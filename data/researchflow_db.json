@@ -1,0 +1,1986 @@
+{
+  "users": [
+    [
+      "usr_default_founder",
+      {
+        "id": "usr_default_founder",
+        "email": "founder@researchflow.ai",
+        "name": "Alex Chen",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "createdAt": "2026-08-20T10:00:00.000Z"
+      }
+    ],
+    [
+      "usr_1787999289476_b843d1a6",
+      {
+        "id": "usr_1787999289476_b843d1a6",
+        "email": "test_tenant_a_1787999289476@isolation.test",
+        "name": "Tenant A Admin",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "createdAt": "2026-08-29T10:28:09.551Z"
+      }
+    ],
+    [
+      "usr_1787999289552_c639bfc6",
+      {
+        "id": "usr_1787999289552_c639bfc6",
+        "email": "test_tenant_b_1787999289552@isolation.test",
+        "name": "Tenant B Admin",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "createdAt": "2026-08-29T10:28:09.630Z"
+      }
+    ]
+  ],
+  "userAccounts": [
+    [
+      "founder@researchflow.ai",
+      {
+        "id": "usr_default_founder",
+        "email": "founder@researchflow.ai",
+        "name": "Alex Chen",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "passwordHash": "0d3364b5b1d934854cd5aa0cc7192f236e6fbc46ada5aad2031110bb1c379195be612567f72a20782355544fe92ef208625098d05faf5544dd77a029194c4803",
+        "salt": "82e99712337b9da9286c14b65579f1d4",
+        "createdAt": "2026-08-20T10:00:00.000Z"
+      }
+    ],
+    [
+      "test_tenant_a_1787999289476@isolation.test",
+      {
+        "id": "usr_1787999289476_b843d1a6",
+        "email": "test_tenant_a_1787999289476@isolation.test",
+        "name": "Tenant A Admin",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "passwordHash": "940e912330f6765b795aace6c3b00a8c6e97f616f4c14eed87d2b5f74a2a59ccc4118bf00a71f80fbc536d5d5800b6fc949395068384cca456d2f9655584d618",
+        "salt": "ba5d3a8805f2e25f7657e2a97e03c40d",
+        "createdAt": "2026-08-29T10:28:09.551Z"
+      }
+    ],
+    [
+      "test_tenant_b_1787999289552@isolation.test",
+      {
+        "id": "usr_1787999289552_c639bfc6",
+        "email": "test_tenant_b_1787999289552@isolation.test",
+        "name": "Tenant B Admin",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "passwordHash": "02acfcadcfa685ef23703bb734778d4386150377c3bc0a008e5220c4a2a92a62a1126c61138ce05beb64396cd372648cd1c04742bdbe45f51a4a9679a77573bb",
+        "salt": "2c02e5dd3bd352e683236533bbcab2e3",
+        "createdAt": "2026-08-29T10:28:09.630Z"
+      }
+    ]
+  ],
+  "sessions": [
+    [
+      "tok_2ae287c413465b8c39100db3de17ee7d802218edc8f0ad67a96e6caac0b77d85",
+      {
+        "token": "tok_2ae287c413465b8c39100db3de17ee7d802218edc8f0ad67a96e6caac0b77d85",
+        "userId": "usr_1787999289476_b843d1a6",
+        "createdAt": "2026-08-29T10:28:09.551Z",
+        "expiresAt": "2026-09-28T10:28:09.551Z"
+      }
+    ],
+    [
+      "tok_a0dd63723e3eaad5b59b45a1bd24bc33ae971cb833a98f72e960cd7c2f2764ae",
+      {
+        "token": "tok_a0dd63723e3eaad5b59b45a1bd24bc33ae971cb833a98f72e960cd7c2f2764ae",
+        "userId": "usr_1787999289552_c639bfc6",
+        "createdAt": "2026-08-29T10:28:09.630Z",
+        "expiresAt": "2026-09-28T10:28:09.630Z"
+      }
+    ]
+  ],
+  "workspaces": [
+    [
+      "ws_default_prod",
+      {
+        "id": "ws_default_prod",
+        "name": "Acme Growth Labs",
+        "businessName": "NextGen Resume AI",
+        "description": "AI resume builder focused on converting college graduates and career changers into high-paying tech roles.",
+        "industry": "B2C SaaS / EdTech / Career Services",
+        "targetAudience": "University seniors, junior software engineers, and career pivoters",
+        "ownerId": "usr_default_founder",
+        "createdAt": "2026-08-20T10:05:00.000Z",
+        "updatedAt": "2026-08-20T10:05:00.000Z"
+      }
+    ],
+    [
+      "ws_iso_a_1787999289552",
+      {
+        "id": "ws_iso_a_1787999289552",
+        "name": "Tenant A Workspace",
+        "businessName": "Tenant A Product",
+        "description": "Private Workspace A",
+        "industry": "Fintech",
+        "targetAudience": "Bank Executives",
+        "ownerId": "usr_1787999289476_b843d1a6",
+        "createdAt": "2026-08-29T10:28:09.552Z",
+        "updatedAt": "2026-08-29T10:28:09.552Z"
+      }
+    ],
+    [
+      "ws_iso_b_1787999289630",
+      {
+        "id": "ws_iso_b_1787999289630",
+        "name": "Tenant B Workspace",
+        "businessName": "Tenant B Product",
+        "description": "Private Workspace B",
+        "industry": "Healthcare",
+        "targetAudience": "Physicians",
+        "ownerId": "usr_1787999289552_c639bfc6",
+        "createdAt": "2026-08-29T10:28:09.630Z",
+        "updatedAt": "2026-08-29T10:28:09.630Z"
+      }
+    ]
+  ],
+  "members": [
+    [
+      "mem_1",
+      {
+        "id": "mem_1",
+        "workspaceId": "ws_default_prod",
+        "name": "Alex Chen",
+        "email": "alex@growthlabs.io",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Executive",
+        "avatarUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+        "joinedAt": "2026-08-20T10:05:00.000Z"
+      }
+    ],
+    [
+      "mem_2",
+      {
+        "id": "mem_2",
+        "workspaceId": "ws_default_prod",
+        "name": "Sarah Jenkins",
+        "email": "sarah.j@growthlabs.io",
+        "role": "GTM_STRATEGIST",
+        "title": "Principal GTM Strategist",
+        "department": "Marketing Strategy",
+        "avatarUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80",
+        "joinedAt": "2026-08-21T09:15:00.000Z"
+      }
+    ],
+    [
+      "mem_3",
+      {
+        "id": "mem_3",
+        "workspaceId": "ws_default_prod",
+        "name": "Marcus Vance",
+        "email": "marcus.v@growthlabs.io",
+        "role": "RESEARCHER",
+        "title": "Competitive Intelligence Lead",
+        "department": "Market Research",
+        "avatarUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80",
+        "joinedAt": "2026-08-22T11:30:00.000Z"
+      }
+    ],
+    [
+      "mem_4",
+      {
+        "id": "mem_4",
+        "workspaceId": "ws_default_prod",
+        "name": "Elena Rostova",
+        "email": "elena.r@growthlabs.io",
+        "role": "CONTENT_LEAD",
+        "title": "Head of Messaging & Content",
+        "department": "Content Strategy",
+        "avatarUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80",
+        "joinedAt": "2026-08-23T14:20:00.000Z"
+      }
+    ],
+    [
+      "mem_5",
+      {
+        "id": "mem_5",
+        "workspaceId": "ws_default_prod",
+        "name": "David Kim",
+        "email": "david.k@growthlabs.io",
+        "role": "REVIEWER",
+        "title": "Product Marketing Manager",
+        "department": "Product Marketing",
+        "avatarUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80",
+        "joinedAt": "2026-08-24T16:00:00.000Z"
+      }
+    ],
+    [
+      "mem_iso_a_1787999289552",
+      {
+        "id": "mem_iso_a_1787999289552",
+        "workspaceId": "ws_iso_a_1787999289552",
+        "name": "Tenant A Admin",
+        "email": "test_tenant_a_1787999289476@isolation.test",
+        "role": "OWNER",
+        "title": "CEO",
+        "department": "Exec",
+        "joinedAt": "2026-08-29T10:28:09.552Z"
+      }
+    ],
+    [
+      "mem_iso_b_1787999289631",
+      {
+        "id": "mem_iso_b_1787999289631",
+        "workspaceId": "ws_iso_b_1787999289630",
+        "name": "Tenant B Admin",
+        "email": "test_tenant_b_1787999289552@isolation.test",
+        "role": "OWNER",
+        "title": "CEO",
+        "department": "Exec",
+        "joinedAt": "2026-08-29T10:28:09.631Z"
+      }
+    ]
+  ],
+  "researchJobs": [
+    [
+      "job_demo_resume_ai",
+      {
+        "id": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "businessName": "NextGen Resume AI",
+        "businessDescription": "Evidence-backed resume intelligence platform that aligns candidate skills with real recruiter hiring benchmarks.",
+        "campaignObjective": "Fall Campus Recruiting: Acquire 1,000 university seniors and junior engineers.",
+        "targetAudience": "College seniors in Computer Science/Engineering, bootcamp graduates, and career changers.",
+        "competitorUrls": [
+          "https://en.wikipedia.org/wiki/Resume",
+          "https://news.ycombinator.com/item?id=38874139",
+          "https://novoresume.com/career-blog/resume-statistics"
+        ],
+        "additionalUrls": [
+          "https://www.kickresume.com/en/help-center/pricing/"
+        ],
+        "status": "awaiting_review",
+        "currentStepMessage": "Research & strategy pipeline complete. Awaiting human review & approval.",
+        "progressPercent": 100,
+        "sourcesCount": 4,
+        "evidenceCount": 9,
+        "conflictsCount": 1,
+        "isDemo": true,
+        "createdAt": "2026-08-26T14:00:00.000Z",
+        "startedAt": "2026-08-26T14:00:05.000Z",
+        "completedAt": "2026-08-26T14:01:25.000Z",
+        "durationMs": 80000,
+        "intelligenceId": "intel_job_demo_resume_ai",
+        "briefId": "brief_job_demo_resume_ai"
+      }
+    ],
+    [
+      "job_1787999289631_ukmg",
+      {
+        "id": "job_1787999289631_ukmg",
+        "workspaceId": "ws_iso_a_1787999289552",
+        "businessName": "Private Fintech Research A1",
+        "businessDescription": "Confidential Fintech Strategy",
+        "campaignObjective": "Capture Enterprise Banks",
+        "targetAudience": "CFOs",
+        "competitorUrls": [
+          "https://stripe.com"
+        ],
+        "additionalUrls": [],
+        "status": "queued",
+        "currentStepMessage": "Job queued for research pipeline",
+        "progressPercent": 5,
+        "sourcesCount": 1,
+        "evidenceCount": 0,
+        "conflictsCount": 0,
+        "isDemo": false,
+        "createdAt": "2026-08-29T10:28:09.631Z"
+      }
+    ],
+    [
+      "job_1787999289632_kfcb",
+      {
+        "id": "job_1787999289632_kfcb",
+        "workspaceId": "ws_iso_b_1787999289630",
+        "businessName": "Private Healthcare Research B1",
+        "businessDescription": "Confidential EHR Strategy",
+        "campaignObjective": "Capture Clinics",
+        "targetAudience": "Doctors",
+        "competitorUrls": [
+          "https://epic.com"
+        ],
+        "additionalUrls": [],
+        "status": "queued",
+        "currentStepMessage": "Job queued for research pipeline",
+        "progressPercent": 5,
+        "sourcesCount": 1,
+        "evidenceCount": 0,
+        "conflictsCount": 0,
+        "isDemo": false,
+        "createdAt": "2026-08-29T10:28:09.632Z"
+      }
+    ]
+  ],
+  "shareLinks": [],
+  "reviewAssignments": [],
+  "sources": [
+    [
+      "src_job_demo_resume_ai_1",
+      {
+        "id": "src_job_demo_resume_ai_1",
+        "jobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "url": "https://en.wikipedia.org/wiki/Resume",
+        "title": "Résumé Standards & Hiring Formats - Wikipedia",
+        "canonicalUrl": "https://en.wikipedia.org/wiki/Resume",
+        "status": "completed",
+        "httpStatus": 200,
+        "retrievedAt": "2026-08-26T14:00:20.000Z",
+        "rawTextSnippet": "A résumé is a document created and used by a person to present their background, skills, and accomplishments. Modern automated Applicant Tracking Systems (ATS) scan and rank candidates based on keyword matching and technical formatting standards.",
+        "wordCount": 1450,
+        "isCompetitor": true
+      }
+    ],
+    [
+      "src_job_demo_resume_ai_2",
+      {
+        "id": "src_job_demo_resume_ai_2",
+        "jobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "url": "https://news.ycombinator.com/item?id=38874139",
+        "title": "Ask HN: What is your experience with modern AI resume builders?",
+        "status": "completed",
+        "httpStatus": 200,
+        "retrievedAt": "2026-08-26T14:00:35.000Z",
+        "rawTextSnippet": "Discussion on technical recruitment: Many candidates report frustration with expensive monthly subscriptions charging $29/mo with credit card required upfront. Hiring managers note that generic AI bullet points without verifiable metrics are instantly spotted.",
+        "wordCount": 2100,
+        "isCompetitor": true
+      }
+    ],
+    [
+      "src_job_demo_resume_ai_3",
+      {
+        "id": "src_job_demo_resume_ai_3",
+        "jobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "url": "https://www.kickresume.com/en/help-center/pricing/",
+        "title": "Kickresume Pricing & Plans",
+        "status": "completed",
+        "httpStatus": 200,
+        "retrievedAt": "2026-08-26T14:00:50.000Z",
+        "rawTextSnippet": "Premium subscription options starting from $19 per month billed annually or $29 month-to-month. Features include AI resume writing, template library, and proofreading.",
+        "wordCount": 820,
+        "isCompetitor": true
+      }
+    ],
+    [
+      "src_job_demo_resume_ai_4",
+      {
+        "id": "src_job_demo_resume_ai_4",
+        "jobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "url": "https://novoresume.com/career-blog/resume-statistics",
+        "title": "2026 Technical Recruiting Benchmark Report & Statistics",
+        "status": "completed",
+        "httpStatus": 200,
+        "retrievedAt": "2026-08-26T14:01:05.000Z",
+        "rawTextSnippet": "82% of technical hiring managers report discarding candidate resumes that show generic AI buzzwords without measurable project outcomes or verified engineering metrics.",
+        "wordCount": 3400,
+        "isCompetitor": false
+      }
+    ],
+    [
+      "src_job_1787999289631_ukmg_1",
+      {
+        "id": "src_job_1787999289631_ukmg_1",
+        "jobId": "job_1787999289631_ukmg",
+        "workspaceId": "ws_iso_a_1787999289552",
+        "url": "https://stripe.com",
+        "title": "https://stripe.com",
+        "status": "pending",
+        "retrievedAt": "2026-08-29T10:28:09.631Z",
+        "isCompetitor": true
+      }
+    ],
+    [
+      "src_job_1787999289632_kfcb_1",
+      {
+        "id": "src_job_1787999289632_kfcb_1",
+        "jobId": "job_1787999289632_kfcb",
+        "workspaceId": "ws_iso_b_1787999289630",
+        "url": "https://epic.com",
+        "title": "https://epic.com",
+        "status": "pending",
+        "retrievedAt": "2026-08-29T10:28:09.632Z",
+        "isCompetitor": true
+      }
+    ]
+  ],
+  "evidence": [
+    [
+      "ev_job_demo_resume_ai_1",
+      {
+        "id": "ev_job_demo_resume_ai_1",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "sourceId": "src_job_demo_resume_ai_3",
+        "category": "Pricing",
+        "claim": "Market tools advertise entry price of $19/month billed annually.",
+        "supportingText": "Starting at $19/month billed annually. Over 500+ templates.",
+        "sourceUrl": "https://www.kickresume.com/en/help-center/pricing/",
+        "sourceTitle": "Kickresume Pricing & Plans",
+        "retrievedAt": "2026-08-26T14:00:25.000Z",
+        "evidenceType": "FACT",
+        "confidence": "HIGH",
+        "normalizedValue": "$19/mo (annual bill)"
+      }
+    ],
+    [
+      "ev_job_demo_resume_ai_2",
+      {
+        "id": "ev_job_demo_resume_ai_2",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "sourceId": "src_job_demo_resume_ai_2",
+        "category": "Pricing",
+        "claim": "Month-to-month plans cost $29/month and require upfront credit card entry for trials.",
+        "supportingText": "Subscription plans start at $29/month with credit card required upfront.",
+        "sourceUrl": "https://news.ycombinator.com/item?id=38874139",
+        "sourceTitle": "Hacker News Community Discussions",
+        "retrievedAt": "2026-08-26T14:00:40.000Z",
+        "evidenceType": "FACT",
+        "confidence": "HIGH",
+        "normalizedValue": "$29/mo (credit card required)"
+      }
+    ],
+    [
+      "ev_job_demo_resume_ai_3",
+      {
+        "id": "ev_job_demo_resume_ai_3",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "sourceId": "src_job_demo_resume_ai_4",
+        "category": "Pain Points",
+        "claim": "82% of tech recruiters reject resumes with ungrounded generic AI buzzwords.",
+        "supportingText": "82% of technical hiring managers report discarding candidate resumes that show generic AI buzzwords without measurable project outcomes or verified engineering metrics.",
+        "sourceUrl": "https://novoresume.com/career-blog/resume-statistics",
+        "sourceTitle": "Technical Recruiting Benchmark Report & Statistics",
+        "retrievedAt": "2026-08-26T14:01:10.000Z",
+        "evidenceType": "FACT",
+        "confidence": "HIGH",
+        "normalizedValue": "82% recruiter rejection on generic AI"
+      }
+    ],
+    [
+      "ev_job_demo_resume_ai_4",
+      {
+        "id": "ev_job_demo_resume_ai_4",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "sourceId": "src_job_demo_resume_ai_1",
+        "category": "Features",
+        "claim": "Modern Applicant Tracking Systems (ATS) scan and filter candidate submissions based on technical keyword density and project outcomes.",
+        "supportingText": "Applicant Tracking Systems (ATS) scan and rank candidates based on keyword matching and technical formatting standards.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Resume",
+        "sourceTitle": "Résumé Standards & Hiring Formats - Wikipedia",
+        "retrievedAt": "2026-08-26T14:00:28.000Z",
+        "evidenceType": "FACT",
+        "confidence": "HIGH",
+        "normalizedValue": "ATS keyword & outcome calibration requirement"
+      }
+    ],
+    [
+      "ev_job_demo_resume_ai_5",
+      {
+        "id": "ev_job_demo_resume_ai_5",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "sourceId": "src_job_demo_resume_ai_2",
+        "category": "Potential Gaps",
+        "claim": "Lack of transparent student semester pricing or non-recurring trial models.",
+        "supportingText": "Many candidates report frustration with expensive monthly subscriptions charging $29/mo with credit card required upfront.",
+        "sourceUrl": "https://news.ycombinator.com/item?id=38874139",
+        "sourceTitle": "Hacker News Community Discussions",
+        "retrievedAt": "2026-08-26T14:00:42.000Z",
+        "evidenceType": "WARNING",
+        "confidence": "HIGH",
+        "normalizedValue": "No student semester plan"
+      }
+    ],
+    [
+      "ev_job_demo_resume_ai_6",
+      {
+        "id": "ev_job_demo_resume_ai_6",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "sourceId": "src_job_demo_resume_ai_1",
+        "category": "Differentiators",
+        "claim": "Standard resume formats lack real-time ATS benchmark feedback.",
+        "supportingText": "Traditional formats rely on static manual editing rather than automated ATS feedback.",
+        "sourceUrl": "https://en.wikipedia.org/wiki/Resume",
+        "sourceTitle": "Résumé Standards & Hiring Formats - Wikipedia",
+        "retrievedAt": "2026-08-26T14:00:55.000Z",
+        "evidenceType": "FACT",
+        "confidence": "HIGH",
+        "normalizedValue": "Real-time ATS benchmarking missing in standard tools"
+      }
+    ]
+  ],
+  "conflicts": [
+    [
+      "conf_job_demo_resume_ai_pricing",
+      {
+        "id": "conf_job_demo_resume_ai_pricing",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "category": "Pricing",
+        "description": "Competitor pricing varies sharply ($19/mo annual commitment vs $29/mo with forced card entry).",
+        "severity": "HIGH",
+        "status": "UNRESOLVED",
+        "conflictingValues": [
+          {
+            "sourceId": "src_job_demo_resume_ai_3",
+            "sourceUrl": "https://www.kickresume.com/en/help-center/pricing/",
+            "sourceTitle": "Kickresume Pricing & Plans",
+            "value": "$19/mo (annual lock-in)",
+            "evidenceId": "ev_job_demo_resume_ai_1"
+          },
+          {
+            "sourceId": "src_job_demo_resume_ai_2",
+            "sourceUrl": "https://news.ycombinator.com/item?id=38874139",
+            "sourceTitle": "Hacker News Community Discussions",
+            "value": "$29/mo (upfront credit card required)",
+            "evidenceId": "ev_job_demo_resume_ai_2"
+          }
+        ],
+        "detectedAt": "2026-08-26T14:01:15.000Z"
+      }
+    ]
+  ],
+  "intelligence": [
+    [
+      "intel_job_demo_resume_ai",
+      {
+        "id": "intel_job_demo_resume_ai",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "competitiveLandscape": "The AI resume space is divided between cosmetic template generators ($19–$29/mo) and outdated legacy export tools ($4.95). None offer verifiable ATS evidence calibration or flexible student semester pricing.",
+        "audienceSignals": [
+          "University seniors are highly price-sensitive and skeptical of hidden annual subscriptions.",
+          "Tech candidates are terrified of ATS auto-rejection due to generic AI buzzwords."
+        ],
+        "messagingPatterns": [
+          "Competitors pitch \"instant magic\" and \"500+ templates\".",
+          "Competitors hide annual lock-in commitments beneath \"monthly\" headline prices."
+        ],
+        "positioningGaps": [
+          "Zero competitors offer evidence-backed ATS benchmark validation tailored to junior technical roles.",
+          "Zero competitors offer transparent student semester pricing with zero card lock-in."
+        ],
+        "marketOpportunities": [
+          {
+            "id": "opp_job_demo_resume_ai_1",
+            "title": "Lead with \"Evidence-Backed ATS Scoring\"",
+            "description": "Directly counter generic AI tool skepticism by proving 82% recruiter rejection risk and offering verified benchmark scoring.",
+            "impact": "HIGH",
+            "recommendedAction": "Deploy interactive ATS score checker and recruiter teardowns on campus subreddits and LinkedIn.",
+            "evidenceIds": [
+              "ev_job_demo_resume_ai_3",
+              "ev_job_demo_resume_ai_4"
+            ]
+          },
+          {
+            "id": "opp_job_demo_resume_ai_2",
+            "title": "Transparent Campus Semester Pass",
+            "description": "Attack competitor annual subscription traps by offering a flat $15 semester pass with no auto-renewal.",
+            "impact": "HIGH",
+            "recommendedAction": "Position explicitly against $29/mo subscription models in student acquisition copy.",
+            "evidenceIds": [
+              "ev_job_demo_resume_ai_1",
+              "ev_job_demo_resume_ai_2",
+              "ev_job_demo_resume_ai_5"
+            ]
+          }
+        ],
+        "potentialDifferentiators": [
+          "Recruiter-benchmark verified bullet points",
+          "Transparent semester pass (no hidden renewals)",
+          "Side-by-side ATS scan comparison against job descriptions"
+        ],
+        "findings": [
+          {
+            "id": "find_job_demo_resume_ai_1",
+            "category": "Market Gap",
+            "title": "Generic AI Backlash in Technical Hiring",
+            "statement": "82% of technical hiring managers now discard resumes showing generic AI patterns. Candidates need evidence-backed technical impact phrasing.",
+            "type": "GAP",
+            "confidence": "HIGH",
+            "evidenceIds": [
+              "ev_job_demo_resume_ai_3"
+            ]
+          },
+          {
+            "id": "find_job_demo_resume_ai_2",
+            "category": "Pricing Disparity",
+            "title": "Subscription Fatigue Among College Seniors",
+            "statement": "Competitor entry pricing hides annual commitments ($228/yr) while students only need 2–3 months during active recruitment.",
+            "type": "COMPETITIVE",
+            "confidence": "HIGH",
+            "evidenceIds": [
+              "ev_job_demo_resume_ai_1",
+              "ev_job_demo_resume_ai_2"
+            ]
+          }
+        ],
+        "risks": [
+          "Incumbents have high SEO authority for generic terms like \"free resume maker\".",
+          "Campus ad spend is seasonal (August–October and January–March peaks)."
+        ],
+        "generatedAt": "2026-08-26T14:01:20.000Z"
+      }
+    ]
+  ],
+  "campaignBriefs": [
+    [
+      "brief_job_demo_resume_ai",
+      {
+        "id": "brief_job_demo_resume_ai",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "executiveSummary": "Fall 2026 student acquisition campaign positioning NextGen Resume AI as the anti-generic, evidence-backed tool that passes modern technical recruiter filters.",
+        "objective": "Acquire 1,000 verified university seniors and junior engineers before campus recruitment season.",
+        "audience": "College seniors in Computer Science/Engineering and recent bootcamp graduates preparing for technical interviews.",
+        "coreProblem": "Candidates are getting ghosted because generic AI tools produce buzzword soup that 82% of tech recruiters immediately filter out.",
+        "competitiveInsights": "The AI resume space is divided between cosmetic template generators ($19–$29/mo) and outdated legacy export tools ($4.95). None offer verifiable ATS evidence calibration or flexible student semester pricing.",
+        "positioning": "NextGen Resume AI is the evidence-backed career platform that calibrates your technical projects directly against real engineering hiring benchmarks.",
+        "campaignAngle": "Proof Over Buzzwords: The Evidence-Backed Resume That Passes Senior Engineering Recruiter Screens",
+        "primaryMessage": "Stop getting filtered by ATS algorithms. Build an evidence-backed resume calibrated to real 2026 engineering job benchmarks.",
+        "supportingMessages": [
+          "82% of hiring managers reject generic AI resumes—here is how to format verified technical impact.",
+          "Zero subscription traps: $15 flat semester access with no recurring credit card billing.",
+          "Every bullet point scored against real recruiter rubrics, not template filler."
+        ],
+        "recommendedChannels": [
+          "LinkedIn",
+          "Cold Email / Campus Outreach",
+          "SEO Long-Tail"
+        ],
+        "contentStrategy": "Release honest teardowns of common resume mistakes, benchmark reports on ATS filtering, and student success stories.",
+        "recommendations": [
+          "Launch LinkedIn thought leadership teardowns analyzing real vs generic resume bullets.",
+          "Distribute campus newsletter sponsorships offering the transparent $15 semester pass.",
+          "Publish comparison SEO pillars targeting competitor subscription traps."
+        ],
+        "risks": [
+          "High competitive paid ad bidding during September peak; emphasize organic LinkedIn and campus ambassador distribution."
+        ],
+        "evidenceReferences": [
+          {
+            "evidenceId": "ev_job_demo_resume_ai_3",
+            "claim": "82% of recruiters discard generic AI resumes",
+            "sourceUrl": "https://novoresume.com/career-blog/resume-statistics",
+            "category": "Pain Points"
+          },
+          {
+            "evidenceId": "ev_job_demo_resume_ai_1",
+            "claim": "Market tools charge $19/mo on annual lock-in",
+            "sourceUrl": "https://www.kickresume.com/en/help-center/pricing/",
+            "category": "Pricing"
+          },
+          {
+            "evidenceId": "ev_job_demo_resume_ai_2",
+            "claim": "Month-to-month plans charge $29/mo with forced card entry",
+            "sourceUrl": "https://news.ycombinator.com/item?id=38874139",
+            "category": "Pricing"
+          }
+        ],
+        "confidence": "HIGH",
+        "limitations": "Competitor enterprise university partnership contracts are not publicly listed.",
+        "generatedAt": "2026-08-26T14:01:25.000Z",
+        "status": "DRAFT"
+      }
+    ]
+  ],
+  "campaignAssets": [
+    [
+      "asset_job_demo_resume_ai_linkedin",
+      {
+        "id": "asset_job_demo_resume_ai_linkedin",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "channel": "LINKEDIN",
+        "title": "LinkedIn Thought Leadership: The 2026 Technical Resume Breakdown",
+        "content": {
+          "hook": "82% of technical hiring managers now discard resumes that use generic AI buzzwords. If you are applying to software roles this fall, read this:",
+          "body": "We analyzed 500+ tech applications across YC startups and Big Tech. The verdict? Template-stuffed resumes generated by generic AI tools get filtered out in under 6 seconds.\n\nHere is what hiring managers actually look for in 2026:\n1. Quantified architectural decisions (e.g. \"Reduced p99 query latency from 320ms to 45ms using Redis caching\")\n2. Concrete ownership over cosmetic adjectives\n3. Proof of end-to-end delivery\n\nAt NextGen Resume AI, we built the first platform that calibrates your bullet points against verified engineering job descriptions.\n\nNo subscription traps. No fluff.",
+          "cta": "👉 Check your resume’s evidence score for free (link in first comment)."
+        },
+        "evidenceReferences": [
+          "ev_job_demo_resume_ai_3",
+          "ev_job_demo_resume_ai_4"
+        ],
+        "validationStatus": "VALID",
+        "reviewStatus": "PENDING"
+      }
+    ],
+    [
+      "asset_job_demo_resume_ai_email",
+      {
+        "id": "asset_job_demo_resume_ai_email",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "channel": "EMAIL",
+        "title": "Cold Outreach Sequence: Campus CS Society & Club Outreach",
+        "content": {
+          "subject": "Why standard AI resumes are getting filtered (and the fall 2026 fix)",
+          "previewText": "A quick teardown for CS seniors preparing for fall campus recruiting.",
+          "body": "Hi {{firstName}},\n\nWith campus recruiting starting this month, wanted to share an urgent insight from our latest technical hiring benchmark.\n\nOver 82% of tech recruiters report rejecting resumes filled with generic generative AI phrasing. Why? Because hiring managers want verified technical proof, not template filler.\n\nWe launched NextGen Resume AI to solve this: a tool built specifically for college engineers to score and refine their projects against real technical job benchmarks.\n\nWe would love to provide your student members with complimentary ATS benchmark scans.",
+          "cta": "Reply \"YES\" and I will send over the private university access link."
+        },
+        "evidenceReferences": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "validationStatus": "VALID",
+        "reviewStatus": "PENDING"
+      }
+    ],
+    [
+      "asset_job_demo_resume_ai_seo",
+      {
+        "id": "asset_job_demo_resume_ai_seo",
+        "researchJobId": "job_demo_resume_ai",
+        "workspaceId": "ws_default_prod",
+        "channel": "SEO",
+        "title": "SEO Pillar: Evidence-Backed Technical Resume Guide (2026)",
+        "content": {
+          "topic": "How to Write an Evidence-Backed Software Engineering Resume for College Seniors",
+          "searchIntent": "Commercial Investigation & Educational",
+          "primaryKeyword": "software engineer resume for college seniors",
+          "secondaryKeywords": [
+            "ATS resume score checker tech",
+            "AI resume builder for CS students",
+            "technical resume without experience",
+            "best resume builder without subscription"
+          ],
+          "outline": [
+            "1. The New Reality: Why 2026 Tech Recruiter Screens Filter Out Generic AI",
+            "2. Competitor Breakdown: Where $29/mo Template Tools Fail Technical Applicants",
+            "3. Anatomy of an Evidence-Backed Resume: 4 Real Project Bullet Teardowns",
+            "4. Step-by-Step Calibration: Aligning GitHub Repos with Real Recruiter Rubrics",
+            "5. Free ATS Benchmark Checklist & Downloadable Sample"
+          ]
+        },
+        "evidenceReferences": [
+          "ev_job_demo_resume_ai_1",
+          "ev_job_demo_resume_ai_3"
+        ],
+        "validationStatus": "VALID",
+        "reviewStatus": "PENDING"
+      }
+    ]
+  ],
+  "tasks": [],
+  "auditEvents": [
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 95824ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1788000744798_s0igp",
+        "provider": "openrouter",
+        "model": "openrouter/free",
+        "latencyMs": 95824
+      },
+      "id": "evt_1788000744798_002f0254",
+      "timestamp": "2026-08-29T10:52:24.798Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
+      "details": {
+        "model": "openrouter/free",
+        "attempts": 2,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1788000744798_e6f9901f",
+      "timestamp": "2026-08-29T10:52:24.798Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+      "details": {
+        "model": "gemini-3.7-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+        "failureCategory": "PROVIDER_UNAVAILABLE"
+      },
+      "id": "evt_1788000727983_7f0aea58",
+      "timestamp": "2026-08-29T10:52:07.983Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 50316ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1788000719280_pvqvu",
+        "provider": "openrouter",
+        "model": "openrouter/free",
+        "latencyMs": 50316
+      },
+      "id": "evt_1788000719280_a07a8f7f",
+      "timestamp": "2026-08-29T10:51:59.280Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
+      "details": {
+        "model": "openrouter/free",
+        "attempts": 2,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1788000719280_13598f0b",
+      "timestamp": "2026-08-29T10:51:59.280Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+      "details": {
+        "model": "gemini-3.7-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+        "failureCategory": "PROVIDER_UNAVAILABLE"
+      },
+      "id": "evt_1788000702950_8fb4e789",
+      "timestamp": "2026-08-29T10:51:42.950Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.7-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-3.6-flash"
+        ]
+      },
+      "id": "evt_1788000668964_e730e1ca",
+      "timestamp": "2026-08-29T10:51:08.965Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.7-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-3.6-flash"
+        ]
+      },
+      "id": "evt_1788000648975_1539ea6c",
+      "timestamp": "2026-08-29T10:50:48.975Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 6841ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1788000468510_nebs8",
+        "provider": "openrouter",
+        "model": "openrouter/free",
+        "latencyMs": 6841
+      },
+      "id": "evt_1788000468510_b0f29716",
+      "timestamp": "2026-08-29T10:47:48.510Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
+      "details": {
+        "model": "openrouter/free",
+        "attempts": 2,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1788000468510_73b84e16",
+      "timestamp": "2026-08-29T10:47:48.510Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-2.5-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "gemini-2.5-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1788000461856_bbabada3",
+      "timestamp": "2026-08-29T10:47:41.856Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-2.5-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-2.5-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1788000461669_79ab556f",
+      "timestamp": "2026-08-29T10:47:41.669Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/liquid/lfm-2.5-2.6b:free in 10842ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1788000461333_526fu",
+        "provider": "openrouter",
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "latencyMs": 10842
+      },
+      "id": "evt_1788000461333_40c19ee0",
+      "timestamp": "2026-08-29T10:47:41.334Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 3 using openrouter (liquid/lfm-2.5-2.6b:free)",
+      "details": {
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "attempts": 3,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1788000461333_d220bf18",
+      "timestamp": "2026-08-29T10:47:41.333Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model openrouter/free failed for task EXECUTIVE_SUMMARY: JSON parse failed: Unable to extract valid JSON payload from model response",
+      "details": {
+        "model": "openrouter/free",
+        "error": "JSON parse failed: Unable to extract valid JSON payload from model response",
+        "failureCategory": "SCHEMA_FAILURE"
+      },
+      "id": "evt_1788000454106_d65ad0bb",
+      "timestamp": "2026-08-29T10:47:34.106Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-2.5-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "gemini-2.5-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1788000450682_259afd53",
+      "timestamp": "2026-08-29T10:47:30.682Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-2.5-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-2.5-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1788000450492_3f1c2281",
+      "timestamp": "2026-08-29T10:47:30.492Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/nvidia/nemotron-3-ultra-550b-a55b:free in 34370ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1788000297497_p7y6o",
+        "provider": "openrouter",
+        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "latencyMs": 34370
+      },
+      "id": "evt_1788000297497_c43f28e7",
+      "timestamp": "2026-08-29T10:44:57.497Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 4 using openrouter (nvidia/nemotron-3-ultra-550b-a55b:free)",
+      "details": {
+        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "attempts": 4,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1788000297496_80b83e92",
+      "timestamp": "2026-08-29T10:44:57.496Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model z-ai/glm-5.2:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"z-ai/glm-5.2:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate li",
+      "details": {
+        "model": "z-ai/glm-5.2:free",
+        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"z-ai/glm-5.2:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your rate li",
+        "failureCategory": "RATE_LIMIT"
+      },
+      "id": "evt_1788000265874_e5b592b1",
+      "timestamp": "2026-08-29T10:44:25.874Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model thinkingmachines/inkling:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 403: {\"error\":{\"message\":\"thinkingmachines/inkling:free is only available on agentic harnesses. Try plugging it into a coding agent or productivity app listed on https://openrouter.ai/apps\",\"code\":403}}",
+      "details": {
+        "model": "thinkingmachines/inkling:free",
+        "error": "OpenRouter HTTP 403: {\"error\":{\"message\":\"thinkingmachines/inkling:free is only available on agentic harnesses. Try plugging it into a coding agent or productivity app listed on https://openrouter.ai/apps\",\"code\":403}}",
+        "failureCategory": "UNKNOWN"
+      },
+      "id": "evt_1788000264547_07299f34",
+      "timestamp": "2026-08-29T10:44:24.547Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model liquid/lfm-2.5-2.6b:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"liquid/lfm-2.5-2.6b:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your ",
+      "details": {
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"liquid/lfm-2.5-2.6b:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to accumulate your ",
+        "failureCategory": "RATE_LIMIT"
+      },
+      "id": "evt_1788000264507_f5381728",
+      "timestamp": "2026-08-29T10:44:24.507Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free, z-ai/glm-5.2:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1788000263127_243a6b13",
+      "timestamp": "2026-08-29T10:44:23.127Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/liquid/lfm-2.5-2.6b:free in 4327ms (Status: SUCCESS)",
+      "details": {
+        "runId": "airun_1788000263058_w5smx",
+        "provider": "openrouter",
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "latencyMs": 4327
+      },
+      "id": "evt_1788000263058_3f597013",
+      "timestamp": "2026-08-29T10:44:23.059Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free, z-ai/glm-5.2:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1788000258731_ee93d4e5",
+      "timestamp": "2026-08-29T10:44:18.731Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "researchJobId": "job_demo_resume_ai",
+      "eventType": "ai_run_completed",
+      "summary": "Generated Tactical Sales Battlecard against \"en.wikipedia.org\"",
+      "id": "evt_1787999778182_782dbb4c",
+      "timestamp": "2026-08-29T10:36:18.182Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "researchJobId": "job_demo_resume_ai",
+      "eventType": "ai_run_completed",
+      "summary": "Generated Tactical Sales Battlecard against \"en.wikipedia.org\"",
+      "id": "evt_1787999778122_fe9548a2",
+      "timestamp": "2026-08-29T10:36:18.122Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/liquid/lfm-2.5-2.6b:free in 3001ms (Status: SUCCESS)",
+      "details": {
+        "runId": "airun_1787999756407_b09zn",
+        "provider": "openrouter",
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "latencyMs": 3001
+      },
+      "id": "evt_1787999756407_e517d745",
+      "timestamp": "2026-08-29T10:35:56.407Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free, z-ai/glm-5.2:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787999753406_681ae564",
+      "timestamp": "2026-08-29T10:35:53.406Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/liquid/lfm-2.5-2.6b:free in 2927ms (Status: SUCCESS)",
+      "details": {
+        "runId": "airun_1787999753343_lu497",
+        "provider": "openrouter",
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "latencyMs": 2927
+      },
+      "id": "evt_1787999753343_8365b7d3",
+      "timestamp": "2026-08-29T10:35:53.343Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free, z-ai/glm-5.2:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787999750416_6b230505",
+      "timestamp": "2026-08-29T10:35:50.416Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/liquid/lfm-2.5-2.6b:free in 2337ms (Status: SUCCESS)",
+      "details": {
+        "runId": "airun_1787999342268_t2auq",
+        "provider": "openrouter",
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "latencyMs": 2337
+      },
+      "id": "evt_1787999342268_046e7f5f",
+      "timestamp": "2026-08-29T10:29:02.268Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free, z-ai/glm-5.2:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787999339931_16086705",
+      "timestamp": "2026-08-29T10:28:59.931Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/liquid/lfm-2.5-2.6b:free in 4018ms (Status: SUCCESS)",
+      "details": {
+        "runId": "airun_1787999339859_ij26t",
+        "provider": "openrouter",
+        "model": "liquid/lfm-2.5-2.6b:free",
+        "latencyMs": 4018
+      },
+      "id": "evt_1787999339859_158030c9",
+      "timestamp": "2026-08-29T10:28:59.859Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free, z-ai/glm-5.2:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787999335842_2a4dd24b",
+      "timestamp": "2026-08-29T10:28:55.842Z"
+    },
+    {
+      "workspaceId": "ws_iso_b_1787999289630",
+      "researchJobId": "job_1787999289632_kfcb",
+      "eventType": "research_created",
+      "summary": "Created research job for \"Private Healthcare Research B1\" with 1 sources.",
+      "details": {
+        "objective": "Capture Clinics"
+      },
+      "id": "evt_1787999289632_90b00757",
+      "timestamp": "2026-08-29T10:28:09.632Z"
+    },
+    {
+      "workspaceId": "ws_iso_a_1787999289552",
+      "researchJobId": "job_1787999289631_ukmg",
+      "eventType": "research_created",
+      "summary": "Created research job for \"Private Fintech Research A1\" with 1 sources.",
+      "details": {
+        "objective": "Capture Enterprise Banks"
+      },
+      "id": "evt_1787999289631_aba8b10a",
+      "timestamp": "2026-08-29T10:28:09.631Z"
+    },
+    {
+      "workspaceId": "ws_iso_b_1787999289630",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Tenant B Workspace",
+      "id": "evt_1787999289630_9520cf9f",
+      "timestamp": "2026-08-29T10:28:09.630Z"
+    },
+    {
+      "workspaceId": "ws_iso_a_1787999289552",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Tenant A Workspace",
+      "id": "evt_1787999289552_17d33dcf",
+      "timestamp": "2026-08-29T10:28:09.552Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with heuristic/heuristic-engine-v2 in 419ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1787998296484_l9g5d",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 419
+      },
+      "id": "evt_1787998296484_8c7308df",
+      "timestamp": "2026-08-29T10:11:36.484Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task EXECUTIVE_SUMMARY after 29 model attempts.",
+      "details": {
+        "lastError": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "fallbackChainUsed": [
+          "meta-llama/llama-3.3-70b-instruct:free",
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "google/gemini-2.0-flash-exp:free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "deepseek/deepseek-r1:free",
+          "mistralai/mistral-small-24b-instruct-2501:free",
+          "qwen/qwen-2.5-coder-32b-instruct:free",
+          "meta-llama/llama-3.2-3b-instruct:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787998296484_396bcf93",
+      "timestamp": "2026-08-29T10:11:36.484Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-2.0-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "gemini-2.0-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1787998296483_88cc394d",
+      "timestamp": "2026-08-29T10:11:36.483Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-2.5-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "gemini-2.5-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1787998296360_a428d53c",
+      "timestamp": "2026-08-29T10:11:36.360Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model google/gemini-2.0-flash-exp:free failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "google/gemini-2.0-flash-exp:free",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1787998296181_dd14b4c2",
+      "timestamp": "2026-08-29T10:11:36.181Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [meta-llama/llama-3.3-70b-instruct:free, liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "meta-llama/llama-3.3-70b-instruct:free",
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "google/gemini-2.0-flash-exp:free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "deepseek/deepseek-r1:free",
+          "mistralai/mistral-small-24b-instruct-2501:free",
+          "qwen/qwen-2.5-coder-32b-instruct:free",
+          "meta-llama/llama-3.2-3b-instruct:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787998296065_9128aecd",
+      "timestamp": "2026-08-29T10:11:36.065Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with heuristic/heuristic-engine-v2 in 426ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1787998296001_v6g29",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 426
+      },
+      "id": "evt_1787998296001_575923f1",
+      "timestamp": "2026-08-29T10:11:36.001Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task EXECUTIVE_SUMMARY after 29 model attempts.",
+      "details": {
+        "lastError": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "fallbackChainUsed": [
+          "meta-llama/llama-3.3-70b-instruct:free",
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "google/gemini-2.0-flash-exp:free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "deepseek/deepseek-r1:free",
+          "mistralai/mistral-small-24b-instruct-2501:free",
+          "qwen/qwen-2.5-coder-32b-instruct:free",
+          "meta-llama/llama-3.2-3b-instruct:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787998296001_57e7c47d",
+      "timestamp": "2026-08-29T10:11:36.001Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-2.0-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "gemini-2.0-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1787998296000_74b1ef96",
+      "timestamp": "2026-08-29T10:11:36.000Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-2.5-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "gemini-2.5-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1787998295887_c1d27d46",
+      "timestamp": "2026-08-29T10:11:35.887Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_model_failed",
+      "summary": "AI model google/gemini-2.0-flash-exp:free failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+      "details": {
+        "model": "google/gemini-2.0-flash-exp:free",
+        "error": "Gemini API error: {\"error\":{\"code\":404,\"message\":\"This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements. We recommend you to use the Interactions API.\",\"status\":\"NOT_FOUND\"}}",
+        "failureCategory": "MODEL_UNAVAILABLE"
+      },
+      "id": "evt_1787998295728_81282133",
+      "timestamp": "2026-08-29T10:11:35.728Z"
+    },
+    {
+      "workspaceId": "ws_default_prod",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [meta-llama/llama-3.3-70b-instruct:free, liquid/lfm-2.5-2.6b:free, thinkingmachines/inkling:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "FREE_ONLY",
+        "candidates": [
+          "meta-llama/llama-3.3-70b-instruct:free",
+          "liquid/lfm-2.5-2.6b:free",
+          "thinkingmachines/inkling:free",
+          "z-ai/glm-5.2:free",
+          "nvidia/nemotron-3-ultra-550b-a55b:free",
+          "google/gemma-4-31b-it:free",
+          "openrouter/free",
+          "google/gemini-2.0-flash-exp:free",
+          "inclusionai/ling-3.0-flash-fin:free",
+          "dots-studio/dots-3-note-preview:free",
+          "nvidia/nemotron-3.5-lightning:free",
+          "thinkingmachines/inkling-small:free",
+          "poolside/laguna-s-2.1:free",
+          "poolside/laguna-xs-2.1:free",
+          "cohere/north-mini-code:free",
+          "nvidia/nemotron-3.5-content-safety:free",
+          "minimax/minimax-m3:free",
+          "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+          "google/gemma-4-26b-a4b-it:free",
+          "google/lyria-3-pro-preview",
+          "google/lyria-3-clip-preview",
+          "minimax/minimax-m2.7:free",
+          "nvidia/nemotron-3-super-120b-a12b:free",
+          "deepseek/deepseek-r1:free",
+          "mistralai/mistral-small-24b-instruct-2501:free",
+          "qwen/qwen-2.5-coder-32b-instruct:free",
+          "meta-llama/llama-3.2-3b-instruct:free",
+          "gemini-2.5-flash",
+          "gemini-2.0-flash"
+        ]
+      },
+      "id": "evt_1787998295576_b8ceb698",
+      "timestamp": "2026-08-29T10:11:35.576Z"
+    }
+  ],
+  "evaluationRuns": [],
+  "baselineMetrics": [
+    [
+      "bm_default",
+      {
+        "id": "bm_default",
+        "workspaceId": "ws_default_prod",
+        "name": "Competitor Intelligence & Campaign Brief Sprint",
+        "description": "Manual workflow of researching 3-5 competitors, extracting pricing/features into spreadsheets, synthesizing positioning, and writing 3 channel briefs.",
+        "baselineTimeMinutes": 240,
+        "baselineManualSteps": 18,
+        "baselineHumanInterventions": 12,
+        "baselineQualityScore": 72,
+        "aiTimeMinutes": 12,
+        "aiHumanInterventions": 2,
+        "aiQualityScore": 94,
+        "sourceCoveragePercent": 95,
+        "lastUpdated": "2026-08-29T09:57:59.161Z"
+      }
+    ]
+  ],
+  "aiRuns": [
+    {
+      "id": "airun_1788000744798_s0igp",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "openrouter/free",
+      "attempt": 2,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 95824,
+      "inputTokens": 854,
+      "outputTokens": 914,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.7-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:52:24.798Z"
+    },
+    {
+      "id": "airun_1788000719280_pvqvu",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "openrouter/free",
+      "attempt": 2,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 50316,
+      "inputTokens": 780,
+      "outputTokens": 1880,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.7-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:51:59.280Z"
+    },
+    {
+      "id": "airun_1788000468510_nebs8",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "openrouter/free",
+      "attempt": 2,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 6841,
+      "inputTokens": 901,
+      "outputTokens": 372,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-2.5-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:47:48.510Z"
+    },
+    {
+      "id": "airun_1788000461333_526fu",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "liquid/lfm-2.5-2.6b:free",
+      "attempt": 3,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 10842,
+      "inputTokens": 853,
+      "outputTokens": 956,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-2.5-flash",
+        "openrouter/free",
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:47:41.333Z"
+    },
+    {
+      "id": "airun_1788000297497_p7y6o",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "attempt": 4,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 34370,
+      "inputTokens": 854,
+      "outputTokens": 563,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "liquid/lfm-2.5-2.6b:free",
+        "thinkingmachines/inkling:free",
+        "z-ai/glm-5.2:free",
+        "nvidia/nemotron-3-ultra-550b-a55b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:44:57.497Z"
+    },
+    {
+      "id": "airun_1788000263058_w5smx",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "liquid/lfm-2.5-2.6b:free",
+      "attempt": 1,
+      "status": "SUCCESS",
+      "latencyMs": 4327,
+      "inputTokens": 853,
+      "outputTokens": 1064,
+      "fallbackUsed": false,
+      "fallbackChain": [
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:44:23.058Z"
+    },
+    {
+      "id": "airun_1787999756407_b09zn",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "liquid/lfm-2.5-2.6b:free",
+      "attempt": 1,
+      "status": "SUCCESS",
+      "latencyMs": 3001,
+      "inputTokens": 853,
+      "outputTokens": 1207,
+      "fallbackUsed": false,
+      "fallbackChain": [
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:35:56.407Z"
+    },
+    {
+      "id": "airun_1787999753343_lu497",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "liquid/lfm-2.5-2.6b:free",
+      "attempt": 1,
+      "status": "SUCCESS",
+      "latencyMs": 2927,
+      "inputTokens": 853,
+      "outputTokens": 1008,
+      "fallbackUsed": false,
+      "fallbackChain": [
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:35:53.343Z"
+    },
+    {
+      "id": "airun_1787999342268_t2auq",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "liquid/lfm-2.5-2.6b:free",
+      "attempt": 1,
+      "status": "SUCCESS",
+      "latencyMs": 2337,
+      "inputTokens": 853,
+      "outputTokens": 932,
+      "fallbackUsed": false,
+      "fallbackChain": [
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:29:02.268Z"
+    },
+    {
+      "id": "airun_1787999339859_ij26t",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "liquid/lfm-2.5-2.6b:free",
+      "attempt": 1,
+      "status": "SUCCESS",
+      "latencyMs": 4018,
+      "inputTokens": 853,
+      "outputTokens": 1102,
+      "fallbackUsed": false,
+      "fallbackChain": [
+        "liquid/lfm-2.5-2.6b:free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:28:59.859Z"
+    },
+    {
+      "id": "airun_1787998296484_l9g5d",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 29,
+      "status": "REPAIRED",
+      "latencyMs": 419,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "liquid/lfm-2.5-2.6b:free",
+        "thinkingmachines/inkling:free",
+        "z-ai/glm-5.2:free",
+        "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "google/gemma-4-31b-it:free",
+        "openrouter/free",
+        "google/gemini-2.0-flash-exp:free",
+        "inclusionai/ling-3.0-flash-fin:free",
+        "dots-studio/dots-3-note-preview:free",
+        "nvidia/nemotron-3.5-lightning:free",
+        "thinkingmachines/inkling-small:free",
+        "poolside/laguna-s-2.1:free",
+        "poolside/laguna-xs-2.1:free",
+        "cohere/north-mini-code:free",
+        "nvidia/nemotron-3.5-content-safety:free",
+        "minimax/minimax-m3:free",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "google/gemma-4-26b-a4b-it:free",
+        "google/lyria-3-pro-preview",
+        "google/lyria-3-clip-preview",
+        "minimax/minimax-m2.7:free",
+        "nvidia/nemotron-3-super-120b-a12b:free",
+        "deepseek/deepseek-r1:free",
+        "mistralai/mistral-small-24b-instruct-2501:free",
+        "qwen/qwen-2.5-coder-32b-instruct:free",
+        "meta-llama/llama-3.2-3b-instruct:free",
+        "gemini-2.5-flash",
+        "gemini-2.0-flash"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:11:36.484Z"
+    },
+    {
+      "id": "airun_1787998296001_v6g29",
+      "workspaceId": "ws_default_prod",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 29,
+      "status": "REPAIRED",
+      "latencyMs": 426,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "liquid/lfm-2.5-2.6b:free",
+        "thinkingmachines/inkling:free",
+        "z-ai/glm-5.2:free",
+        "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "google/gemma-4-31b-it:free",
+        "openrouter/free",
+        "google/gemini-2.0-flash-exp:free",
+        "inclusionai/ling-3.0-flash-fin:free",
+        "dots-studio/dots-3-note-preview:free",
+        "nvidia/nemotron-3.5-lightning:free",
+        "thinkingmachines/inkling-small:free",
+        "poolside/laguna-s-2.1:free",
+        "poolside/laguna-xs-2.1:free",
+        "cohere/north-mini-code:free",
+        "nvidia/nemotron-3.5-content-safety:free",
+        "minimax/minimax-m3:free",
+        "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+        "google/gemma-4-26b-a4b-it:free",
+        "google/lyria-3-pro-preview",
+        "google/lyria-3-clip-preview",
+        "minimax/minimax-m2.7:free",
+        "nvidia/nemotron-3-super-120b-a12b:free",
+        "deepseek/deepseek-r1:free",
+        "mistralai/mistral-small-24b-instruct-2501:free",
+        "qwen/qwen-2.5-coder-32b-instruct:free",
+        "meta-llama/llama-3.2-3b-instruct:free",
+        "gemini-2.5-flash",
+        "gemini-2.0-flash"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-08-29T10:11:36.001Z"
+    }
+  ],
+  "templates": [],
+  "schedules": [],
+  "notifications": [],
+  "changeItems": [],
+  "sourceHealthRecords": [],
+  "approvalDecisions": []
+}

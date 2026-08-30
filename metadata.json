@@ -1,0 +1,6 @@
+{
+  "name": "ResearchFlow AI",
+  "description": "Turn market research into evidence-backed decisions and execution layer for marketing and business teams.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
