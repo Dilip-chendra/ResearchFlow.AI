@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
+import { UserAvatar } from '../common/UserAvatar';
 import {
   BookOpen,
   CheckCircle2,
@@ -23,12 +24,54 @@ import {
   RotateCcw,
   Sparkles,
   ShieldAlert,
-  ArrowRight
+  ArrowRight,
+  User,
+  Upload,
+  Smile,
+  Type,
+  Trash2,
+  Camera,
+  Save
 } from 'lucide-react';
-import { AIHealthStatus, ModelCapabilityProfile, AIRun, FailureCategory, AIRoutingMode } from '../../types';
+import { AIHealthStatus, ModelCapabilityProfile, AIRun, FailureCategory, AIRoutingMode, AvatarType } from '../../types';
+
+const EMOJI_OPTIONS = [
+  '🚀', '⚡', '🎯', '🧠', '💡', '🛡️',
+  '🦊', '🦁', '🐯', '🦅', '🌊', '🔮',
+  '💎', '👑', '💼', '🔬', '🔭', '📈',
+  '🤖', '🌐', '🏆', '🔥', '🌟', '🦄',
+];
 
 export const SettingsView: React.FC = () => {
-  const { activeWorkspace, setActiveView } = useWorkspace();
+  const {
+    user,
+    activeWorkspace,
+    setActiveView,
+    updateUserProfile,
+    removeUserAvatar,
+    addToast
+  } = useWorkspace();
+
+  // Profile Customization State
+  const [profileName, setProfileName] = useState(user?.name || '');
+  const [profileDisplayName, setProfileDisplayName] = useState(user?.displayName || user?.name || '');
+  const [avatarType, setAvatarType] = useState<AvatarType>(user?.avatarType || 'INITIALS');
+  const [avatarValue, setAvatarValue] = useState(user?.avatarValue || '');
+  const [previewImage, setPreviewImage] = useState<string | null>(user?.profileImageUrl || null);
+  const [savingProfile, setSavingProfile] = useState(false);
+  const [savedRecently, setSavedRecently] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Sync state if user changes
+  useEffect(() => {
+    if (user) {
+      setProfileName(user.name || '');
+      setProfileDisplayName(user.displayName || user.name || '');
+      setAvatarType(user.avatarType || 'INITIALS');
+      setAvatarValue(user.avatarValue || '');
+      setPreviewImage(user.profileImageUrl || null);
+    }
+  }, [user]);
 
   const [aiHealth, setAiHealth] = useState<AIHealthStatus | null>(null);
   const [loadingHealth, setLoadingHealth] = useState(false);
@@ -155,16 +198,76 @@ export const SettingsView: React.FC = () => {
     }
   };
 
+  const handlePhotoSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      addToast('Please select a valid image (JPEG, PNG, or WebP).', 'error');
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      addToast('Image size exceeds maximum limit of 2MB.', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const base64 = event.target?.result as string;
+      setPreviewImage(base64);
+      setAvatarType('IMAGE');
+      setAvatarValue(base64);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profileName.trim()) {
+      addToast('Name is required.', 'error');
+      return;
+    }
+
+    setSavedRecently(true);
+    setSavingProfile(true);
+    setTimeout(() => setSavedRecently(false), 2500);
+
+    try {
+      await updateUserProfile({
+        name: profileName.trim(),
+        displayName: profileDisplayName.trim() || profileName.trim(),
+        avatarType,
+        avatarValue: avatarType === 'IMAGE' ? (previewImage || user?.profileImageUrl || '') : avatarValue,
+        profileImageUrl: avatarType === 'IMAGE' ? (previewImage || user?.profileImageUrl || '') : '',
+      });
+    } catch (err: any) {
+      // Error handled in context
+    } finally {
+      setSavingProfile(false);
+    }
+  };
+
+  const handleRemovePhoto = async () => {
+    setPreviewImage(null);
+    setAvatarType('INITIALS');
+    setAvatarValue('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="space-y-6 md:space-y-8 pb-12">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
-            System Architecture & AI Orchestration Runbook
+            Account Profile & System Architecture
           </h2>
           <p className="text-xs text-zinc-600 mt-0.5">
-            Multi-model resilience engine, dynamic OpenRouter free discovery, Gemini failover, and live operational telemetry.
+            Personalize your identity avatar, verify AI provider latency, and inspect runtime telemetry.
           </p>
         </div>
 
@@ -191,6 +294,239 @@ export const SettingsView: React.FC = () => {
           </button>
         </div>
       )}
+
+      {/* User Profile & Avatar Customizer Card */}
+      <div className="bg-white rounded-2xl border border-zinc-200 p-6 shadow-xs space-y-6">
+        <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 bg-purple-50 text-purple-600 rounded-xl border border-purple-100">
+              <User className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                <span>Personal Profile & Avatar Identity</span>
+                <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-purple-100 text-purple-800 border border-purple-200">
+                  Active Account
+                </span>
+              </h3>
+              <p className="text-xs text-zinc-500">
+                Choose between custom uploaded photo, unique emoji, smart hash-colored initials, or neutral vector.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <form onSubmit={handleSaveProfile} className="space-y-6">
+          <div className="flex flex-col md:flex-row items-start gap-6">
+            {/* Live Avatar Preview */}
+            <div className="flex flex-col items-center gap-3 shrink-0 p-4 bg-zinc-50 rounded-2xl border border-zinc-200/80 w-full md:w-56 text-center">
+              <UserAvatar
+                user={{
+                  name: profileName,
+                  displayName: profileDisplayName,
+                  email: user?.email,
+                  avatarType,
+                  avatarValue: avatarType === 'IMAGE' ? (previewImage || user?.profileImageUrl) : avatarValue,
+                  profileImageUrl: avatarType === 'IMAGE' ? (previewImage || user?.profileImageUrl) : undefined,
+                }}
+                size="xl"
+                showRing={true}
+                showStatusIndicator={true}
+                status="online"
+              />
+              <div>
+                <p className="font-bold text-zinc-900 text-sm truncate max-w-[180px]">
+                  {profileDisplayName || profileName || 'Your Name'}
+                </p>
+                <p className="text-[11px] text-zinc-500 truncate max-w-[180px]">{user?.email || 'email@example.com'}</p>
+                <span className="inline-block mt-1 text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-zinc-200 text-zinc-700">
+                  Mode: {avatarType}
+                </span>
+              </div>
+            </div>
+
+            {/* Form Fields & Avatar Mode Tabs */}
+            <div className="flex-1 space-y-4 w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-zinc-700 block mb-1">
+                    Full Name <span className="text-rose-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={profileName}
+                    onChange={(e) => setProfileName(e.target.value)}
+                    required
+                    maxLength={100}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white"
+                    placeholder="e.g. Alex Chen"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-zinc-700 block mb-1">
+                    Display Name / Handle
+                  </label>
+                  <input
+                    type="text"
+                    value={profileDisplayName}
+                    onChange={(e) => setProfileDisplayName(e.target.value)}
+                    maxLength={100}
+                    className="w-full px-3 py-2 text-xs rounded-xl border border-zinc-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 bg-white"
+                    placeholder="e.g. Alex (CEO)"
+                  />
+                </div>
+              </div>
+
+              {/* Avatar Type Selector Buttons */}
+              <div className="space-y-2 pt-2">
+                <label className="text-xs font-semibold text-zinc-700 block">
+                  Select Avatar Type:
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setAvatarType('INITIALS')}
+                    className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                      avatarType === 'INITIALS'
+                        ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 ring-1 ring-indigo-600'
+                        : 'border-zinc-200 hover:border-zinc-300 text-zinc-700 bg-white'
+                    }`}
+                  >
+                    <Type className="w-4 h-4" />
+                    <span>Initials</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAvatarType('EMOJI')}
+                    className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                      avatarType === 'EMOJI'
+                        ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 ring-1 ring-indigo-600'
+                        : 'border-zinc-200 hover:border-zinc-300 text-zinc-700 bg-white'
+                    }`}
+                  >
+                    <Smile className="w-4 h-4" />
+                    <span>Emoji</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAvatarType('IMAGE')}
+                    className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                      avatarType === 'IMAGE'
+                        ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 ring-1 ring-indigo-600'
+                        : 'border-zinc-200 hover:border-zinc-300 text-zinc-700 bg-white'
+                    }`}
+                  >
+                    <Camera className="w-4 h-4" />
+                    <span>Custom Photo</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAvatarType('DEFAULT')}
+                    className={`flex items-center justify-center gap-2 p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
+                      avatarType === 'DEFAULT'
+                        ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 ring-1 ring-indigo-600'
+                        : 'border-zinc-200 hover:border-zinc-300 text-zinc-700 bg-white'
+                    }`}
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Vector</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Sub-panel based on chosen Avatar Type */}
+              {avatarType === 'EMOJI' && (
+                <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-200 space-y-2 animate-in fade-in">
+                  <span className="text-[11px] font-semibold text-zinc-600 block">
+                    Choose an Emoji Icon:
+                  </span>
+                  <div className="grid grid-cols-8 sm:grid-cols-12 gap-1.5">
+                    {EMOJI_OPTIONS.map((emoji) => (
+                      <button
+                        key={emoji}
+                        type="button"
+                        onClick={() => setAvatarValue(emoji)}
+                        className={`text-lg p-1.5 rounded-lg transition-transform hover:scale-110 cursor-pointer flex items-center justify-center ${
+                          avatarValue === emoji
+                            ? 'bg-indigo-100 ring-2 ring-indigo-600 shadow-2xs'
+                            : 'hover:bg-zinc-200/80'
+                        }`}
+                      >
+                        {emoji}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {avatarType === 'IMAGE' && (
+                <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-200 space-y-3 animate-in fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-semibold text-zinc-600">
+                      Upload Photo (Max 2MB, JPEG/PNG/WebP):
+                    </span>
+                    {previewImage && (
+                      <button
+                        type="button"
+                        onClick={handleRemovePhoto}
+                        className="text-[11px] text-rose-600 hover:text-rose-700 font-bold flex items-center gap-1 cursor-pointer"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        <span>Remove Photo</span>
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handlePhotoSelected}
+                    accept="image/jpeg,image/png,image/webp"
+                    className="block w-full text-xs text-zinc-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 cursor-pointer"
+                  />
+                </div>
+              )}
+
+              {avatarType === 'INITIALS' && (
+                <div className="p-3 bg-zinc-50 rounded-xl border border-zinc-200 text-xs text-zinc-600 flex items-center gap-2 animate-in fade-in">
+                  <Type className="w-4 h-4 text-indigo-600 shrink-0" />
+                  <span>
+                    Initials are automatically generated from <strong>{profileName || 'your name'}</strong> and styled with a distinct, deterministic gradient palette.
+                  </span>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <div className="flex items-center justify-end gap-3 pt-2">
+                <button
+                  type="submit"
+                  disabled={savingProfile}
+                  className={`px-4 py-2 text-white rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-2 cursor-pointer ${
+                    savedRecently
+                      ? 'bg-emerald-600 hover:bg-emerald-700 ring-2 ring-emerald-300'
+                      : 'bg-indigo-600 hover:bg-indigo-700'
+                  }`}
+                >
+                  {savedRecently ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-white" />
+                      <span>Saved!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-3.5 h-3.5" />
+                      <span>{savingProfile ? 'Saving Changes...' : 'Save Profile Changes'}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
 
       {/* AI Multi-Model Orchestration Health Card */}
       <div className="bg-white rounded-2xl border border-zinc-200 p-6 shadow-xs space-y-6">

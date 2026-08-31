@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { api } from '../../lib/api';
+import { UserAvatar } from '../common/UserAvatar';
 import {
   ResearchJob,
   WorkspaceMember,
@@ -661,10 +662,13 @@ export const ShareResearchModal: React.FC<ShareResearchModalProps> = ({
                           : 'border-zinc-200 hover:border-zinc-300 bg-white'
                       }`}
                     >
-                      <img
-                        src={mem.avatarUrl}
-                        alt={mem.name}
-                        className="w-8 h-8 rounded-full object-cover border border-zinc-200 shrink-0"
+                      <UserAvatar
+                        name={mem.name}
+                        email={mem.email}
+                        avatarType={mem.avatarType}
+                        avatarValue={mem.avatarValue}
+                        avatarUrl={mem.avatarUrl}
+                        size="sm"
                       />
                       <div className="min-w-0 flex-1">
                         <div className="font-bold text-zinc-900 text-xs truncate flex items-center justify-between">
@@ -826,13 +830,10 @@ export const ShareResearchModal: React.FC<ShareResearchModalProps> = ({
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <img
-                              src={
-                                rev.assignedToAvatar ||
-                                'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
-                              }
-                              alt={rev.assignedToName}
-                              className="w-7 h-7 rounded-full object-cover border border-zinc-200"
+                            <UserAvatar
+                              name={rev.assignedToName}
+                              avatarUrl={rev.assignedToAvatar}
+                              size="xs"
                             />
                             <div>
                               <div className="font-bold text-zinc-900 text-xs">{rev.assignedToName}</div>

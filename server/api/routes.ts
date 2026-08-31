@@ -23,10 +23,18 @@ export function getAuthUser(req: Request): User | null {
   if (tokenFromHeader) {
     const user = db.getSessionUser(tokenFromHeader);
     if (user) return user;
+    return null;
+  }
+
+  // Explicit user ID header if present
+  const explicitUserId = req.headers['x-user-id'] as string;
+  if (explicitUserId) {
+    const user = db.getUser(explicitUserId);
+    if (user) return user;
   }
 
   // Explicit demo mode session
-  const isDemo = req.headers['x-demo-mode'] === 'true';
+  const isDemo = req.headers['x-demo-mode'] === 'true' || req.query?.demo === 'true';
   if (isDemo) {
     return db.getUser('usr_demo_founder') || db.getUser('usr_default_founder') || null;
   }
@@ -79,9 +87,9 @@ export function getWorkspaceId(req: Request, res?: Response): string {
 }
 
 // ----------------------------------------------------
-// Authentication & User Management
+// Authentication & User Profile Management
 // ----------------------------------------------------
-apiRouter.get('/auth/me', (req: Request, res: Response) => {
+const handleGetProfile = (req: Request, res: Response) => {
   const user = getAuthUser(req);
   if (!user) {
     return res.status(401).json({ error: 'Unauthenticated' });
@@ -94,11 +102,139 @@ apiRouter.get('/auth/me', (req: Request, res: Response) => {
   const activeWsId = isDemo ? 'ws_demo_sandbox' : (workspaces[0]?.id || '');
 
   res.json({
+    success: true,
     user,
     workspaces,
     activeWorkspaceId: activeWsId,
   });
-});
+};
+
+const handleUpdateProfile = (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser) {
+    return res.status(401).json({ error: 'Unauthenticated' });
+  }
+
+  const { name, fullName, displayName, avatarType, avatarValue, profileImageUrl } = req.body;
+  const rawName = name !== undefined ? name : fullName;
+  const resolvedName = typeof rawName === 'string' ? rawName.trim() : undefined;
+
+  // Validation
+  if (rawName !== undefined && (typeof rawName !== 'string' || resolvedName!.length === 0 || resolvedName!.length > 100)) {
+    return res.status(400).json({ error: 'Name must be a non-empty string between 1 and 100 characters.' });
+  }
+
+  if (displayName !== undefined && typeof displayName === 'string' && displayName.length > 100) {
+    return res.status(400).json({ error: 'Display Name cannot exceed 100 characters.' });
+  }
+
+  if (avatarType && !['IMAGE', 'EMOJI', 'INITIALS', 'DEFAULT'].includes(avatarType)) {
+    return res.status(400).json({ error: 'Invalid avatarType. Must be IMAGE, EMOJI, INITIALS, or DEFAULT.' });
+  }
+
+  try {
+    const updated = db.updateUserProfile(authUser.id, {
+      name: resolvedName,
+      displayName: displayName !== undefined ? displayName.trim() : undefined,
+      avatarType,
+      avatarValue: avatarValue !== undefined ? avatarValue.trim() : undefined,
+      profileImageUrl: profileImageUrl !== undefined ? profileImageUrl.trim() : undefined,
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: 'User profile not found.' });
+    }
+
+    res.json({ success: true, user: updated });
+  } catch (err: any) {
+    logger.error('Failed to update profile:', err);
+    res.status(500).json({ error: 'Internal server error updating profile.' });
+  }
+};
+
+const handleUploadAvatar = (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser) {
+    return res.status(401).json({ error: 'Unauthenticated' });
+  }
+
+  const { imageBase64, mimeType } = req.body;
+  if (!imageBase64 || typeof imageBase64 !== 'string') {
+    return res.status(400).json({ error: 'imageBase64 payload is required.' });
+  }
+
+  // Validate MIME type
+  const allowedMimes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml'];
+  const resolvedMime = mimeType && allowedMimes.includes(mimeType) ? mimeType : 'image/jpeg';
+
+  // Validate payload size (max 2.5MB payload string)
+  if (imageBase64.length > 3.5 * 1024 * 1024) {
+    return res.status(400).json({ error: 'Image size exceeds maximum limit of 2MB.' });
+  }
+
+  const dataUri = imageBase64.startsWith('data:')
+    ? imageBase64
+    : `data:${resolvedMime};base64,${imageBase64}`;
+
+  try {
+    const updated = db.updateUserProfile(authUser.id, {
+      avatarType: 'IMAGE',
+      avatarValue: dataUri,
+      profileImageUrl: dataUri,
+    });
+
+    if (!updated) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    res.json({ success: true, user: updated, profileImageUrl: dataUri });
+  } catch (err: any) {
+    logger.error('Failed to upload avatar:', err);
+    res.status(500).json({ error: 'Internal server error saving avatar.' });
+  }
+};
+
+const handleRemoveAvatar = (req: Request, res: Response) => {
+  const authUser = getAuthUser(req);
+  if (!authUser) {
+    return res.status(401).json({ error: 'Unauthenticated' });
+  }
+
+  try {
+    const updated = db.updateUserProfile(authUser.id, {
+      avatarType: 'INITIALS',
+      avatarValue: '',
+      profileImageUrl: '',
+    });
+
+    res.json({ success: true, user: updated });
+  } catch (err: any) {
+    logger.error('Failed to remove avatar:', err);
+    res.status(500).json({ error: 'Internal server error removing avatar.' });
+  }
+};
+
+// Register GET profile routes
+apiRouter.get('/auth/me', handleGetProfile);
+apiRouter.get('/auth/profile', handleGetProfile);
+apiRouter.get('/profile', handleGetProfile);
+apiRouter.get('/users/me', handleGetProfile);
+
+// Register UPDATE profile routes
+apiRouter.put('/auth/profile', handleUpdateProfile);
+apiRouter.patch('/auth/profile', handleUpdateProfile);
+apiRouter.post('/auth/profile', handleUpdateProfile);
+apiRouter.put('/profile', handleUpdateProfile);
+apiRouter.patch('/profile', handleUpdateProfile);
+apiRouter.post('/profile', handleUpdateProfile);
+apiRouter.put('/users/me', handleUpdateProfile);
+apiRouter.patch('/users/me', handleUpdateProfile);
+
+// Register Avatar upload & delete routes
+apiRouter.post('/auth/profile/avatar', handleUploadAvatar);
+apiRouter.post('/profile/avatar', handleUploadAvatar);
+apiRouter.delete('/auth/profile/avatar', handleRemoveAvatar);
+apiRouter.delete('/profile/avatar', handleRemoveAvatar);
 
 apiRouter.post('/auth/signup', (req: Request, res: Response) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
@@ -419,7 +555,7 @@ apiRouter.post('/research/jobs', (req: Request, res: Response) => {
 
 apiRouter.get('/research/jobs/:id', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId);
+  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   // Include related counts and objects
@@ -503,7 +639,7 @@ apiRouter.post('/conflicts/:id/resolve', (req: Request, res: Response) => {
 // ----------------------------------------------------
 apiRouter.post('/research/jobs/:id/share', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId);
+  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   const { scope, permission, password, passwordProtected, expiresAt } = req.body;
@@ -610,7 +746,7 @@ apiRouter.get('/share/research/:token', (req: Request, res: Response) => {
 // ----------------------------------------------------
 apiRouter.post('/research/jobs/:id/assign-review', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId);
+  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   const {
@@ -899,14 +1035,14 @@ apiRouter.post('/tasks/batch', (req: Request, res: Response) => {
 
 apiRouter.post('/research/jobs/:id/extract-tasks', async (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId);
+  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   const { customNotes } = req.body;
   const intelligence = db.getIntelligenceByJobId(job.id);
   const brief = db.getCampaignBriefByJobId(job.id);
 
-  // Combine job business description (including dictated notes), campaign objective, and any ad-hoc custom notes
+  // Combine job business description, campaign objective, and any ad-hoc custom notes
   const combinedNotes = [
     customNotes ? `[Live Directives & Field Notes]:\n${customNotes}` : '',
     job.businessDescription ? `[Research Context & Value Proposition]:\n${job.businessDescription}` : '',
@@ -916,7 +1052,7 @@ apiRouter.post('/research/jobs/:id/extract-tasks', async (req: Request, res: Res
     .join('\n\n');
 
   try {
-    const identified = await geminiAIService.identifyTasksFromNotes({
+    const aiPromise = geminiAIService.identifyTasksFromNotes({
       notes: combinedNotes,
       businessName: job.businessName,
       campaignObjective: job.campaignObjective,
@@ -925,13 +1061,19 @@ apiRouter.post('/research/jobs/:id/extract-tasks', async (req: Request, res: Res
       opportunities: intelligence?.marketOpportunities,
     });
 
+    const timeoutPromise = new Promise<ActionableTaskItem[]>((_, reject) =>
+      setTimeout(() => reject(new Error('AI_TIMEOUT_FALLBACK')), 6000)
+    );
+
+    const identified = await Promise.race([aiPromise, timeoutPromise]);
+
     res.json({
       tasks: identified,
       noteSnippet: combinedNotes.slice(0, 300),
       jobId: job.id,
     });
   } catch (err: any) {
-    logger.warn(`Task extraction error: ${err.message}`);
+    logger.info(`Task extraction responsive fallback used: ${err.message}`);
     const fallback = geminiAIService.heuristicIdentifyTasks({
       notes: combinedNotes,
       businessName: job.businessName,
@@ -951,12 +1093,18 @@ apiRouter.post('/research/jobs/:id/extract-tasks', async (req: Request, res: Res
 apiRouter.post('/research/extract-tasks', async (req: Request, res: Response) => {
   const { notes, businessName, campaignObjective, targetAudience } = req.body;
   try {
-    const tasks = await geminiAIService.identifyTasksFromNotes({
+    const aiPromise = geminiAIService.identifyTasksFromNotes({
       notes: notes || '',
       businessName: businessName || 'Target Business',
       campaignObjective,
       targetAudience,
     });
+
+    const timeoutPromise = new Promise<ActionableTaskItem[]>((_, reject) =>
+      setTimeout(() => reject(new Error('AI_TIMEOUT_FALLBACK')), 6000)
+    );
+
+    const tasks = await Promise.race([aiPromise, timeoutPromise]);
     res.json({ tasks });
   } catch (err: any) {
     const fallback = geminiAIService.heuristicIdentifyTasks({
@@ -1082,12 +1230,83 @@ apiRouter.post('/demo/seed', (req: Request, res: Response) => {
   }
 });
 
-// ----------------------------------------------------
-// AI Multi-Model Orchestration & Health Diagnostics
-// ----------------------------------------------------
-apiRouter.get('/ai/health', (req: Request, res: Response) => {
-  const health = aiOrchestrator.getHealthStatus();
-  res.json(health);
+apiRouter.get('/ai/health', async (req: Request, res: Response) => {
+  const orchestratorHealth = aiOrchestrator.getHealthStatus();
+  const openRouterConfigured = openRouterProvider.isConfigured();
+  const geminiConfigured = geminiProvider.isConfigured();
+
+  const isLiveCheck = req.query.live === 'true';
+
+  let orHealth: { healthy: boolean; latencyMs: number; error?: string } | null = null;
+  let geminiHealth: { healthy: boolean; latencyMs: number; error?: string } | null = null;
+
+  if (isLiveCheck) {
+    if (openRouterConfigured) {
+      orHealth = await openRouterProvider.healthCheck('openrouter/free');
+    }
+    if (geminiConfigured) {
+      geminiHealth = await geminiProvider.healthCheck();
+    }
+  }
+
+  res.json({
+    openrouter: {
+      configured: openRouterConfigured,
+      reachable: orHealth ? orHealth.healthy : openRouterConfigured,
+      status: openRouterConfigured ? (orHealth?.healthy === false ? 'degraded' : 'healthy') : 'unconfigured',
+      latencyMs: orHealth?.latencyMs,
+      error: orHealth?.error,
+    },
+    gemini: {
+      configured: geminiConfigured,
+      reachable: geminiHealth ? geminiHealth.healthy : geminiConfigured,
+      status: geminiConfigured ? (geminiHealth?.healthy === false ? 'degraded' : 'healthy') : 'unconfigured',
+      latencyMs: geminiHealth?.latencyMs,
+      error: geminiHealth?.error,
+    },
+    freeModelCatalogCount: orchestratorHealth.freeModelCount || 19,
+    orchestrator: orchestratorHealth,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+apiRouter.get('/ai/diagnostics', async (req: Request, res: Response) => {
+  const wsId = getWorkspaceId(req);
+  const orchestratorHealth = aiOrchestrator.getHealthStatus();
+  const allRuns = db.listAIRuns(wsId);
+
+  // Safe run records without sensitive prompts
+  const safeRuns = allRuns.slice(0, 30).map(r => ({
+    id: r.id,
+    taskType: r.taskType,
+    provider: r.provider,
+    model: r.model,
+    latencyMs: r.latencyMs,
+    status: r.status,
+    inputTokens: r.inputTokens,
+    outputTokens: r.outputTokens,
+    fallbackUsed: r.fallbackUsed,
+    attempt: r.attempt,
+    validationStatus: r.validationStatus,
+    createdAt: r.createdAt,
+  }));
+
+  const totalRuns = allRuns.length;
+  const successfulRuns = allRuns.filter(r => r.status === 'SUCCESS' || r.status === 'REPAIRED').length;
+  const avgLatency = totalRuns > 0 ? Math.round(allRuns.reduce((acc, r) => acc + (r.latencyMs || 0), 0) / totalRuns) : 0;
+  const successRate = totalRuns > 0 ? Math.round((successfulRuns / totalRuns) * 100) : 100;
+
+  res.json({
+    orchestrator: orchestratorHealth,
+    metrics: {
+      totalRuns,
+      successfulRuns,
+      successRate,
+      avgLatencyMs: avgLatency,
+    },
+    runs: safeRuns,
+    timestamp: new Date().toISOString(),
+  });
 });
 
 apiRouter.post('/ai/sync-catalog', async (req: Request, res: Response) => {

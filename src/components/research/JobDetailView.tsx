@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { api } from '../../lib/api';
+import { UserAvatar } from '../common/UserAvatar';
 import {
   ResearchJob,
   ResearchSource,
@@ -434,13 +435,11 @@ export const JobDetailView: React.FC<{ jobId: string }> = ({ jobId }) => {
                   className="bg-indigo-50/50 border border-indigo-200/70 rounded-xl p-2.5 flex items-center justify-between gap-3 text-xs"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <img
-                      src={
-                        rev.assignedToAvatar ||
-                        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'
-                      }
-                      alt={rev.assignedToName}
-                      className="w-7 h-7 rounded-full object-cover border border-indigo-200 shrink-0"
+                    <UserAvatar
+                      name={rev.assignedToName}
+                      email={rev.assignedToEmail}
+                      avatarUrl={rev.assignedToAvatar}
+                      size="xs"
                     />
                     <div className="min-w-0">
                       <div className="font-bold text-zinc-900 text-xs truncate">

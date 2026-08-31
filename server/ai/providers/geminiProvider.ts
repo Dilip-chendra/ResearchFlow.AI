@@ -7,7 +7,7 @@ import { logger } from '../../utils/logger';
 export class GeminiProvider implements AIProvider {
   public readonly name = 'gemini' as const;
   private aiClient: GoogleGenAI | null = null;
-  private readonly defaultModel = 'gemini-3.7-flash';
+  private readonly defaultModel = 'gemini-3.6-flash';
 
   private getClient(): GoogleGenAI | null {
     const key = process.env.GEMINI_API_KEY;
@@ -68,7 +68,7 @@ export class GeminiProvider implements AIProvider {
         prompt: 'Return json: {"status":"healthy"}',
         temperature: 0.1,
         maxTokens: 50,
-        timeoutMs: 8000,
+        timeoutMs: 90000,
       }, true);
       const latencyMs = Date.now() - start;
       if (res.success) {
@@ -116,12 +116,20 @@ export class GeminiProvider implements AIProvider {
       }
     }
 
+    const timeoutMs = options.timeoutMs || 90000;
+    const timeoutPromise = new Promise<never>((_, reject) =>
+      setTimeout(() => reject(new Error(`Gemini API request timed out after ${timeoutMs}ms`)), timeoutMs)
+    );
+
     try {
-      const response = await client.models.generateContent({
-        model: resolvedModel,
-        contents: options.prompt,
-        config,
-      });
+      const response = await Promise.race([
+        client.models.generateContent({
+          model: resolvedModel,
+          contents: options.prompt,
+          config,
+        }),
+        timeoutPromise,
+      ]);
 
       const latencyMs = Date.now() - start;
       const text = response.text || '';
@@ -165,9 +173,9 @@ export class GeminiProvider implements AIProvider {
   }
 
   private mapModelName(model: string): string {
-    if (model.includes('3.1-pro') || model.includes('pro')) return 'gemini-3.1-pro-preview';
-    if (model.includes('3.6')) return 'gemini-3.6-flash';
-    if (model.includes('3.7') || model.includes('flash')) return 'gemini-3.7-flash';
+    if (model.includes('3.6') || model === 'gemini-3.6-flash') return 'gemini-3.6-flash';
+    if (model.includes('3.7')) return 'gemini-3.7-flash';
+    if (model.includes('flash')) return 'gemini-3.6-flash';
     return this.defaultModel;
   }
 

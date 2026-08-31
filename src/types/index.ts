@@ -48,12 +48,19 @@ export type ResearchCategory =
   | 'Potential Gaps'
   | 'Trust Signals';
 
+export type AvatarType = 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
+
 export interface User {
   id: string;
   email: string;
   name: string;
-  avatarUrl?: string;
+  displayName?: string;
+  profileImageUrl?: string;
+  avatarType?: AvatarType;
+  avatarValue?: string;
+  avatarUrl?: string; // Backwards compatible alias
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Workspace {
@@ -274,6 +281,8 @@ export interface WorkspaceMember {
   role: 'OWNER' | 'ADMIN' | 'GTM_STRATEGIST' | 'RESEARCHER' | 'CONTENT_LEAD' | 'REVIEWER';
   title?: string;
   avatarUrl?: string;
+  avatarType?: AvatarType;
+  avatarValue?: string;
   department?: string;
   joinedAt: string;
 }

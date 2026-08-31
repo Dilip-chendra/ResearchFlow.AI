@@ -8,7 +8,7 @@ import { PositioningMatrixModal } from './PositioningMatrixModal';
 import { BattlecardBuilder } from './BattlecardBuilder';
 
 export const IntelligenceView: React.FC = () => {
-  const { activeWorkspace, addToast, setSelectedJobId, setActiveView } = useWorkspace();
+  const { activeWorkspace, addToast, selectedJobId, setSelectedJobId, setActiveView } = useWorkspace();
   const [jobs, setJobs] = useState<ResearchJob[]>([]);
   const [selectedJob, setSelectedJob] = useState<ResearchJob | null>(null);
   const [intelligence, setIntelligence] = useState<IntelligenceReport | null>(null);
@@ -22,7 +22,7 @@ export const IntelligenceView: React.FC = () => {
       setJobs(jobsList);
 
       if (jobsList.length > 0) {
-        const target = jobsList[0];
+        const target = (selectedJobId && jobsList.find(j => j.id === selectedJobId)) || jobsList[0];
         setSelectedJob(target);
         const full = await api.getResearchJob(target.id);
         setIntelligence(full.intelligence || null);

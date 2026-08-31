@@ -303,14 +303,14 @@ export class AIOrchestrator {
 
     if (this.routingMode === 'BALANCED') {
       if (hasGemini) {
-        chain.push('gemini-3.7-flash');
+        chain.push('gemini-3.6-flash');
       }
       if (hasOpenRouter) {
         const freeModels = freeModelRegistry.getCandidateChainForTask(options.taskType, options.preferredModel);
         chain.push(...freeModels.slice(0, 3));
       }
-      if (hasGemini && !chain.includes('gemini-3.6-flash')) {
-        chain.push('gemini-3.6-flash');
+      if (hasGemini && !chain.includes('gemini-3.7-flash')) {
+        chain.push('gemini-3.7-flash');
       }
     } else if (this.routingMode === 'FREE_ONLY') {
       if (hasOpenRouter) {
@@ -318,16 +318,16 @@ export class AIOrchestrator {
         chain.push(...freeModels.slice(0, 3));
       }
       if (hasGemini) {
-        chain.push('gemini-3.7-flash', 'gemini-3.6-flash');
+        chain.push('gemini-3.6-flash', 'gemini-3.7-flash');
       }
     } else {
       if (options.preferredModel) chain.push(options.preferredModel);
-      if (hasGemini) chain.push('gemini-3.7-flash');
+      if (hasGemini) chain.push('gemini-3.6-flash');
       if (hasOpenRouter) chain.push('openrouter/free');
     }
 
     if (chain.length === 0) {
-      chain.push('gemini-3.7-flash', 'openrouter/free');
+      chain.push('gemini-3.6-flash', 'openrouter/free');
     }
 
     return Array.from(new Set(chain));

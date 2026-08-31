@@ -20,9 +20,32 @@ import {
   ResearchReviewAssignment
 } from '../types';
 
+const getStorageItem = (key: string): string | null => {
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  }
+  return null;
+};
+
+const setStorageItem = (key: string, value: string | null) => {
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    try {
+      if (value !== null) {
+        localStorage.setItem(key, value);
+      } else {
+        localStorage.removeItem(key);
+      }
+    } catch {}
+  }
+};
+
 let currentWorkspaceId = 'ws_demo_sandbox';
-let currentAuthToken: string | null = localStorage.getItem('rf_auth_token') || null;
-let currentDemoMode = localStorage.getItem('rf_demo_mode') === 'true';
+let currentAuthToken: string | null = getStorageItem('rf_auth_token');
+let currentDemoMode = getStorageItem('rf_demo_mode') === 'true';
 
 export function setActiveWorkspaceHeader(workspaceId: string) {
   currentWorkspaceId = workspaceId;
@@ -30,42 +53,56 @@ export function setActiveWorkspaceHeader(workspaceId: string) {
 
 export function setAuthToken(token: string | null) {
   currentAuthToken = token;
-  if (token) {
-    localStorage.setItem('rf_auth_token', token);
-  } else {
-    localStorage.removeItem('rf_auth_token');
-  }
+  setStorageItem('rf_auth_token', token);
 }
 
 export function setDemoModeHeader(isDemo: boolean) {
   currentDemoMode = isDemo;
   if (isDemo) {
-    localStorage.setItem('rf_demo_mode', 'true');
+    setStorageItem('rf_demo_mode', 'true');
   } else {
-    localStorage.removeItem('rf_demo_mode');
+    setStorageItem('rf_demo_mode', null);
   }
 }
 
-async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+async function request<T>(endpoint: string, options: RequestInit & { timeoutMs?: number } = {}): Promise<T> {
+  const timeoutMs = options.timeoutMs || 60000;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const token = currentAuthToken || getStorageItem('rf_auth_token');
+  const demoMode = currentDemoMode || getStorageItem('rf_demo_mode') === 'true';
+  const wsId = currentWorkspaceId || getStorageItem('rf_workspace_id') || 'ws_demo_sandbox';
+
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    'x-workspace-id': currentWorkspaceId,
-    ...(currentDemoMode ? { 'x-demo-mode': 'true' } : {}),
-    ...(currentAuthToken ? { Authorization: `Bearer ${currentAuthToken}` } : {}),
+    'x-workspace-id': wsId,
+    ...(demoMode ? { 'x-demo-mode': 'true' } : {}),
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...((options.headers as Record<string, string>) || {}),
   };
 
-  const response = await fetch(endpoint, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(endpoint, {
+      ...options,
+      headers,
+      signal: options.signal || controller.signal,
+    });
 
-  if (!response.ok) {
-    const errorBody = await response.json().catch(() => ({ error: response.statusText }));
-    throw new Error(errorBody.error || `HTTP error ${response.status}`);
+    if (!response.ok) {
+      const errorBody = await response.json().catch(() => ({ error: response.statusText }));
+      throw new Error(errorBody.error || `HTTP error ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error(`Request timed out after ${Math.round(timeoutMs / 1000)}s. Please check your network connection.`);
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return response.json();
 }
 
 export const api = {
@@ -106,6 +143,28 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ token, newPassword }),
     }),
+  updateProfile: (data: {
+    name?: string;
+    displayName?: string;
+    avatarType?: 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
+    avatarValue?: string;
+    profileImageUrl?: string;
+  }) =>
+    request<{ success: boolean; user: any }>('/api/auth/profile', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+  uploadAvatar: (imageBase64: string, mimeType?: string) =>
+    request<{ success: boolean; user: any; profileImageUrl: string }>('/api/auth/profile/avatar', {
+      method: 'POST',
+      body: JSON.stringify({ imageBase64, mimeType }),
+    }),
+  removeAvatar: () =>
+    request<{ success: boolean; user: any }>('/api/auth/profile/avatar', {
+      method: 'DELETE',
+    }),
+  getAiDiagnostics: () =>
+    request<any>('/api/ai/diagnostics'),
 
   // Workspaces
   getWorkspaces: () => request<Workspace[]>('/api/workspaces'),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { GlobalSearchBar } from './GlobalSearchBar';
+import { UserAvatar } from '../common/UserAvatar';
 import {
   Layers,
   Plus,
@@ -283,50 +284,61 @@ export const Navbar: React.FC = () => {
           <button
             id="btn-user-profile-menu"
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="flex items-center gap-1.5 p-1 rounded-lg hover:bg-zinc-100 transition-colors border border-transparent hover:border-zinc-200"
+            className="flex items-center gap-1.5 p-1 rounded-xl hover:bg-zinc-100 transition-colors border border-transparent hover:border-zinc-200 cursor-pointer"
+            aria-label="Open profile menu"
           >
-            <img
-              src={user?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100'}
-              alt={user?.name || 'User Profile'}
-              className="w-7 h-7 rounded-full object-cover border border-zinc-300"
-            />
+            <UserAvatar user={user} size="sm" />
             <ChevronDown className="w-3 h-3 text-zinc-500 hidden sm:block" />
           </button>
 
           {isUserMenuOpen && (
-            <div className="absolute top-full right-0 mt-1.5 w-56 bg-white rounded-xl border border-zinc-200 shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-1 text-xs">
-              <div className="px-3 py-2 border-b border-zinc-100">
-                <p className="font-semibold text-zinc-900 truncate">{user?.name || 'Founder'}</p>
-                <p className="text-[11px] text-zinc-500 truncate">{user?.email || 'founder@growthlabs.io'}</p>
-                {isDemoMode && (
-                  <span className="inline-block mt-1 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">
-                    Demo Mode Sandbox
-                  </span>
-                )}
+            <div className="absolute top-full right-0 mt-1.5 w-64 bg-white rounded-2xl border border-zinc-200 shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-1 text-xs">
+              <div className="px-3.5 py-2.5 border-b border-zinc-100 flex items-center gap-3">
+                <UserAvatar user={user} size="md" />
+                <div className="min-w-0 flex-1">
+                  <p className="font-bold text-zinc-900 truncate">{user?.displayName || user?.name || 'Founder'}</p>
+                  <p className="text-[11px] text-zinc-500 truncate">{user?.email || 'founder@growthlabs.io'}</p>
+                  {isDemoMode && (
+                    <span className="inline-block mt-1 text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-100 text-amber-800 border border-amber-200 uppercase tracking-wider">
+                      Demo Sandbox
+                    </span>
+                  )}
+                </div>
               </div>
 
               <div className="py-1">
                 <button
                   onClick={() => {
+                    setActiveView('settings');
+                    setIsUserMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3.5 py-2 hover:bg-indigo-50/60 text-zinc-700 hover:text-indigo-600 flex items-center gap-2.5 transition-colors cursor-pointer"
+                >
+                  <UserAvatar user={user} size="xs" />
+                  <span className="font-medium">Customize Profile & Avatar</span>
+                </button>
+
+                <button
+                  onClick={() => {
                     setIsOnboardingOpen(true);
                     setIsUserMenuOpen(false);
                   }}
-                  className="w-full text-left px-3 py-1.5 hover:bg-zinc-50 text-zinc-700 flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 hover:bg-zinc-50 text-zinc-700 flex items-center gap-2.5 transition-colors cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5 text-zinc-500" />
+                  <Plus className="w-4 h-4 text-zinc-400" />
                   <span>Create New Workspace</span>
                 </button>
               </div>
 
-              <div className="border-t border-zinc-100 pt-1">
+              <div className="border-t border-zinc-100 pt-1 mt-1">
                 <button
                   onClick={() => {
                     setIsUserMenuOpen(false);
                     logout();
                   }}
-                  className="w-full text-left px-3 py-1.5 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 hover:bg-rose-50 text-rose-600 font-medium flex items-center gap-2.5 transition-colors cursor-pointer"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
+                  <LogOut className="w-4 h-4" />
                   <span>{isDemoMode ? 'Exit Demo Sandbox' : 'Sign Out'}</span>
                 </button>
               </div>

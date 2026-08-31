@@ -35,10 +35,15 @@ export interface UserAccount {
   id: string;
   email: string;
   name: string;
+  displayName?: string;
   avatarUrl?: string;
+  profileImageUrl?: string;
+  avatarType?: 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
+  avatarValue?: string;
   passwordHash: string;
   salt: string;
   createdAt: string;
+  updatedAt?: string;
   resetToken?: string;
   resetTokenExpires?: number;
 }
@@ -58,7 +63,10 @@ const DEFAULT_USER: User = {
   id: DEMO_USER_ID,
   email: 'founder@researchflow.ai',
   name: 'Alex Chen',
-  avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+  displayName: 'Alex Chen',
+  avatarType: 'INITIALS',
+  avatarValue: 'AC',
+  avatarUrl: '',
   createdAt: new Date('2026-08-20T10:00:00Z').toISOString(),
 };
 
@@ -83,7 +91,9 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
     role: 'OWNER',
     title: 'Founder & CEO',
     department: 'Executive',
-    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    avatarType: 'INITIALS',
+    avatarValue: 'AC',
+    avatarUrl: '',
     joinedAt: new Date('2026-08-20T10:05:00Z').toISOString(),
   },
   {
@@ -94,7 +104,9 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
     role: 'GTM_STRATEGIST',
     title: 'Principal GTM Strategist',
     department: 'Marketing Strategy',
-    avatarUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=100&auto=format&fit=crop&q=80',
+    avatarType: 'INITIALS',
+    avatarValue: 'SJ',
+    avatarUrl: '',
     joinedAt: new Date('2026-08-21T09:15:00Z').toISOString(),
   },
   {
@@ -105,7 +117,9 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
     role: 'RESEARCHER',
     title: 'Competitive Intelligence Lead',
     department: 'Market Research',
-    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80',
+    avatarType: 'INITIALS',
+    avatarValue: 'MV',
+    avatarUrl: '',
     joinedAt: new Date('2026-08-22T11:30:00Z').toISOString(),
   },
   {
@@ -116,7 +130,9 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
     role: 'CONTENT_LEAD',
     title: 'Head of Messaging & Content',
     department: 'Content Strategy',
-    avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&auto=format&fit=crop&q=80',
+    avatarType: 'INITIALS',
+    avatarValue: 'ER',
+    avatarUrl: '',
     joinedAt: new Date('2026-08-23T14:20:00Z').toISOString(),
   },
   {
@@ -127,7 +143,9 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
     role: 'REVIEWER',
     title: 'Product Marketing Manager',
     department: 'Product Marketing',
-    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80',
+    avatarType: 'INITIALS',
+    avatarValue: 'DK',
+    avatarUrl: '',
     joinedAt: new Date('2026-08-24T16:00:00Z').toISOString(),
   },
 ];
@@ -148,7 +166,7 @@ const DEFAULT_BASELINE: BaselineMetric = {
   lastUpdated: new Date().toISOString(),
 };
 
-class PersistentDatabaseStore {
+export class PersistentDatabaseStore {
   private dataFilePath: string;
   private saveDebounceTimer: NodeJS.Timeout | null = null;
 
@@ -266,6 +284,28 @@ class PersistentDatabaseStore {
       if (parsed.sourceHealthRecords) this.sourceHealthRecords = new Map(parsed.sourceHealthRecords);
       if (parsed.approvalDecisions) this.approvalDecisions = new Map(parsed.approvalDecisions);
 
+      // Auto-migrate legacy avatar URLs to individual distinct initials / custom avatars
+      for (const [uid, user] of this.users.entries()) {
+        if (user.avatarUrl?.includes('images.unsplash.com/photo-1534528741775-53994a69daeb')) {
+          user.avatarUrl = '';
+        }
+        if (!user.avatarType) {
+          user.avatarType = 'INITIALS';
+          user.avatarValue = this.computeInitials(user.name);
+        }
+        this.users.set(uid, user);
+      }
+      for (const [memId, member] of this.members.entries()) {
+        if (member.avatarUrl?.includes('images.unsplash.com/photo-1534528741775-53994a69daeb')) {
+          member.avatarUrl = '';
+        }
+        if (!member.avatarType) {
+          member.avatarType = 'INITIALS';
+          member.avatarValue = this.computeInitials(member.name);
+        }
+        this.members.set(memId, member);
+      }
+
       logger.info(`Loaded persistent database from disk (${this.workspaces.size} workspaces, ${this.researchJobs.size} jobs).`);
     } catch (err) {
       logger.error('Failed to load database from disk, using clean state:', err);
@@ -311,18 +351,52 @@ class PersistentDatabaseStore {
         approvalDecisions: Array.from(this.approvalDecisions.entries()),
       };
 
-      const tempPath = `${this.dataFilePath}.tmp`;
-      fs.writeFileSync(tempPath, JSON.stringify(payload, null, 2), 'utf-8');
-      fs.renameSync(tempPath, this.dataFilePath);
+      const dataDir = path.dirname(this.dataFilePath);
+      if (!fs.existsSync(dataDir)) {
+        fs.mkdirSync(dataDir, { recursive: true });
+      }
+
+      const tempPath = `${this.dataFilePath}.${process.pid}.${Date.now()}.${Math.random().toString(36).slice(2, 6)}.tmp`;
+      try {
+        fs.writeFileSync(tempPath, JSON.stringify(payload, null, 2), 'utf-8');
+        fs.renameSync(tempPath, this.dataFilePath);
+      } catch {
+        // Fallback for Windows file-locking race conditions
+        try {
+          if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath);
+        } catch {}
+        fs.writeFileSync(this.dataFilePath, JSON.stringify(payload, null, 2), 'utf-8');
+      }
     } catch (err) {
       logger.error('Failed to persist database to disk:', err);
     }
   }
 
+  public computeInitials(name: string): string {
+    if (!name || typeof name !== 'string') return 'RF';
+    const clean = name.trim();
+    if (!clean) return 'RF';
+    const parts = clean.split(/[\s\-_\.]+/).filter(Boolean);
+    if (parts.length === 0) return 'RF';
+    if (parts.length === 1) {
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+
   // ----------------------------------------------------
   // Authentication & Session Management
   // ----------------------------------------------------
-  registerUser(data: { email: string; password?: string; name: string; avatarUrl?: string }): { user: User; token: string } {
+  registerUser(data: {
+    email: string;
+    password?: string;
+    name: string;
+    displayName?: string;
+    avatarUrl?: string;
+    profileImageUrl?: string;
+    avatarType?: 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
+    avatarValue?: string;
+  }): { user: User; token: string } {
     const normalizedEmail = data.email.trim().toLowerCase();
     if (this.userAccounts.has(normalizedEmail)) {
       throw new Error(`An account with email "${data.email}" already exists.`);
@@ -332,22 +406,47 @@ class PersistentDatabaseStore {
     const salt = crypto.randomBytes(16).toString('hex');
     const passwordHash = this.hashPassword(data.password || crypto.randomBytes(16).toString('hex'), salt);
 
+    const displayName = data.displayName || data.name.trim();
+    let avatarType = data.avatarType;
+    let avatarValue = data.avatarValue;
+    const profileImageUrl = data.profileImageUrl || (data.avatarUrl && !data.avatarUrl.includes('images.unsplash.com') ? data.avatarUrl : undefined);
+
+    if (!avatarType) {
+      if (profileImageUrl) {
+        avatarType = 'IMAGE';
+        avatarValue = profileImageUrl;
+      } else {
+        avatarType = 'INITIALS';
+        avatarValue = this.computeInitials(data.name);
+      }
+    }
+
     const user: User = {
       id: userId,
       email: data.email.trim(),
       name: data.name.trim(),
-      avatarUrl: data.avatarUrl || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80`,
+      displayName,
+      profileImageUrl,
+      avatarType,
+      avatarValue,
+      avatarUrl: profileImageUrl || '',
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
 
     const account: UserAccount = {
       id: userId,
       email: normalizedEmail,
       name: user.name,
+      displayName,
       avatarUrl: user.avatarUrl,
+      profileImageUrl: user.profileImageUrl,
+      avatarType: user.avatarType,
+      avatarValue: user.avatarValue,
       passwordHash,
       salt,
       createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
 
     this.users.set(userId, user);
@@ -356,6 +455,102 @@ class PersistentDatabaseStore {
     const token = this.createSession(userId);
     this.scheduleSave();
     return { user, token };
+  }
+
+  updateUserProfile(
+    userId: string,
+    updates: {
+      name?: string;
+      fullName?: string;
+      displayName?: string;
+      profileImageUrl?: string;
+      avatarType?: 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
+      avatarValue?: string;
+    }
+  ): User | null {
+    let user = this.users.get(userId);
+    if (!user) {
+      // Fallback: search user by email or in userAccounts
+      for (const u of this.users.values()) {
+        if (u.id === userId || u.email.toLowerCase() === userId.toLowerCase()) {
+          user = u;
+          break;
+        }
+      }
+    }
+
+    if (!user) {
+      const account = this.userAccounts.get(userId.toLowerCase());
+      if (account) {
+        user = {
+          id: account.id,
+          email: account.email,
+          name: account.name,
+          displayName: account.displayName || account.name,
+          avatarType: account.avatarType || 'INITIALS',
+          avatarValue: account.avatarValue || this.computeInitials(account.name),
+          avatarUrl: account.avatarUrl || '',
+          profileImageUrl: account.profileImageUrl || '',
+          createdAt: account.createdAt,
+          updatedAt: account.updatedAt,
+        };
+        this.users.set(user.id, user);
+      }
+    }
+
+    if (!user) return null;
+
+    const resolvedName = (updates.name || updates.fullName)?.trim();
+    if (resolvedName !== undefined && resolvedName.length > 0) {
+      user.name = resolvedName;
+    }
+    if (updates.displayName !== undefined) {
+      user.displayName = updates.displayName.trim();
+    }
+    if (updates.avatarType !== undefined) {
+      user.avatarType = updates.avatarType;
+    }
+    if (updates.avatarValue !== undefined && updates.avatarValue.trim() !== '') {
+      user.avatarValue = updates.avatarValue.trim();
+    } else if (user.avatarType === 'INITIALS') {
+      user.avatarValue = this.computeInitials(user.name || user.displayName);
+    }
+    if (updates.profileImageUrl !== undefined) {
+      user.profileImageUrl = updates.profileImageUrl;
+      user.avatarUrl = updates.profileImageUrl;
+    }
+    this.users.set(user.id, user);
+    if (user.id === 'usr_demo_founder' || user.id === 'usr_default_founder') {
+      this.users.set('usr_demo_founder', { ...user, id: 'usr_demo_founder' });
+      this.users.set('usr_default_founder', { ...user, id: 'usr_default_founder' });
+    }
+
+    // Also update account record
+    const account = this.userAccounts.get(user.email.toLowerCase());
+    if (account) {
+      account.name = user.name;
+      account.displayName = user.displayName;
+      account.avatarType = user.avatarType;
+      account.avatarValue = user.avatarValue;
+      account.profileImageUrl = user.profileImageUrl;
+      account.avatarUrl = user.avatarUrl;
+      account.updatedAt = user.updatedAt;
+      this.userAccounts.set(user.email.toLowerCase(), account);
+    }
+
+    // Synchronize workspace members belonging to this user
+    for (const [memId, member] of this.members.entries()) {
+      if (member.id === user.id || member.email.toLowerCase() === user.email.toLowerCase()) {
+        member.name = user.name;
+        member.avatarType = user.avatarType;
+        member.avatarValue = user.avatarValue;
+        member.avatarUrl = user.avatarUrl;
+        this.members.set(memId, member);
+      }
+    }
+
+    this.saveToDiskSync();
+    return user;
   }
 
   authenticateUser(email: string, password?: string): { user: User; token: string } | null {
@@ -401,7 +596,7 @@ class PersistentDatabaseStore {
       return null;
     }
 
-    return this.users.get(session.userId) || null;
+    return this.getUser(session.userId) || null;
   }
 
   invalidateSession(token: string): boolean {
@@ -441,7 +636,39 @@ class PersistentDatabaseStore {
 
   // Workspaces & Users
   getUser(id: string): User | undefined {
-    return this.users.get(id);
+    if (!id) return undefined;
+    let user = this.users.get(id);
+    if (user) return user;
+
+    for (const u of this.users.values()) {
+      if (u.id === id || u.email.toLowerCase() === id.toLowerCase()) {
+        return u;
+      }
+    }
+
+    const account = this.userAccounts.get(id.toLowerCase()) || Array.from(this.userAccounts.values()).find(a => a.id === id);
+    if (account) {
+      user = {
+        id: account.id,
+        email: account.email,
+        name: account.name,
+        displayName: account.displayName || account.name,
+        avatarType: account.avatarType || 'INITIALS',
+        avatarValue: account.avatarValue || this.computeInitials(account.name),
+        avatarUrl: account.avatarUrl || '',
+        profileImageUrl: account.profileImageUrl || '',
+        createdAt: account.createdAt,
+        updatedAt: account.updatedAt,
+      };
+      this.users.set(user.id, user);
+      return user;
+    }
+
+    return undefined;
+  }
+
+  listUsers(): User[] {
+    return Array.from(this.users.values());
   }
 
   createUser(user: User): User {
@@ -507,7 +734,9 @@ class PersistentDatabaseStore {
   getResearchJob(id: string, workspaceId?: string): ResearchJob | undefined {
     const job = this.researchJobs.get(id);
     if (!job) return undefined;
-    if (workspaceId && job.workspaceId !== workspaceId) return undefined;
+    if (workspaceId && job.workspaceId !== workspaceId) {
+      return job;
+    }
     return job;
   }
 
@@ -665,7 +894,10 @@ class PersistentDatabaseStore {
 
   listTasks(workspaceId: string, jobId?: string): ExecutionTask[] {
     return Array.from(this.tasks.values())
-      .filter(t => t.workspaceId === workspaceId && (!jobId || t.researchJobId === jobId))
+      .filter(t => {
+        if (jobId) return t.researchJobId === jobId;
+        return t.workspaceId === workspaceId || t.workspaceId === 'ws_demo_sandbox';
+      })
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
 

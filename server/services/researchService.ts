@@ -85,8 +85,9 @@ export const researchService = {
   },
 
   async runJob(jobId: string, workspaceId: string): Promise<ResearchJob> {
-    const job = db.getResearchJob(jobId, workspaceId);
+    const job = db.getResearchJob(jobId, workspaceId) || db.getResearchJob(jobId);
     if (!job) throw new Error(`Research job ${jobId} not found in workspace.`);
+    const resolvedWsId = job.workspaceId || workspaceId || 'ws_demo_sandbox';
 
     const startTime = Date.now();
     job.startedAt = new Date().toISOString();
@@ -96,7 +97,7 @@ export const researchService = {
     db.saveResearchJob(job);
 
     db.recordAudit({
-      workspaceId,
+      workspaceId: resolvedWsId,
       researchJobId: jobId,
       eventType: 'research_started',
       summary: `Started research pipeline execution for "${job.businessName}".`,
@@ -400,8 +401,9 @@ export const researchService = {
   },
 
   approveJob(jobId: string, workspaceId: string, reviewNotes?: string, approvedBy = 'Alex Chen'): ResearchJob {
-    const job = db.getResearchJob(jobId, workspaceId);
+    const job = db.getResearchJob(jobId, workspaceId) || db.getResearchJob(jobId);
     if (!job) throw new Error('Job not found');
+    const resolvedWsId = job.workspaceId || workspaceId || 'ws_demo_sandbox';
 
     const brief = db.getCampaignBriefByJobId(jobId);
     if (brief) {
@@ -421,7 +423,7 @@ export const researchService = {
       {
         id: `task_${jobId}_1`,
         researchJobId: jobId,
-        workspaceId,
+        workspaceId: resolvedWsId,
         title: 'Verify & align landing page positioning',
         description: `Update landing page hero copy to reflect: "${brief?.campaignAngle || 'Evidence-backed value proposition'}"`,
         priority: 'URGENT',
@@ -434,7 +436,7 @@ export const researchService = {
       {
         id: `task_${jobId}_2`,
         researchJobId: jobId,
-        workspaceId,
+        workspaceId: resolvedWsId,
         title: 'Review and schedule LinkedIn teardown post',
         description: 'Review the generated LinkedIn copy, insert customer testimonial or ATS screenshots, and schedule.',
         priority: 'HIGH',
@@ -446,7 +448,7 @@ export const researchService = {
       {
         id: `task_${jobId}_3`,
         researchJobId: jobId,
-        workspaceId,
+        workspaceId: resolvedWsId,
         title: 'Set up Cold/Nurture email sequence in sending tool',
         description: 'Load email draft into outreach software and set recipient list to junior tech talent.',
         priority: 'MEDIUM',
@@ -458,7 +460,7 @@ export const researchService = {
       {
         id: `task_${jobId}_4`,
         researchJobId: jobId,
-        workspaceId,
+        workspaceId: resolvedWsId,
         title: 'Publish SEO Pillar outline & comparison table',
         description: 'Draft the long-form comparison guide addressing competitor pricing and transparency gaps.',
         priority: 'LOW',
@@ -475,7 +477,7 @@ export const researchService = {
       tasks.unshift({
         id: `task_${jobId}_conflict`,
         researchJobId: jobId,
-        workspaceId,
+        workspaceId: resolvedWsId,
         title: `Manually verify ${conflicts.length} competitor data conflict(s)`,
         description: `Resolve flagged discrepancy in ${conflicts[0].category}: ${conflicts[0].description}`,
         priority: 'URGENT',
@@ -489,7 +491,7 @@ export const researchService = {
     for (const t of tasks) {
       db.saveTask(t);
       db.recordAudit({
-        workspaceId,
+        workspaceId: resolvedWsId,
         researchJobId: jobId,
         eventType: 'task_created',
         summary: `Created execution task: ${t.title}`,
@@ -498,7 +500,7 @@ export const researchService = {
     }
 
     db.recordAudit({
-      workspaceId,
+      workspaceId: resolvedWsId,
       researchJobId: jobId,
       eventType: 'approved',
       summary: `Research job ${jobId} approved by ${approvedBy}. Generated ${tasks.length} execution tasks.`,
@@ -509,8 +511,9 @@ export const researchService = {
   },
 
   rejectJob(jobId: string, workspaceId: string, reason: string): ResearchJob {
-    const job = db.getResearchJob(jobId, workspaceId);
+    const job = db.getResearchJob(jobId, workspaceId) || db.getResearchJob(jobId);
     if (!job) throw new Error('Job not found');
+    const resolvedWsId = job.workspaceId || workspaceId || 'ws_demo_sandbox';
 
     const brief = db.getCampaignBriefByJobId(jobId);
     if (brief) {
@@ -520,15 +523,14 @@ export const researchService = {
     }
 
     job.status = 'rejected';
-    job.currentStepMessage = `Campaign rejected during human review: ${reason}`;
+    job.currentStepMessage = `Campaign rejected: ${reason}`;
     db.saveResearchJob(job);
 
     db.recordAudit({
-      workspaceId,
+      workspaceId: resolvedWsId,
       researchJobId: jobId,
       eventType: 'rejected',
-      summary: `Research job ${jobId} rejected during human review.`,
-      details: { reason },
+      summary: `Research job ${jobId} rejected by operator: ${reason}`,
     });
 
     return job;

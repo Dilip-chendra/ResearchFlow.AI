@@ -374,17 +374,17 @@ export const OverviewDashboard: React.FC = () => {
         </div>
 
         {/* Right Column: Execution Checklist & Audit Timeline */}
-        <div className="space-y-5 sm:space-y-6">
+        <div className="space-y-5 sm:space-y-6 min-w-0">
           {/* Active Tasks Widget */}
-          <div className="bg-white rounded-2xl border border-zinc-200 p-4 sm:p-5 md:p-6 shadow-2xs space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                <CheckSquare className="w-4 h-4 text-emerald-600" />
-                <span>Tactical Tasks</span>
+          <div className="bg-white rounded-2xl border border-zinc-200 p-4 sm:p-5 md:p-6 shadow-2xs space-y-3 min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2 truncate">
+                <CheckSquare className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span className="truncate">Tactical Tasks</span>
               </h3>
               <button
                 onClick={() => setActiveView('tasks')}
-                className="text-xs font-semibold text-indigo-600 hover:underline"
+                className="text-xs font-semibold text-indigo-600 hover:underline shrink-0"
               >
                 Full list
               </button>
@@ -399,18 +399,18 @@ export const OverviewDashboard: React.FC = () => {
                 {tasks.slice(0, 4).map((t) => (
                   <div
                     key={t.id}
-                    className="p-2.5 bg-zinc-50 rounded-lg border border-zinc-200/80 flex items-start gap-2"
+                    className="p-2.5 bg-zinc-50 rounded-lg border border-zinc-200/80 flex items-start gap-2 min-w-0"
                   >
                     <span
                       className={`w-2 h-2 rounded-full mt-1 shrink-0 ${
                         t.status === 'COMPLETED' ? 'bg-emerald-600' : 'bg-amber-500'
                       }`}
                     />
-                    <div className="flex-1">
-                      <p className={`font-semibold ${t.status === 'COMPLETED' ? 'line-through text-zinc-500' : 'text-zinc-900'}`}>
+                    <div className="flex-1 min-w-0">
+                      <p className={`font-semibold break-words ${t.status === 'COMPLETED' ? 'line-through text-zinc-500' : 'text-zinc-900'}`}>
                         {t.title}
                       </p>
-                      <span className="text-[10px] text-zinc-600 font-mono">{t.category}</span>
+                      <span className="text-[10px] text-zinc-600 font-mono block truncate">{t.category}</span>
                     </div>
                   </div>
                 ))}
@@ -419,27 +419,45 @@ export const OverviewDashboard: React.FC = () => {
           </div>
 
           {/* Activity Timeline Preview */}
-          <div className="bg-white rounded-2xl border border-zinc-200 p-4 sm:p-5 md:p-6 shadow-2xs space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-zinc-900">Recent Audit Events</h3>
+          <div className="bg-white rounded-2xl border border-zinc-200 p-4 sm:p-5 md:p-6 shadow-2xs space-y-3.5 min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-sm font-bold text-zinc-900 truncate">Recent Audit Events</h3>
               <button
                 onClick={() => setActiveView('audit')}
-                className="text-xs font-semibold text-indigo-600 hover:underline"
+                className="text-xs font-semibold text-indigo-600 hover:text-indigo-700 hover:underline shrink-0 cursor-pointer"
               >
-                View log
+                View all ({activity.length})
               </button>
             </div>
 
-            <div className="space-y-2.5 text-xs">
-              {activity.map((evt) => (
-                <div key={evt.id} className="border-l-2 border-indigo-300 pl-2.5 py-0.5 space-y-0.5">
-                  <span className="text-[10px] text-zinc-600 font-mono">
-                    {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                  <p className="text-zinc-800 text-[11px] font-medium leading-snug">{evt.summary}</p>
-                </div>
-              ))}
-            </div>
+            {activity.length === 0 ? (
+              <div className="p-4 text-center text-zinc-500 text-xs bg-zinc-50 rounded-xl">
+                No recent audit events recorded.
+              </div>
+            ) : (
+              <div className="space-y-2.5 text-xs max-h-[360px] overflow-y-auto pr-1">
+                {activity.slice(0, 10).map((evt) => (
+                  <div
+                    key={evt.id}
+                    className="p-2.5 bg-zinc-50/80 hover:bg-zinc-50 rounded-xl border border-zinc-200/80 transition-colors space-y-1 min-w-0 break-words"
+                  >
+                    <div className="flex items-center justify-between gap-2 flex-wrap text-[10px]">
+                      <span className="text-zinc-500 font-mono font-medium shrink-0">
+                        {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                      {evt.eventType && (
+                        <span className="px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 font-mono text-[9px] uppercase tracking-wider font-semibold truncate max-w-[130px]">
+                          {evt.eventType.replace(/_/g, ' ')}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-zinc-800 text-[11px] font-medium leading-snug break-words hyphens-auto">
+                      {evt.summary}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -27,7 +27,7 @@ async function startServer() {
   app.use('/api', apiRouter);
 
   // Health check endpoint
-  app.get('/api/health', (req, res) => {
+  app.get(['/api/health', '/health'], (req, res) => {
     res.json({
       status: 'healthy',
       app: 'ResearchFlow AI',
