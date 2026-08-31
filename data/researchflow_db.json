@@ -23231,6 +23231,24 @@
   ],
   "auditEvents": [
     {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.7-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-3.6-flash"
+        ]
+      },
+      "id": "evt_1788180457439_114286b3",
+      "timestamp": "2026-08-31T12:47:37.439Z"
+    },
+    {
       "workspaceId": "ws_default_prod",
       "eventType": "ai_run_completed",
       "summary": "AI task EXECUTIVE_SUMMARY completed with heuristic/heuristic-engine-v2 in 1ms (Status: REPAIRED)",
@@ -29326,14 +29344,6 @@
         ]
       },
       "id": "evt_1788168565903_a78ea5fd",
-      "timestamp": "2026-08-31T09:29:25.903Z"
-    },
-    {
-      "workspaceId": "ws_func_1788168562693",
-      "researchJobId": "job_1788168562694_zxae",
-      "eventType": "intelligence_generated",
-      "summary": "Synthesized competitive intelligence with 1 findings and 1 opportunities.",
-      "id": "evt_1788168565902_a204b5fe",
       "timestamp": "2026-08-31T09:29:25.903Z"
     }
   ],

@@ -76,9 +76,9 @@ export const Sidebar: React.FC = () => {
   return (
     <>
       {/* Desktop Sticky Sidebar (Hidden on mobile, visible on md+) */}
-      <aside className="hidden md:flex md:w-60 lg:w-64 border-r border-zinc-200 bg-zinc-50/50 flex-col justify-between shrink-0 select-none sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto">
-        <div className="p-3 space-y-1">
-          <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+      <aside className="hidden md:flex md:w-60 lg:w-64 border-r border-zinc-200 bg-zinc-50/50 flex-col justify-between shrink-0 select-none sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto overflow-x-hidden">
+        <div className="p-3 space-y-1 flex-1">
+          <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
             Core Workflows
           </div>
           {navItems.map((item) => {
@@ -89,7 +89,7 @@ export const Sidebar: React.FC = () => {
                 key={item.id}
                 id={`nav-item-${item.id}`}
                 onClick={() => handleNavigate(item.id)}
-                className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+                className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   isActive
                     ? 'bg-indigo-600 text-white shadow-2xs font-semibold'
                     : 'text-zinc-700 hover:bg-zinc-100 hover:text-zinc-900'
@@ -114,33 +114,35 @@ export const Sidebar: React.FC = () => {
         </div>
 
         {/* System Topology & Architecture Quick Card */}
-        <div className="relative overflow-hidden p-3.5 m-2.5 rounded-2xl bg-gradient-to-b from-indigo-950/80 via-zinc-900 to-zinc-950 text-white border border-indigo-500/20 shadow-md">
-          {/* Subtle ambient glow */}
-          <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/20 rounded-full blur-xl pointer-events-none" />
+        <div className="p-3 pb-6 shrink-0 mt-auto">
+          <div className="relative overflow-hidden p-3.5 rounded-2xl bg-gradient-to-b from-indigo-950/90 via-zinc-900 to-zinc-950 text-white border border-indigo-500/20 shadow-md">
+            {/* Subtle ambient glow */}
+            <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/20 rounded-full blur-xl pointer-events-none" />
 
-          <div className="relative z-10 space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-white">
-                <Layers className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                <span>System Topology</span>
+            <div className="relative z-10 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-white">
+                  <Layers className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                  <span>System Topology</span>
+                </div>
+                <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                  <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+                  Live
+                </span>
               </div>
-              <span className="inline-flex items-center gap-1 text-[9px] font-mono font-medium px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
-                <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-                Live
-              </span>
+
+              <p className="text-[10.5px] text-zinc-300 leading-snug">
+                End-to-end evidence pipelines, neural synthesis mesh, and security invariants.
+              </p>
+
+              <button
+                onClick={() => handleNavigate('architecture')}
+                className="w-full text-center py-2 px-2.5 text-[11px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 group cursor-pointer"
+              >
+                <span>Explore Architecture</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </button>
             </div>
-
-            <p className="text-[10.5px] text-zinc-300 leading-snug">
-              End-to-end evidence pipelines, neural synthesis mesh, and security invariants.
-            </p>
-
-            <button
-              onClick={() => handleNavigate('architecture')}
-              className="w-full text-center py-1.5 px-2 text-[11px] font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl transition-all shadow-xs flex items-center justify-center gap-1.5 group"
-            >
-              <span>Explore Architecture</span>
-              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
-            </button>
           </div>
         </div>
       </aside>
@@ -222,10 +224,28 @@ export const Sidebar: React.FC = () => {
                   </button>
                 );
               })}
+              <div className="pt-2 border-t border-zinc-100 mt-2">
+                <button
+                  onClick={() => handleNavigate('architecture')}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium transition-all min-h-[44px] ${
+                    activeView === 'architecture'
+                      ? 'bg-indigo-600 text-white shadow-2xs font-semibold'
+                      : 'text-indigo-600 bg-indigo-50/70 hover:bg-indigo-100 hover:text-indigo-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Layers className={`w-4.5 h-4.5 ${activeView === 'architecture' ? 'text-white' : 'text-indigo-600'}`} />
+                    <span>System Topology</span>
+                  </div>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full font-mono bg-emerald-500/20 text-emerald-700 font-bold uppercase">
+                    Live
+                  </span>
+                </button>
+              </div>
             </div>
 
             {/* Footer info */}
-            <div className="p-4 border-t border-zinc-200 bg-zinc-50 text-center text-[11px] text-zinc-500">
+            <div className="p-3 border-t border-zinc-200 bg-zinc-50 text-center text-[11px] text-zinc-500">
               <p className="font-semibold text-zinc-700">ResearchFlow AI SaaS</p>
               <p className="text-[10px] mt-0.5">Evidence-backed decisions & execution</p>
             </div>

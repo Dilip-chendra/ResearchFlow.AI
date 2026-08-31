@@ -149,7 +149,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
           <span
             className={`font-extrabold tracking-tight font-display ${fontSizes[size] || 'text-lg'} ${textClass}`}
           >
-            Research<tspan className={isLight ? 'text-indigo-600' : 'text-zinc-100'}>Flow</tspan>
+            Research<span className={isLight ? 'text-indigo-600' : 'text-zinc-100'}>Flow</span>
           </span>
 
           {showBadge && (

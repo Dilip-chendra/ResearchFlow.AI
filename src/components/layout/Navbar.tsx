@@ -111,14 +111,14 @@ export const Navbar: React.FC = () => {
   };
 
   return (
-    <header className="h-16 border-b border-zinc-200 bg-white/95 backdrop-blur-xs sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between">
+    <header className="h-16 border-b border-zinc-200 bg-white/95 backdrop-blur-xs sticky top-0 z-30 px-2 sm:px-4 lg:px-6 flex items-center justify-between gap-1.5 sm:gap-4">
       {/* Brand Identity & Mobile Menu Toggle */}
-      <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+      <div className="flex items-center gap-1.5 sm:gap-3 lg:gap-5 min-w-0">
         {/* Mobile Hamburger Toggle */}
         <button
           id="btn-mobile-nav-toggle"
           onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
-          className="md:hidden p-2 rounded-lg text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="md:hidden p-1.5 rounded-lg text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 shrink-0"
           aria-label={isMobileNavOpen ? 'Close navigation menu' : 'Open navigation menu'}
         >
           {isMobileNavOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -130,27 +130,27 @@ export const Navbar: React.FC = () => {
             setActiveView('overview');
             setIsMobileNavOpen(false);
           }}
-          className="cursor-pointer group select-none"
+          className="cursor-pointer group select-none shrink-0"
         >
           <BrandLogo size="xs" variant="light" showBadge={true} />
         </div>
 
         {/* Workspace Switcher */}
-        <div className="relative">
+        <div className="relative shrink-0">
           <button
             id="btn-workspace-switcher"
             onClick={() => setIsWsDropdownOpen(!isWsDropdownOpen)}
-            className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-zinc-50/70 hover:bg-zinc-100/70 text-xs font-medium text-zinc-800 transition-colors"
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-2.5 py-1.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-zinc-50/70 hover:bg-zinc-100/70 text-xs font-medium text-zinc-800 transition-colors"
           >
             <Building2 className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
-            <span className="max-w-[80px] sm:max-w-[140px] truncate font-semibold">
+            <span className="max-w-[70px] xs:max-w-[100px] sm:max-w-[140px] truncate font-semibold">
               {activeWorkspace?.name || 'Acme Growth Labs'}
             </span>
             <ChevronDown className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-zinc-400 shrink-0" />
           </button>
 
           {isWsDropdownOpen && (
-            <div className="absolute top-full left-0 mt-1.5 w-60 bg-white rounded-xl border border-zinc-200 shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-1">
+            <div className="absolute top-full left-0 mt-1.5 w-[calc(100vw-2rem)] sm:w-60 max-w-xs bg-white rounded-xl border border-zinc-200 shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-1">
               <div className="px-3 py-1 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
                 Workspaces
               </div>
@@ -181,7 +181,7 @@ export const Navbar: React.FC = () => {
       <GlobalSearchBar />
 
       {/* Action CTA Bar */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 lg:gap-3 shrink-0">
+      <div className="flex items-center gap-1 sm:gap-2.5 lg:gap-3 shrink-0">
         <div className="hidden xl:flex items-center gap-1.5 text-xs text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200 font-medium">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
           <span>Tenant Isolated</span>
@@ -192,19 +192,19 @@ export const Navbar: React.FC = () => {
           <button
             id="btn-notifications-toggle"
             onClick={() => setIsNotifOpen(!isNotifOpen)}
-            className="relative p-2 rounded-lg text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-colors border border-transparent hover:border-zinc-200"
+            className="relative p-1.5 sm:p-2 rounded-lg text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-colors border border-transparent hover:border-zinc-200"
             title="Notifications"
           >
             <Bell className="w-4 h-4" />
             {unreadCount > 0 && (
-              <span className="absolute top-1 right-1 w-4 h-4 bg-indigo-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
+              <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-4 h-4 bg-indigo-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-pulse">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}
           </button>
 
           {isNotifOpen && (
-            <div className="absolute top-full right-0 mt-1.5 w-80 sm:w-96 bg-white rounded-xl border border-zinc-200 shadow-xl z-50 animate-in fade-in slide-in-from-top-1 overflow-hidden">
+            <div className="absolute top-full right-0 mt-1.5 w-[calc(100vw-1.5rem)] sm:w-96 max-w-sm bg-white rounded-xl border border-zinc-200 shadow-xl z-50 animate-in fade-in slide-in-from-top-1 overflow-hidden">
               <div className="p-3 border-b border-zinc-100 flex items-center justify-between bg-zinc-50/50">
                 <div className="flex items-center gap-2">
                   <span className="font-semibold text-xs text-zinc-900">Notifications</span>

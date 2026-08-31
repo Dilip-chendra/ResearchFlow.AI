@@ -209,7 +209,7 @@ export const GlobalSearchBar: React.FC = () => {
   };
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-md lg:max-w-xl mx-2 sm:mx-4">
+    <div ref={containerRef} className="relative flex-1 min-w-0 max-w-xs sm:max-w-md lg:max-w-xl mx-1 sm:mx-4">
       {/* Search Input Bar */}
       <div
         className={`relative flex items-center w-full transition-all duration-150 rounded-xl border ${
@@ -218,11 +218,11 @@ export const GlobalSearchBar: React.FC = () => {
             : 'bg-zinc-100/90 hover:bg-zinc-100 border-zinc-200 hover:border-zinc-300'
         }`}
       >
-        <div className="pl-3 pr-2 flex items-center pointer-events-none text-zinc-400">
+        <div className="pl-2.5 sm:pl-3 pr-1.5 sm:pr-2 flex items-center pointer-events-none text-zinc-400 shrink-0">
           {isLoading ? (
-            <Loader2 className="w-4 h-4 text-indigo-600 animate-spin" />
+            <Loader2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-indigo-600 animate-spin" />
           ) : (
-            <Search className="w-4 h-4" />
+            <Search className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           )}
         </div>
 
@@ -237,7 +237,7 @@ export const GlobalSearchBar: React.FC = () => {
             if (!isOpen) setIsOpen(true);
           }}
           onKeyDown={handleInputKeyDown}
-          placeholder="Search research, campaigns, tasks, evidence..."
+          placeholder="Search research, evidence..."
           className="w-full py-1.5 sm:py-2 text-xs sm:text-sm bg-transparent placeholder-zinc-400 text-zinc-900 focus:outline-none pr-8"
         />
 
@@ -248,13 +248,13 @@ export const GlobalSearchBar: React.FC = () => {
               setResults([]);
               inputRef.current?.focus();
             }}
-            className="p-1 mr-1.5 text-zinc-400 hover:text-zinc-700 rounded-md hover:bg-zinc-200/60"
+            className="p-1 mr-1.5 text-zinc-400 hover:text-zinc-700 rounded-md hover:bg-zinc-200/60 shrink-0"
             aria-label="Clear search"
           >
             <X className="w-3.5 h-3.5" />
           </button>
         ) : (
-          <div className="hidden sm:flex items-center gap-0.5 mr-2 px-1.5 py-0.5 bg-zinc-200/80 border border-zinc-300/80 rounded text-[10px] font-medium text-zinc-600 select-none">
+          <div className="hidden sm:flex items-center gap-0.5 mr-2 px-1.5 py-0.5 bg-zinc-200/80 border border-zinc-300/80 rounded text-[10px] font-medium text-zinc-600 select-none shrink-0">
             <Command className="w-2.5 h-2.5" />
             <span>K</span>
           </div>
@@ -263,9 +263,9 @@ export const GlobalSearchBar: React.FC = () => {
 
       {/* Dropdown Results Overlay */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl border border-zinc-200 shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="fixed sm:absolute top-16 sm:top-full left-2 sm:left-0 right-2 sm:right-0 mt-2 bg-white rounded-2xl border border-zinc-200 shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150 max-h-[80vh] flex flex-col">
           {/* Filter Categories Bar */}
-          <div className="flex items-center gap-1.5 p-2 bg-zinc-50 border-b border-zinc-200 overflow-x-auto text-xs no-scrollbar">
+          <div className="flex items-center gap-1.5 p-2 bg-zinc-50 border-b border-zinc-200 overflow-x-auto text-xs no-scrollbar shrink-0">
             {CATEGORY_TABS.map((tab) => (
               <button
                 key={tab.id}
