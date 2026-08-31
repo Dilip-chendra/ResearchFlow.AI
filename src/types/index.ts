@@ -181,10 +181,93 @@ export interface IntelligenceReport {
   generatedAt: string;
 }
 
+export type FunnelStage = 'AWARENESS' | 'CONSIDERATION' | 'CONVERSION' | 'RETENTION';
+
+export interface TargetPersona {
+  role: string;
+  situation: string;
+  pain: string;
+  desiredOutcome: string;
+  objections: string[];
+  trigger: string;
+  decisionCriteria: string[];
+}
+
+export interface StrategicAngle {
+  id: string;
+  name: string;
+  description: string;
+  evidenceStrength: number; // 0-5
+  audienceRelevance: number; // 0-5
+  differentiation: number; // 0-5
+  businessImpact: number; // 0-5
+  rationale: string;
+  isRecommended: boolean;
+  isSelected: boolean;
+}
+
+export interface MessageArchitecture {
+  coreMessage: string;
+  supportingMessages: {
+    index: number;
+    headline: string;
+    description: string;
+    evidenceReferenceIds: string[];
+  }[];
+  proofPoints: {
+    claim: string;
+    sourceUrl: string;
+    evidenceId: string;
+    metric?: string;
+  }[];
+  callToAction: string;
+}
+
+export interface ChallengeStrategyItem {
+  id: string;
+  risk: string;
+  severity: 'HIGH' | 'MEDIUM' | 'LOW';
+  objection: string;
+  evidenceBackedCounter: string;
+  mitigation: string;
+}
+
+export interface QualityReviewScorecard {
+  overallScore: number; // 0-10
+  dimensions: {
+    strategicAlignment: number; // 0-10
+    audienceRelevance: number; // 0-10
+    specificity: number; // 0-10
+    evidenceGrounding: number; // 0-10
+    originality: number; // 0-10
+    clarity: number; // 0-10
+    conversionPotential: number; // 0-10
+    channelFit: number; // 0-10
+  };
+  strengths: string[];
+  issues: string[];
+  suggestedImprovements: string[];
+  reviewedAt: string;
+}
+
+export interface ValidationReport {
+  status: 'PASS' | 'WARNING' | 'BLOCKED';
+  factualityScore: number; // 0-100
+  unsupportedClaimsCount: number;
+  checks: {
+    name: string;
+    status: 'PASS' | 'WARNING' | 'FAIL';
+    message: string;
+  }[];
+  validatedAt: string;
+}
+
 export interface CampaignBrief {
   id: string;
   researchJobId: string;
   workspaceId: string;
+  title?: string;
+  funnelStage?: FunnelStage;
   executiveSummary: string;
   objective: string;
   audience: string;
@@ -194,6 +277,12 @@ export interface CampaignBrief {
   campaignAngle: string;
   primaryMessage: string;
   supportingMessages: string[];
+  targetPersona?: TargetPersona;
+  strategicAngles?: StrategicAngle[];
+  messageArchitecture?: MessageArchitecture;
+  challengeStrategy?: ChallengeStrategyItem[];
+  qualityReview?: QualityReviewScorecard;
+  validationReport?: ValidationReport;
   recommendedChannels: string[];
   contentStrategy: string;
   recommendations: string[];
@@ -205,18 +294,48 @@ export interface CampaignBrief {
     category: string;
   }[];
   confidence: ConfidenceLevel;
+  confidenceScore?: number;
+  confidenceExplanation?: string;
   limitations: string;
   generatedAt: string;
-  status: 'DRAFT' | 'REVIEWED' | 'APPROVED' | 'REJECTED';
+  updatedAt?: string;
+  status: 'DRAFT' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED' | 'READY_FOR_EXECUTION';
   reviewNotes?: string;
   approvedAt?: string;
   approvedBy?: string;
+}
+
+export interface LinkedInPostVariant {
+  id: string;
+  type: 'THOUGHT_LEADERSHIP' | 'TACTICAL' | 'PRODUCT_LED';
+  title: string;
+  hook: string;
+  opening?: string;
+  body: string; // 150-300 words
+  cta: string;
+  evidenceReferences: string[];
+  qualityScore: number;
+  wordCount: number;
 }
 
 export interface LinkedInAsset {
   hook: string;
   body: string;
   cta: string;
+  variants?: LinkedInPostVariant[];
+  selectedVariantType?: 'THOUGHT_LEADERSHIP' | 'TACTICAL' | 'PRODUCT_LED';
+}
+
+export interface EmailMessageItem {
+  id: string;
+  sequenceStep: number;
+  subject: string;
+  previewText: string;
+  greeting: string;
+  body: string; // 150+ words
+  cta: string;
+  evidenceReferences: string[];
+  qualityScore: number;
 }
 
 export interface EmailAsset {
@@ -224,14 +343,23 @@ export interface EmailAsset {
   previewText: string;
   body: string;
   cta: string;
+  sequenceName?: string;
+  emails?: EmailMessageItem[];
 }
 
 export interface SEOAsset {
   topic: string;
-  searchIntent: string;
+  searchIntent: string; // Commercial / Informational / Transactional
   primaryKeyword: string;
   secondaryKeywords: string[];
+  suggestedTitle?: string;
+  metaDescription?: string;
+  h1?: string;
   outline: string[];
+  keyQuestions?: string[];
+  internalLinking?: string[];
+  cta?: string;
+  evidenceRequirements?: string[];
 }
 
 export interface CampaignAsset {
@@ -244,7 +372,9 @@ export interface CampaignAsset {
   evidenceReferences: string[];
   validationStatus: 'VALID' | 'WARNING' | 'INVALID';
   reviewStatus: 'PENDING' | 'APPROVED' | 'EDITED' | 'REJECTED';
+  qualityScore?: number;
   notes?: string;
+  updatedAt?: string;
 }
 
 export interface ExecutionTask {

@@ -301,22 +301,37 @@ export const researchService = {
         evidenceList: extractedEvidenceList,
       });
 
-      const campaignBrief: CampaignBrief = {
-        id: `brief_${jobId}`,
-        researchJobId: jobId,
-        workspaceId,
-        ...briefData,
-        status: 'DRAFT',
-        generatedAt: new Date().toISOString(),
-      };
-      db.saveCampaignBrief(campaignBrief);
-      job.briefId = campaignBrief.id;
-
       const channelDrafts = await aiService.generateChannelDrafts({
         businessName: job.businessName,
         campaignBrief: briefData,
         evidenceList: extractedEvidenceList,
       });
+
+      const qualityReview = await aiService.evaluateCampaignQuality({
+        businessName: job.businessName,
+        campaignBrief: briefData,
+        channelDrafts,
+        evidenceList: extractedEvidenceList,
+      });
+
+      const validationReport = aiService.validateCampaignSafety({
+        campaignBrief: briefData,
+        channelDrafts,
+        evidenceList: extractedEvidenceList,
+      });
+
+      const campaignBrief: CampaignBrief = {
+        id: `brief_${jobId}`,
+        researchJobId: jobId,
+        workspaceId,
+        ...briefData,
+        qualityReview,
+        validationReport,
+        status: 'DRAFT',
+        generatedAt: new Date().toISOString(),
+      };
+      db.saveCampaignBrief(campaignBrief);
+      job.briefId = campaignBrief.id;
 
       // Save LinkedIn Asset
       const linkedinAsset: CampaignAsset = {
@@ -327,8 +342,9 @@ export const researchService = {
         title: 'LinkedIn Thought Leadership & Teardown Post',
         content: channelDrafts.linkedin,
         evidenceReferences: briefData.evidenceReferences.map(r => r.evidenceId),
-        validationStatus: 'VALID',
+        validationStatus: validationReport.status === 'BLOCKED' ? 'INVALID' : validationReport.status === 'WARNING' ? 'WARNING' : 'VALID',
         reviewStatus: 'PENDING',
+        qualityScore: qualityReview.dimensions.channelFit || 9.0,
       };
       db.saveCampaignAsset(linkedinAsset);
 
@@ -338,11 +354,12 @@ export const researchService = {
         researchJobId: jobId,
         workspaceId,
         channel: 'EMAIL',
-        title: 'Cold Outreach & Nurture Sequence (ATS Calibrated)',
+        title: 'Cold Outreach & Nurture Sequence (3-Step Framework)',
         content: channelDrafts.email,
         evidenceReferences: briefData.evidenceReferences.map(r => r.evidenceId),
-        validationStatus: 'VALID',
+        validationStatus: validationReport.status === 'BLOCKED' ? 'INVALID' : validationReport.status === 'WARNING' ? 'WARNING' : 'VALID',
         reviewStatus: 'PENDING',
+        qualityScore: qualityReview.dimensions.conversionPotential || 9.0,
       };
       db.saveCampaignAsset(emailAsset);
 
@@ -355,8 +372,9 @@ export const researchService = {
         title: 'Long-Tail Comparison & High-Intent Guide',
         content: channelDrafts.seo,
         evidenceReferences: briefData.evidenceReferences.map(r => r.evidenceId),
-        validationStatus: 'VALID',
+        validationStatus: validationReport.status === 'BLOCKED' ? 'INVALID' : validationReport.status === 'WARNING' ? 'WARNING' : 'VALID',
         reviewStatus: 'PENDING',
+        qualityScore: qualityReview.dimensions.specificity || 9.0,
       };
       db.saveCampaignAsset(seoAsset);
 

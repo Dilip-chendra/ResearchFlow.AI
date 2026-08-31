@@ -606,6 +606,35 @@
         "createdAt": "2026-08-31T17:31:56.666Z",
         "updatedAt": "2026-08-31T17:31:56.666Z"
       }
+    ],
+    [
+      "usr_1788200351177_650711c7",
+      {
+        "id": "usr_1788200351177_650711c7",
+        "email": "alpha_1788200351148@testcorp.com",
+        "name": "Test User Alpha",
+        "displayName": "alpha-user",
+        "profileImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "createdAt": "2026-08-31T18:19:11.248Z",
+        "updatedAt": "2026-08-31T18:19:11.248Z"
+      }
+    ],
+    [
+      "usr_1788200351413_253bb571",
+      {
+        "id": "usr_1788200351413_253bb571",
+        "email": "beta_1788200351411@testcorp.com",
+        "name": "Bob Builder",
+        "displayName": "Bob Builder",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB",
+        "avatarUrl": "",
+        "createdAt": "2026-08-31T18:19:11.494Z",
+        "updatedAt": "2026-08-31T18:19:11.494Z"
+      }
     ]
   ],
   "userAccounts": [
@@ -1209,6 +1238,39 @@
         "createdAt": "2026-08-31T17:31:56.666Z",
         "updatedAt": "2026-08-31T17:31:56.666Z"
       }
+    ],
+    [
+      "alpha_1788200351148@testcorp.com",
+      {
+        "id": "usr_1788200351177_650711c7",
+        "email": "alpha_1788200351148@testcorp.com",
+        "name": "Test User Alpha",
+        "displayName": "alpha-user",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "profileImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "passwordHash": "ddea56603764098d5d71944e12c2511e6710f365e59f50a623bdcb0b2b9d04130d4dfeb2c9f7cac8da538e9c1d99c786e9477fe69ccffe64fd65f89a24a77dc2",
+        "salt": "e7df09f6689f47ad181a6c7c2c783355",
+        "createdAt": "2026-08-31T18:19:11.248Z",
+        "updatedAt": "2026-08-31T18:19:11.248Z"
+      }
+    ],
+    [
+      "beta_1788200351411@testcorp.com",
+      {
+        "id": "usr_1788200351413_253bb571",
+        "email": "beta_1788200351411@testcorp.com",
+        "name": "Bob Builder",
+        "displayName": "Bob Builder",
+        "avatarUrl": "",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB",
+        "passwordHash": "ce820379ed5efca0492c31a76ec7f66c5b5fc6adb7a549a79cfaa8c367f0eb760d54564f7d091f312bd907f1feec82ea738bc6c0c14eeda6907a75920dfbf8ec",
+        "salt": "847f9aa45ef5e001da640d10cbe856e7",
+        "createdAt": "2026-08-31T18:19:11.494Z",
+        "updatedAt": "2026-08-31T18:19:11.494Z"
+      }
     ]
   ],
   "sessions": [
@@ -1669,6 +1731,24 @@
         "userId": "usr_1788197516602_df43cc5a",
         "createdAt": "2026-08-31T17:31:56.666Z",
         "expiresAt": "2026-09-30T17:31:56.666Z"
+      }
+    ],
+    [
+      "tok_02f8d7c6c5b71c88da92746c5f74642efebe07f4464ce49193aec387de163c32",
+      {
+        "token": "tok_02f8d7c6c5b71c88da92746c5f74642efebe07f4464ce49193aec387de163c32",
+        "userId": "usr_1788200351177_650711c7",
+        "createdAt": "2026-08-31T18:19:11.376Z",
+        "expiresAt": "2026-09-30T18:19:11.376Z"
+      }
+    ],
+    [
+      "tok_98de453e67d98bd76642c3eedcdff0cdc1cdbee39d32eb762be12a80a8f002b8",
+      {
+        "token": "tok_98de453e67d98bd76642c3eedcdff0cdc1cdbee39d32eb762be12a80a8f002b8",
+        "userId": "usr_1788200351413_253bb571",
+        "createdAt": "2026-08-31T18:19:11.494Z",
+        "expiresAt": "2026-09-30T18:19:11.494Z"
       }
     ]
   ],
@@ -2143,6 +2223,34 @@
         "createdAt": "2026-08-31T17:31:56.667Z",
         "updatedAt": "2026-08-31T17:31:56.667Z"
       }
+    ],
+    [
+      "ws_1788200351248_ipuk",
+      {
+        "id": "ws_1788200351248_ipuk",
+        "name": "Alpha Workspace",
+        "businessName": "Initial Alpha Name's Product",
+        "description": "Autonomous market intelligence and campaign workspace for Initial Alpha Name.",
+        "industry": "Technology & Digital Services",
+        "targetAudience": "Founders, marketers, and decision makers",
+        "ownerId": "usr_1788200351177_650711c7",
+        "createdAt": "2026-08-31T18:19:11.248Z",
+        "updatedAt": "2026-08-31T18:19:11.248Z"
+      }
+    ],
+    [
+      "ws_1788200351495_ccjj",
+      {
+        "id": "ws_1788200351495_ccjj",
+        "name": "Bob Builder's Workspace",
+        "businessName": "Bob Builder's Product",
+        "description": "Autonomous market intelligence and campaign workspace for Bob Builder.",
+        "industry": "Technology & Digital Services",
+        "targetAudience": "Founders, marketers, and decision makers",
+        "ownerId": "usr_1788200351413_253bb571",
+        "createdAt": "2026-08-31T18:19:11.495Z",
+        "updatedAt": "2026-08-31T18:19:11.495Z"
+      }
     ]
   ],
   "members": [
@@ -2568,7 +2676,39 @@
         "title": "Founder & CEO",
         "department": "Leadership",
         "avatarUrl": "",
-        "joinedAt": "2026-08-31T17:31:56.667Z"
+        "joinedAt": "2026-08-31T17:31:56.667Z",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB"
+      }
+    ],
+    [
+      "mem_1788200351248",
+      {
+        "id": "mem_1788200351248",
+        "workspaceId": "ws_1788200351248_ipuk",
+        "name": "Test User Alpha",
+        "email": "alpha_1788200351148@testcorp.com",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Leadership",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "joinedAt": "2026-08-31T18:19:11.248Z",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      }
+    ],
+    [
+      "mem_1788200351495",
+      {
+        "id": "mem_1788200351495",
+        "workspaceId": "ws_1788200351495_ccjj",
+        "name": "Bob Builder",
+        "email": "beta_1788200351411@testcorp.com",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Leadership",
+        "avatarUrl": "",
+        "joinedAt": "2026-08-31T18:19:11.495Z"
       }
     ]
   ],
@@ -22497,6 +22637,240 @@
         "status": "DRAFT",
         "generatedAt": "2026-08-31T17:31:26.577Z"
       }
+    ],
+    [
+      "brief_test_1788200342877",
+      {
+        "id": "brief_test_1788200342877",
+        "researchJobId": "job_test_nextgen",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Proof Over Promises: University seniors & early-career software engineers Acquisition",
+        "funnelStage": "CONSIDERATION",
+        "executiveSummary": "Evidence-backed campaign targeting University seniors & early-career software engineers to achieve \"Acquire qualified engineering students and early-career software developers\". Grounded upon 2 verified evidence points across competitive intelligence benchmarks.",
+        "objective": "Acquire qualified engineering students and early-career software developers",
+        "audience": "University seniors & early-career software engineers",
+        "coreProblem": "Target audience (University seniors & early-career software engineers) is frustrated by over 80% of applicant resumes fail initial screening due to generic ai buzzwords, while incumbents lock users into incumbents charge $19-$29/month with forced annual renewals.",
+        "competitiveInsights": "Competitors rely on cosmetic AI templates and opaque subscriptions.",
+        "positioning": "NextGen Resume AI is the evidence-backed solution designed for University seniors & early-career software engineers who demand specialized precision and verifiable accuracy with complete transparency.",
+        "campaignAngle": "Transparent Economics & Zero Lock-in",
+        "primaryMessage": "Ground your positioning in verifiable evidence recruiters and leaders can actually trust.",
+        "supportingMessages": [
+          "100% transparent pricing and clear deliverables with zero surprise lock-ins.",
+          "Calibrated directly against real market benchmarks and verified evidence.",
+          "Purpose-built for University seniors & early-career software engineers seeking measurable impact over vanity features."
+        ],
+        "targetPersona": {
+          "role": "University seniors & early-career software engineers",
+          "situation": "Navigating noisy market claims and evaluating solutions with tight timelines and budget scrutiny.",
+          "pain": "Frustrated by generic marketing promises, opaque subscription lock-ins, and lack of verifiable proof.",
+          "desiredOutcome": "Deploy a proven, evidence-backed solution with clear deliverables and fast time-to-value.",
+          "objections": [
+            "How does this actually differ from incumbent tools we already tested?",
+            "Will this require extensive onboarding or vendor lock-in?",
+            "Is there tangible proof of outcomes before we commit?"
+          ],
+          "trigger": "Failed past implementation or upcoming strategic quarter review requiring measurable results.",
+          "decisionCriteria": [
+            "Verifiable benchmark evidence over marketing claims",
+            "Transparent pricing with zero hidden fees",
+            "Frictionless onboarding and workflow integration"
+          ]
+        },
+        "strategicAngles": [
+          {
+            "id": "angle_1",
+            "name": "Proof Over Promises",
+            "description": "Positioning NextGen Resume AI on verifiable, transparent evidence rather than generic marketing claims for University seniors & early-career software engineers.",
+            "evidenceStrength": 4.9,
+            "audienceRelevance": 4.8,
+            "differentiation": 4.7,
+            "businessImpact": 4.6,
+            "rationale": "Directly counters top incumbent vulnerabilities on ungrounded marketing promises and opaque outputs.",
+            "isRecommended": true,
+            "isSelected": false
+          },
+          {
+            "id": "angle_2",
+            "name": "Transparent Economics & Zero Lock-in",
+            "description": "Highlighting clear pricing, flexible terms, and zero recurring lock-in traps compared to legacy vendors.",
+            "evidenceStrength": 4.6,
+            "audienceRelevance": 4.5,
+            "differentiation": 4.8,
+            "businessImpact": 4.3,
+            "rationale": "Strongest conversion angle for cost-conscious buyers experiencing subscription fatigue.",
+            "isRecommended": false,
+            "isSelected": true
+          },
+          {
+            "id": "angle_3",
+            "name": "Specialized Precision & Workflow Fit",
+            "description": "Emphasizing architecture tailored specifically for University seniors & early-career software engineers rather than one-size-fits-all bloated suites.",
+            "evidenceStrength": 4.4,
+            "audienceRelevance": 4.9,
+            "differentiation": 4.3,
+            "businessImpact": 4.2,
+            "rationale": "Highest resonance for technical practitioners seeking precision tools over generic templates.",
+            "isRecommended": false,
+            "isSelected": false
+          }
+        ],
+        "messageArchitecture": {
+          "coreMessage": "Ground your University seniors & early-career software engineers strategy in verifiable evidence recruiters and leaders can actually trust.",
+          "supportingMessages": [
+            {
+              "index": 1,
+              "headline": "Verifiable Proof Over Keyword Density",
+              "description": "Demonstrate concrete problem-solving deliverables rather than superficial keyword matching.",
+              "evidenceReferenceIds": [
+                "ev_test_1",
+                "ev_test_2"
+              ]
+            },
+            {
+              "index": 2,
+              "headline": "Radical Transparency & Zero Subscription Traps",
+              "description": "Clear pricing and flexible engagement with zero hidden renewals or restrictive contract terms.",
+              "evidenceReferenceIds": [
+                "ev_test_1"
+              ]
+            },
+            {
+              "index": 3,
+              "headline": "High-Velocity, Repeatable Workflow",
+              "description": "Empower University seniors & early-career software engineers to produce calibrated, execution-ready results in minutes.",
+              "evidenceReferenceIds": [
+                "ev_test_2"
+              ]
+            }
+          ],
+          "proofPoints": [
+            {
+              "claim": "Incumbents charge $19-$29/month with forced annual renewals",
+              "sourceUrl": "https://competitor-benchmark.com/pricing",
+              "evidenceId": "ev_test_1"
+            },
+            {
+              "claim": "Over 80% of applicant resumes fail initial screening due to generic AI buzzwords",
+              "sourceUrl": "https://hiring-trends.org/screening",
+              "evidenceId": "ev_test_2"
+            }
+          ],
+          "callToAction": "Experience evidence-backed precision with NextGen Resume AI."
+        },
+        "challengeStrategy": [
+          {
+            "id": "risk_1",
+            "risk": "Audience Fatigue from Generic Vendor Claims",
+            "severity": "MEDIUM",
+            "objection": "We have tried multiple tools claiming to be the best for University seniors & early-career software engineers. How is NextGen Resume AI different?",
+            "evidenceBackedCounter": "We anchor every recommendation to verifiable live benchmark data rather than cosmetic templates.",
+            "mitigation": "Show unedited evidence teardowns and transparent source citations in all messaging."
+          },
+          {
+            "id": "risk_2",
+            "risk": "Incumbent Brand Familiarity Advantage",
+            "severity": "HIGH",
+            "objection": "Why switch from a legacy platform with established market awareness?",
+            "evidenceBackedCounter": "Incumbents lock users into rigid annual commitments while failing to resolve core precision bottlenecks.",
+            "mitigation": "Focus on high-intent decision points and provide friction-free trial experiences."
+          },
+          {
+            "id": "risk_3",
+            "risk": "Perceived Workflow Switching Cost",
+            "severity": "LOW",
+            "objection": "Will adopting a new approach disrupt our existing rhythm?",
+            "evidenceBackedCounter": "Engineered for instant export and integration with standard downstream workflows.",
+            "mitigation": "Provide one-click copy, structured JSON/Markdown exports, and clear checklists."
+          }
+        ],
+        "recommendedChannels": [
+          "LinkedIn",
+          "Cold Outreach / Direct Email",
+          "Organic SEO & High-Intent Search"
+        ],
+        "contentStrategy": "Deploy comparative breakdowns, teardown articles of common industry mistakes, and transparent evidence-backed case studies.",
+        "recommendations": [
+          "Launch thought leadership campaign highlighting industry benchmarks and common vendor pitfalls.",
+          "Deploy direct email sequence emphasizing verified outcomes and transparent pricing.",
+          "Publish long-tail comparison pillars contrasting NextGen Resume AI's proof points against incumbent weaknesses."
+        ],
+        "risks": [
+          "Incumbent search volume on broad keywords; focus strictly on high-intent decision-maker distribution."
+        ],
+        "evidenceReferences": [
+          {
+            "evidenceId": "ev_test_1",
+            "claim": "Incumbents charge $19-$29/month with forced annual renewals",
+            "sourceUrl": "https://competitor-benchmark.com/pricing",
+            "category": "Pricing"
+          },
+          {
+            "evidenceId": "ev_test_2",
+            "claim": "Over 80% of applicant resumes fail initial screening due to generic AI buzzwords",
+            "sourceUrl": "https://hiring-trends.org/screening",
+            "category": "Pain Points"
+          }
+        ],
+        "confidence": "HIGH",
+        "confidenceScore": 94,
+        "confidenceExplanation": "Supported by 2 verified evidence points across independent source domains.",
+        "limitations": "Enterprise private discount contracts and non-public custom agreements remain outside public web intelligence bounds.",
+        "qualityReview": {
+          "overallScore": 9.1,
+          "dimensions": {
+            "strategicAlignment": 9.3,
+            "audienceRelevance": 9.2,
+            "specificity": 8.9,
+            "evidenceGrounding": 9.5,
+            "originality": 8.8,
+            "clarity": 9.4,
+            "conversionPotential": 8.7,
+            "channelFit": 9
+          },
+          "strengths": [
+            "Directly targets validated competitor vulnerabilities with verified citations",
+            "Maintains distinct, publication-grade voice across LinkedIn, Email, and SEO",
+            "Zero prohibited generic AI clichés or uncorroborated percentage claims"
+          ],
+          "issues": [
+            "Could include further quantitative benchmark breakdowns in email step 2"
+          ],
+          "suggestedImprovements": [
+            "Incorporate specific time-saving metrics in the tactical LinkedIn post variant"
+          ],
+          "reviewedAt": "2026-08-31T18:19:02.876Z"
+        },
+        "validationReport": {
+          "status": "WARNING",
+          "factualityScore": 98,
+          "unsupportedClaimsCount": 0,
+          "checks": [
+            {
+              "name": "Evidence Grounding",
+              "status": "PASS",
+              "message": "2 verified evidence references linked to strategy."
+            },
+            {
+              "name": "AI Cliché & Jargon Filter",
+              "status": "PASS",
+              "message": "Zero prohibited generic marketing clichés detected."
+            },
+            {
+              "name": "Factuality & Claim Safety",
+              "status": "PASS",
+              "message": "All figures and comparative claims corroborated by source evidence."
+            },
+            {
+              "name": "Channel Depth & Completeness",
+              "status": "WARNING",
+              "message": "Channel drafts may be too brief for full commercial engagement."
+            }
+          ],
+          "validatedAt": "2026-08-31T18:19:02.877Z"
+        },
+        "status": "DRAFT",
+        "generatedAt": "2026-08-31T18:19:02.877Z"
+      }
     ]
   ],
   "campaignAssets": [
@@ -27370,6 +27744,226 @@
     ]
   ],
   "auditEvents": [
+    {
+      "workspaceId": "ws_1788200351495_ccjj",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Bob Builder's Workspace",
+      "id": "evt_1788200351495_24250006",
+      "timestamp": "2026-08-31T18:19:11.495Z"
+    },
+    {
+      "workspaceId": "ws_1788200351248_ipuk",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Alpha Workspace",
+      "id": "evt_1788200351248_9eeb4308",
+      "timestamp": "2026-08-31T18:19:11.248Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "SYSTEM_EVENT",
+      "action": "ai_run_completed_with_huge_token_breakdown",
+      "summary": "Completed deep reasoning extraction pipeline for campaign intelligence.",
+      "details": {
+        "model": "gemini-3.6-flash",
+        "latencyMs": 1420
+      },
+      "id": "evt_1788200351064_ae7238f1",
+      "timestamp": "2026-08-31T18:19:11.064Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "SYSTEM_EVENT",
+      "action": "source_crawled_with_extremely_long_url_and_unbroken_string_parameters",
+      "summary": "Crawled source https://verylongdomainnameexample.com/deeply/nested/article/path/with/many/segments/and/unbroken_identifiers_1234567890_abcdefghij_klmnopqrstuvwxyz?param1=test&param2=unbrokenvalue",
+      "details": {
+        "rawPayload": {
+          "nestedKey": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "longArray": [
+            "item_0_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_1_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_2_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_3_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_4_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_5_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_6_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_7_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_8_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_9_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_10_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_11_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_12_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_13_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_14_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ]
+        }
+      },
+      "id": "evt_1788200351063_83152d65",
+      "timestamp": "2026-08-31T18:19:11.063Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task CONTENT_GENERATION completed with heuristic/heuristic-engine-v2 in 0ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1788200342902_0s6fu",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 0
+      },
+      "id": "evt_1788200342902_ee2179ab",
+      "timestamp": "2026-08-31T18:19:02.902Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task CONTENT_GENERATION after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342902_7bae16ab",
+      "timestamp": "2026-08-31T18:19:02.902Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task CONTENT_GENERATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "CONTENT_GENERATION",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342902_37750091",
+      "timestamp": "2026-08-31T18:19:02.902Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task QUALITY_EVALUATION completed with heuristic/heuristic-engine-v2 in 1ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1788200342876_q8qig",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 1
+      },
+      "id": "evt_1788200342876_4a02ad1e",
+      "timestamp": "2026-08-31T18:19:02.876Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task QUALITY_EVALUATION after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342876_e6a1bf5c",
+      "timestamp": "2026-08-31T18:19:02.876Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task QUALITY_EVALUATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "QUALITY_EVALUATION",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342875_955f8f23",
+      "timestamp": "2026-08-31T18:19:02.875Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task CONTENT_GENERATION completed with heuristic/heuristic-engine-v2 in 1ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1788200342875_c7cuh",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 1
+      },
+      "id": "evt_1788200342875_6125a609",
+      "timestamp": "2026-08-31T18:19:02.875Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task CONTENT_GENERATION after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342874_ffd383e5",
+      "timestamp": "2026-08-31T18:19:02.874Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task CONTENT_GENERATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "CONTENT_GENERATION",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342874_e3a071f1",
+      "timestamp": "2026-08-31T18:19:02.874Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task CAMPAIGN_STRATEGY completed with heuristic/heuristic-engine-v2 in 2ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1788200342873_eobcb",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 2
+      },
+      "id": "evt_1788200342873_c4cee6f2",
+      "timestamp": "2026-08-31T18:19:02.873Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task CAMPAIGN_STRATEGY after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342873_1aa63351",
+      "timestamp": "2026-08-31T18:19:02.873Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task CAMPAIGN_STRATEGY across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "CAMPAIGN_STRATEGY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1788200342871_0b0f0fe1",
+      "timestamp": "2026-08-31T18:19:02.871Z"
+    },
     {
       "workspaceId": "ws_1788197516667_y6x4",
       "eventType": "workspace_created",
@@ -33833,211 +34427,6 @@
       },
       "id": "evt_1788185162475_49a3ec2c",
       "timestamp": "2026-08-31T14:06:02.475Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 60671ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185059482_18i9i",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 60671
-      },
-      "id": "evt_1788185059482_a4405b53",
-      "timestamp": "2026-08-31T14:04:19.482Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185059481_0ba03699",
-      "timestamp": "2026-08-31T14:04:19.481Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 58040ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185057483_a665b",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 58040
-      },
-      "id": "evt_1788185057483_9a2806d8",
-      "timestamp": "2026-08-31T14:04:17.483Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185057483_45ceb6ad",
-      "timestamp": "2026-08-31T14:04:17.483Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 31358ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185054519_h24pe",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 31358
-      },
-      "id": "evt_1788185054519_e9356af8",
-      "timestamp": "2026-08-31T14:04:14.519Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185054519_f9412a6b",
-      "timestamp": "2026-08-31T14:04:14.519Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 29657ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185039860_fgsdx",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 29657
-      },
-      "id": "evt_1788185039860_505bbc08",
-      "timestamp": "2026-08-31T14:03:59.861Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185039860_ab172c2f",
-      "timestamp": "2026-08-31T14:03:59.860Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 78367ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185028392_kp5zq",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 78367
-      },
-      "id": "evt_1788185028392_670de63b",
-      "timestamp": "2026-08-31T14:03:48.392Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185028391_d25fcd95",
-      "timestamp": "2026-08-31T14:03:48.391Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 15.454722846s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.7-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"15s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 15.454722846s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.7-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"15s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185025631_e39b23ae",
-      "timestamp": "2026-08-31T14:03:45.631Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 16027ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185025453_q3i8z",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 16027
-      },
-      "id": "evt_1788185025453_e478b2d5",
-      "timestamp": "2026-08-31T14:03:45.453Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185025453_055fd558",
-      "timestamp": "2026-08-31T14:03:45.453Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, z-ai/glm-5.2:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "z-ai/glm-5.2:free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185023161_3e1dab29",
-      "timestamp": "2026-08-31T14:03:43.161Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with gemini/gemini-3.6-flash in 52414ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185014581_n66fa",
-        "provider": "gemini",
-        "model": "gemini-3.6-flash",
-        "latencyMs": 52414
-      },
-      "id": "evt_1788185014581_ccdf49e4",
-      "timestamp": "2026-08-31T14:03:34.581Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 5 using gemini (gemini-3.6-flash)",
-      "details": {
-        "model": "gemini-3.6-flash",
-        "attempts": 5,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185014581_e31d44cd",
-      "timestamp": "2026-08-31T14:03:34.581Z"
     }
   ],
   "evaluationRuns": [
@@ -34494,6 +34883,86 @@
     ]
   ],
   "aiRuns": [
+    {
+      "id": "airun_1788200342902_0s6fu",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "CONTENT_GENERATION",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Senior Conversion Copywriter.\nRegenerate the LINKEDIN asset for this campaign based on the following specific ",
+      "createdAt": "2026-08-31T18:19:02.902Z"
+    },
+    {
+      "id": "airun_1788200342876_q8qig",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "QUALITY_EVALUATION",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 1,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Principal Marketing Quality Auditor.\nEvaluate the following campaign strategy and generated assets across 8 di",
+      "createdAt": "2026-08-31T18:19:02.876Z"
+    },
+    {
+      "id": "airun_1788200342875_c7cuh",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "CONTENT_GENERATION",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 1,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Senior Copywriter and B2B Growth Lead.\nGenerate complete, professional, publication-ready execution assets acr",
+      "createdAt": "2026-08-31T18:19:02.875Z"
+    },
+    {
+      "id": "airun_1788200342873_eobcb",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "CAMPAIGN_STRATEGY",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 2,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Principal Go-To-Market Strategist and Conversion Copywriter.\nFormulate a rigorous, evidence-backed campaign st",
+      "createdAt": "2026-08-31T18:19:02.873Z"
+    },
     {
       "id": "airun_1788197505965_l48w2",
       "workspaceId": "ws_default_prod",
@@ -44526,86 +44995,6 @@
       "validationStatus": "REPAIRED",
       "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
       "createdAt": "2026-08-31T08:45:42.348Z"
-    },
-    {
-      "id": "airun_1788165941857_s5q0y",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:41.857Z"
-    },
-    {
-      "id": "airun_1788165941850_e8s6l",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 0,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:41.850Z"
-    },
-    {
-      "id": "airun_1788165941399_hcder",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 0,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:41.399Z"
-    },
-    {
-      "id": "airun_1788165941396_5p7jw",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:41.396Z"
     }
   ],
   "templates": [],

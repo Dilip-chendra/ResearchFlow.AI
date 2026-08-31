@@ -220,6 +220,22 @@ export const api = {
   resolveConflict: (id: string, data: { status: 'HUMAN_VERIFIED' | 'DISMISSED'; resolutionNotes: string }) =>
     request<ConflictItem>(`/api/conflicts/${id}/resolve`, { method: 'POST', body: JSON.stringify(data) }),
 
+  // Enterprise Campaigns
+  getCampaigns: () => request<any[]>('/api/campaigns'),
+  getCampaign: (id: string) => request<{ campaign: CampaignBrief; job: ResearchJob; assets: CampaignAsset[]; evidence: Evidence[]; intelligence: any }>(`/api/campaigns/${id}`),
+  selectCampaignAngle: (id: string, angleId: string) =>
+    request<CampaignBrief>(`/api/campaigns/${id}/angles/select`, { method: 'POST', body: JSON.stringify({ angleId }) }),
+  updateCampaignAsset: (id: string, assetId: string, data: { content?: any; title?: string; reviewStatus?: string }) =>
+    request<CampaignAsset>(`/api/campaigns/${id}/assets/${assetId}`, { method: 'PUT', body: JSON.stringify(data) }),
+  regenerateCampaignAsset: (id: string, data: { assetId: string; channel: string; instruction: string }) =>
+    request<CampaignAsset>(`/api/campaigns/${id}/regenerate-asset`, { method: 'POST', body: JSON.stringify(data) }),
+  validateCampaign: (id: string) =>
+    request<ValidationReport>(`/api/campaigns/${id}/validate`, { method: 'POST' }),
+  approveCampaign: (id: string, data?: { reviewNotes?: string; approvedBy?: string }) =>
+    request<{ brief: CampaignBrief; tasks: ExecutionTask[] }>(`/api/campaigns/${id}/approve`, { method: 'POST', body: JSON.stringify(data || {}) }),
+  rejectCampaign: (id: string, reason?: string) =>
+    request<CampaignBrief>(`/api/campaigns/${id}/reject`, { method: 'POST', body: JSON.stringify({ reason }) }),
+
   // Campaign Approval & Edit
   editCampaignBrief: (jobId: string, updates: Partial<CampaignBrief>) =>
     request<CampaignBrief>(`/api/research/jobs/${jobId}/campaign/edit`, { method: 'POST', body: JSON.stringify(updates) }),

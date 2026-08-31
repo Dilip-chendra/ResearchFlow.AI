@@ -870,6 +870,27 @@ export class PersistentDatabaseStore {
     return Array.from(this.campaignBriefs.values()).find(b => b.researchJobId === jobId);
   }
 
+  listCampaignBriefs(workspaceId?: string): CampaignBrief[] {
+    return Array.from(this.campaignBriefs.values())
+      .filter(b => {
+        if (!workspaceId) return true;
+        return b.workspaceId === workspaceId || b.workspaceId === 'ws_demo_sandbox';
+      })
+      .sort((a, b) => new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime());
+  }
+
+  updateCampaignBrief(brief: CampaignBrief): CampaignBrief {
+    this.campaignBriefs.set(brief.id, brief);
+    this.saveToDiskSync();
+    return brief;
+  }
+
+  deleteCampaignBrief(id: string): boolean {
+    const res = this.campaignBriefs.delete(id);
+    if (res) this.saveToDiskSync();
+    return res;
+  }
+
   // Assets
   saveCampaignAsset(asset: CampaignAsset): CampaignAsset {
     this.campaignAssets.set(asset.id, asset);
