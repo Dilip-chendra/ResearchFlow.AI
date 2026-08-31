@@ -195,6 +195,20 @@ export const api = {
     competitorUrls: string[];
     additionalUrls?: string[];
   }) => request<ResearchJob>('/api/research/jobs', { method: 'POST', body: JSON.stringify(data) }),
+  discoverCompetitors: (data: {
+    businessName?: string;
+    businessDescription?: string;
+    industry?: string;
+    targetAudience?: string;
+  }) =>
+    request<{
+      success: boolean;
+      count: number;
+      competitors: Array<{ name: string; url: string; reason?: string }>;
+    }>('/api/research/discover-competitors', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
   runResearchJob: (id: string) =>
     request<ResearchJob>(`/api/research/jobs/${id}/run`, { method: 'POST' }),
   deleteResearchJob: (id: string) =>

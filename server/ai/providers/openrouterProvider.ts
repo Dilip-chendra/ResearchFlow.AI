@@ -146,8 +146,8 @@ export class OpenRouterProvider implements AIProvider {
           const errorText = await res.text().catch(() => '');
           const failureCategory = this.categorizeHttpError(res.status, errorText);
 
-          // Retry on 429 or 5xx with jitter
-          if ((res.status === 429 || res.status >= 500) && attempt < maxRetries) {
+          // Retry on 5xx transient server errors with jitter (do not retry 429 quota exhaustion)
+          if ((res.status === 502 || res.status === 503 || res.status === 504) && attempt < maxRetries) {
             const jitterMs = 300 + Math.random() * 500;
             await new Promise(resolve => setTimeout(resolve, jitterMs));
             continue;

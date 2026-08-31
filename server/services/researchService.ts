@@ -129,101 +129,111 @@ export const researchService = {
         return job;
       }
 
-      // 2. Fetch and research sources
+      // 2. Fetch and research sources concurrently in worker batches
+      const sources = db.listSources(jobId);
       job.status = 'researching';
-      job.currentStepMessage = 'Browsing and extracting visible text from sources...';
+      job.currentStepMessage = `Browsing and extracting visible text from ${sources.length} sources...`;
       job.progressPercent = 25;
       db.saveResearchJob(job);
 
-      const sources = db.listSources(jobId);
       const extractedEvidenceList: Evidence[] = [];
       let completedSourcesCount = 0;
       let failedSourcesCount = 0;
 
-      for (let i = 0; i < sources.length; i++) {
-        const src = sources[i];
-        src.status = 'fetching';
-        db.saveSource(src);
+      // Concurrency limit of 5 parallel requests
+      const CONCURRENCY_LIMIT = Math.min(5, Math.max(1, sources.length));
+      let currentSrcIdx = 0;
 
-        db.recordAudit({
-          workspaceId,
-          researchJobId: jobId,
-          eventType: 'source_started',
-          summary: `Initiated research retrieval for ${src.url}`,
-        });
-
-        // Fetch source content with live search grounding context
-        const businessContext = `${job.businessName}: ${job.businessDescription}. Objective: ${job.campaignObjective}`;
-        const extracted = await researchTool.fetchUrl(src.url, businessContext);
-
-        src.httpStatus = extracted.httpStatus;
-        src.title = extracted.title || src.url;
-        src.canonicalUrl = extracted.canonicalUrl;
-        src.rawTextSnippet = extracted.rawTextSnippet;
-        src.wordCount = extracted.wordCount;
-        src.retrievedAt = new Date().toISOString();
-
-        if (extracted.success) {
-          src.status = 'completed';
-          completedSourcesCount++;
+      const workers = Array.from({ length: CONCURRENCY_LIMIT }, async () => {
+        while (currentSrcIdx < sources.length) {
+          const i = currentSrcIdx++;
+          const src = sources[i];
+          src.status = 'fetching';
           db.saveSource(src);
 
           db.recordAudit({
-            workspaceId,
+            workspaceId: resolvedWsId,
             researchJobId: jobId,
-            eventType: 'source_completed',
-            summary: `Successfully retrieved ${src.url} (${extracted.wordCount} words)`,
-            details: { title: src.title, wordCount: src.wordCount },
+            eventType: 'source_started',
+            summary: `Initiated research retrieval for ${src.url}`,
           });
 
-          // 3. Extract evidence from this source
-          job.status = 'extracting';
-          job.currentStepMessage = `Extracting structured claims and facts from ${src.title}...`;
-          job.progressPercent = 30 + Math.round(((i + 1) / sources.length) * 20);
-          db.saveResearchJob(job);
+          // Fetch source content with live search grounding context
+          const businessContext = `${job.businessName}: ${job.businessDescription}. Objective: ${job.campaignObjective}`;
+          const extracted = await researchTool.fetchUrl(src.url, businessContext);
 
-          const evidenceItems = await aiService.extractEvidence({
-            sourceUrl: src.url,
-            sourceTitle: src.title,
-            rawText: extracted.rawTextSnippet,
-            businessContext: `${job.businessName} - ${job.businessDescription}`,
-          });
+          src.httpStatus = extracted.httpStatus;
+          src.title = extracted.title || src.url;
+          src.canonicalUrl = extracted.canonicalUrl;
+          src.rawTextSnippet = extracted.rawTextSnippet;
+          src.wordCount = extracted.wordCount;
+          src.retrievedAt = new Date().toISOString();
 
-          for (const item of evidenceItems) {
-            const ev: Evidence = {
-              id: `ev_${jobId}_${extractedEvidenceList.length + 1}`,
+          if (extracted.success) {
+            src.status = 'completed';
+            completedSourcesCount++;
+            db.saveSource(src);
+
+            db.recordAudit({
+              workspaceId: resolvedWsId,
               researchJobId: jobId,
-              workspaceId,
-              sourceId: src.id,
-              category: item.category,
-              claim: item.claim,
-              supportingText: item.supportingText,
+              eventType: 'source_completed',
+              summary: `Successfully retrieved ${src.url} (${extracted.wordCount} words)`,
+              details: { title: src.title, wordCount: src.wordCount },
+            });
+
+            // 3. Extract evidence from this source
+            const evidenceItems = await aiService.extractEvidence({
               sourceUrl: src.url,
               sourceTitle: src.title,
-              retrievedAt: new Date().toISOString(),
-              evidenceType: item.evidenceType,
-              confidence: item.confidence,
-              normalizedValue: item.normalizedValue,
-            };
-            db.saveEvidence(ev);
-            extractedEvidenceList.push(ev);
-          }
-        } else {
-          src.status = 'failed';
-          src.failureReason = extracted.failureReason;
-          src.errorMessage = extracted.errorMessage;
-          failedSourcesCount++;
-          db.saveSource(src);
+              rawText: extracted.rawTextSnippet,
+              businessContext: `${job.businessName} - ${job.businessDescription}`,
+            });
 
-          db.recordAudit({
-            workspaceId,
-            researchJobId: jobId,
-            eventType: 'source_failed',
-            summary: `Failed to retrieve ${src.url}: ${extracted.errorMessage}`,
-            details: { failureReason: extracted.failureReason },
-          });
+            for (const item of evidenceItems) {
+              const ev: Evidence = {
+                id: `ev_${jobId}_${extractedEvidenceList.length + 1}`,
+                researchJobId: jobId,
+                workspaceId: resolvedWsId,
+                sourceId: src.id,
+                category: item.category,
+                claim: item.claim,
+                supportingText: item.supportingText,
+                sourceUrl: src.url,
+                sourceTitle: src.title,
+                retrievedAt: new Date().toISOString(),
+                evidenceType: item.evidenceType,
+                confidence: item.confidence,
+                normalizedValue: item.normalizedValue,
+              };
+              db.saveEvidence(ev);
+              extractedEvidenceList.push(ev);
+            }
+          } else {
+            src.status = 'failed';
+            src.failureReason = extracted.failureReason;
+            src.errorMessage = extracted.errorMessage;
+            failedSourcesCount++;
+            db.saveSource(src);
+
+            db.recordAudit({
+              workspaceId: resolvedWsId,
+              researchJobId: jobId,
+              eventType: 'source_failed',
+              summary: `Failed to retrieve ${src.url}: ${src.failureReason || 'HTTP error'}`,
+              details: { error: src.errorMessage },
+            });
+          }
+
+          // Update progress
+          const processedSoFar = completedSourcesCount + failedSourcesCount;
+          job.currentStepMessage = `Processed ${processedSoFar}/${sources.length} sources (${extractedEvidenceList.length} claims extracted)...`;
+          job.progressPercent = Math.min(50, 25 + Math.round((processedSoFar / sources.length) * 25));
+          db.saveResearchJob(job);
         }
-      }
+      });
+
+      await Promise.all(workers);
 
       // If all sources failed completely
       if (completedSourcesCount === 0) {
