@@ -2,10 +2,19 @@ import React, { useState } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
 import { Sparkles, Shield, ArrowRight, Lock, Mail, User, Building, Compass, CheckCircle2 } from 'lucide-react';
 import { api } from '../../lib/api';
+import { BrandLogo } from '../brand/BrandLogo';
 
-export const AuthView: React.FC = () => {
+interface AuthViewProps {
+  initialMode?: 'login' | 'signup' | 'forgot';
+  onBackToLanding?: () => void;
+}
+
+export const AuthView: React.FC<AuthViewProps> = ({
+  initialMode = 'login',
+  onBackToLanding,
+}) => {
   const { login, signup, googleLogin, enterDemoMode, addToast } = useWorkspace();
-  const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>('login');
+  const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>(initialMode);
   
   // Login / Signup Form
   const [email, setEmail] = useState('');
@@ -123,12 +132,20 @@ export const AuthView: React.FC = () => {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center shadow-lg shadow-indigo-500/25 border border-indigo-400/30">
-            <Sparkles className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-white">ResearchFlow <span className="text-indigo-400 font-mono text-sm uppercase px-1.5 py-0.5 rounded bg-indigo-950/80 border border-indigo-500/30 ml-1">Enterprise</span></span>
+      {onBackToLanding && (
+        <div className="sm:mx-auto sm:w-full sm:max-w-md mb-4 relative z-10">
+          <button
+            onClick={onBackToLanding}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-zinc-400 hover:text-white transition-colors px-2 py-1 rounded-lg hover:bg-zinc-800/60"
+          >
+            <span>← Back to ResearchFlow AI</span>
+          </button>
+        </div>
+      )}
+
+      <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
+        <div className="flex items-center justify-center mb-4">
+          <BrandLogo size="lg" variant="dark" showBadge={true} />
         </div>
 
         <h2 className="text-center text-xl font-semibold text-slate-200">

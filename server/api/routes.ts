@@ -11,11 +11,12 @@ import { freeModelRegistry } from '../ai/openrouter/registry';
 import { openRouterProvider } from '../ai/providers/openrouterProvider';
 import { geminiProvider } from '../ai/providers/geminiProvider';
 import { logger } from '../utils/logger';
+import { User, Workspace } from '../types';
 
 export const apiRouter = Router();
 
 // Helper to extract authenticated user from Request
-function getAuthUser(req: Request) {
+export function getAuthUser(req: Request): User | null {
   const authHeader = req.headers['authorization'] || '';
   const tokenFromHeader = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : (req.headers['x-session-token'] as string);
   
@@ -24,45 +25,73 @@ function getAuthUser(req: Request) {
     if (user) return user;
   }
 
-  // Fallback: If no token or invalid, check if explicitly requesting default founder in demo mode
+  // Explicit demo mode session
   const isDemo = req.headers['x-demo-mode'] === 'true';
   if (isDemo) {
-    return db.getUser('usr_default_founder') || null;
+    return db.getUser('usr_demo_founder') || db.getUser('usr_default_founder') || null;
   }
 
   return null;
 }
 
 // Middleware to extract and authorize workspace context
-function getWorkspaceId(req: Request, res?: Response): string {
+export function getWorkspaceId(req: Request, res?: Response): string {
   const user = getAuthUser(req);
-  const requestedWsId = (req.headers['x-workspace-id'] as string) || 'ws_default_prod';
+  if (!user) {
+    const isDemoHeader = req.headers['x-demo-mode'] === 'true';
+    if (isDemoHeader) {
+      return (req.headers['x-workspace-id'] as string) || 'ws_demo_sandbox';
+    }
+    if (res && !res.headersSent) {
+      res.status(401).json({ error: 'Authentication required. Please log in or launch Demo Mode.' });
+    }
+    const err: any = new Error('UNAUTHENTICATED');
+    err.statusCode = 401;
+    throw err;
+  }
 
-  // If user is authenticated, verify authorization
-  if (user) {
-    const isAuthorized = db.isUserAuthorizedForWorkspace(user.id, requestedWsId);
-    if (!isAuthorized && requestedWsId !== 'ws_default_prod') {
-      if (res) {
-        res.status(403).json({ error: 'Access denied: You are not a member of this workspace.' });
-      }
-      throw new Error('UNAUTHORIZED_WORKSPACE');
+  const isDemo = req.headers['x-demo-mode'] === 'true' || user.id === 'usr_demo_founder' || user.id === 'usr_default_founder';
+  const requestedWsId = req.headers['x-workspace-id'] as string;
+
+  if (isDemo) {
+    return requestedWsId || 'ws_demo_sandbox';
+  }
+
+  const userWorkspaces = db.getWorkspacesForUser(user.id);
+  let targetWsId = requestedWsId || userWorkspaces[0]?.id;
+
+  if (!targetWsId) {
+    if (userWorkspaces.length > 0) {
+      targetWsId = userWorkspaces[0].id;
+    } else {
+      targetWsId = 'ws_demo_sandbox';
     }
   }
 
-  return requestedWsId;
+  const isAuthorized = db.isUserAuthorizedForWorkspace(user.id, targetWsId);
+  if (!isAuthorized && targetWsId !== 'ws_demo_sandbox') {
+    if (userWorkspaces.length > 0) {
+      return userWorkspaces[0].id;
+    }
+  }
+
+  return targetWsId;
 }
 
 // ----------------------------------------------------
 // Authentication & User Management
 // ----------------------------------------------------
 apiRouter.get('/auth/me', (req: Request, res: Response) => {
-  const user = getAuthUser(req) || db.getUser('usr_default_founder');
+  const user = getAuthUser(req);
   if (!user) {
     return res.status(401).json({ error: 'Unauthenticated' });
   }
 
-  const workspaces = db.getWorkspacesForUser(user.id);
-  const activeWsId = workspaces[0]?.id || 'ws_default_prod';
+  const isDemo = req.headers['x-demo-mode'] === 'true' || user.id === 'usr_demo_founder' || user.id === 'usr_default_founder';
+  const workspaces = isDemo
+    ? [db.getWorkspace('ws_demo_sandbox') || db.getWorkspace('ws_default_prod')!].filter(Boolean)
+    : db.getWorkspacesForUser(user.id);
+  const activeWsId = isDemo ? 'ws_demo_sandbox' : (workspaces[0]?.id || '');
 
   res.json({
     user,
@@ -85,33 +114,31 @@ apiRouter.post('/auth/signup', (req: Request, res: Response) => {
       avatarUrl,
     });
 
-    let initialWorkspace = null;
-    if (workspaceName || businessName) {
-      initialWorkspace = db.createWorkspace({
-        id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-        name: workspaceName || `${name}'s Workspace`,
-        businessName: businessName || `${name}'s Product`,
-        description: req.body.description || `Autonomous market intelligence and campaign workspace for ${businessName || name}.`,
-        industry: industry || 'Technology & Digital Services',
-        targetAudience: targetAudience || 'Founders, marketers, and decision makers',
-        ownerId: user.id,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+    // Auto-create personal workspace for new user
+    const initialWorkspace = db.createWorkspace({
+      id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      name: workspaceName || `${name}'s Workspace`,
+      businessName: businessName || `${name}'s Product`,
+      description: req.body.description || `Autonomous market intelligence and campaign workspace for ${businessName || name}.`,
+      industry: industry || 'Technology & Digital Services',
+      targetAudience: targetAudience || 'Founders, marketers, and decision makers',
+      ownerId: user.id,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
 
-      // Add user as owner member
-      db.addMember({
-        id: `mem_${Date.now()}`,
-        workspaceId: initialWorkspace.id,
-        name: user.name,
-        email: user.email,
-        role: 'OWNER',
-        title: 'Founder & CEO',
-        department: 'Leadership',
-        avatarUrl: user.avatarUrl,
-        joinedAt: new Date().toISOString(),
-      });
-    }
+    // Add user as owner member
+    db.addMember({
+      id: `mem_${Date.now()}`,
+      workspaceId: initialWorkspace.id,
+      name: user.name,
+      email: user.email,
+      role: 'OWNER',
+      title: 'Founder & CEO',
+      department: 'Leadership',
+      avatarUrl: user.avatarUrl,
+      joinedAt: new Date().toISOString(),
+    });
 
     const workspaces = db.getWorkspacesForUser(user.id);
 
@@ -119,7 +146,7 @@ apiRouter.post('/auth/signup', (req: Request, res: Response) => {
       user,
       token,
       workspaces,
-      activeWorkspaceId: initialWorkspace?.id || workspaces[0]?.id || 'ws_default_prod',
+      activeWorkspaceId: initialWorkspace.id,
     });
   } catch (err: any) {
     logger.warn('Signup failed:', err.message);
@@ -137,14 +164,14 @@ apiRouter.post('/auth/login', (req: Request, res: Response) => {
   if (!authResult) {
     // If not found, check if it's default founder demo
     if (email.toLowerCase() === 'founder@researchflow.ai' || email.toLowerCase() === 'alex@growthlabs.io') {
-      const defaultUser = db.getUser('usr_default_founder')!;
+      const defaultUser = db.getUser('usr_demo_founder') || db.getUser('usr_default_founder')!;
       const token = db.createSession(defaultUser.id);
-      const workspaces = db.getWorkspacesForUser(defaultUser.id);
+      const workspaces = [db.getWorkspace('ws_demo_sandbox') || db.getWorkspace('ws_default_prod')!].filter(Boolean);
       return res.json({
         user: defaultUser,
         token,
         workspaces,
-        activeWorkspaceId: workspaces[0]?.id || 'ws_default_prod',
+        activeWorkspaceId: workspaces[0]?.id || 'ws_demo_sandbox',
       });
     }
     return res.status(401).json({ error: 'Invalid email or password.' });
@@ -157,7 +184,7 @@ apiRouter.post('/auth/login', (req: Request, res: Response) => {
     user,
     token,
     workspaces,
-    activeWorkspaceId: workspaces[0]?.id || 'ws_default_prod',
+    activeWorkspaceId: workspaces[0]?.id || '',
   });
 });
 
@@ -212,7 +239,7 @@ apiRouter.post('/auth/google', (req: Request, res: Response) => {
     user,
     token,
     workspaces,
-    activeWorkspaceId: workspaces[0]?.id || 'ws_default_prod',
+    activeWorkspaceId: workspaces[0]?.id || '',
   });
 });
 
@@ -695,14 +722,19 @@ apiRouter.get('/research/insights/summary', async (req: Request, res: Response) 
   const evidenceList = db.listAllEvidenceForWorkspace(wsId);
   const conflicts = db.listConflicts(wsId);
 
+  const targetBusinessName = workspace?.businessName || jobs[0]?.businessName || workspace?.name || 'Your Business';
+  const targetDescription = workspace?.description || jobs[0]?.businessDescription || 'Market intelligence and strategic positioning workspace.';
+  const targetAudience = workspace?.targetAudience || jobs[0]?.targetAudience || 'Target audience and market decision makers';
+
   try {
     const summary = await geminiAIService.generateExecutiveSummary({
-      businessName: workspace?.businessName || 'NextGen Resume AI',
-      businessDescription: workspace?.description,
-      targetAudience: workspace?.targetAudience,
+      businessName: targetBusinessName,
+      businessDescription: targetDescription,
+      targetAudience: targetAudience,
       latestJobs: jobs,
       evidenceList,
       conflictsCount: conflicts.filter((c) => c.status === 'UNRESOLVED').length,
+      workspaceId: wsId,
     });
     res.json(summary);
   } catch (err: any) {
@@ -718,14 +750,19 @@ apiRouter.post('/research/insights/summary/regenerate', async (req: Request, res
   const evidenceList = db.listAllEvidenceForWorkspace(wsId);
   const conflicts = db.listConflicts(wsId);
 
+  const targetBusinessName = workspace?.businessName || jobs[0]?.businessName || workspace?.name || 'Your Business';
+  const targetDescription = workspace?.description || jobs[0]?.businessDescription || 'Market intelligence and strategic positioning workspace.';
+  const targetAudience = workspace?.targetAudience || jobs[0]?.targetAudience || 'Target audience and market decision makers';
+
   try {
     const summary = await geminiAIService.generateExecutiveSummary({
-      businessName: workspace?.businessName || 'NextGen Resume AI',
-      businessDescription: workspace?.description,
-      targetAudience: workspace?.targetAudience,
+      businessName: targetBusinessName,
+      businessDescription: targetDescription,
+      targetAudience: targetAudience,
       latestJobs: jobs,
       evidenceList,
       conflictsCount: conflicts.filter((c) => c.status === 'UNRESOLVED').length,
+      workspaceId: wsId,
     });
     res.json(summary);
   } catch (err: any) {
@@ -1030,12 +1067,19 @@ apiRouter.get('/search', (req: Request, res: Response) => {
 // Demo Mode Seeder
 // ----------------------------------------------------
 apiRouter.post('/demo/seed', (req: Request, res: Response) => {
-  const wsId = getWorkspaceId(req);
-  const demoJob = demoService.seedDemoJob(wsId);
-  res.json({
-    success: true,
-    job: demoJob,
-  });
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const demoJob = demoService.seedDemoJob(wsId);
+    res.json({
+      success: true,
+      job: demoJob,
+    });
+  } catch (err: any) {
+    logger.error('Error seeding demo job:', err);
+    if (!res.headersSent) {
+      res.status(err.statusCode || 500).json({ error: err.message || 'Failed to seed sample job' });
+    }
+  }
 });
 
 // ----------------------------------------------------
@@ -1899,4 +1943,35 @@ apiRouter.get('/intelligence/:jobId/audio-briefing', async (req: Request, res: R
     res.status(500).json({ error: err.message });
   }
 });
+
+// ---------------------------------------------------------------------------
+// Automated End-to-End Test Suite Execution Endpoint
+// ---------------------------------------------------------------------------
+apiRouter.post('/admin/run-test-suite', async (req: Request, res: Response) => {
+  try {
+    const { runAllTests } = await import('../tests/e2e.test');
+    const results = await runAllTests();
+    res.json(results);
+  } catch (err: any) {
+    logger.error('Test suite runner error:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Error handling middleware
+apiRouter.use((err: any, req: Request, res: Response, next: any) => {
+  if (res.headersSent) return next(err);
+  if (err.statusCode) {
+    return res.status(err.statusCode).json({ error: err.message });
+  }
+  if (err.message === 'UNAUTHENTICATED') {
+    return res.status(401).json({ error: 'Authentication required. Please log in or enter demo mode.' });
+  }
+  if (err.message === 'UNAUTHORIZED_WORKSPACE') {
+    return res.status(403).json({ error: 'Access denied: You are not authorized for this workspace.' });
+  }
+  logger.error('API Router unhandled error:', err);
+  res.status(500).json({ error: err.message || 'Internal server error' });
+});
+
 

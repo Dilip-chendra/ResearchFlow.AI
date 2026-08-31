@@ -20,7 +20,7 @@ import {
   ResearchReviewAssignment
 } from '../types';
 
-let currentWorkspaceId = 'ws_default_prod';
+let currentWorkspaceId = 'ws_demo_sandbox';
 let currentAuthToken: string | null = localStorage.getItem('rf_auth_token') || null;
 let currentDemoMode = localStorage.getItem('rf_demo_mode') === 'true';
 

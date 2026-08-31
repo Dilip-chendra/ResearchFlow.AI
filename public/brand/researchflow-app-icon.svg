@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" fill="none">
+  <!-- ResearchFlow App Icon Squircle Canvas -->
+  <rect width="512" height="512" rx="115" fill="#090A0F" />
+  <rect x="8" y="8" width="496" height="496" rx="107" stroke="#312E81" stroke-width="4" stroke-opacity="0.5" />
+
+  <defs>
+    <radialGradient id="app-glow-flow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stopColor="#4F46E5" stopOpacity="0.25" />
+      <stop offset="100%" stopColor="#090A0F" stopOpacity="0" />
+    </radialGradient>
+    <linearGradient id="app-symbol-flow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="40%" stopColor="#60A5FA" />
+      <stop offset="80%" stopColor="#6366F1" />
+      <stop offset="100%" stopColor="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <circle cx="256" cy="256" r="220" fill="url(#app-glow-flow)" />
+
+  <!-- Center Symbol Scale -->
+  <g transform="translate(106, 106) scale(4.6875)">
+    <!-- Signal 1: Upper Loop -->
+    <path
+      d="M8 14.5 C8 11.5 10.5 9 13.5 9 H36 C44.837 9 52 16.163 52 25 C52 33.837 44.837 41 36 41 H28 V 33 H36 C40.418 33 44 29.418 44 25 C44 20.582 40.418 17 36 17 H13.5 C10.5 17 8 14.5 8 14.5 Z"
+      fill="url(#app-symbol-flow)"
+    />
+    <!-- Signal 2: Mid Stream -->
+    <rect x="8" y="22" width="16" height="7" rx="3.5" fill="url(#app-symbol-flow)" />
+    <!-- Signal 3: Lower Stream -->
+    <rect x="8" y="35" width="14" height="7" rx="3.5" fill="url(#app-symbol-flow)" />
+    <!-- Execution Vector -->
+    <path
+      d="M26 31.5 L46.8 52.3 C48.4 53.9 51 53.9 52.6 52.3 C54.2 50.7 54.2 48.1 52.6 46.5 L34.5 28.4 C32 25.9 27.5 27.7 26 31.5 Z"
+      fill="url(#app-symbol-flow)"
+    />
+  </g>
+</svg>

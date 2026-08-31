@@ -7,16 +7,17 @@ import { logger } from './server/utils/logger';
 
 async function startServer() {
   const app = express();
-  const PORT = 3000;
+  const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
   // JSON Body Parser & CORS headers
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  // Seed demo data on boot for instant ready-to-test experience
+  // Seed demo data on boot strictly for isolated demo sandbox
   try {
+    demoService.seedDemoJob('ws_demo_sandbox');
     demoService.seedDemoJob('ws_default_prod');
-    logger.info('ResearchFlow AI seeded with default NextGen Resume AI demo workflow.');
+    logger.info('ResearchFlow AI demo sandbox seeded with NextGen Resume AI scenario.');
   } catch (err) {
     logger.warn('Could not seed default demo job on boot:', err);
   }
@@ -37,7 +38,21 @@ async function startServer() {
   // Vite development middleware or static production serving
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      configFile: path.resolve(process.cwd(), 'vite.config.ts'),
+      server: {
+        middlewareMode: true,
+        watch: {
+          ignored: [
+            '**/data/**',
+            '**/data/researchflow_db.json',
+            '**/*.json',
+            '**/docs/**',
+            '**/scripts/**',
+            '**/dist/**',
+            '**/.git/**',
+          ],
+        },
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);

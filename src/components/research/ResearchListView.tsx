@@ -32,6 +32,7 @@ import {
 
 export const ResearchListView: React.FC = () => {
   const {
+    activeWorkspace,
     selectedJobId,
     setSelectedJobId,
     setIsNewResearchModalOpen,
@@ -72,7 +73,7 @@ export const ResearchListView: React.FC = () => {
 
   useEffect(() => {
     loadJobs();
-  }, [selectedJobId]);
+  }, [selectedJobId, activeWorkspace?.id]);
 
   const handleDeleteJob = async (e: React.MouseEvent, id: string) => {
     e.stopPropagation();

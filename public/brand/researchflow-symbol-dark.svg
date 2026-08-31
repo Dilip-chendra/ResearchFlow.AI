@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%" fill="none">
+  <!-- ResearchFlow Symbol: Dark Mode Master -->
+  <defs>
+    <linearGradient id="rf-dark-flow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="40%" stopColor="#60A5FA" />
+      <stop offset="80%" stopColor="#6366F1" />
+      <stop offset="100%" stopColor="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <!-- Signal 1: Upper Flow Ribbon (Crown of R & Top Bar of F) -->
+  <path
+    d="M8 14.5 C8 11.5 10.5 9 13.5 9 H36 C44.837 9 52 16.163 52 25 C52 33.837 44.837 41 36 41 H28 V 33 H36 C40.418 33 44 29.418 44 25 C44 20.582 40.418 17 36 17 H13.5 C10.5 17 8 14.5 8 14.5 Z"
+    fill="url(#rf-dark-flow)"
+  />
+
+  <!-- Signal 2: Middle Flow Ribbon (Inflow & Center Alignment) -->
+  <rect x="8" y="22" width="16" height="7" rx="3.5" fill="url(#rf-dark-flow)" />
+
+  <!-- Signal 3: Lower Inflow Ribbon -->
+  <rect x="8" y="35" width="14" height="7" rx="3.5" fill="url(#rf-dark-flow)" />
+
+  <!-- The Convergence Vector: Dynamic 45° Forward Execution Thrust -->
+  <path
+    d="M26 31.5 L46.8 52.3 C48.4 53.9 51 53.9 52.6 52.3 C54.2 50.7 54.2 48.1 52.6 46.5 L34.5 28.4 C32 25.9 27.5 27.7 26 31.5 Z"
+    fill="url(#rf-dark-flow)"
+  />
+</svg>

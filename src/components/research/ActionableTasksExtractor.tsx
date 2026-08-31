@@ -226,7 +226,7 @@ export const ActionableTasksExtractor: React.FC<ActionableTasksExtractorProps> =
               Actionable Task Identification Engine
             </h3>
             <span className="text-[10px] font-bold px-2 py-0.5 bg-indigo-500/40 text-indigo-200 border border-indigo-400/30 rounded uppercase tracking-wide">
-              Gemini GTM Ops
+              GTM Synthesis Engine
             </span>
           </div>
           <p className="text-xs text-indigo-200 mt-1 max-w-2xl">

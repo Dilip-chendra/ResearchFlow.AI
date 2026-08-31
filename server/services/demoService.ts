@@ -12,13 +12,13 @@ import { db } from '../db/store';
 
 export const demoService = {
   seedDemoJob(workspaceId = 'ws_default_prod'): ResearchJob {
-    const existingJobs = db.listResearchJobs(workspaceId);
-    const existingDemo = existingJobs.find(j => j.isDemo);
-    if (existingDemo) {
-      return existingDemo;
-    }
+    const cleanWs = (workspaceId || 'ws_default_prod').replace(/[^a-zA-Z0-9_]/g, '_');
+    const jobId = `job_demo_${cleanWs}`;
 
-    const jobId = 'job_demo_resume_ai';
+    const existingJob = db.getResearchJob(jobId, workspaceId);
+    if (existingJob) {
+      return existingJob;
+    }
 
     const job: ResearchJob = {
       id: jobId,

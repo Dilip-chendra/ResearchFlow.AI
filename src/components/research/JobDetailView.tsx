@@ -63,7 +63,7 @@ import {
 } from 'lucide-react';
 
 export const JobDetailView: React.FC<{ jobId: string }> = ({ jobId }) => {
-  const { addToast, refreshWorkspaces, setActiveView } = useWorkspace();
+  const { activeWorkspace, addToast, refreshWorkspaces, setActiveView } = useWorkspace();
   const [jobData, setJobData] = useState<{
     job: ResearchJob;
     sources: ResearchSource[];
@@ -125,7 +125,7 @@ export const JobDetailView: React.FC<{ jobId: string }> = ({ jobId }) => {
 
   useEffect(() => {
     loadJob();
-  }, [jobId]);
+  }, [jobId, activeWorkspace?.id]);
 
   // Polling when job is actively running
   useEffect(() => {
@@ -1335,7 +1335,7 @@ export const JobDetailView: React.FC<{ jobId: string }> = ({ jobId }) => {
             <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-zinc-900">
-                  Active Sprint Execution Checklist ({tasks.length})
+                  Strategic Execution Checklist ({tasks.length})
                 </h3>
                 <p className="text-xs text-zinc-500 mt-0.5">
                   Tasks synced from research notes, intelligence findings, and approved campaign directives.

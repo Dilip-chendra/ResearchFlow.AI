@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { WorkspaceProvider, useWorkspace } from './context/WorkspaceContext';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
@@ -11,10 +11,13 @@ import { TasksView } from './components/tasks/TasksView';
 import { EvaluationView } from './components/evaluation/EvaluationView';
 import { AuditView } from './components/audit/AuditView';
 import { SettingsView } from './components/settings/SettingsView';
+import { ArchitectureView } from './components/architecture/ArchitectureView';
 import { NewResearchModal } from './components/research/NewResearchModal';
 import { AuthView } from './components/auth/AuthView';
+import { LandingPage } from './components/landing/LandingPage';
 import { OnboardingModal } from './components/auth/OnboardingModal';
-import { X, CheckCircle2, AlertTriangle, Info, Sparkles } from 'lucide-react';
+import { BrandSymbol } from './components/brand/BrandLogo';
+import { X, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
 
 const ToastContainer: React.FC = () => {
   const { toasts, removeToast } = useWorkspace();
@@ -60,28 +63,79 @@ const ToastContainer: React.FC = () => {
 };
 
 const MainApp: React.FC = () => {
-  const { activeView, isAuthenticated, isLoading } = useWorkspace();
+  const { activeView, isAuthenticated, isLoading, enterDemoMode } = useWorkspace();
+  const [publicView, setPublicView] = useState<'landing' | 'auth'>('landing');
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+
+  // Handle URL hash or query routing on load
+  useEffect(() => {
+    const checkRoute = () => {
+      const hash = window.location.hash;
+      const search = window.location.search;
+      if (hash === '#login' || search.includes('mode=login')) {
+        setAuthMode('login');
+        setPublicView('auth');
+      } else if (hash === '#signup' || search.includes('mode=signup')) {
+        setAuthMode('signup');
+        setPublicView('auth');
+      }
+    };
+    checkRoute();
+    window.addEventListener('hashchange', checkRoute);
+    return () => window.removeEventListener('hashchange', checkRoute);
+  }, []);
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-slate-300 gap-3">
-        <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 animate-pulse">
-          <Sparkles className="w-5 h-5" />
-        </div>
-        <p className="text-sm font-medium tracking-wide text-slate-400">Loading ResearchFlow Workspace...</p>
+      <div className="min-h-screen bg-[#090A0F] flex flex-col items-center justify-center text-slate-300 gap-4">
+        <BrandSymbol size="lg" animated={true} variant="dark" />
+        <p className="text-xs font-semibold tracking-wider text-zinc-400 uppercase font-mono">
+          Loading ResearchFlow Workspace...
+        </p>
       </div>
     );
   }
 
+  // If not logged in, render either the World-Class Landing Page or Auth View
   if (!isAuthenticated) {
+    if (publicView === 'landing') {
+      return (
+        <>
+          <LandingPage
+            onSignIn={() => {
+              setAuthMode('login');
+              setPublicView('auth');
+              window.scrollTo({ top: 0, behavior: 'instant' as any });
+            }}
+            onGetStarted={() => {
+              setAuthMode('signup');
+              setPublicView('auth');
+              window.scrollTo({ top: 0, behavior: 'instant' as any });
+            }}
+            onExploreDemo={() => {
+              enterDemoMode();
+            }}
+          />
+          <ToastContainer />
+        </>
+      );
+    }
+
     return (
       <>
-        <AuthView />
+        <AuthView
+          initialMode={authMode}
+          onBackToLanding={() => {
+            setPublicView('landing');
+            window.scrollTo({ top: 0, behavior: 'instant' as any });
+          }}
+        />
         <ToastContainer />
       </>
     );
   }
 
+  // Authenticated workspace dashboard
   return (
     <div className="min-h-screen bg-zinc-100/60 flex flex-col text-zinc-900 font-sans antialiased">
       <Navbar />
@@ -97,6 +151,7 @@ const MainApp: React.FC = () => {
           {activeView === 'evaluation' && <EvaluationView />}
           {activeView === 'audit' && <AuditView />}
           {activeView === 'settings' && <SettingsView />}
+          {activeView === 'architecture' && <ArchitectureView />}
         </main>
       </div>
 
@@ -114,4 +169,3 @@ export default function App() {
     </WorkspaceProvider>
   );
 }
-

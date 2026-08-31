@@ -50,9 +50,12 @@ export interface UserSession {
   expiresAt: string;
 }
 
-// Default user & workspace for instant demo sandbox
+// Default demo user & workspace for instant demo sandbox
+export const DEMO_USER_ID = 'usr_demo_founder';
+export const DEMO_WORKSPACE_ID = 'ws_demo_sandbox';
+
 const DEFAULT_USER: User = {
-  id: 'usr_default_founder',
+  id: DEMO_USER_ID,
   email: 'founder@researchflow.ai',
   name: 'Alex Chen',
   avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
@@ -60,8 +63,8 @@ const DEFAULT_USER: User = {
 };
 
 const DEFAULT_WORKSPACE: Workspace = {
-  id: 'ws_default_prod',
-  name: 'Acme Growth Labs',
+  id: DEMO_WORKSPACE_ID,
+  name: 'Acme Growth Labs (Demo)',
   businessName: 'NextGen Resume AI',
   description: 'AI resume builder focused on converting college graduates and career changers into high-paying tech roles.',
   industry: 'B2C SaaS / EdTech / Career Services',
@@ -74,7 +77,7 @@ const DEFAULT_WORKSPACE: Workspace = {
 const DEFAULT_MEMBERS: WorkspaceMember[] = [
   {
     id: 'mem_1',
-    workspaceId: DEFAULT_WORKSPACE.id,
+    workspaceId: DEMO_WORKSPACE_ID,
     name: 'Alex Chen',
     email: 'alex@growthlabs.io',
     role: 'OWNER',
@@ -85,7 +88,7 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
   },
   {
     id: 'mem_2',
-    workspaceId: DEFAULT_WORKSPACE.id,
+    workspaceId: DEMO_WORKSPACE_ID,
     name: 'Sarah Jenkins',
     email: 'sarah.j@growthlabs.io',
     role: 'GTM_STRATEGIST',
@@ -96,7 +99,7 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
   },
   {
     id: 'mem_3',
-    workspaceId: DEFAULT_WORKSPACE.id,
+    workspaceId: DEMO_WORKSPACE_ID,
     name: 'Marcus Vance',
     email: 'marcus.v@growthlabs.io',
     role: 'RESEARCHER',
@@ -107,7 +110,7 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
   },
   {
     id: 'mem_4',
-    workspaceId: DEFAULT_WORKSPACE.id,
+    workspaceId: DEMO_WORKSPACE_ID,
     name: 'Elena Rostova',
     email: 'elena.r@growthlabs.io',
     role: 'CONTENT_LEAD',
@@ -118,7 +121,7 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
   },
   {
     id: 'mem_5',
-    workspaceId: DEFAULT_WORKSPACE.id,
+    workspaceId: DEMO_WORKSPACE_ID,
     name: 'David Kim',
     email: 'david.k@growthlabs.io',
     role: 'REVIEWER',
@@ -131,7 +134,7 @@ const DEFAULT_MEMBERS: WorkspaceMember[] = [
 
 const DEFAULT_BASELINE: BaselineMetric = {
   id: 'bm_default',
-  workspaceId: DEFAULT_WORKSPACE.id,
+  workspaceId: DEMO_WORKSPACE_ID,
   name: 'Competitor Intelligence & Campaign Brief Sprint',
   description: 'Manual workflow of researching 3-5 competitors, extracting pricing/features into spreadsheets, synthesizing positioning, and writing 3 channel briefs.',
   baselineTimeMinutes: 240, // 4 hours manual
@@ -188,7 +191,7 @@ class PersistentDatabaseStore {
 
     this.loadFromDisk();
 
-    // Ensure default founder exists if empty
+    // Ensure demo user exists
     if (!this.users.has(DEFAULT_USER.id)) {
       this.users.set(DEFAULT_USER.id, DEFAULT_USER);
       const salt = crypto.randomBytes(16).toString('hex');
@@ -204,8 +207,16 @@ class PersistentDatabaseStore {
       });
     }
 
-    if (!this.workspaces.has(DEFAULT_WORKSPACE.id)) {
-      this.workspaces.set(DEFAULT_WORKSPACE.id, DEFAULT_WORKSPACE);
+    // Also support legacy ID alias
+    if (!this.users.has('usr_default_founder')) {
+      this.users.set('usr_default_founder', { ...DEFAULT_USER, id: 'usr_default_founder' });
+    }
+
+    if (!this.workspaces.has(DEMO_WORKSPACE_ID)) {
+      this.workspaces.set(DEMO_WORKSPACE_ID, DEFAULT_WORKSPACE);
+    }
+    if (!this.workspaces.has('ws_default_prod')) {
+      this.workspaces.set('ws_default_prod', { ...DEFAULT_WORKSPACE, id: 'ws_default_prod', name: 'Acme Growth Labs' });
     }
 
     if (this.members.size === 0) {
@@ -444,9 +455,11 @@ class PersistentDatabaseStore {
   }
 
   getWorkspacesForUser(userId: string): Workspace[] {
+    const user = this.getUser(userId);
+    const userEmail = user?.email?.toLowerCase();
     const owned = Array.from(this.workspaces.values()).filter(w => w.ownerId === userId);
     const memberWsIds = Array.from(this.members.values())
-      .filter(m => m.id === userId || m.email === this.getUser(userId)?.email)
+      .filter(m => m.id === userId || (userEmail && m.email.toLowerCase() === userEmail))
       .map(m => m.workspaceId);
 
     const memberWorkspaces = Array.from(this.workspaces.values()).filter(w => memberWsIds.includes(w.id));
@@ -459,13 +472,18 @@ class PersistentDatabaseStore {
   }
 
   isUserAuthorizedForWorkspace(userId: string, workspaceId: string): boolean {
+    if ((userId === 'usr_demo_founder' || userId === 'usr_default_founder') && (workspaceId === 'ws_demo_sandbox' || workspaceId === 'ws_default_prod')) {
+      return true;
+    }
+
     const ws = this.workspaces.get(workspaceId);
     if (!ws) return false;
     if (ws.ownerId === userId) return true;
 
     const user = this.getUser(userId);
+    const userEmail = user?.email?.toLowerCase();
     const members = this.listMembers(workspaceId);
-    return members.some(m => m.id === userId || (user && m.email.toLowerCase() === user.email.toLowerCase()));
+    return members.some(m => m.id === userId || (userEmail && m.email.toLowerCase() === userEmail));
   }
 
   createWorkspace(workspace: Workspace): Workspace {
@@ -486,9 +504,10 @@ class PersistentDatabaseStore {
   }
 
   // Research Jobs
-  getResearchJob(id: string, workspaceId: string): ResearchJob | undefined {
+  getResearchJob(id: string, workspaceId?: string): ResearchJob | undefined {
     const job = this.researchJobs.get(id);
-    if (!job || job.workspaceId !== workspaceId) return undefined;
+    if (!job) return undefined;
+    if (workspaceId && job.workspaceId !== workspaceId) return undefined;
     return job;
   }
 

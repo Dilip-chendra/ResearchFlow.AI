@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%" fill="none">
+  <!-- ResearchFlow Brand Motion: Signal Convergence Sequence -->
+  <style>
+    .rf-sig-1 {
+      animation: signal-in-1 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .rf-sig-2 {
+      animation: signal-in-2 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .rf-sig-3 {
+      animation: signal-in-3 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .rf-vec {
+      animation: vector-thrust 1.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes signal-in-1 {
+      0% { opacity: 0; transform: translateX(-12px); }
+      50% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes signal-in-2 {
+      0% { opacity: 0; transform: translateX(-16px); }
+      60% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes signal-in-3 {
+      0% { opacity: 0; transform: translateX(-20px); }
+      70% { opacity: 1; transform: translateX(0); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes vector-thrust {
+      0% { opacity: 0; transform: scale(0.6) translate(-10px, -10px); }
+      40% { opacity: 0; transform: scale(0.6) translate(-10px, -10px); }
+      100% { opacity: 1; transform: scale(1) translate(0, 0); }
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="rf-anim-flow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stopColor="#38BDF8" />
+      <stop offset="40%" stopColor="#60A5FA" />
+      <stop offset="80%" stopColor="#6366F1" />
+      <stop offset="100%" stopColor="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <path
+    class="rf-sig-1"
+    d="M8 14.5 C8 11.5 10.5 9 13.5 9 H36 C44.837 9 52 16.163 52 25 C52 33.837 44.837 41 36 41 H28 V 33 H36 C40.418 33 44 29.418 44 25 C44 20.582 40.418 17 36 17 H13.5 C10.5 17 8 14.5 8 14.5 Z"
+    fill="url(#rf-anim-flow)"
+  />
+
+  <rect class="rf-sig-2" x="8" y="22" width="16" height="7" rx="3.5" fill="url(#rf-anim-flow)" />
+  <rect class="rf-sig-3" x="8" y="35" width="14" height="7" rx="3.5" fill="url(#rf-anim-flow)" />
+
+  <path
+    class="rf-vec"
+    d="M26 31.5 L46.8 52.3 C48.4 53.9 51 53.9 52.6 52.3 C54.2 50.7 54.2 48.1 52.6 46.5 L34.5 28.4 C32 25.9 27.5 27.7 26 31.5 Z"
+    fill="url(#rf-anim-flow)"
+  />
+</svg>

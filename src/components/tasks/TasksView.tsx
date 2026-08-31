@@ -112,7 +112,7 @@ export const TasksView: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
-            Sprint Execution Checklist
+            Tactical Execution Tasks
           </h2>
           <p className="text-xs text-zinc-600 mt-0.5">
             Actionable tasks automatically derived from research notes, competitor evidence, and approved strategies.

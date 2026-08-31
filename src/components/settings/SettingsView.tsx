@@ -22,12 +22,13 @@ import {
   Play,
   RotateCcw,
   Sparkles,
-  ShieldAlert
+  ShieldAlert,
+  ArrowRight
 } from 'lucide-react';
 import { AIHealthStatus, ModelCapabilityProfile, AIRun, FailureCategory, AIRoutingMode } from '../../types';
 
 export const SettingsView: React.FC = () => {
-  const { activeWorkspace } = useWorkspace();
+  const { activeWorkspace, setActiveView } = useWorkspace();
 
   const [aiHealth, setAiHealth] = useState<AIHealthStatus | null>(null);
   const [loadingHealth, setLoadingHealth] = useState(false);
@@ -667,44 +668,58 @@ export const SettingsView: React.FC = () => {
         </div>
       </div>
 
-      {/* 5-Day Validation Sprint Roadmap */}
+      {/* System Architecture & Core Engineering Invariants */}
       <div className="bg-white rounded-2xl border border-zinc-200 p-6 shadow-xs space-y-4 text-xs">
-        <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-indigo-600" />
-          <span>5-Day Execution Priority Architecture</span>
-        </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-zinc-100">
+          <div>
+            <h3 className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+              <Layers className="w-4 h-4 text-indigo-600" />
+              <span>System Topology & Architectural Invariants</span>
+            </h3>
+            <p className="text-xs text-zinc-500 mt-0.5">
+              High-assurance 6-stage autonomous research pipeline with multi-model resilience and zero fake metrics.
+            </p>
+          </div>
+          <button
+            onClick={() => setActiveView('architecture')}
+            className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-bold transition-colors shadow-2xs flex items-center gap-1.5 shrink-0"
+          >
+            <span>Explore Full Architecture</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-3">
           {[
             {
-              day: 'Day 1',
-              title: 'Architecture & Workspace',
-              desc: 'Domain types, in-memory store, job creation, 12 test case baseline specification.',
+              phase: 'Stage 01',
+              title: 'Ingestion Engine',
+              desc: 'Distributed web scraping, SSRF IP sanitization, bounded 15s execution timeouts.',
             },
             {
-              day: 'Day 2',
-              title: 'Evidence Engine',
-              desc: 'Resilient HTTP scraping, bounded timeouts, 11-category structured claim extraction.',
+              phase: 'Stage 02',
+              title: 'Evidence Grounding',
+              desc: '11-category structured claim extraction with 100% source URL citation linkage.',
             },
             {
-              day: 'Day 3',
-              title: 'Intelligence & Briefs',
-              desc: 'Multi-model synthesis, positioning gap analysis, campaign briefs, multi-channel copy drafts.',
+              phase: 'Stage 03',
+              title: 'Conflict Analyzer',
+              desc: 'Cross-source semantic diffing, pricing variance detection, risk scoring.',
             },
             {
-              day: 'Day 4',
-              title: 'Hardening & Conflicts',
-              desc: 'Pricing conflict detection ($19 vs $29), failure classification, human review approvals.',
+              phase: 'Stage 04',
+              title: 'Neural Synthesis',
+              desc: 'Multi-model resilience mesh with instant deterministic heuristic self-repair.',
             },
             {
-              day: 'Day 5',
-              title: 'Evaluation & Benchmark',
-              desc: '12 test cases benchmark suite, operational telemetry, rubric audit, zero fake metrics.',
+              phase: 'Stage 05 & 06',
+              title: 'Campaign & Tasks',
+              desc: 'Multi-channel copy drafts, human approval gating, and immutable audit ledger.',
             },
           ].map((d) => (
-            <div key={d.day} className="p-3.5 bg-zinc-50 rounded-xl border border-zinc-200 space-y-1">
-              <span className="font-bold text-indigo-600 uppercase text-[10px] tracking-wider block">
-                {d.day}
+            <div key={d.phase} className="p-3.5 bg-zinc-50 rounded-xl border border-zinc-200 space-y-1">
+              <span className="font-bold text-indigo-600 uppercase text-[10px] tracking-wider block font-mono">
+                {d.phase}
               </span>
               <p className="font-bold text-zinc-900">{d.title}</p>
               <p className="text-[11px] text-zinc-600 leading-snug">{d.desc}</p>

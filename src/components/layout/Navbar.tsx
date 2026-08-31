@@ -20,6 +20,7 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { api } from '../../lib/api';
+import { BrandLogo } from '../brand/BrandLogo';
 
 export const Navbar: React.FC = () => {
   const {
@@ -129,24 +130,9 @@ export const Navbar: React.FC = () => {
             setActiveView('overview');
             setIsMobileNavOpen(false);
           }}
-          className="flex items-center gap-2 sm:gap-2.5 cursor-pointer group select-none"
+          className="cursor-pointer group select-none"
         >
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-xs group-hover:bg-indigo-700 transition-colors shrink-0">
-            <Layers className="w-4.5 h-4.5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-sm tracking-tight text-zinc-900">
-                ResearchFlow<span className="text-indigo-600">.AI</span>
-              </span>
-              <span className="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.2 bg-zinc-100 text-zinc-600 rounded border border-zinc-200 uppercase">
-                v1.0
-              </span>
-            </div>
-            <p className="text-[10px] text-zinc-600 hidden lg:block">
-              Evidence-Backed Decisions & Execution
-            </p>
-          </div>
+          <BrandLogo size="xs" variant="light" showBadge={true} />
         </div>
 
         {/* Workspace Switcher */}

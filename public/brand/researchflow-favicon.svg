@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" fill="none">
+  <defs>
+    <linearGradient id="rf-fav-g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="40%" stop-color="#60A5FA" />
+      <stop offset="80%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#6366F1" />
+    </linearGradient>
+    <linearGradient id="rf-fav-g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818CF8" />
+      <stop offset="60%" stop-color="#6366F1" />
+      <stop offset="100%" stop-color="#06B6D4" />
+    </linearGradient>
+  </defs>
+
+  <style>
+    .rf-ribbon-1 { fill: #38BDF8; fill: url(#rf-fav-g1); }
+    .rf-ribbon-2 { fill: #38BDF8; }
+    .rf-ribbon-3 { fill: #60A5FA; }
+    .rf-thrust { fill: #06B6D4; fill: url(#rf-fav-g2); }
+  </style>
+
+  <path
+    class="rf-ribbon-1"
+    d="M8 14.5 C8 11.5 10.5 9 13.5 9 H36 C44.837 9 52 16.163 52 25 C52 33.837 44.837 41 36 41 H28 V 33 H36 C40.418 33 44 29.418 44 25 C44 20.582 40.418 17 36 17 H13.5 C10.5 17 8 14.5 8 14.5 Z"
+  />
+  <rect class="rf-ribbon-2" x="8" y="22" width="16" height="7" rx="3.5" />
+  <rect class="rf-ribbon-3" x="8" y="35" width="14" height="7" rx="3.5" />
+  <path
+    class="rf-thrust"
+    d="M26 31.5 L46.8 52.3 C48.4 53.9 51 53.9 52.6 52.3 C54.2 50.7 54.2 48.1 52.6 46.5 L34.5 28.4 C32 25.9 27.5 27.7 26 31.5 Z"
+  />
+</svg>

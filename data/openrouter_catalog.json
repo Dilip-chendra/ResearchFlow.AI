@@ -1,0 +1,497 @@
+{
+  "lastFetchTime": 1788177885587,
+  "models": [
+    {
+      "id": "openrouter/free",
+      "name": "OpenRouter Free Auto-Router",
+      "provider": "openrouter",
+      "contextWindow": 128000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:44.580Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 850,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "universal-fallback",
+        "synthesis",
+        "extraction",
+        "campaigns"
+      ]
+    },
+    {
+      "id": "inclusionai/ling-3.0-flash-fin:free",
+      "name": "Ling 3.0 Flash Fin (free)",
+      "provider": "openrouter",
+      "contextWindow": 262144,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "provider": "openrouter",
+      "contextWindow": 512000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "liquid/lfm-2.5-2.6b:free",
+      "name": "LiquidAI: LFM2.5-2.6B (free)",
+      "provider": "openrouter",
+      "contextWindow": 65536,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "deep-reasoning",
+        "strategic-analysis"
+      ]
+    },
+    {
+      "id": "nvidia/nemotron-3.5-lightning:free",
+      "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+      "provider": "openrouter",
+      "contextWindow": 1000000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "poolside/laguna-s-2.1:free",
+      "name": "Poolside: Laguna S 2.1 (free)",
+      "provider": "openrouter",
+      "contextWindow": 262144,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "poolside/laguna-xs-2.1:free",
+      "name": "Poolside: Laguna XS 2.1 (free)",
+      "provider": "openrouter",
+      "contextWindow": 262144,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini Code (free)",
+      "provider": "openrouter",
+      "contextWindow": 256000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context",
+        "structured-output",
+        "json-formatting"
+      ]
+    },
+    {
+      "id": "z-ai/glm-5.2:free",
+      "name": "Z.ai: GLM 5.2 (free)",
+      "provider": "openrouter",
+      "contextWindow": 256000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "deep-reasoning",
+        "strategic-analysis"
+      ]
+    },
+    {
+      "id": "nvidia/nemotron-3.5-content-safety:free",
+      "name": "NVIDIA: Nemotron 3.5 Content Safety (free)",
+      "provider": "openrouter",
+      "contextWindow": 128000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "name": "NVIDIA: Nemotron 3 Ultra (free)",
+      "provider": "openrouter",
+      "contextWindow": 1000000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "deep-reasoning",
+        "strategic-analysis"
+      ]
+    },
+    {
+      "id": "minimax/minimax-m3:free",
+      "name": "MiniMax: MiniMax M3 (free)",
+      "provider": "openrouter",
+      "contextWindow": 1048576,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "provider": "openrouter",
+      "contextWindow": 256000,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "name": "Google: Gemma 4 26B A4B  (free)",
+      "provider": "openrouter",
+      "contextWindow": 262144,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "google/gemma-4-31b-it:free",
+      "name": "Google: Gemma 4 31B (free)",
+      "provider": "openrouter",
+      "contextWindow": 262144,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "deep-reasoning",
+        "strategic-analysis"
+      ]
+    },
+    {
+      "id": "google/lyria-3-pro-preview",
+      "name": "Google: Lyria 3 Pro Preview",
+      "provider": "openrouter",
+      "contextWindow": 1048576,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "google/lyria-3-clip-preview",
+      "name": "Google: Lyria 3 Clip Preview",
+      "provider": "openrouter",
+      "contextWindow": 1048576,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "minimax/minimax-m2.7:free",
+      "name": "MiniMax: MiniMax M2.7 (free)",
+      "provider": "openrouter",
+      "contextWindow": 196608,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    },
+    {
+      "id": "nvidia/nemotron-3-super-120b-a12b:free",
+      "name": "NVIDIA: Nemotron 3 Super (free)",
+      "provider": "openrouter",
+      "contextWindow": 262144,
+      "supportsStructuredOutput": true,
+      "supportsJsonSchema": true,
+      "reasoningLevel": "HIGH",
+      "free": true,
+      "health": "HEALTHY",
+      "lastHealthCheck": "2026-08-31T12:04:47.031Z",
+      "consecutiveFailures": 0,
+      "totalRequests": 0,
+      "totalSuccesses": 0,
+      "avgLatencyMs": 800,
+      "pricing": {
+        "prompt": 0,
+        "completion": 0
+      },
+      "strengths": [
+        "free-tier",
+        "synthesis",
+        "campaign-strategy",
+        "large-context"
+      ]
+    }
+  ]
+}

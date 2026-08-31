@@ -43,7 +43,7 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
         : await api.getExecutiveSummary();
       setSummary(data);
       if (isRefresh) {
-        addToast('Executive summary re-synthesized via Gemini 3.7 Flash', 'success');
+        addToast('Executive summary re-synthesized', 'success');
       }
     } catch (err: any) {
       console.error('Failed to load executive summary', err);
@@ -108,17 +108,24 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
               </h3>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80">
                 <Sparkles className="w-2.5 h-2.5 text-indigo-600" />
-                Gemini 3.7 Flash
+                Neural Synthesis Core
               </span>
-              {summary?.confidenceScore && (
+              {summary && summary.confidenceScore > 0 ? (
                 <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-medium text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
                   <ShieldCheck className="w-3 h-3 text-emerald-600" />
                   {summary.confidenceScore}% Grounded
                 </span>
+              ) : (
+                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
+                  <Clock className="w-3 h-3 text-amber-600" />
+                  Awaiting Research Data
+                </span>
               )}
             </div>
             <p className="text-xs text-zinc-500 mt-0.5">
-              Live executive synthesis from latest verified evidence & competitor findings
+              {summary && summary.confidenceScore > 0
+                ? 'Live executive synthesis from latest verified evidence & competitor findings'
+                : 'Pipeline ready. Run a research job to generate live evidence-backed intelligence.'}
             </p>
           </div>
         </div>
@@ -134,7 +141,7 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
             onClick={() => fetchSummary(true)}
             disabled={regenerating}
             className="px-3 py-1.5 bg-white hover:bg-zinc-50 text-zinc-700 hover:text-indigo-600 text-xs font-semibold rounded-lg border border-zinc-200 shadow-2xs transition-all flex items-center gap-1.5 disabled:opacity-60"
-            title="Re-generate executive summary using Gemini API"
+            title="Re-generate executive summary"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${regenerating ? 'animate-spin text-indigo-600' : ''}`} />
             <span>{regenerating ? 'Synthesizing...' : 'Regenerate'}</span>
@@ -143,7 +150,7 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
       </div>
 
       {/* Main Executive Summary Paragraph */}
-      <div className="mt-4">
+      <div className={`mt-4 transition-all duration-200 ${regenerating ? 'opacity-50 blur-[0.5px]' : 'opacity-100'}`}>
         <div className="bg-white/80 backdrop-blur-xs p-4 sm:p-5 rounded-xl border border-zinc-200/80 shadow-2xs">
           <div className="flex items-start gap-3">
             <div className="p-1.5 bg-indigo-50 rounded-lg text-indigo-600 shrink-0 mt-0.5 hidden sm:block">
@@ -160,7 +167,7 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
               </div>
               <p className="text-xs sm:text-sm text-zinc-800 leading-relaxed font-normal">
                 {summary?.paragraph ||
-                  'Recent competitor audits show widespread customer frustration with recurring subscription fees and generic template outputs. By coupling verified applicant tracking benchmarks with clear transparent pricing, your campaign wedge can quickly capture high-intent users looking for evidence-backed solutions.'}
+                  'No competitor research jobs have been executed yet for this workspace. Launch a research job to extract live market evidence and synthesize competitive intelligence.'}
               </p>
             </div>
           </div>
@@ -169,7 +176,7 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
 
       {/* Key Strategic Signals Grid */}
       {summary?.keySignals && summary.keySignals.length > 0 && (
-        <div className="mt-4">
+        <div className={`mt-4 transition-all duration-200 ${regenerating ? 'opacity-50' : 'opacity-100'}`}>
           <h4 className="text-[11px] font-bold uppercase tracking-wider text-zinc-600 mb-2 flex items-center gap-1.5">
             <TrendingUp className="w-3.5 h-3.5 text-indigo-600" />
             <span>Top Market Signals Identified</span>
@@ -201,7 +208,7 @@ export const ResearchInsightsWidget: React.FC<ResearchInsightsWidgetProps> = ({
           </div>
         ) : (
           <div className="text-zinc-600">
-            Model: <span className="font-mono font-medium text-zinc-700">{summary?.model || 'Gemini 3.7 Flash'}</span>
+            Engine: <span className="font-mono font-medium text-zinc-700">Autonomous Intelligence Core</span>
           </div>
         )}
 
