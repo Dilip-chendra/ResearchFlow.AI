@@ -121,53 +121,68 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 }) => {
   const isLight = variant === 'light';
 
-  const textClass = isLight ? 'text-slate-900' : 'text-white';
-  const subtextClass = isLight ? 'text-slate-500' : 'text-zinc-400';
-
   const fontSizes: Record<string, string> = {
-    xs: 'text-sm',
-    sm: 'text-base',
-    md: 'text-lg',
+    xs: 'text-[15px]',
+    sm: 'text-[17px]',
+    md: 'text-xl',
     lg: 'text-2xl',
-    xl: 'text-3xl',
+    xl: 'text-3xl sm:text-4xl',
   };
 
   const badgeSizes: Record<string, string> = {
-    xs: 'text-[9px] px-1 py-0.2',
+    xs: 'text-[9px] px-1.5 py-0.5',
     sm: 'text-[10px] px-1.5 py-0.5',
-    md: 'text-xs px-2 py-0.5',
+    md: 'text-[11px] px-2 py-0.5',
     lg: 'text-xs px-2.5 py-1',
-    xl: 'text-sm px-3 py-1',
+    xl: 'text-xs px-3 py-1',
   };
 
   return (
-    <div className={`inline-flex items-center gap-2.5 select-none ${className}`}>
+    <div className={`inline-flex items-center gap-2 select-none group ${className}`}>
       <BrandSymbol size={size} variant={variant} animated={animated} />
 
-      <div className="flex flex-col">
+      <div className="flex flex-col justify-center">
         <div className="flex items-center gap-1.5 leading-none">
-          <span
-            className={`font-extrabold tracking-tight font-display ${fontSizes[size] || 'text-lg'} ${textClass}`}
-          >
-            Research<span className={isLight ? 'text-indigo-600' : 'text-zinc-100'}>Flow</span>
+          {/* Main Brand Typography */}
+          <span className={`font-black tracking-[-0.035em] ${fontSizes[size] || 'text-xl'}`}>
+            <span
+              className={
+                isLight
+                  ? 'text-slate-900 drop-shadow-2xs transition-colors'
+                  : 'text-white drop-shadow-2xs transition-colors'
+              }
+            >
+              Research
+            </span>
+            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent font-black ml-px">
+              Flow
+            </span>
           </span>
 
+          {/* Glowing Modern AI Pill Badge */}
           {showBadge && (
             <span
-              className={`font-mono font-bold rounded-md uppercase tracking-wider ${badgeSizes[size]} ${
+              className={`inline-flex items-center gap-1 font-mono font-black rounded-full uppercase tracking-wider shadow-2xs transition-all ${
+                badgeSizes[size]
+              } ${
                 isLight
-                  ? 'bg-indigo-50 text-indigo-600 border border-indigo-200'
-                  : 'bg-indigo-950/80 text-indigo-400 border border-indigo-500/30'
+                  ? 'bg-gradient-to-r from-blue-50/90 via-indigo-50 to-violet-50 text-indigo-700 border border-indigo-200/90 shadow-indigo-500/10'
+                  : 'bg-gradient-to-r from-indigo-950/90 via-blue-950/90 to-purple-950/90 text-indigo-300 border border-indigo-500/40 shadow-indigo-500/20'
               }`}
             >
-              AI
+              <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 animate-pulse shrink-0" />
+              <span>AI</span>
             </span>
           )}
         </div>
 
         {showTagline && (
-          <span className={`text-[10px] font-medium tracking-wide uppercase mt-0.5 ${subtextClass}`}>
-            Turn market research into decisions
+          <span
+            className={`text-[10px] font-semibold tracking-wider uppercase mt-1 ${
+              isLight ? 'text-slate-500' : 'text-zinc-400'
+            }`}
+          >
+            Market Intelligence OS
           </span>
         )}
       </div>
