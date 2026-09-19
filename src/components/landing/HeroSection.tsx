@@ -5,13 +5,11 @@ import { InteractiveCore3D } from './InteractiveCore3D';
 interface HeroSectionProps {
   onGetStarted: () => void;
   onSignIn: () => void;
-  onExploreDemo: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   onGetStarted,
   onSignIn,
-  onExploreDemo,
 }) => {
   return (
     <section className="relative pt-32 pb-20 sm:pt-40 sm:pb-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -47,18 +45,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
           <button
             onClick={onGetStarted}
-            className="group w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:from-indigo-400 hover:to-indigo-600 text-white text-sm font-bold rounded-2xl shadow-xl shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+            className="group w-full sm:w-auto px-7 py-3.5 bg-gradient-to-r from-indigo-500 via-indigo-600 to-indigo-700 hover:from-indigo-400 hover:to-indigo-600 text-white text-sm font-bold rounded-2xl shadow-xl shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>Start Researching</span>
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </button>
 
           <button
-            onClick={onExploreDemo}
-            className="w-full sm:w-auto px-6 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 text-sm font-semibold rounded-2xl border border-zinc-700/80 shadow-lg shadow-black/40 hover:border-zinc-600 transition-all flex items-center justify-center gap-2"
+            onClick={onSignIn}
+            className="w-full sm:w-auto px-6 py-3.5 bg-zinc-900/90 hover:bg-zinc-800 text-zinc-200 text-sm font-semibold rounded-2xl border border-zinc-700/80 shadow-lg shadow-black/40 hover:border-zinc-600 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
-            <Play className="w-3.5 h-3.5 fill-current text-indigo-400" />
-            <span>Explore Interactive Demo Sandbox</span>
+            <span>Sign In to Workspace</span>
+            <ArrowRight className="w-4 h-4 text-zinc-400" />
           </button>
         </div>
 

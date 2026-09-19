@@ -63,7 +63,7 @@ const ToastContainer: React.FC = () => {
 };
 
 const MainApp: React.FC = () => {
-  const { activeView, isAuthenticated, isLoading, enterDemoMode } = useWorkspace();
+  const { activeView, isAuthenticated, isLoading } = useWorkspace();
   const [publicView, setPublicView] = useState<'landing' | 'auth'>('landing');
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
 
@@ -111,9 +111,6 @@ const MainApp: React.FC = () => {
               setAuthMode('signup');
               setPublicView('auth');
               window.scrollTo({ top: 0, behavior: 'instant' as any });
-            }}
-            onExploreDemo={() => {
-              enterDemoMode();
             }}
           />
           <ToastContainer />

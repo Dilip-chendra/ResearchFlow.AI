@@ -5,13 +5,11 @@ import { BrandLogo } from '../brand/BrandLogo';
 interface LandingNavProps {
   onSignIn: () => void;
   onGetStarted: () => void;
-  onExploreDemo: () => void;
 }
 
 export const LandingNav: React.FC<LandingNavProps> = ({
   onSignIn,
   onGetStarted,
-  onExploreDemo,
 }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -185,15 +183,6 @@ export const LandingNav: React.FC<LandingNavProps> = ({
             >
               <span>Start Researching</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onExploreDemo();
-              }}
-              className="w-full py-2 text-center text-xs font-medium text-zinc-400 hover:text-zinc-200"
-            >
-              Explore Interactive Demo Sandbox →
             </button>
           </div>
         </div>

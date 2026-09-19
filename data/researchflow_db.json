@@ -635,6 +635,49 @@
         "createdAt": "2026-08-31T18:19:11.494Z",
         "updatedAt": "2026-08-31T18:19:11.494Z"
       }
+    ],
+    [
+      "usr_1789826271015_61b491e7",
+      {
+        "id": "usr_1789826271015_61b491e7",
+        "email": "founder@growthlabs.io",
+        "name": "Alex Chen",
+        "displayName": "Alex Chen",
+        "avatarType": "INITIALS",
+        "avatarValue": "AC",
+        "avatarUrl": "",
+        "createdAt": "2026-09-19T13:57:51.096Z",
+        "updatedAt": "2026-09-19T13:57:51.096Z"
+      }
+    ],
+    [
+      "usr_1789826565097_3570a5e2",
+      {
+        "id": "usr_1789826565097_3570a5e2",
+        "email": "alpha_1789826565075@testcorp.com",
+        "name": "Test User Alpha",
+        "displayName": "alpha-user",
+        "profileImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "createdAt": "2026-09-19T14:02:45.160Z",
+        "updatedAt": "2026-09-19T14:02:45.160Z"
+      }
+    ],
+    [
+      "usr_1789826565307_ab5f5746",
+      {
+        "id": "usr_1789826565307_ab5f5746",
+        "email": "beta_1789826565305@testcorp.com",
+        "name": "Bob Builder",
+        "displayName": "Bob Builder",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB",
+        "avatarUrl": "",
+        "createdAt": "2026-09-19T14:02:45.374Z",
+        "updatedAt": "2026-09-19T14:02:45.374Z"
+      }
     ]
   ],
   "userAccounts": [
@@ -1271,6 +1314,55 @@
         "createdAt": "2026-08-31T18:19:11.494Z",
         "updatedAt": "2026-08-31T18:19:11.494Z"
       }
+    ],
+    [
+      "founder@growthlabs.io",
+      {
+        "id": "usr_1789826271015_61b491e7",
+        "email": "founder@growthlabs.io",
+        "name": "Alex Chen",
+        "displayName": "Alex Chen",
+        "avatarUrl": "",
+        "avatarType": "INITIALS",
+        "avatarValue": "AC",
+        "passwordHash": "cb6ed285a0201ea4696ff9d26e2a9a3d78272eae65832e06822c0b53ab65d547e50d3a929e9efabcf8af098c4fd49837f25dc9b9bcf14bc0e4537a19bfb52093",
+        "salt": "8c23c9d6796af88795251e5b5eac0683",
+        "createdAt": "2026-09-19T13:57:51.096Z",
+        "updatedAt": "2026-09-19T13:57:51.096Z"
+      }
+    ],
+    [
+      "alpha_1789826565075@testcorp.com",
+      {
+        "id": "usr_1789826565097_3570a5e2",
+        "email": "alpha_1789826565075@testcorp.com",
+        "name": "Test User Alpha",
+        "displayName": "alpha-user",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "profileImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "passwordHash": "b28aaea6bc74bd50380e3a6038a2ba2afffc58278284ec5260f46e3d962807bfb7422683d33dbcc70bff66ee0b01412418aded7a94ff4aeb135e921541f2c45d",
+        "salt": "2fe49e5d606120c9bd56d4d8f6552a80",
+        "createdAt": "2026-09-19T14:02:45.160Z",
+        "updatedAt": "2026-09-19T14:02:45.160Z"
+      }
+    ],
+    [
+      "beta_1789826565305@testcorp.com",
+      {
+        "id": "usr_1789826565307_ab5f5746",
+        "email": "beta_1789826565305@testcorp.com",
+        "name": "Bob Builder",
+        "displayName": "Bob Builder",
+        "avatarUrl": "",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB",
+        "passwordHash": "93bcc859dce1408528bd9dcae38dc837279ba9a1d1bbc53e571fa50e63432eca398480f0689c21766fcbae2705bc1baf0b60edfac5db9a303cdb0d2ec372b4c7",
+        "salt": "30989eb181fd2f08e59a06f74ed6b93a",
+        "createdAt": "2026-09-19T14:02:45.374Z",
+        "updatedAt": "2026-09-19T14:02:45.374Z"
+      }
     ]
   ],
   "sessions": [
@@ -1689,15 +1781,6 @@
       }
     ],
     [
-      "tok_e7774bb6ddd9215bf1c38f7d0376135d54885a308e5faf215bb7e6173c4627f9",
-      {
-        "token": "tok_e7774bb6ddd9215bf1c38f7d0376135d54885a308e5faf215bb7e6173c4627f9",
-        "userId": "usr_1788165870953_adc607b1",
-        "createdAt": "2026-08-31T12:06:21.619Z",
-        "expiresAt": "2026-09-30T12:06:21.619Z"
-      }
-    ],
-    [
       "tok_e8859c6e6a2d51e676d3f8d509aae6499c645388935b1f1a1cd226516792da03",
       {
         "token": "tok_e8859c6e6a2d51e676d3f8d509aae6499c645388935b1f1a1cd226516792da03",
@@ -1749,6 +1832,24 @@
         "userId": "usr_1788200351413_253bb571",
         "createdAt": "2026-08-31T18:19:11.494Z",
         "expiresAt": "2026-09-30T18:19:11.494Z"
+      }
+    ],
+    [
+      "tok_50cdf008ad6352ec3b7a1e7add879135d085813c167e966c75e0b926387a64d0",
+      {
+        "token": "tok_50cdf008ad6352ec3b7a1e7add879135d085813c167e966c75e0b926387a64d0",
+        "userId": "usr_1789826565097_3570a5e2",
+        "createdAt": "2026-09-19T14:02:45.272Z",
+        "expiresAt": "2026-10-19T14:02:45.272Z"
+      }
+    ],
+    [
+      "tok_5f877b6b2bd454b071d1a80c5a30f345a3902222ee07f42d74192e3b756f0510",
+      {
+        "token": "tok_5f877b6b2bd454b071d1a80c5a30f345a3902222ee07f42d74192e3b756f0510",
+        "userId": "usr_1789826565307_ab5f5746",
+        "createdAt": "2026-09-19T14:02:45.374Z",
+        "expiresAt": "2026-10-19T14:02:45.374Z"
       }
     ]
   ],
@@ -2251,6 +2352,48 @@
         "createdAt": "2026-08-31T18:19:11.495Z",
         "updatedAt": "2026-08-31T18:19:11.495Z"
       }
+    ],
+    [
+      "ws_1789826271096_r5hq",
+      {
+        "id": "ws_1789826271096_r5hq",
+        "name": "Alex Chen's Workspace",
+        "businessName": "Alex Chen's Growth Hub",
+        "description": "Autonomous research and GTM campaign intelligence workspace.",
+        "industry": "B2B SaaS / Growth",
+        "targetAudience": "Early adopters, founders, and growth leads",
+        "ownerId": "usr_1789826271015_61b491e7",
+        "createdAt": "2026-09-19T13:57:51.096Z",
+        "updatedAt": "2026-09-19T13:57:51.096Z"
+      }
+    ],
+    [
+      "ws_1789826565160_7m07",
+      {
+        "id": "ws_1789826565160_7m07",
+        "name": "Alpha Workspace",
+        "businessName": "Initial Alpha Name's Product",
+        "description": "Autonomous market intelligence and campaign workspace for Initial Alpha Name.",
+        "industry": "Technology & Digital Services",
+        "targetAudience": "Founders, marketers, and decision makers",
+        "ownerId": "usr_1789826565097_3570a5e2",
+        "createdAt": "2026-09-19T14:02:45.160Z",
+        "updatedAt": "2026-09-19T14:02:45.160Z"
+      }
+    ],
+    [
+      "ws_1789826565374_e2mi",
+      {
+        "id": "ws_1789826565374_e2mi",
+        "name": "Bob Builder's Workspace",
+        "businessName": "Bob Builder's Product",
+        "description": "Autonomous market intelligence and campaign workspace for Bob Builder.",
+        "industry": "Technology & Digital Services",
+        "targetAudience": "Founders, marketers, and decision makers",
+        "ownerId": "usr_1789826565307_ab5f5746",
+        "createdAt": "2026-09-19T14:02:45.374Z",
+        "updatedAt": "2026-09-19T14:02:45.374Z"
+      }
     ]
   ],
   "members": [
@@ -2708,7 +2851,55 @@
         "title": "Founder & CEO",
         "department": "Leadership",
         "avatarUrl": "",
-        "joinedAt": "2026-08-31T18:19:11.495Z"
+        "joinedAt": "2026-08-31T18:19:11.495Z",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB"
+      }
+    ],
+    [
+      "mem_1789826271097",
+      {
+        "id": "mem_1789826271097",
+        "workspaceId": "ws_1789826271096_r5hq",
+        "name": "Alex Chen",
+        "email": "founder@growthlabs.io",
+        "role": "OWNER",
+        "title": "Founder & Team Lead",
+        "department": "Executive",
+        "avatarUrl": "",
+        "joinedAt": "2026-09-19T13:57:51.097Z",
+        "avatarType": "INITIALS",
+        "avatarValue": "AC"
+      }
+    ],
+    [
+      "mem_1789826565161",
+      {
+        "id": "mem_1789826565161",
+        "workspaceId": "ws_1789826565160_7m07",
+        "name": "Test User Alpha",
+        "email": "alpha_1789826565075@testcorp.com",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Leadership",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "joinedAt": "2026-09-19T14:02:45.161Z",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      }
+    ],
+    [
+      "mem_1789826565375",
+      {
+        "id": "mem_1789826565375",
+        "workspaceId": "ws_1789826565374_e2mi",
+        "name": "Bob Builder",
+        "email": "beta_1789826565305@testcorp.com",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Leadership",
+        "avatarUrl": "",
+        "joinedAt": "2026-09-19T14:02:45.375Z"
       }
     ]
   ],
@@ -27745,6 +27936,179 @@
   ],
   "auditEvents": [
     {
+      "workspaceId": "ws_1789826565374_e2mi",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Bob Builder's Workspace",
+      "id": "evt_1789826565374_99c17042",
+      "timestamp": "2026-09-19T14:02:45.374Z"
+    },
+    {
+      "workspaceId": "ws_1789826565160_7m07",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Alpha Workspace",
+      "id": "evt_1789826565160_a844bbb0",
+      "timestamp": "2026-09-19T14:02:45.160Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "SYSTEM_EVENT",
+      "action": "ai_run_completed_with_huge_token_breakdown",
+      "summary": "Completed deep reasoning extraction pipeline for campaign intelligence.",
+      "details": {
+        "model": "gemini-3.6-flash",
+        "latencyMs": 1420
+      },
+      "id": "evt_1789826565013_61084731",
+      "timestamp": "2026-09-19T14:02:45.013Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "SYSTEM_EVENT",
+      "action": "source_crawled_with_extremely_long_url_and_unbroken_string_parameters",
+      "summary": "Crawled source https://verylongdomainnameexample.com/deeply/nested/article/path/with/many/segments/and/unbroken_identifiers_1234567890_abcdefghij_klmnopqrstuvwxyz?param1=test&param2=unbrokenvalue",
+      "details": {
+        "rawPayload": {
+          "nestedKey": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "longArray": [
+            "item_0_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_1_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_2_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_3_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_4_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_5_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_6_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_7_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_8_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_9_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_10_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_11_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_12_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_13_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_14_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ]
+        }
+      },
+      "id": "evt_1789826565012_4d09da6e",
+      "timestamp": "2026-09-19T14:02:45.012Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 14726ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1789826290383_ttfj4",
+        "provider": "openrouter",
+        "model": "openrouter/free",
+        "latencyMs": 14726
+      },
+      "id": "evt_1789826290383_d1457e0b",
+      "timestamp": "2026-09-19T13:58:10.383Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
+      "details": {
+        "model": "openrouter/free",
+        "attempts": 2,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1789826290383_d34e2b2d",
+      "timestamp": "2026-09-19T13:58:10.383Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-3.6-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+      "details": {
+        "model": "gemini-3.6-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+        "failureCategory": "PROVIDER_UNAVAILABLE"
+      },
+      "id": "evt_1789826281604_09a52a58",
+      "timestamp": "2026-09-19T13:58:01.604Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_run_completed",
+      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 24792ms (Status: FALLBACK_SUCCESS)",
+      "details": {
+        "runId": "airun_1789826280449_qw1dg",
+        "provider": "openrouter",
+        "model": "openrouter/free",
+        "latencyMs": 24792
+      },
+      "id": "evt_1789826280449_76e453ab",
+      "timestamp": "2026-09-19T13:58:00.449Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_fallback",
+      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
+      "details": {
+        "model": "openrouter/free",
+        "attempts": 2,
+        "taskType": "EXECUTIVE_SUMMARY"
+      },
+      "id": "evt_1789826280448_7bfa9743",
+      "timestamp": "2026-09-19T13:58:00.448Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.6-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-3.7-flash"
+        ]
+      },
+      "id": "evt_1789826275657_cae8de35",
+      "timestamp": "2026-09-19T13:57:55.657Z"
+    },
+    {
+      "workspaceId": "ws_1789826271096_r5hq",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Alex Chen's Workspace",
+      "id": "evt_1789826271097_75abc3f3",
+      "timestamp": "2026-09-19T13:57:51.097Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_model_failed",
+      "summary": "AI model gemini-3.6-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+      "details": {
+        "model": "gemini-3.6-flash",
+        "error": "Gemini API error: {\"error\":{\"code\":503,\"message\":\"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\"status\":\"UNAVAILABLE\"}}",
+        "failureCategory": "PROVIDER_UNAVAILABLE"
+      },
+      "id": "evt_1789826269770_5bacfeff",
+      "timestamp": "2026-09-19T13:57:49.770Z"
+    },
+    {
+      "workspaceId": "ws_1788165871021_rrn9",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.6-flash, openrouter/free, liquid/lfm-2.5-2.6b:free...]",
+      "details": {
+        "taskType": "EXECUTIVE_SUMMARY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free",
+          "liquid/lfm-2.5-2.6b:free",
+          "z-ai/glm-5.2:free",
+          "gemini-3.7-flash"
+        ]
+      },
+      "id": "evt_1789826255658_8776f4c9",
+      "timestamp": "2026-09-19T13:57:35.658Z"
+    },
+    {
       "workspaceId": "ws_1788200351495_ccjj",
       "eventType": "workspace_created",
       "summary": "Created workspace: Bob Builder's Workspace",
@@ -34245,188 +34609,6 @@
       },
       "id": "evt_1788185312060_768bdb12",
       "timestamp": "2026-08-31T14:08:32.060Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185312060_679fca89",
-      "timestamp": "2026-08-31T14:08:32.060Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 27500ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185310806_r9z2h",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 27500
-      },
-      "id": "evt_1788185310806_9efdeb0f",
-      "timestamp": "2026-08-31T14:08:30.806Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185310805_1022ee74",
-      "timestamp": "2026-08-31T14:08:30.805Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 36.311947423s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"36s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 36.311947423s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"36s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185304822_694409c8",
-      "timestamp": "2026-08-31T14:08:24.822Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, z-ai/glm-5.2:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "z-ai/glm-5.2:free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185304263_30dd6709",
-      "timestamp": "2026-08-31T14:08:24.263Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 36.914501714s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"36s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 36.914501714s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"36s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185304202_e0812706",
-      "timestamp": "2026-08-31T14:08:24.202Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, z-ai/glm-5.2:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "z-ai/glm-5.2:free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185303400_5a325c4b",
-      "timestamp": "2026-08-31T14:08:23.400Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 48.84670569s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"48s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 48.84670569s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"48s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185292086_f447eab8",
-      "timestamp": "2026-08-31T14:08:12.086Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, z-ai/glm-5.2:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "z-ai/glm-5.2:free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185291431_64e4caed",
-      "timestamp": "2026-08-31T14:08:11.431Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 56.643394154s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"56s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 56.643394154s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"56s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185284451_1dd22312",
-      "timestamp": "2026-08-31T14:08:04.451Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, z-ai/glm-5.2:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "z-ai/glm-5.2:free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185283306_9ae5780a",
-      "timestamp": "2026-08-31T14:08:03.306Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 170634ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185162476_p5zj3",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 170634
-      },
-      "id": "evt_1788185162476_629e1d58",
-      "timestamp": "2026-08-31T14:06:02.476Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185162475_49a3ec2c",
-      "timestamp": "2026-08-31T14:06:02.475Z"
     }
   ],
   "evaluationRuns": [
@@ -34883,6 +35065,46 @@
     ]
   ],
   "aiRuns": [
+    {
+      "id": "airun_1789826290383_ttfj4",
+      "workspaceId": "ws_1788165871021_rrn9",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "openrouter/free",
+      "attempt": 2,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 14726,
+      "inputTokens": 1654,
+      "outputTokens": 1530,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-09-19T13:58:10.383Z"
+    },
+    {
+      "id": "airun_1789826280449_qw1dg",
+      "workspaceId": "ws_1788165871021_rrn9",
+      "taskType": "EXECUTIVE_SUMMARY",
+      "provider": "openrouter",
+      "model": "openrouter/free",
+      "attempt": 2,
+      "status": "FALLBACK_SUCCESS",
+      "latencyMs": 24792,
+      "inputTokens": 1599,
+      "outputTokens": 1304,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "VALID",
+      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
+      "createdAt": "2026-09-19T13:58:00.449Z"
+    },
     {
       "id": "airun_1788200342902_0s6fu",
       "workspaceId": "ws_demo_sandbox",
@@ -44955,46 +45177,6 @@
       "validationStatus": "REPAIRED",
       "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
       "createdAt": "2026-08-31T08:45:42.786Z"
-    },
-    {
-      "id": "airun_1788165942356_lwzyd",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:42.356Z"
-    },
-    {
-      "id": "airun_1788165942348_09xxg",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:42.348Z"
     }
   ],
   "templates": [],

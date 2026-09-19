@@ -5,13 +5,11 @@ import { BrandLogo } from '../brand/BrandLogo';
 interface LandingFooterProps {
   onSignIn: () => void;
   onGetStarted: () => void;
-  onExploreDemo: () => void;
 }
 
 export const LandingFooter: React.FC<LandingFooterProps> = ({
   onSignIn,
   onGetStarted,
-  onExploreDemo,
 }) => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -109,11 +107,6 @@ export const LandingFooter: React.FC<LandingFooterProps> = ({
               <li>
                 <button onClick={onGetStarted} className="hover:text-white transition-colors text-left">
                   Start Researching
-                </button>
-              </li>
-              <li>
-                <button onClick={onExploreDemo} className="hover:text-white transition-colors text-left">
-                  Explore Demo Sandbox
                 </button>
               </li>
             </ul>

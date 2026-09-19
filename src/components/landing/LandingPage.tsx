@@ -21,13 +21,11 @@ import { LandingFooter } from './LandingFooter';
 interface LandingPageProps {
   onGetStarted: () => void;
   onSignIn: () => void;
-  onExploreDemo: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   onGetStarted,
   onSignIn,
-  onExploreDemo,
 }) => {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' as any });
@@ -39,7 +37,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <LandingNav
         onSignIn={onSignIn}
         onGetStarted={onGetStarted}
-        onExploreDemo={onExploreDemo}
       />
 
       {/* 2. Hero & 3D Intelligence Core */}
@@ -47,7 +44,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <HeroSection
           onGetStarted={onGetStarted}
           onSignIn={onSignIn}
-          onExploreDemo={onExploreDemo}
         />
 
         {/* 3. Problem Section */}
@@ -96,7 +92,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <FinalCtaSection
           onGetStarted={onGetStarted}
           onSignIn={onSignIn}
-          onExploreDemo={onExploreDemo}
         />
       </main>
 
@@ -104,7 +99,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <LandingFooter
         onSignIn={onSignIn}
         onGetStarted={onGetStarted}
-        onExploreDemo={onExploreDemo}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useWorkspace } from '../../context/WorkspaceContext';
-import { Sparkles, Shield, ArrowRight, Lock, Mail, User, Building, Compass, CheckCircle2 } from 'lucide-react';
+import { Sparkles, Shield, ArrowRight, Lock, Mail, User, Building, CheckCircle2 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { BrandLogo } from '../brand/BrandLogo';
 
@@ -13,7 +13,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
   initialMode = 'login',
   onBackToLanding,
 }) => {
-  const { login, signup, googleLogin, enterDemoMode, addToast } = useWorkspace();
+  const { login, signup, addToast } = useWorkspace();
   const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>(initialMode);
   
   // Login / Signup Form
@@ -68,17 +68,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
       });
     } catch (err: any) {
       addToast(err.message || 'Registration failed', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleGoogleOneClick = async () => {
-    setLoading(true);
-    try {
-      await googleLogin('founder@growthlabs.io', 'Alex Chen');
-    } catch (err: any) {
-      addToast(err.message || 'Google sign in failed', 'error');
     } finally {
       setLoading(false);
     }
@@ -183,43 +172,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
               Create Account
             </button>
           </div>
-
-          {/* Quick Sign-In Option */}
-          {mode !== 'forgot' && (
-            <div className="space-y-3 mb-6">
-              <button
-                type="button"
-                onClick={handleGoogleOneClick}
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-sm font-medium text-slate-200 transition-all shadow-sm hover:border-slate-600 disabled:opacity-50"
-              >
-                <svg className="w-4 h-4" viewBox="0 0 24 24">
-                  <path
-                    fill="#EA4335"
-                    d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.1 8.9 5 12 5z"
-                  />
-                  <path
-                    fill="#4285F4"
-                    d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"
-                  />
-                  <path
-                    fill="#FBBC05"
-                    d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.2-2 .4-2.7L1.6 6.4C.6 8.4 0 10.1 0 12s.6 3.6 1.6 5.6l3.7-2.9z"
-                  />
-                  <path
-                    fill="#34A853"
-                    d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.1-6.7-5.3L1.6 16c1.9 3.8 5.8 7 10.4 7z"
-                  />
-                </svg>
-                Continue with Google / 1-Click Founder ID
-              </button>
-
-              <div className="relative flex items-center justify-center">
-                <div className="border-t border-slate-800 w-full" />
-                <span className="bg-slate-900 px-3 text-xs text-slate-500 uppercase tracking-wider font-mono">or email credentials</span>
-              </div>
-            </div>
-          )}
 
           {/* Mode: Login */}
           {mode === 'login' && (
@@ -446,18 +398,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
               </button>
             </div>
           )}
-
-          {/* Direct Demo Sandbox Explorer */}
-          <div className="mt-6 pt-5 border-t border-slate-800 flex flex-col items-center">
-            <button
-              type="button"
-              onClick={enterDemoMode}
-              className="flex items-center gap-2 text-xs font-medium text-indigo-400 hover:text-indigo-300 bg-indigo-950/40 hover:bg-indigo-950/80 px-3 py-1.5 rounded-full border border-indigo-800/50 transition-all"
-            >
-              <Compass className="w-3.5 h-3.5" />
-              <span>Explore Instant Demo Sandbox (NextGen Resume AI)</span>
-            </button>
-          </div>
         </div>
 
         <div className="mt-6 text-center text-xs text-slate-500 flex items-center justify-center gap-2">
