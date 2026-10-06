@@ -156,7 +156,8 @@ export class OpenRouterCatalogService {
   private readonly CACHE_TTL_MS = 2 * 60 * 60 * 1000; // 2 hours
 
   constructor() {
-    const dataDir = path.join(process.cwd(), 'data');
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const dataDir = isServerless ? path.join('/tmp', 'data') : path.join(process.cwd(), 'data');
     if (!fs.existsSync(dataDir)) {
       try {
         fs.mkdirSync(dataDir, { recursive: true });
@@ -169,9 +170,19 @@ export class OpenRouterCatalogService {
   }
 
   private loadFromDisk(): void {
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const seedPath = path.join(process.cwd(), 'data', 'openrouter_catalog.json');
+
+    let targetPath = this.cacheFilePath;
+    if (!fs.existsSync(targetPath)) {
+      if (isServerless && fs.existsSync(seedPath)) {
+        targetPath = seedPath;
+      }
+    }
+
     try {
-      if (fs.existsSync(this.cacheFilePath)) {
-        const raw = fs.readFileSync(this.cacheFilePath, 'utf-8');
+      if (fs.existsSync(targetPath)) {
+        const raw = fs.readFileSync(targetPath, 'utf-8');
         const data = JSON.parse(raw);
         if (Array.isArray(data.models) && data.models.length > 0) {
           this.memoryCache = data.models;

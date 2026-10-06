@@ -197,15 +197,18 @@ export class PersistentDatabaseStore {
   private approvalDecisions: Map<string, ApprovalDecisionRecord> = new Map();
 
   constructor() {
-    const dataDir = path.join(process.cwd(), 'data');
-    if (!fs.existsSync(dataDir)) {
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const defaultDataDir = path.join(process.cwd(), 'data');
+    const writableDir = isServerless ? path.join('/tmp', 'data') : defaultDataDir;
+
+    if (!fs.existsSync(writableDir)) {
       try {
-        fs.mkdirSync(dataDir, { recursive: true });
+        fs.mkdirSync(writableDir, { recursive: true });
       } catch (err) {
         logger.warn('Could not create data directory:', err);
       }
     }
-    this.dataFilePath = path.join(dataDir, 'researchflow_db.json');
+    this.dataFilePath = path.join(writableDir, 'researchflow_db.json');
 
     this.loadFromDisk();
 
@@ -253,9 +256,20 @@ export class PersistentDatabaseStore {
   }
 
   private loadFromDisk(): void {
-    if (!fs.existsSync(this.dataFilePath)) return;
+    const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
+    const seedDbPath = path.join(process.cwd(), 'data', 'researchflow_db.json');
+
+    let targetPath = this.dataFilePath;
+    if (!fs.existsSync(targetPath)) {
+      if (isServerless && fs.existsSync(seedDbPath)) {
+        targetPath = seedDbPath;
+      } else {
+        return;
+      }
+    }
+
     try {
-      const raw = fs.readFileSync(this.dataFilePath, 'utf-8');
+      const raw = fs.readFileSync(targetPath, 'utf-8');
       const parsed = JSON.parse(raw);
 
       if (parsed.users) this.users = new Map(parsed.users);
