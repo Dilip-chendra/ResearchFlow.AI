@@ -678,6 +678,35 @@
         "createdAt": "2026-10-06T15:33:00.619Z",
         "updatedAt": "2026-10-06T15:33:00.619Z"
       }
+    ],
+    [
+      "usr_1791307747288_4596e5ff",
+      {
+        "id": "usr_1791307747288_4596e5ff",
+        "email": "alpha_1791307747214@testcorp.com",
+        "name": "Test User Alpha",
+        "displayName": "alpha-user",
+        "profileImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "createdAt": "2026-10-06T17:29:07.379Z",
+        "updatedAt": "2026-10-06T17:29:07.379Z"
+      }
+    ],
+    [
+      "usr_1791307747601_1d60e31b",
+      {
+        "id": "usr_1791307747601_1d60e31b",
+        "email": "beta_1791307747597@testcorp.com",
+        "name": "Bob Builder",
+        "displayName": "Bob Builder",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB",
+        "avatarUrl": "",
+        "createdAt": "2026-10-06T17:29:07.694Z",
+        "updatedAt": "2026-10-06T17:29:07.694Z"
+      }
     ]
   ],
   "userAccounts": [
@@ -1363,6 +1392,39 @@
         "createdAt": "2026-10-06T15:33:00.619Z",
         "updatedAt": "2026-10-06T15:33:00.619Z"
       }
+    ],
+    [
+      "alpha_1791307747214@testcorp.com",
+      {
+        "id": "usr_1791307747288_4596e5ff",
+        "email": "alpha_1791307747214@testcorp.com",
+        "name": "Test User Alpha",
+        "displayName": "alpha-user",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "profileImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "passwordHash": "708d45edafc3b385ca5e650c7b8d90f45bae25ab31ff4c8c742684ff32a8b59e93d4fb6cd8abd2f1744d1fe43f95be9ea1dead635a3ddfa3745f4a4a92526e8d",
+        "salt": "f844c401cbf8a3e9c651037ffdda9b20",
+        "createdAt": "2026-10-06T17:29:07.379Z",
+        "updatedAt": "2026-10-06T17:29:07.379Z"
+      }
+    ],
+    [
+      "beta_1791307747597@testcorp.com",
+      {
+        "id": "usr_1791307747601_1d60e31b",
+        "email": "beta_1791307747597@testcorp.com",
+        "name": "Bob Builder",
+        "displayName": "Bob Builder",
+        "avatarUrl": "",
+        "avatarType": "INITIALS",
+        "avatarValue": "BB",
+        "passwordHash": "2e55772e85cfb856d5aa7a275be775eb689175b053ecc955e1dbac222ebb06b341f79a7aa2cd521eff83808fcd75e443ee543e4412de1d1de1c920b34b13bfae",
+        "salt": "bc9223fb160b7b975caf6e8d5ac373e4",
+        "createdAt": "2026-10-06T17:29:07.694Z",
+        "updatedAt": "2026-10-06T17:29:07.694Z"
+      }
     ]
   ],
   "sessions": [
@@ -1859,6 +1921,24 @@
         "userId": "usr_1791300780556_b1b66f2f",
         "createdAt": "2026-10-06T15:33:00.619Z",
         "expiresAt": "2026-11-05T15:33:00.619Z"
+      }
+    ],
+    [
+      "tok_d6cc02a56247671c965e6dca9df797fd194b13b5a235fe7d2d5be263e2c8ee49",
+      {
+        "token": "tok_d6cc02a56247671c965e6dca9df797fd194b13b5a235fe7d2d5be263e2c8ee49",
+        "userId": "usr_1791307747288_4596e5ff",
+        "createdAt": "2026-10-06T17:29:07.537Z",
+        "expiresAt": "2026-11-05T17:29:07.537Z"
+      }
+    ],
+    [
+      "tok_a33db815b55c0fba06c56a79de53c4e074b99734980558664edaefae7979280e",
+      {
+        "token": "tok_a33db815b55c0fba06c56a79de53c4e074b99734980558664edaefae7979280e",
+        "userId": "usr_1791307747601_1d60e31b",
+        "createdAt": "2026-10-06T17:29:07.694Z",
+        "expiresAt": "2026-11-05T17:29:07.694Z"
       }
     ]
   ],
@@ -2403,6 +2483,34 @@
         "createdAt": "2026-10-06T15:33:00.619Z",
         "updatedAt": "2026-10-06T15:33:00.619Z"
       }
+    ],
+    [
+      "ws_1791307747379_dq8k",
+      {
+        "id": "ws_1791307747379_dq8k",
+        "name": "Alpha Workspace",
+        "businessName": "Initial Alpha Name's Product",
+        "description": "Autonomous market intelligence and campaign workspace for Initial Alpha Name.",
+        "industry": "Technology & Digital Services",
+        "targetAudience": "Founders, marketers, and decision makers",
+        "ownerId": "usr_1791307747288_4596e5ff",
+        "createdAt": "2026-10-06T17:29:07.379Z",
+        "updatedAt": "2026-10-06T17:29:07.379Z"
+      }
+    ],
+    [
+      "ws_1791307747694_7xjf",
+      {
+        "id": "ws_1791307747694_7xjf",
+        "name": "Bob Builder's Workspace",
+        "businessName": "Bob Builder's Product",
+        "description": "Autonomous market intelligence and campaign workspace for Bob Builder.",
+        "industry": "Technology & Digital Services",
+        "targetAudience": "Founders, marketers, and decision makers",
+        "ownerId": "usr_1791307747601_1d60e31b",
+        "createdAt": "2026-10-06T17:29:07.694Z",
+        "updatedAt": "2026-10-06T17:29:07.694Z"
+      }
     ]
   ],
   "members": [
@@ -2911,6 +3019,36 @@
         "joinedAt": "2026-10-06T15:33:00.620Z",
         "avatarType": "INITIALS",
         "avatarValue": "BB"
+      }
+    ],
+    [
+      "mem_1791307747380",
+      {
+        "id": "mem_1791307747380",
+        "workspaceId": "ws_1791307747379_dq8k",
+        "name": "Test User Alpha",
+        "email": "alpha_1791307747214@testcorp.com",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Leadership",
+        "avatarUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==",
+        "joinedAt": "2026-10-06T17:29:07.380Z",
+        "avatarType": "IMAGE",
+        "avatarValue": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=="
+      }
+    ],
+    [
+      "mem_1791307747694",
+      {
+        "id": "mem_1791307747694",
+        "workspaceId": "ws_1791307747694_7xjf",
+        "name": "Bob Builder",
+        "email": "beta_1791307747597@testcorp.com",
+        "role": "OWNER",
+        "title": "Founder & CEO",
+        "department": "Leadership",
+        "avatarUrl": "",
+        "joinedAt": "2026-10-06T17:29:07.694Z"
       }
     ]
   ],
@@ -23307,6 +23445,332 @@
         "status": "DRAFT",
         "generatedAt": "2026-10-06T15:33:12.986Z"
       }
+    ],
+    [
+      "brief_warroom_1791307726546",
+      {
+        "id": "brief_warroom_1791307726546",
+        "workspaceId": "ws_demo_sandbox",
+        "researchJobId": "job_warroom_1791307726546",
+        "title": "Zero-Lockin Transparent Pricing Campaign",
+        "businessName": "NextGen Resume AI",
+        "objective": "Capture market whitespace: Zero-Lockin Transparent Pricing Campaign",
+        "targetAudience": "University seniors, early-career software engineers, and mid-career pivoters targeting top tech roles",
+        "status": "DRAFT",
+        "strategicAngle": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+        "coreMessage": "Stop settling for generic claims. Our verified intelligence delivers real results.",
+        "supportingMessages": [
+          "Direct proof over superficial vendor promises.",
+          "Zero-lockin pricing designed for customer ROI.",
+          "Continuous performance benchmarking."
+        ],
+        "proofPoints": [
+          {
+            "claim": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+            "sourceUrl": "https://researchflow.ai/evidence",
+            "evidenceId": "ev_job_demo_resume_ai_1"
+          }
+        ],
+        "channels": [
+          "LINKEDIN",
+          "EMAIL",
+          "SEO"
+        ],
+        "callToAction": "Experience the verified alternative today.",
+        "evidenceCount": 2,
+        "confidenceScore": 94,
+        "createdAt": "2026-10-06T17:28:46.546Z",
+        "updatedAt": "2026-10-06T17:28:46.546Z",
+        "strategicAngles": [
+          {
+            "id": "angle_1",
+            "name": "Zero-Lockin Transparent Pricing Campaign",
+            "description": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+            "evidenceStrength": 9,
+            "audienceRelevance": 9,
+            "differentiation": 9,
+            "businessImpact": 8,
+            "rationale": "Directly grounded in War Room strategic opportunity.",
+            "isRecommended": true,
+            "isSelected": true
+          }
+        ],
+        "messageArchitecture": {
+          "coreMessage": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+          "supportingMessages": [
+            {
+              "title": "Verified Proof",
+              "message": "Transparent benchmarks over marketing claims.",
+              "evidenceReferenceIds": [
+                "ev_job_demo_resume_ai_1",
+                "ev_job_demo_resume_ai_2"
+              ]
+            },
+            {
+              "title": "Customer Alignment",
+              "message": "Engineered specifically for target customer ROI.",
+              "evidenceReferenceIds": [
+                "ev_job_demo_resume_ai_1",
+                "ev_job_demo_resume_ai_2"
+              ]
+            }
+          ],
+          "proofPoints": [
+            {
+              "claim": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+              "sourceUrl": "https://researchflow.ai/evidence",
+              "evidenceId": "ev_job_demo_resume_ai_1"
+            }
+          ],
+          "cta": "Start with full transparency today."
+        },
+        "validationReport": {
+          "status": "PASS",
+          "factualityScore": 92,
+          "unsupportedClaimsCount": 0,
+          "checks": [
+            {
+              "name": "Grounding Verification",
+              "status": "PASS",
+              "message": "Grounded in verified War Room opportunity"
+            }
+          ]
+        }
+      }
+    ],
+    [
+      "brief_test_1791307736215",
+      {
+        "id": "brief_test_1791307736215",
+        "researchJobId": "job_test_nextgen",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Proof Over Promises: University seniors & early-career software engineers Acquisition",
+        "funnelStage": "CONSIDERATION",
+        "executiveSummary": "Evidence-backed campaign targeting University seniors & early-career software engineers to achieve \"Acquire qualified engineering students and early-career software developers\". Grounded upon 2 verified evidence points across competitive intelligence benchmarks.",
+        "objective": "Acquire qualified engineering students and early-career software developers",
+        "audience": "University seniors & early-career software engineers",
+        "coreProblem": "Target audience (University seniors & early-career software engineers) is frustrated by over 80% of applicant resumes fail initial screening due to generic ai buzzwords, while incumbents lock users into incumbents charge $19-$29/month with forced annual renewals.",
+        "competitiveInsights": "Competitors rely on cosmetic AI templates and opaque subscriptions.",
+        "positioning": "NextGen Resume AI is the evidence-backed solution designed for University seniors & early-career software engineers who demand specialized precision and verifiable accuracy with complete transparency.",
+        "campaignAngle": "Transparent Economics & Zero Lock-in",
+        "primaryMessage": "Ground your positioning in verifiable evidence recruiters and leaders can actually trust.",
+        "supportingMessages": [
+          "100% transparent pricing and clear deliverables with zero surprise lock-ins.",
+          "Calibrated directly against real market benchmarks and verified evidence.",
+          "Purpose-built for University seniors & early-career software engineers seeking measurable impact over vanity features."
+        ],
+        "targetPersona": {
+          "role": "University seniors & early-career software engineers",
+          "situation": "Navigating noisy market claims and evaluating solutions with tight timelines and budget scrutiny.",
+          "pain": "Frustrated by generic marketing promises, opaque subscription lock-ins, and lack of verifiable proof.",
+          "desiredOutcome": "Deploy a proven, evidence-backed solution with clear deliverables and fast time-to-value.",
+          "objections": [
+            "How does this actually differ from incumbent tools we already tested?",
+            "Will this require extensive onboarding or vendor lock-in?",
+            "Is there tangible proof of outcomes before we commit?"
+          ],
+          "trigger": "Failed past implementation or upcoming strategic quarter review requiring measurable results.",
+          "decisionCriteria": [
+            "Verifiable benchmark evidence over marketing claims",
+            "Transparent pricing with zero hidden fees",
+            "Frictionless onboarding and workflow integration"
+          ]
+        },
+        "strategicAngles": [
+          {
+            "id": "angle_1",
+            "name": "Proof Over Promises",
+            "description": "Positioning NextGen Resume AI on verifiable, transparent evidence rather than generic marketing claims for University seniors & early-career software engineers.",
+            "evidenceStrength": 4.9,
+            "audienceRelevance": 4.8,
+            "differentiation": 4.7,
+            "businessImpact": 4.6,
+            "rationale": "Directly counters top incumbent vulnerabilities on ungrounded marketing promises and opaque outputs.",
+            "isRecommended": true,
+            "isSelected": false
+          },
+          {
+            "id": "angle_2",
+            "name": "Transparent Economics & Zero Lock-in",
+            "description": "Highlighting clear pricing, flexible terms, and zero recurring lock-in traps compared to legacy vendors.",
+            "evidenceStrength": 4.6,
+            "audienceRelevance": 4.5,
+            "differentiation": 4.8,
+            "businessImpact": 4.3,
+            "rationale": "Strongest conversion angle for cost-conscious buyers experiencing subscription fatigue.",
+            "isRecommended": false,
+            "isSelected": true
+          },
+          {
+            "id": "angle_3",
+            "name": "Specialized Precision & Workflow Fit",
+            "description": "Emphasizing architecture tailored specifically for University seniors & early-career software engineers rather than one-size-fits-all bloated suites.",
+            "evidenceStrength": 4.4,
+            "audienceRelevance": 4.9,
+            "differentiation": 4.3,
+            "businessImpact": 4.2,
+            "rationale": "Highest resonance for technical practitioners seeking precision tools over generic templates.",
+            "isRecommended": false,
+            "isSelected": false
+          }
+        ],
+        "messageArchitecture": {
+          "coreMessage": "Ground your University seniors & early-career software engineers strategy in verifiable evidence recruiters and leaders can actually trust.",
+          "supportingMessages": [
+            {
+              "index": 1,
+              "headline": "Verifiable Proof Over Keyword Density",
+              "description": "Demonstrate concrete problem-solving deliverables rather than superficial keyword matching.",
+              "evidenceReferenceIds": [
+                "ev_test_1",
+                "ev_test_2"
+              ]
+            },
+            {
+              "index": 2,
+              "headline": "Radical Transparency & Zero Subscription Traps",
+              "description": "Clear pricing and flexible engagement with zero hidden renewals or restrictive contract terms.",
+              "evidenceReferenceIds": [
+                "ev_test_1"
+              ]
+            },
+            {
+              "index": 3,
+              "headline": "High-Velocity, Repeatable Workflow",
+              "description": "Empower University seniors & early-career software engineers to produce calibrated, execution-ready results in minutes.",
+              "evidenceReferenceIds": [
+                "ev_test_2"
+              ]
+            }
+          ],
+          "proofPoints": [
+            {
+              "claim": "Incumbents charge $19-$29/month with forced annual renewals",
+              "sourceUrl": "https://competitor-benchmark.com/pricing",
+              "evidenceId": "ev_test_1"
+            },
+            {
+              "claim": "Over 80% of applicant resumes fail initial screening due to generic AI buzzwords",
+              "sourceUrl": "https://hiring-trends.org/screening",
+              "evidenceId": "ev_test_2"
+            }
+          ],
+          "callToAction": "Experience evidence-backed precision with NextGen Resume AI."
+        },
+        "challengeStrategy": [
+          {
+            "id": "risk_1",
+            "risk": "Audience Fatigue from Generic Vendor Claims",
+            "severity": "MEDIUM",
+            "objection": "We have tried multiple tools claiming to be the best for University seniors & early-career software engineers. How is NextGen Resume AI different?",
+            "evidenceBackedCounter": "We anchor every recommendation to verifiable live benchmark data rather than cosmetic templates.",
+            "mitigation": "Show unedited evidence teardowns and transparent source citations in all messaging."
+          },
+          {
+            "id": "risk_2",
+            "risk": "Incumbent Brand Familiarity Advantage",
+            "severity": "HIGH",
+            "objection": "Why switch from a legacy platform with established market awareness?",
+            "evidenceBackedCounter": "Incumbents lock users into rigid annual commitments while failing to resolve core precision bottlenecks.",
+            "mitigation": "Focus on high-intent decision points and provide friction-free trial experiences."
+          },
+          {
+            "id": "risk_3",
+            "risk": "Perceived Workflow Switching Cost",
+            "severity": "LOW",
+            "objection": "Will adopting a new approach disrupt our existing rhythm?",
+            "evidenceBackedCounter": "Engineered for instant export and integration with standard downstream workflows.",
+            "mitigation": "Provide one-click copy, structured JSON/Markdown exports, and clear checklists."
+          }
+        ],
+        "recommendedChannels": [
+          "LinkedIn",
+          "Cold Outreach / Direct Email",
+          "Organic SEO & High-Intent Search"
+        ],
+        "contentStrategy": "Deploy comparative breakdowns, teardown articles of common industry mistakes, and transparent evidence-backed case studies.",
+        "recommendations": [
+          "Launch thought leadership campaign highlighting industry benchmarks and common vendor pitfalls.",
+          "Deploy direct email sequence emphasizing verified outcomes and transparent pricing.",
+          "Publish long-tail comparison pillars contrasting NextGen Resume AI's proof points against incumbent weaknesses."
+        ],
+        "risks": [
+          "Incumbent search volume on broad keywords; focus strictly on high-intent decision-maker distribution."
+        ],
+        "evidenceReferences": [
+          {
+            "evidenceId": "ev_test_1",
+            "claim": "Incumbents charge $19-$29/month with forced annual renewals",
+            "sourceUrl": "https://competitor-benchmark.com/pricing",
+            "category": "Pricing"
+          },
+          {
+            "evidenceId": "ev_test_2",
+            "claim": "Over 80% of applicant resumes fail initial screening due to generic AI buzzwords",
+            "sourceUrl": "https://hiring-trends.org/screening",
+            "category": "Pain Points"
+          }
+        ],
+        "confidence": "HIGH",
+        "confidenceScore": 94,
+        "confidenceExplanation": "Supported by 2 verified evidence points across independent source domains.",
+        "limitations": "Enterprise private discount contracts and non-public custom agreements remain outside public web intelligence bounds.",
+        "qualityReview": {
+          "overallScore": 9.1,
+          "dimensions": {
+            "strategicAlignment": 9.3,
+            "audienceRelevance": 9.2,
+            "specificity": 8.9,
+            "evidenceGrounding": 9.5,
+            "originality": 8.8,
+            "clarity": 9.4,
+            "conversionPotential": 8.7,
+            "channelFit": 9
+          },
+          "strengths": [
+            "Directly targets validated competitor vulnerabilities with verified citations",
+            "Maintains distinct, publication-grade voice across LinkedIn, Email, and SEO",
+            "Zero prohibited generic AI clichés or uncorroborated percentage claims"
+          ],
+          "issues": [
+            "Could include further quantitative benchmark breakdowns in email step 2"
+          ],
+          "suggestedImprovements": [
+            "Incorporate specific time-saving metrics in the tactical LinkedIn post variant"
+          ],
+          "reviewedAt": "2026-10-06T17:28:56.213Z"
+        },
+        "validationReport": {
+          "status": "WARNING",
+          "factualityScore": 98,
+          "unsupportedClaimsCount": 0,
+          "checks": [
+            {
+              "name": "Evidence Grounding",
+              "status": "PASS",
+              "message": "2 verified evidence references linked to strategy."
+            },
+            {
+              "name": "AI Cliché & Jargon Filter",
+              "status": "PASS",
+              "message": "Zero prohibited generic marketing clichés detected."
+            },
+            {
+              "name": "Factuality & Claim Safety",
+              "status": "PASS",
+              "message": "All figures and comparative claims corroborated by source evidence."
+            },
+            {
+              "name": "Channel Depth & Completeness",
+              "status": "WARNING",
+              "message": "Channel drafts may be too brief for full commercial engagement."
+            }
+          ],
+          "validatedAt": "2026-10-06T17:28:56.215Z"
+        },
+        "status": "DRAFT",
+        "generatedAt": "2026-10-06T17:28:56.215Z"
+      }
     ]
   ],
   "campaignAssets": [
@@ -28177,9 +28641,336 @@
         "reason": "Capture high-intent organic search traffic.",
         "createdAt": "2026-08-31T13:59:18.304Z"
       }
+    ],
+    [
+      "task_warroom_1791307726547",
+      {
+        "id": "task_warroom_1791307726547",
+        "workspaceId": "ws_demo_sandbox",
+        "campaignId": "warroom_sprint_1791307726547",
+        "title": "Counter-measure: Teal browser extension expanding into real-time job application lock-in",
+        "description": "Defensive plan for competitor move: Teal is capturing candidate workflow at the moment of job board application, reducing standalone web traffic.\n\nLeading indicators: Teal hiring browser extension engineers, Integration of direct autofill across Lever and Greenhouse\nDefensive countermeasure: Deploy lightweight browser diagnostic tool that checks resume match without leaving LinkedIn/Indeed.",
+        "channel": "OTHER",
+        "status": "TODO",
+        "assigneeName": "Test Runner",
+        "priority": "HIGH",
+        "createdAt": "2026-10-06T17:28:46.547Z",
+        "updatedAt": "2026-10-06T17:28:46.547Z"
+      }
     ]
   ],
   "auditEvents": [
+    {
+      "workspaceId": "ws_1791307747694_7xjf",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Bob Builder's Workspace",
+      "id": "evt_1791307747694_bd33dfd9",
+      "timestamp": "2026-10-06T17:29:07.694Z"
+    },
+    {
+      "workspaceId": "ws_1791307747379_dq8k",
+      "eventType": "workspace_created",
+      "summary": "Created workspace: Alpha Workspace",
+      "id": "evt_1791307747379_a983cb0c",
+      "timestamp": "2026-10-06T17:29:07.379Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "SYSTEM_EVENT",
+      "action": "ai_run_completed_with_huge_token_breakdown",
+      "summary": "Completed deep reasoning extraction pipeline for campaign intelligence.",
+      "details": {
+        "model": "gemini-3.6-flash",
+        "latencyMs": 1420
+      },
+      "id": "evt_1791307747115_6c187d61",
+      "timestamp": "2026-10-06T17:29:07.115Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "SYSTEM_EVENT",
+      "action": "source_crawled_with_extremely_long_url_and_unbroken_string_parameters",
+      "summary": "Crawled source https://verylongdomainnameexample.com/deeply/nested/article/path/with/many/segments/and/unbroken_identifiers_1234567890_abcdefghij_klmnopqrstuvwxyz?param1=test&param2=unbrokenvalue",
+      "details": {
+        "rawPayload": {
+          "nestedKey": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+          "longArray": [
+            "item_0_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_1_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_2_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_3_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_4_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_5_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_6_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_7_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_8_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_9_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_10_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_11_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_12_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_13_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+            "item_14_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+          ]
+        }
+      },
+      "id": "evt_1791307747113_8b2d36a9",
+      "timestamp": "2026-10-06T17:29:07.114Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task CONTENT_GENERATION completed with heuristic/heuristic-engine-v2 in 1ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1791307736255_mey8j",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 1
+      },
+      "id": "evt_1791307736255_625de2c1",
+      "timestamp": "2026-10-06T17:28:56.255Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task CONTENT_GENERATION after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736254_59157f3c",
+      "timestamp": "2026-10-06T17:28:56.254Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task CONTENT_GENERATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "CONTENT_GENERATION",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736254_02cb1af9",
+      "timestamp": "2026-10-06T17:28:56.254Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task QUALITY_EVALUATION completed with heuristic/heuristic-engine-v2 in 0ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1791307736213_6u5oj",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 0
+      },
+      "id": "evt_1791307736214_665068e5",
+      "timestamp": "2026-10-06T17:28:56.214Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task QUALITY_EVALUATION after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736213_4ea8508f",
+      "timestamp": "2026-10-06T17:28:56.213Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task QUALITY_EVALUATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "QUALITY_EVALUATION",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736213_2a6d2d24",
+      "timestamp": "2026-10-06T17:28:56.213Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task CONTENT_GENERATION completed with heuristic/heuristic-engine-v2 in 2ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1791307736212_ga8zp",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 2
+      },
+      "id": "evt_1791307736212_8f2798da",
+      "timestamp": "2026-10-06T17:28:56.212Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task CONTENT_GENERATION after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736211_8589dfb7",
+      "timestamp": "2026-10-06T17:28:56.211Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task CONTENT_GENERATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "CONTENT_GENERATION",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736210_e7bebcf6",
+      "timestamp": "2026-10-06T17:28:56.211Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_run_completed",
+      "summary": "AI task CAMPAIGN_STRATEGY completed with heuristic/heuristic-engine-v2 in 3ms (Status: REPAIRED)",
+      "details": {
+        "runId": "airun_1791307736209_tcrex",
+        "provider": "heuristic",
+        "model": "heuristic-engine-v2",
+        "latencyMs": 3
+      },
+      "id": "evt_1791307736209_2e7fc949",
+      "timestamp": "2026-10-06T17:28:56.209Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_repair",
+      "summary": "Activated heuristic synthesis fallback for task CAMPAIGN_STRATEGY after 2 model attempts.",
+      "details": {
+        "fallbackChainUsed": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736209_4bd3c162",
+      "timestamp": "2026-10-06T17:28:56.209Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "ai_routing_started",
+      "summary": "AI routing initiated for task CAMPAIGN_STRATEGY across candidate chain [gemini-3.6-flash, openrouter/free...]",
+      "details": {
+        "taskType": "CAMPAIGN_STRATEGY",
+        "mode": "BALANCED",
+        "candidates": [
+          "gemini-3.6-flash",
+          "openrouter/free"
+        ]
+      },
+      "id": "evt_1791307736206_5d1a77d8",
+      "timestamp": "2026-10-06T17:28:56.207Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "war_room_create",
+      "summary": "War Room action: CREATE",
+      "details": {
+        "title": "Experiment: Ship Grounded Impact Metric Formulator for Junior Engineers",
+        "recommendationId": "rec_ws_demo_sandbox_3"
+      },
+      "id": "evt_1791307726548_f9274663",
+      "timestamp": "2026-10-06T17:28:46.548Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "war_room_create",
+      "summary": "War Room action: CREATE",
+      "details": {
+        "title": "Counter-measure: Teal browser extension expanding into real-time job application lock-in",
+        "entityType": "THREAT",
+        "entityId": "threat_ws_demo_sandbox_1"
+      },
+      "id": "evt_1791307726547_c6dca733",
+      "timestamp": "2026-10-06T17:28:46.547Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "war_room_create",
+      "summary": "War Room action: CREATE",
+      "details": {
+        "title": "Zero-Lockin Transparent Pricing Campaign",
+        "opportunityId": "opp_ws_demo_sandbox_1"
+      },
+      "id": "evt_1791307726547_2ea1dd87",
+      "timestamp": "2026-10-06T17:28:46.547Z"
+    },
+    {
+      "workspaceId": "ws_test_warroom_1791307726536",
+      "eventType": "war_room_update",
+      "summary": "Market Model mapped for category: Legit Category",
+      "details": {
+        "message": "Market Model mapped for category: Legit Category",
+        "competitorCount": 1
+      },
+      "id": "evt_1791307726546_e71fba71",
+      "timestamp": "2026-10-06T17:28:46.546Z"
+    },
+    {
+      "workspaceId": "ws_test_warroom_1791307726536",
+      "eventType": "war_room_create",
+      "summary": "War Room action: CREATE",
+      "details": {
+        "scenarioTitle": "Vanta drops entry tier pricing to zero with VC subsidies",
+        "competitorName": "Vanta"
+      },
+      "id": "evt_1791307726545_e18d9ccd",
+      "timestamp": "2026-10-06T17:28:46.545Z"
+    },
+    {
+      "workspaceId": "ws_test_warroom_1791307726536",
+      "eventType": "war_room_create",
+      "summary": "War Room action: CREATE",
+      "details": {
+        "featureName": "Continuous Evidence Hash Notarization",
+        "buildPriorityScore": 8748,
+        "action": "BUILD"
+      },
+      "id": "evt_1791307726543_20ecb655",
+      "timestamp": "2026-10-06T17:28:46.544Z"
+    },
+    {
+      "workspaceId": "ws_test_warroom_1791307726536",
+      "eventType": "war_room_update",
+      "summary": "War Room action: UPDATE",
+      "details": {
+        "competitorName": "Sprinto",
+        "status": "CONFIRMED",
+        "notes": "Validated target competitor in mid-market"
+      },
+      "id": "evt_1791307726543_7bad2c3a",
+      "timestamp": "2026-10-06T17:28:46.543Z"
+    },
+    {
+      "workspaceId": "ws_test_warroom_1791307726536",
+      "eventType": "war_room_update",
+      "summary": "Market Model mapped for category: B2B Compliance AI & Audit Automation",
+      "details": {
+        "message": "Market Model mapped for category: B2B Compliance AI & Audit Automation",
+        "competitorCount": 3
+      },
+      "id": "evt_1791307726540_f77ea5fc",
+      "timestamp": "2026-10-06T17:28:46.540Z"
+    },
     {
       "workspaceId": "ws_demo_sandbox",
       "eventType": "ai_run_completed",
@@ -34533,320 +35324,6 @@
       },
       "id": "evt_1788185376643_407002dc",
       "timestamp": "2026-08-31T14:09:36.643Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model nvidia/nemotron-3-ultra-550b-a55b:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185375537_cd1ee8dd",
-      "timestamp": "2026-08-31T14:09:35.537Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model z-ai/glm-5.2:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "z-ai/glm-5.2:free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185373005_86512c72",
-      "timestamp": "2026-08-31T14:09:33.005Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model openrouter/free failed for task EXECUTIVE_SUMMARY: OpenRouter returned an empty message content.",
-      "details": {
-        "model": "openrouter/free",
-        "error": "OpenRouter returned an empty message content.",
-        "failureCategory": "INVALID_RESPONSE"
-      },
-      "id": "evt_1788185371061_2e05bebc",
-      "timestamp": "2026-08-31T14:09:31.061Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 46449ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185363622_0jd34",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 46449
-      },
-      "id": "evt_1788185363622_5487ea67",
-      "timestamp": "2026-08-31T14:09:23.623Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185363622_c934cc11",
-      "timestamp": "2026-08-31T14:09:23.622Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with heuristic/heuristic-engine-v2 in 5272ms (Status: REPAIRED)",
-      "details": {
-        "runId": "airun_1788185362154_jh0rs",
-        "provider": "heuristic",
-        "model": "heuristic-engine-v2",
-        "latencyMs": 5272
-      },
-      "id": "evt_1788185362154_3db0e963",
-      "timestamp": "2026-08-31T14:09:22.154Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_repair",
-      "summary": "Activated heuristic synthesis fallback for task EXECUTIVE_SUMMARY after 5 model attempts.",
-      "details": {
-        "lastError": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 38.990157316s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"38s\"}]}}",
-        "fallbackChainUsed": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "google/gemma-4-31b-it:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185362154_7643cd35",
-      "timestamp": "2026-08-31T14:09:22.154Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.6-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 38.990157316s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"38s\"}]}}",
-      "details": {
-        "model": "gemini-3.6-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 38.990157316s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.6-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"38s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185362153_7d117752",
-      "timestamp": "2026-08-31T14:09:22.153Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_model_failed",
-      "summary": "AI model google/gemma-4-31b-it:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "google/gemma-4-31b-it:free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185361717_378e8716",
-      "timestamp": "2026-08-31T14:09:21.717Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_model_failed",
-      "summary": "AI model nvidia/nemotron-3-ultra-550b-a55b:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185360869_ea29d65f",
-      "timestamp": "2026-08-31T14:09:20.870Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with openrouter/openrouter/free in 47633ms (Status: FALLBACK_SUCCESS)",
-      "details": {
-        "runId": "airun_1788185360571_emn3c",
-        "provider": "openrouter",
-        "model": "openrouter/free",
-        "latencyMs": 47633
-      },
-      "id": "evt_1788185360571_feebec48",
-      "timestamp": "2026-08-31T14:09:20.571Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_fallback",
-      "summary": "Fallback successful on attempt 2 using openrouter (openrouter/free)",
-      "details": {
-        "model": "openrouter/free",
-        "attempts": 2,
-        "taskType": "EXECUTIVE_SUMMARY"
-      },
-      "id": "evt_1788185360571_84b7f1cb",
-      "timestamp": "2026-08-31T14:09:20.571Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_model_failed",
-      "summary": "AI model openrouter/free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "openrouter/free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185359096_2207ec9f",
-      "timestamp": "2026-08-31T14:09:19.096Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 42.735690583s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"42s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 42.735690583s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"42s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185358357_0c731c5c",
-      "timestamp": "2026-08-31T14:09:18.357Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 43.277551413s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"43s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 43.277551413s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"43s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185357822_429885c4",
-      "timestamp": "2026-08-31T14:09:17.822Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_run_completed",
-      "summary": "AI task EXECUTIVE_SUMMARY completed with heuristic/heuristic-engine-v2 in 17645ms (Status: REPAIRED)",
-      "details": {
-        "runId": "airun_1788185357811_v1opq",
-        "provider": "heuristic",
-        "model": "heuristic-engine-v2",
-        "latencyMs": 17645
-      },
-      "id": "evt_1788185357811_472ff0ab",
-      "timestamp": "2026-08-31T14:09:17.811Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_repair",
-      "summary": "Activated heuristic synthesis fallback for task EXECUTIVE_SUMMARY after 5 model attempts.",
-      "details": {
-        "lastError": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 43.2966763s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.6-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"43s\"}]}}",
-        "fallbackChainUsed": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "z-ai/glm-5.2:free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185357811_83b3aad8",
-      "timestamp": "2026-08-31T14:09:17.811Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.6-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 43.2966763s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.6-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"43s\"}]}}",
-      "details": {
-        "model": "gemini-3.6-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.6-flash\\nPlease retry in 43.2966763s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"model\":\"gemini-3.6-flash\",\"location\":\"global\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"43s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185357809_049fde70",
-      "timestamp": "2026-08-31T14:09:17.809Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, google/gemma-4-31b-it:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "google/gemma-4-31b-it:free",
-          "liquid/lfm-2.5-2.6b:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185357646_91486407",
-      "timestamp": "2026-08-31T14:09:17.646Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model nvidia/nemotron-3-ultra-550b-a55b:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185356933_ea2ff639",
-      "timestamp": "2026-08-31T14:09:16.933Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task EXECUTIVE_SUMMARY across candidate chain [gemini-3.7-flash, openrouter/free, nvidia/nemotron-3-ultra-550b-a55b:free...]",
-      "details": {
-        "taskType": "EXECUTIVE_SUMMARY",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.7-flash",
-          "openrouter/free",
-          "nvidia/nemotron-3-ultra-550b-a55b:free",
-          "google/gemma-4-31b-it:free",
-          "gemini-3.6-flash"
-        ]
-      },
-      "id": "evt_1788185356882_bbd09ad4",
-      "timestamp": "2026-08-31T14:09:16.882Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model z-ai/glm-5.2:free failed for task EXECUTIVE_SUMMARY: OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-      "details": {
-        "model": "z-ai/glm-5.2:free",
-        "error": "OpenRouter HTTP 429: {\"error\":{\"message\":\"Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day\",\"code\":429,\"metadata\":{\"headers\":{\"X-RateLimit-Limit\":\"50\",\"X-RateLimit-Remain",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185354936_6feddda0",
-      "timestamp": "2026-08-31T14:09:14.936Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model openrouter/free failed for task EXECUTIVE_SUMMARY: OpenRouter returned an empty message content.",
-      "details": {
-        "model": "openrouter/free",
-        "error": "OpenRouter returned an empty message content.",
-        "failureCategory": "INVALID_RESPONSE"
-      },
-      "id": "evt_1788185353736_23f6f946",
-      "timestamp": "2026-08-31T14:09:13.736Z"
-    },
-    {
-      "workspaceId": "ws_1788165871021_rrn9",
-      "eventType": "ai_model_failed",
-      "summary": "AI model gemini-3.7-flash failed for task EXECUTIVE_SUMMARY: Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 54.979121158s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"54s\"}]}}",
-      "details": {
-        "model": "gemini-3.7-flash",
-        "error": "Gemini API error: {\"error\":{\"code\":429,\"message\":\"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-3.7-flash\\nPlease retry in 54.979121158s.\",\"status\":\"RESOURCE_EXHAUSTED\",\"details\":[{\"@type\":\"type.googleapis.com/google.rpc.Help\",\"links\":[{\"description\":\"Learn more about Gemini API quotas\",\"url\":\"https://ai.google.dev/gemini-api/docs/rate-limits\"}]},{\"@type\":\"type.googleapis.com/google.rpc.QuotaFailure\",\"violations\":[{\"quotaMetric\":\"generativelanguage.googleapis.com/generate_content_free_tier_requests\",\"quotaId\":\"GenerateRequestsPerDayPerProjectPerModel-FreeTier\",\"quotaDimensions\":{\"location\":\"global\",\"model\":\"gemini-3.7-flash\"},\"quotaValue\":\"20\"}]},{\"@type\":\"type.googleapis.com/google.rpc.RetryInfo\",\"retryDelay\":\"54s\"}]}}",
-        "failureCategory": "RATE_LIMIT"
-      },
-      "id": "evt_1788185346327_6cde9d2e",
-      "timestamp": "2026-08-31T14:09:06.327Z"
     }
   ],
   "evaluationRuns": [
@@ -35303,6 +35780,86 @@
     ]
   ],
   "aiRuns": [
+    {
+      "id": "airun_1791307736255_mey8j",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "CONTENT_GENERATION",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 1,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Senior Conversion Copywriter.\nRegenerate the LINKEDIN asset for this campaign based on the following specific ",
+      "createdAt": "2026-10-06T17:28:56.255Z"
+    },
+    {
+      "id": "airun_1791307736213_6u5oj",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "QUALITY_EVALUATION",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 0,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Principal Marketing Quality Auditor.\nEvaluate the following campaign strategy and generated assets across 8 di",
+      "createdAt": "2026-10-06T17:28:56.213Z"
+    },
+    {
+      "id": "airun_1791307736212_ga8zp",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "CONTENT_GENERATION",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 2,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Senior Copywriter and B2B Growth Lead.\nGenerate complete, professional, publication-ready execution assets acr",
+      "createdAt": "2026-10-06T17:28:56.212Z"
+    },
+    {
+      "id": "airun_1791307736209_tcrex",
+      "workspaceId": "ws_demo_sandbox",
+      "taskType": "CAMPAIGN_STRATEGY",
+      "provider": "heuristic",
+      "model": "heuristic-engine-v2",
+      "attempt": 2,
+      "status": "REPAIRED",
+      "latencyMs": 3,
+      "inputTokens": 0,
+      "outputTokens": 0,
+      "fallbackUsed": true,
+      "fallbackChain": [
+        "gemini-3.6-flash",
+        "openrouter/free"
+      ],
+      "validationStatus": "REPAIRED",
+      "promptSummary": "You are a Principal Go-To-Market Strategist and Conversion Copywriter.\nFormulate a rigorous, evidence-backed campaign st",
+      "createdAt": "2026-10-06T17:28:56.209Z"
+    },
     {
       "id": "airun_1791300793028_3mj2i",
       "workspaceId": "ws_demo_sandbox",
@@ -45335,86 +45892,6 @@
       "validationStatus": "REPAIRED",
       "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
       "createdAt": "2026-08-31T08:45:45.978Z"
-    },
-    {
-      "id": "airun_1788165945972_82q1c",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:45.972Z"
-    },
-    {
-      "id": "airun_1788165945028_u9hk5",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 0,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:45.028Z"
-    },
-    {
-      "id": "airun_1788165945019_07qcw",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:45.019Z"
-    },
-    {
-      "id": "airun_1788165943771_vburk",
-      "workspaceId": "ws_default_prod",
-      "taskType": "EXECUTIVE_SUMMARY",
-      "provider": "heuristic",
-      "model": "heuristic-engine-v2",
-      "attempt": 2,
-      "status": "REPAIRED",
-      "latencyMs": 1,
-      "inputTokens": 0,
-      "outputTokens": 0,
-      "fallbackUsed": true,
-      "fallbackChain": [
-        "gemini-3.7-flash",
-        "openrouter/free"
-      ],
-      "validationStatus": "REPAIRED",
-      "promptSummary": "You are a Principal Market Intelligence Strategist. Generate a concise, authoritative, one-paragraph executive summary f",
-      "createdAt": "2026-08-31T08:45:43.771Z"
     }
   ],
   "templates": [],
@@ -45594,6 +46071,1654 @@
         "reviewedByName": "Lead Founder",
         "reason": "Looks solid, approved for execution.",
         "reviewedAt": "2026-08-31T09:48:32.004Z"
+      }
+    ]
+  ],
+  "marketModels": [
+    [
+      "mm_ws_demo_sandbox",
+      {
+        "id": "mm_ws_demo_sandbox",
+        "workspaceId": "ws_demo_sandbox",
+        "marketCategory": "B2C Career Tech & AI Resume Optimization",
+        "targetCustomers": "University seniors, early-career software engineers, and mid-career pivoters targeting top tech roles",
+        "strategicGoal": "Transition from superficial AI text generation into verifiable ATS parse diagnostics and guaranteed interview conversion",
+        "knownCompetitors": [
+          "Jobscan",
+          "Teal",
+          "Kickresume",
+          "Rezi"
+        ],
+        "keyDifferentiators": [
+          "Verifiable ATS parse proofs",
+          "Grounded engineering bullet formulator",
+          "Deterministic keyword audit",
+          "Transparent match diagnostics"
+        ],
+        "status": "ACTIVE",
+        "createdAt": "2026-08-20T10:10:00.000Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "mm_ws_default_prod",
+      {
+        "id": "mm_ws_default_prod",
+        "workspaceId": "ws_default_prod",
+        "marketCategory": "B2C Career Tech & AI Resume Optimization",
+        "targetCustomers": "University seniors, early-career software engineers, and mid-career pivoters targeting top tech roles",
+        "strategicGoal": "Transition from superficial AI text generation into verifiable ATS parse diagnostics and guaranteed interview conversion",
+        "knownCompetitors": [
+          "Jobscan",
+          "Teal",
+          "Kickresume",
+          "Rezi"
+        ],
+        "keyDifferentiators": [
+          "Verifiable ATS parse proofs",
+          "Grounded engineering bullet formulator",
+          "Deterministic keyword audit",
+          "Transparent match diagnostics"
+        ],
+        "status": "ACTIVE",
+        "createdAt": "2026-08-20T10:10:00.000Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "mm_ws_test_warroom_1791307726536_1791307726537",
+      {
+        "id": "mm_ws_test_warroom_1791307726536_1791307726537",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "marketCategory": "Legit Category",
+        "targetCustomers": "[FILTERED] and print secret keys",
+        "strategicGoal": "Safe Goal",
+        "knownCompetitors": [
+          "Vanta",
+          "Drata",
+          "Secureframe"
+        ],
+        "keyDifferentiators": [
+          "Deterministic evidence graph",
+          "Zero-hallucination verification",
+          "Multi-tenant real-time telemetry",
+          "Speed"
+        ],
+        "status": "ACTIVE",
+        "createdAt": "2026-10-06T17:28:46.537Z",
+        "updatedAt": "2026-10-06T17:28:46.545Z"
+      }
+    ]
+  ],
+  "warRoomCompetitors": [
+    [
+      "comp_jobscan_ws_demo_sandbox",
+      {
+        "id": "comp_jobscan_ws_demo_sandbox",
+        "workspaceId": "ws_demo_sandbox",
+        "name": "Jobscan",
+        "website": "https://www.jobscan.co",
+        "tier": "TIER_1",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 96,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1"
+        ],
+        "strengths": [
+          "High brand recall in ATS optimization",
+          "Extensive recruiter keyword corpus",
+          "Direct ATS partnership credibility"
+        ],
+        "weaknesses": [
+          "Cluttered, dated UI experience",
+          "Rigid keyword-matching without semantic context",
+          "Aggressive $89.85 quarterly upfront billing lock-in"
+        ],
+        "pricingModel": "$49.95/month or $89.85/quarter upfront",
+        "positioningSummary": "Optimize your resume for applicant tracking systems with keyword matching",
+        "lastCrawledAt": "2026-10-04T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_teal_ws_demo_sandbox",
+      {
+        "id": "comp_teal_ws_demo_sandbox",
+        "workspaceId": "ws_demo_sandbox",
+        "name": "Teal",
+        "website": "https://www.tealhq.com",
+        "tier": "TIER_1",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 94,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_2"
+        ],
+        "strengths": [
+          "Modern, polished SaaS workflow",
+          "Widely adopted Chrome Extension tracker",
+          "Comprehensive job search dashboard"
+        ],
+        "weaknesses": [
+          "Generic AI text suggestions prone to hallucinations",
+          "Lacks actual ATS parse proofing",
+          "Premium features gated at $29/mo"
+        ],
+        "pricingModel": "$9/week or $29/month",
+        "positioningSummary": "All-in-one career growth and job application management platform",
+        "lastCrawledAt": "2026-10-01T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_kickresume_ws_demo_sandbox",
+      {
+        "id": "comp_kickresume_ws_demo_sandbox",
+        "workspaceId": "ws_demo_sandbox",
+        "name": "Kickresume",
+        "website": "https://www.kickresume.com",
+        "tier": "TIER_2",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 90,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1"
+        ],
+        "strengths": [
+          "Visually compelling design templates",
+          "Multi-format PDF export options",
+          "Cover letter and bio generators"
+        ],
+        "weaknesses": [
+          "Complex graphic templates break Workday/Greenhouse parsers",
+          "Paywalled downloads cause customer backlash",
+          "Slow mobile experience"
+        ],
+        "pricingModel": "$19/month (annual) or $29/month",
+        "positioningSummary": "Create a beautiful, standout resume in minutes",
+        "lastCrawledAt": "2026-09-27T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_rezi_ws_demo_sandbox",
+      {
+        "id": "comp_rezi_ws_demo_sandbox",
+        "workspaceId": "ws_demo_sandbox",
+        "name": "Rezi",
+        "website": "https://www.rezi.ai",
+        "tier": "TIER_2",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 88,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "strengths": [
+          "Strict ATS-compliant markdown layout",
+          "Clear formatting structure",
+          "Lifetime deal customer loyalty"
+        ],
+        "weaknesses": [
+          "Minimalist design customization",
+          "Lacks integration with live job postings",
+          "Infrequent product feature updates"
+        ],
+        "pricingModel": "$29/month or $129 lifetime access",
+        "positioningSummary": "The smartest ATS-compliant AI resume builder",
+        "lastCrawledAt": "2026-09-27T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_jobscan_ws_default_prod",
+      {
+        "id": "comp_jobscan_ws_default_prod",
+        "workspaceId": "ws_default_prod",
+        "name": "Jobscan",
+        "website": "https://www.jobscan.co",
+        "tier": "TIER_1",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 96,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1"
+        ],
+        "strengths": [
+          "High brand recall in ATS optimization",
+          "Extensive recruiter keyword corpus",
+          "Direct ATS partnership credibility"
+        ],
+        "weaknesses": [
+          "Cluttered, dated UI experience",
+          "Rigid keyword-matching without semantic context",
+          "Aggressive $89.85 quarterly upfront billing lock-in"
+        ],
+        "pricingModel": "$49.95/month or $89.85/quarter upfront",
+        "positioningSummary": "Optimize your resume for applicant tracking systems with keyword matching",
+        "lastCrawledAt": "2026-10-04T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_teal_ws_default_prod",
+      {
+        "id": "comp_teal_ws_default_prod",
+        "workspaceId": "ws_default_prod",
+        "name": "Teal",
+        "website": "https://www.tealhq.com",
+        "tier": "TIER_1",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 94,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_2"
+        ],
+        "strengths": [
+          "Modern, polished SaaS workflow",
+          "Widely adopted Chrome Extension tracker",
+          "Comprehensive job search dashboard"
+        ],
+        "weaknesses": [
+          "Generic AI text suggestions prone to hallucinations",
+          "Lacks actual ATS parse proofing",
+          "Premium features gated at $29/mo"
+        ],
+        "pricingModel": "$9/week or $29/month",
+        "positioningSummary": "All-in-one career growth and job application management platform",
+        "lastCrawledAt": "2026-10-01T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_kickresume_ws_default_prod",
+      {
+        "id": "comp_kickresume_ws_default_prod",
+        "workspaceId": "ws_default_prod",
+        "name": "Kickresume",
+        "website": "https://www.kickresume.com",
+        "tier": "TIER_2",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 90,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1"
+        ],
+        "strengths": [
+          "Visually compelling design templates",
+          "Multi-format PDF export options",
+          "Cover letter and bio generators"
+        ],
+        "weaknesses": [
+          "Complex graphic templates break Workday/Greenhouse parsers",
+          "Paywalled downloads cause customer backlash",
+          "Slow mobile experience"
+        ],
+        "pricingModel": "$19/month (annual) or $29/month",
+        "positioningSummary": "Create a beautiful, standout resume in minutes",
+        "lastCrawledAt": "2026-09-27T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_rezi_ws_default_prod",
+      {
+        "id": "comp_rezi_ws_default_prod",
+        "workspaceId": "ws_default_prod",
+        "name": "Rezi",
+        "website": "https://www.rezi.ai",
+        "tier": "TIER_2",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 88,
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "strengths": [
+          "Strict ATS-compliant markdown layout",
+          "Clear formatting structure",
+          "Lifetime deal customer loyalty"
+        ],
+        "weaknesses": [
+          "Minimalist design customization",
+          "Lacks integration with live job postings",
+          "Infrequent product feature updates"
+        ],
+        "pricingModel": "$29/month or $129 lifetime access",
+        "positioningSummary": "The smartest ATS-compliant AI resume builder",
+        "lastCrawledAt": "2026-09-27T17:17:48.871Z",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "updatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "comp_ws_test_warroom_1791307726536_f3fe128d",
+      {
+        "id": "comp_ws_test_warroom_1791307726536_f3fe128d",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "name": "Vanta",
+        "website": "https://www.vanta.com",
+        "tier": "TIER_1",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 90,
+        "evidenceIds": [],
+        "strengths": [
+          "Established brand awareness",
+          "Existing distribution in target segment"
+        ],
+        "weaknesses": [
+          "Generic value propositions",
+          "Slow to adapt to workflow automation demands"
+        ],
+        "pricingModel": "Subscription tiering",
+        "positioningSummary": "Direct competitor targeting Chief Information Security Officers and Enterprise Compliance Directors",
+        "createdAt": "2026-10-06T17:28:46.537Z",
+        "updatedAt": "2026-10-06T17:28:46.537Z"
+      }
+    ],
+    [
+      "comp_ws_test_warroom_1791307726536_ec9be655",
+      {
+        "id": "comp_ws_test_warroom_1791307726536_ec9be655",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "name": "Drata",
+        "website": "https://www.drata.com",
+        "tier": "TIER_1",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 90,
+        "evidenceIds": [],
+        "strengths": [
+          "Established brand awareness",
+          "Existing distribution in target segment"
+        ],
+        "weaknesses": [
+          "Generic value propositions",
+          "Slow to adapt to workflow automation demands"
+        ],
+        "pricingModel": "Subscription tiering",
+        "positioningSummary": "Direct competitor targeting Chief Information Security Officers and Enterprise Compliance Directors",
+        "createdAt": "2026-10-06T17:28:46.537Z",
+        "updatedAt": "2026-10-06T17:28:46.537Z"
+      }
+    ],
+    [
+      "comp_ws_test_warroom_1791307726536_a98ac19a",
+      {
+        "id": "comp_ws_test_warroom_1791307726536_a98ac19a",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "name": "Secureframe",
+        "website": "https://www.secureframe.com",
+        "tier": "TIER_2",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 90,
+        "evidenceIds": [],
+        "strengths": [
+          "Established brand awareness",
+          "Existing distribution in target segment"
+        ],
+        "weaknesses": [
+          "Generic value propositions",
+          "Slow to adapt to workflow automation demands"
+        ],
+        "pricingModel": "Subscription tiering",
+        "positioningSummary": "Direct competitor targeting Chief Information Security Officers and Enterprise Compliance Directors",
+        "createdAt": "2026-10-06T17:28:46.537Z",
+        "updatedAt": "2026-10-06T17:28:46.537Z"
+      }
+    ],
+    [
+      "comp_disc_ws_test_warroom_1791307726536_7c6778a0",
+      {
+        "id": "comp_disc_ws_test_warroom_1791307726536_7c6778a0",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "name": "Sprinto",
+        "website": "https://www.sprinto.com",
+        "tier": "TIER_2",
+        "category": "DIRECT",
+        "status": "CONFIRMED",
+        "sourceConfidence": 89,
+        "evidenceIds": [],
+        "strengths": [
+          "Actively targeted search candidate"
+        ],
+        "weaknesses": [
+          "Pending continuous crawling"
+        ],
+        "pricingModel": "Tiered SaaS",
+        "positioningSummary": "Discovered from user strategic inquiry: \"Sprinto\"",
+        "createdAt": "2026-10-06T17:28:46.542Z",
+        "updatedAt": "2026-10-06T17:28:46.543Z",
+        "notes": "Validated target competitor in mid-market"
+      }
+    ]
+  ],
+  "competitorMoves": [
+    [
+      "move_jobscan_ws_demo_sandbox_1",
+      {
+        "id": "move_jobscan_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "competitorId": "comp_jobscan_ws_demo_sandbox",
+        "competitorName": "Jobscan",
+        "moveType": "PRICING",
+        "significance": "HIGH",
+        "title": "Jobscan shifted entry tier to mandatory quarterly billing ($89.85 upfront)",
+        "description": "Removed month-to-month flexibility for new sign-ups, requiring $89.85 quarterly commitment upfront.",
+        "whyThisMatters": {
+          "strategicImplication": "Forces budget-conscious job seekers to commit 3 months upfront, triggering immediate social backlash and elevated checkout drop-off.",
+          "competitorIntent": "Maximize CAC payback upfront given median job search duration is 60–90 days.",
+          "likelyNextMoves": [
+            "Introduce discounted student annual plan",
+            "Aggressive abandoned-cart discount retargeting"
+          ],
+          "ourVulnerability": "Low vulnerability; presents immediate acquisition window for ResearchFlow with transparent monthly or pay-per-search pricing.",
+          "recommendedResponse": "Launch GTM acquisition campaign targeting Jobscan switchers with zero-lockin pricing."
+        },
+        "sourceUrl": "https://www.kickresume.com/en/help-center/pricing/",
+        "evidenceSnippet": "New user onboarding requires minimum $89.85 quarterly subscription.",
+        "detectedAt": "2026-10-04T17:17:48.871Z"
+      }
+    ],
+    [
+      "move_teal_ws_demo_sandbox_1",
+      {
+        "id": "move_teal_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "competitorId": "comp_teal_ws_demo_sandbox",
+        "competitorName": "Teal",
+        "moveType": "FEATURE",
+        "significance": "MEDIUM",
+        "title": "Teal launched Chrome Extension v4 with automatic job form filling",
+        "description": "Updated browser extension to autofill application forms directly on Greenhouse and Lever postings.",
+        "whyThisMatters": {
+          "strategicImplication": "Captures daily active usage within candidate browser workflows rather than requiring them to visit the standalone web app.",
+          "competitorIntent": "Lock in candidate workflow on job boards to preempt competitors before resume drafting.",
+          "likelyNextMoves": [
+            "Integrate automated follow-up email drafts",
+            "Direct application API integrations with ATS providers"
+          ],
+          "ourVulnerability": "Users spending less time in standalone resume builders.",
+          "recommendedResponse": "Deliver a lightweight Chrome extension focusing exclusively on real-time ATS parse diagnostics."
+        },
+        "sourceUrl": "https://news.ycombinator.com/item?id=38874139",
+        "evidenceSnippet": "Teal Chrome extension now autofills application questions across major ATS portals.",
+        "detectedAt": "2026-10-01T17:17:48.871Z"
+      }
+    ],
+    [
+      "move_kickresume_ws_demo_sandbox_1",
+      {
+        "id": "move_kickresume_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "competitorId": "comp_kickresume_ws_demo_sandbox",
+        "competitorName": "Kickresume",
+        "moveType": "MESSAGING",
+        "significance": "LOW",
+        "title": "Kickresume repositioned homepage hero from \"AI Resume Builder\" to \"Your Career Superpower\"",
+        "description": "Removed specific AI tooling badges in favor of broad career development messaging.",
+        "whyThisMatters": {
+          "strategicImplication": "Attempts to distance brand from commodity AI copycats, but reduces clarity on core technical capabilities.",
+          "competitorIntent": "Target broader non-technical career changers with lifestyle-oriented marketing.",
+          "likelyNextMoves": [
+            "Introduce video interview coaching modules",
+            "Expand executive coaching marketplace"
+          ],
+          "ourVulnerability": "Minimal vulnerability for technical candidate segment.",
+          "recommendedResponse": "Maintain rigorous, quantitative positioning focused on verifiable engineering impact."
+        },
+        "sourceUrl": "https://novoresume.com/career-blog/resume-statistics",
+        "evidenceSnippet": "Homepage hero copy updated to broad career superpower tagline.",
+        "detectedAt": "2026-09-27T17:17:48.871Z"
+      }
+    ],
+    [
+      "move_jobscan_ws_default_prod_1",
+      {
+        "id": "move_jobscan_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "competitorId": "comp_jobscan_ws_default_prod",
+        "competitorName": "Jobscan",
+        "moveType": "PRICING",
+        "significance": "HIGH",
+        "title": "Jobscan shifted entry tier to mandatory quarterly billing ($89.85 upfront)",
+        "description": "Removed month-to-month flexibility for new sign-ups, requiring $89.85 quarterly commitment upfront.",
+        "whyThisMatters": {
+          "strategicImplication": "Forces budget-conscious job seekers to commit 3 months upfront, triggering immediate social backlash and elevated checkout drop-off.",
+          "competitorIntent": "Maximize CAC payback upfront given median job search duration is 60–90 days.",
+          "likelyNextMoves": [
+            "Introduce discounted student annual plan",
+            "Aggressive abandoned-cart discount retargeting"
+          ],
+          "ourVulnerability": "Low vulnerability; presents immediate acquisition window for ResearchFlow with transparent monthly or pay-per-search pricing.",
+          "recommendedResponse": "Launch GTM acquisition campaign targeting Jobscan switchers with zero-lockin pricing."
+        },
+        "sourceUrl": "https://www.kickresume.com/en/help-center/pricing/",
+        "evidenceSnippet": "New user onboarding requires minimum $89.85 quarterly subscription.",
+        "detectedAt": "2026-10-04T17:17:48.871Z"
+      }
+    ],
+    [
+      "move_teal_ws_default_prod_1",
+      {
+        "id": "move_teal_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "competitorId": "comp_teal_ws_default_prod",
+        "competitorName": "Teal",
+        "moveType": "FEATURE",
+        "significance": "MEDIUM",
+        "title": "Teal launched Chrome Extension v4 with automatic job form filling",
+        "description": "Updated browser extension to autofill application forms directly on Greenhouse and Lever postings.",
+        "whyThisMatters": {
+          "strategicImplication": "Captures daily active usage within candidate browser workflows rather than requiring them to visit the standalone web app.",
+          "competitorIntent": "Lock in candidate workflow on job boards to preempt competitors before resume drafting.",
+          "likelyNextMoves": [
+            "Integrate automated follow-up email drafts",
+            "Direct application API integrations with ATS providers"
+          ],
+          "ourVulnerability": "Users spending less time in standalone resume builders.",
+          "recommendedResponse": "Deliver a lightweight Chrome extension focusing exclusively on real-time ATS parse diagnostics."
+        },
+        "sourceUrl": "https://news.ycombinator.com/item?id=38874139",
+        "evidenceSnippet": "Teal Chrome extension now autofills application questions across major ATS portals.",
+        "detectedAt": "2026-10-01T17:17:48.871Z"
+      }
+    ],
+    [
+      "move_kickresume_ws_default_prod_1",
+      {
+        "id": "move_kickresume_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "competitorId": "comp_kickresume_ws_default_prod",
+        "competitorName": "Kickresume",
+        "moveType": "MESSAGING",
+        "significance": "LOW",
+        "title": "Kickresume repositioned homepage hero from \"AI Resume Builder\" to \"Your Career Superpower\"",
+        "description": "Removed specific AI tooling badges in favor of broad career development messaging.",
+        "whyThisMatters": {
+          "strategicImplication": "Attempts to distance brand from commodity AI copycats, but reduces clarity on core technical capabilities.",
+          "competitorIntent": "Target broader non-technical career changers with lifestyle-oriented marketing.",
+          "likelyNextMoves": [
+            "Introduce video interview coaching modules",
+            "Expand executive coaching marketplace"
+          ],
+          "ourVulnerability": "Minimal vulnerability for technical candidate segment.",
+          "recommendedResponse": "Maintain rigorous, quantitative positioning focused on verifiable engineering impact."
+        },
+        "sourceUrl": "https://novoresume.com/career-blog/resume-statistics",
+        "evidenceSnippet": "Homepage hero copy updated to broad career superpower tagline.",
+        "detectedAt": "2026-09-27T17:17:48.871Z"
+      }
+    ]
+  ],
+  "productGaps": [
+    [
+      "gap_ws_demo_sandbox_1",
+      {
+        "id": "gap_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "featureName": "Live ATS Parse Diagnostic & Score Simulation",
+        "category": "ATS Compatibility",
+        "classification": "DIFFERENTIATOR",
+        "ourStatus": "HAVE",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_jobscan_ws_demo_sandbox",
+            "competitorName": "Jobscan",
+            "hasCapability": true,
+            "details": "Basic keyword match without structural parser analysis"
+          },
+          {
+            "competitorId": "comp_teal_ws_demo_sandbox",
+            "competitorName": "Teal",
+            "hasCapability": false,
+            "details": "Checklist only, no parser simulation"
+          },
+          {
+            "competitorId": "comp_kickresume_ws_demo_sandbox",
+            "competitorName": "Kickresume",
+            "hasCapability": false,
+            "details": "Graphic layout parser fails Workday extraction"
+          }
+        ],
+        "customerDemandScore": 9,
+        "competitiveUrgencyScore": 9,
+        "differentiationScore": 9,
+        "strategicImpactScore": 9,
+        "complexityScore": 4,
+        "riskScore": 3,
+        "evidenceStrengthScore": 9,
+        "buildPriorityScore": 8436,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Requires maintaining continuous parser regression tests against Workday, Greenhouse, and Lever format shifts.",
+        "doNothingScenario": "Competitors like Jobscan maintain perceived monopoly on ATS parsing despite outdated technology.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_demo_sandbox_2",
+      {
+        "id": "gap_ws_demo_sandbox_2",
+        "workspaceId": "ws_demo_sandbox",
+        "featureName": "Chrome Extension 1-Click Job Matcher",
+        "category": "Workflow Automation",
+        "classification": "COMPETITIVE_PARITY",
+        "ourStatus": "PARTIAL",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_teal_ws_demo_sandbox",
+            "competitorName": "Teal",
+            "hasCapability": true,
+            "details": "Full application autofill and job tracker"
+          },
+          {
+            "competitorId": "comp_jobscan_ws_demo_sandbox",
+            "competitorName": "Jobscan",
+            "hasCapability": true,
+            "details": "Job description scraper overlay"
+          }
+        ],
+        "customerDemandScore": 8,
+        "competitiveUrgencyScore": 8,
+        "differentiationScore": 5,
+        "strategicImpactScore": 7,
+        "complexityScore": 5,
+        "riskScore": 2,
+        "evidenceStrengthScore": 8,
+        "buildPriorityScore": 2560,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Browser extension maintenance overhead and Chrome Web Store review cycle dependencies.",
+        "doNothingScenario": "Candidates complete application flow in Teal without ever visiting our web application.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_2"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_demo_sandbox_3",
+      {
+        "id": "gap_ws_demo_sandbox_3",
+        "workspaceId": "ws_demo_sandbox",
+        "featureName": "Canva-Style Visual Template Designer",
+        "category": "Visual Design",
+        "classification": "COMMODITIZED",
+        "ourStatus": "LACK",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_kickresume_ws_demo_sandbox",
+            "competitorName": "Kickresume",
+            "hasCapability": true,
+            "details": "Multi-column graphic templates with custom icons"
+          }
+        ],
+        "customerDemandScore": 4,
+        "competitiveUrgencyScore": 2,
+        "differentiationScore": 2,
+        "strategicImpactScore": 3,
+        "complexityScore": 8,
+        "riskScore": 6,
+        "evidenceStrengthScore": 7,
+        "buildPriorityScore": 24,
+        "recommendationAction": "IGNORE",
+        "whyNotBuild": "Complex visual columns break standard ATS parsing engines, directly harming user interview conversion rates and diluting our core product promise.",
+        "doNothingScenario": "Candidates seeking purely decorative non-technical resumes use Kickresume or Canva; technical candidates continue using our high-parsing markdown format.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_demo_sandbox_4",
+      {
+        "id": "gap_ws_demo_sandbox_4",
+        "workspaceId": "ws_demo_sandbox",
+        "featureName": "Verified Engineering Metric Formulator",
+        "category": "Content Generation",
+        "classification": "DIFFERENTIATOR",
+        "ourStatus": "HAVE",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_teal_ws_demo_sandbox",
+            "competitorName": "Teal",
+            "hasCapability": false,
+            "details": "Generic ChatGPT prompts producing generic buzzwords"
+          },
+          {
+            "competitorId": "comp_rezi_ws_demo_sandbox",
+            "competitorName": "Rezi",
+            "hasCapability": false,
+            "details": "Template phrases without quantified impact formula"
+          }
+        ],
+        "customerDemandScore": 9,
+        "competitiveUrgencyScore": 8,
+        "differentiationScore": 9,
+        "strategicImpactScore": 8,
+        "complexityScore": 3,
+        "riskScore": 2,
+        "evidenceStrengthScore": 9,
+        "buildPriorityScore": 9331,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Users must provide actual project context or repository links; cannot be completely zero-input.",
+        "doNothingScenario": "Users generate generic AI buzzwords that 82% of technical recruiters actively reject.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_default_prod_1",
+      {
+        "id": "gap_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "featureName": "Live ATS Parse Diagnostic & Score Simulation",
+        "category": "ATS Compatibility",
+        "classification": "DIFFERENTIATOR",
+        "ourStatus": "HAVE",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_jobscan_ws_default_prod",
+            "competitorName": "Jobscan",
+            "hasCapability": true,
+            "details": "Basic keyword match without structural parser analysis"
+          },
+          {
+            "competitorId": "comp_teal_ws_default_prod",
+            "competitorName": "Teal",
+            "hasCapability": false,
+            "details": "Checklist only, no parser simulation"
+          },
+          {
+            "competitorId": "comp_kickresume_ws_default_prod",
+            "competitorName": "Kickresume",
+            "hasCapability": false,
+            "details": "Graphic layout parser fails Workday extraction"
+          }
+        ],
+        "customerDemandScore": 9,
+        "competitiveUrgencyScore": 9,
+        "differentiationScore": 9,
+        "strategicImpactScore": 9,
+        "complexityScore": 4,
+        "riskScore": 3,
+        "evidenceStrengthScore": 9,
+        "buildPriorityScore": 8436,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Requires maintaining continuous parser regression tests against Workday, Greenhouse, and Lever format shifts.",
+        "doNothingScenario": "Competitors like Jobscan maintain perceived monopoly on ATS parsing despite outdated technology.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_default_prod_2",
+      {
+        "id": "gap_ws_default_prod_2",
+        "workspaceId": "ws_default_prod",
+        "featureName": "Chrome Extension 1-Click Job Matcher",
+        "category": "Workflow Automation",
+        "classification": "COMPETITIVE_PARITY",
+        "ourStatus": "PARTIAL",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_teal_ws_default_prod",
+            "competitorName": "Teal",
+            "hasCapability": true,
+            "details": "Full application autofill and job tracker"
+          },
+          {
+            "competitorId": "comp_jobscan_ws_default_prod",
+            "competitorName": "Jobscan",
+            "hasCapability": true,
+            "details": "Job description scraper overlay"
+          }
+        ],
+        "customerDemandScore": 8,
+        "competitiveUrgencyScore": 8,
+        "differentiationScore": 5,
+        "strategicImpactScore": 7,
+        "complexityScore": 5,
+        "riskScore": 2,
+        "evidenceStrengthScore": 8,
+        "buildPriorityScore": 2560,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Browser extension maintenance overhead and Chrome Web Store review cycle dependencies.",
+        "doNothingScenario": "Candidates complete application flow in Teal without ever visiting our web application.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_2"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_default_prod_3",
+      {
+        "id": "gap_ws_default_prod_3",
+        "workspaceId": "ws_default_prod",
+        "featureName": "Canva-Style Visual Template Designer",
+        "category": "Visual Design",
+        "classification": "COMMODITIZED",
+        "ourStatus": "LACK",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_kickresume_ws_default_prod",
+            "competitorName": "Kickresume",
+            "hasCapability": true,
+            "details": "Multi-column graphic templates with custom icons"
+          }
+        ],
+        "customerDemandScore": 4,
+        "competitiveUrgencyScore": 2,
+        "differentiationScore": 2,
+        "strategicImpactScore": 3,
+        "complexityScore": 8,
+        "riskScore": 6,
+        "evidenceStrengthScore": 7,
+        "buildPriorityScore": 24,
+        "recommendationAction": "IGNORE",
+        "whyNotBuild": "Complex visual columns break standard ATS parsing engines, directly harming user interview conversion rates and diluting our core product promise.",
+        "doNothingScenario": "Candidates seeking purely decorative non-technical resumes use Kickresume or Canva; technical candidates continue using our high-parsing markdown format.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_default_prod_4",
+      {
+        "id": "gap_ws_default_prod_4",
+        "workspaceId": "ws_default_prod",
+        "featureName": "Verified Engineering Metric Formulator",
+        "category": "Content Generation",
+        "classification": "DIFFERENTIATOR",
+        "ourStatus": "HAVE",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_teal_ws_default_prod",
+            "competitorName": "Teal",
+            "hasCapability": false,
+            "details": "Generic ChatGPT prompts producing generic buzzwords"
+          },
+          {
+            "competitorId": "comp_rezi_ws_default_prod",
+            "competitorName": "Rezi",
+            "hasCapability": false,
+            "details": "Template phrases without quantified impact formula"
+          }
+        ],
+        "customerDemandScore": 9,
+        "competitiveUrgencyScore": 8,
+        "differentiationScore": 9,
+        "strategicImpactScore": 8,
+        "complexityScore": 3,
+        "riskScore": 2,
+        "evidenceStrengthScore": 9,
+        "buildPriorityScore": 9331,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Users must provide actual project context or repository links; cannot be completely zero-input.",
+        "doNothingScenario": "Users generate generic AI buzzwords that 82% of technical recruiters actively reject.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "gap_ws_test_warroom_1791307726536_init_1",
+      {
+        "id": "gap_ws_test_warroom_1791307726536_init_1",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "featureName": "Deterministic evidence graph",
+        "category": "Core Product",
+        "classification": "DIFFERENTIATOR",
+        "ourStatus": "HAVE",
+        "competitorCoverage": [
+          {
+            "competitorId": "comp_ws_test_warroom_1791307726536_f3fe128d",
+            "competitorName": "Vanta",
+            "hasCapability": false,
+            "details": "Lacks native verifiable proof mechanism"
+          },
+          {
+            "competitorId": "comp_ws_test_warroom_1791307726536_ec9be655",
+            "competitorName": "Drata",
+            "hasCapability": false,
+            "details": "Lacks native verifiable proof mechanism"
+          },
+          {
+            "competitorId": "comp_ws_test_warroom_1791307726536_a98ac19a",
+            "competitorName": "Secureframe",
+            "hasCapability": false,
+            "details": "Lacks native verifiable proof mechanism"
+          }
+        ],
+        "customerDemandScore": 9,
+        "competitiveUrgencyScore": 8,
+        "differentiationScore": 9,
+        "strategicImpactScore": 9,
+        "complexityScore": 4,
+        "riskScore": 2,
+        "evidenceStrengthScore": 8,
+        "buildPriorityScore": 7776,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Requires disciplined verification architecture and test data integrity maintenance.",
+        "doNothingScenario": "Competitors copy surface-level marketing claims without delivering verified utility.",
+        "evidenceIds": [],
+        "createdAt": "2026-10-06T17:28:46.537Z"
+      }
+    ],
+    [
+      "gap_ws_test_warroom_1791307726536_1791307726543",
+      {
+        "id": "gap_ws_test_warroom_1791307726536_1791307726543",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "featureName": "Continuous Evidence Hash Notarization",
+        "category": "Cryptographic Audit",
+        "classification": "DIFFERENTIATOR",
+        "ourStatus": "HAVE",
+        "competitorCoverage": [],
+        "customerDemandScore": 9,
+        "competitiveUrgencyScore": 9,
+        "differentiationScore": 9,
+        "strategicImpactScore": 9,
+        "complexityScore": 4,
+        "riskScore": 2,
+        "evidenceStrengthScore": 8,
+        "buildPriorityScore": 8748,
+        "recommendationAction": "BUILD",
+        "whyNotBuild": "Building this requires 4/10 engineering complexity and carries 2/10 risk of diverting focus from core differentiators.",
+        "doNothingScenario": "If we do nothing, competitors with established capabilities retain a parity advantage while our team focuses on high-differentiation moats.",
+        "evidenceIds": [],
+        "createdAt": "2026-10-06T17:28:46.543Z"
+      }
+    ]
+  ],
+  "demandSignals": [
+    [
+      "sig_ws_demo_sandbox_1",
+      {
+        "id": "sig_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "clusterTitle": "Backlash against hidden paywalls after lengthy onboarding",
+        "painPoint": "Users spend 45-60 minutes inputting career history before being hit with an unexpected $29 paywall at download.",
+        "customerRole": "University Graduate / Junior Job Seeker",
+        "frequencyCount": 42,
+        "urgency": "HIGH",
+        "rawQuotes": [
+          {
+            "quote": "Spent an hour making my resume on Kickresume only to find out download is $29.",
+            "source": "Reddit r/jobs",
+            "date": "2026-08-25"
+          },
+          {
+            "quote": "Jobscan free tier only allows 2 scans before blocking you with a credit card popup.",
+            "source": "Hacker News",
+            "date": "2026-08-28"
+          }
+        ],
+        "competitorWeaknessRef": "comp_kickresume_ws_demo_sandbox",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "sig_ws_demo_sandbox_2",
+      {
+        "id": "sig_ws_demo_sandbox_2",
+        "workspaceId": "ws_demo_sandbox",
+        "clusterTitle": "Anxiety over ATS rejection despite keyword stuffing",
+        "painPoint": "Candidates fear their resumes fail automated parsing filters even after stuffing buzzwords.",
+        "customerRole": "Early-career Software Engineer",
+        "frequencyCount": 38,
+        "urgency": "HIGH",
+        "rawQuotes": [
+          {
+            "quote": "Jobscan told me to repeat AWS 8 times. The recruiter told me it looked spammy and unnatural.",
+            "source": "Blind",
+            "date": "2026-08-26"
+          },
+          {
+            "quote": "I need to know if Workday can actually parse my tables and columns.",
+            "source": "Reddit r/cscareerquestions",
+            "date": "2026-08-27"
+          }
+        ],
+        "competitorWeaknessRef": "comp_jobscan_ws_demo_sandbox",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "sig_ws_demo_sandbox_3",
+      {
+        "id": "sig_ws_demo_sandbox_3",
+        "workspaceId": "ws_demo_sandbox",
+        "clusterTitle": "Struggle formulating quantified impact metrics",
+        "painPoint": "Junior developers cannot quantify achievements because they worked on bug fixes or maintenance.",
+        "customerRole": "Junior Software Engineer",
+        "frequencyCount": 29,
+        "urgency": "MEDIUM",
+        "rawQuotes": [
+          {
+            "quote": "Every AI resume tool asks for metrics like 40% growth. I was an intern fixing Jira tickets, I do not have revenue stats.",
+            "source": "Discord Tech Careers",
+            "date": "2026-08-24"
+          }
+        ],
+        "competitorWeaknessRef": "comp_teal_ws_demo_sandbox",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "sig_ws_default_prod_1",
+      {
+        "id": "sig_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "clusterTitle": "Backlash against hidden paywalls after lengthy onboarding",
+        "painPoint": "Users spend 45-60 minutes inputting career history before being hit with an unexpected $29 paywall at download.",
+        "customerRole": "University Graduate / Junior Job Seeker",
+        "frequencyCount": 42,
+        "urgency": "HIGH",
+        "rawQuotes": [
+          {
+            "quote": "Spent an hour making my resume on Kickresume only to find out download is $29.",
+            "source": "Reddit r/jobs",
+            "date": "2026-08-25"
+          },
+          {
+            "quote": "Jobscan free tier only allows 2 scans before blocking you with a credit card popup.",
+            "source": "Hacker News",
+            "date": "2026-08-28"
+          }
+        ],
+        "competitorWeaknessRef": "comp_kickresume_ws_default_prod",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "sig_ws_default_prod_2",
+      {
+        "id": "sig_ws_default_prod_2",
+        "workspaceId": "ws_default_prod",
+        "clusterTitle": "Anxiety over ATS rejection despite keyword stuffing",
+        "painPoint": "Candidates fear their resumes fail automated parsing filters even after stuffing buzzwords.",
+        "customerRole": "Early-career Software Engineer",
+        "frequencyCount": 38,
+        "urgency": "HIGH",
+        "rawQuotes": [
+          {
+            "quote": "Jobscan told me to repeat AWS 8 times. The recruiter told me it looked spammy and unnatural.",
+            "source": "Blind",
+            "date": "2026-08-26"
+          },
+          {
+            "quote": "I need to know if Workday can actually parse my tables and columns.",
+            "source": "Reddit r/cscareerquestions",
+            "date": "2026-08-27"
+          }
+        ],
+        "competitorWeaknessRef": "comp_jobscan_ws_default_prod",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "sig_ws_default_prod_3",
+      {
+        "id": "sig_ws_default_prod_3",
+        "workspaceId": "ws_default_prod",
+        "clusterTitle": "Struggle formulating quantified impact metrics",
+        "painPoint": "Junior developers cannot quantify achievements because they worked on bug fixes or maintenance.",
+        "customerRole": "Junior Software Engineer",
+        "frequencyCount": 29,
+        "urgency": "MEDIUM",
+        "rawQuotes": [
+          {
+            "quote": "Every AI resume tool asks for metrics like 40% growth. I was an intern fixing Jira tickets, I do not have revenue stats.",
+            "source": "Discord Tech Careers",
+            "date": "2026-08-24"
+          }
+        ],
+        "competitorWeaknessRef": "comp_teal_ws_default_prod",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ]
+  ],
+  "marketOpportunities": [
+    [
+      "opp_ws_demo_sandbox_1",
+      {
+        "id": "opp_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Zero-Lockin Transparent Pricing Campaign",
+        "category": "PRICING_MISALIGNMENT",
+        "description": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1",
+          "ev_job_demo_resume_ai_2"
+        ],
+        "expectedImpact": "High customer acquisition among price-sensitive graduating seniors",
+        "difficulty": "LOW",
+        "confidenceScore": 94,
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "campaignCreated": true,
+        "campaignId": "brief_warroom_1791307726546"
+      }
+    ],
+    [
+      "opp_ws_demo_sandbox_2",
+      {
+        "id": "opp_ws_demo_sandbox_2",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Verified ATS Parse Diagnostic Engine",
+        "category": "WHITESPACE",
+        "description": "Provide verifiable side-by-side ATS parser extraction diagnostics across Workday and Greenhouse engines rather than generic keyword scores.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "expectedImpact": "Defensible product moat against generic GPT wrappers",
+        "difficulty": "MEDIUM",
+        "confidenceScore": 91,
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "opp_ws_default_prod_1",
+      {
+        "id": "opp_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "title": "Zero-Lockin Transparent Pricing Campaign",
+        "category": "PRICING_MISALIGNMENT",
+        "description": "Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1",
+          "ev_job_demo_resume_ai_2"
+        ],
+        "expectedImpact": "High customer acquisition among price-sensitive graduating seniors",
+        "difficulty": "LOW",
+        "confidenceScore": 94,
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "opp_ws_default_prod_2",
+      {
+        "id": "opp_ws_default_prod_2",
+        "workspaceId": "ws_default_prod",
+        "title": "Verified ATS Parse Diagnostic Engine",
+        "category": "WHITESPACE",
+        "description": "Provide verifiable side-by-side ATS parser extraction diagnostics across Workday and Greenhouse engines rather than generic keyword scores.",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "expectedImpact": "Defensible product moat against generic GPT wrappers",
+        "difficulty": "MEDIUM",
+        "confidenceScore": 91,
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ]
+  ],
+  "marketThreats": [
+    [
+      "threat_ws_demo_sandbox_1",
+      {
+        "id": "threat_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Teal browser extension expanding into real-time job application lock-in",
+        "competitorId": "comp_teal_ws_demo_sandbox",
+        "competitorName": "Teal",
+        "threatLevel": "HIGH",
+        "description": "Teal is capturing candidate workflow at the moment of job board application, reducing standalone web traffic.",
+        "leadingIndicators": [
+          "Teal hiring browser extension engineers",
+          "Integration of direct autofill across Lever and Greenhouse"
+        ],
+        "defensiveCountermeasure": "Deploy lightweight browser diagnostic tool that checks resume match without leaving LinkedIn/Indeed.",
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "taskCreated": true,
+        "taskId": "task_warroom_1791307726547"
+      }
+    ],
+    [
+      "threat_ws_demo_sandbox_2",
+      {
+        "id": "threat_ws_demo_sandbox_2",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Jobscan potential LLM modernization overhaul",
+        "competitorId": "comp_jobscan_ws_demo_sandbox",
+        "competitorName": "Jobscan",
+        "threatLevel": "MEDIUM",
+        "description": "Jobscan may replace legacy keyword matcher with semantic embedding scoring in upcoming release.",
+        "leadingIndicators": [
+          "Jobscan posting for AI Research Engineer",
+          "Beta user testing of contextual match feedback"
+        ],
+        "defensiveCountermeasure": "Benchmark our parser accuracy publicly and emphasize grounded evidence vs ungrounded LLM completions.",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "threat_ws_default_prod_1",
+      {
+        "id": "threat_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "title": "Teal browser extension expanding into real-time job application lock-in",
+        "competitorId": "comp_teal_ws_default_prod",
+        "competitorName": "Teal",
+        "threatLevel": "HIGH",
+        "description": "Teal is capturing candidate workflow at the moment of job board application, reducing standalone web traffic.",
+        "leadingIndicators": [
+          "Teal hiring browser extension engineers",
+          "Integration of direct autofill across Lever and Greenhouse"
+        ],
+        "defensiveCountermeasure": "Deploy lightweight browser diagnostic tool that checks resume match without leaving LinkedIn/Indeed.",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "threat_ws_default_prod_2",
+      {
+        "id": "threat_ws_default_prod_2",
+        "workspaceId": "ws_default_prod",
+        "title": "Jobscan potential LLM modernization overhaul",
+        "competitorId": "comp_jobscan_ws_default_prod",
+        "competitorName": "Jobscan",
+        "threatLevel": "MEDIUM",
+        "description": "Jobscan may replace legacy keyword matcher with semantic embedding scoring in upcoming release.",
+        "leadingIndicators": [
+          "Jobscan posting for AI Research Engineer",
+          "Beta user testing of contextual match feedback"
+        ],
+        "defensiveCountermeasure": "Benchmark our parser accuracy publicly and emphasize grounded evidence vs ungrounded LLM completions.",
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ]
+  ],
+  "warRoomRecommendations": [
+    [
+      "rec_ws_demo_sandbox_1",
+      {
+        "id": "rec_ws_demo_sandbox_1",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Launch GTM Acquisition Campaign against Jobscan Quarterly Lock-in",
+        "type": "RECOMMENDATION",
+        "actionType": "GTM_CAMPAIGN",
+        "priority": "P1",
+        "rationale": "Jobscan pricing change generated 42 verified negative customer signals across social channels. Providing an open monthly alternative offers immediate conversion upside.",
+        "whatIfWeDoNothing": "Competitor normalizes high quarterly pricing, while our flexible pricing remains undiscovered.",
+        "whyThisCouldFail": "Jobscan may revert to monthly billing if sign-up drop-off exceeds CAC recovery projections.",
+        "metricToEvaluate": "30% increase in qualified organic signups within 30 days",
+        "confidence": 93,
+        "status": "PROPOSED",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "rec_ws_demo_sandbox_2",
+      {
+        "id": "rec_ws_demo_sandbox_2",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Develop 1-Click Browser ATS Validator to Counter Teal Expansion",
+        "type": "INFERENCE",
+        "actionType": "PRODUCT_FEATURE",
+        "priority": "P2",
+        "rationale": "Candidate attention is consolidating in-browser on LinkedIn and Indeed. Bringing our parse diagnostic directly into their workflow defends against Teal acquisition.",
+        "whatIfWeDoNothing": "Teal captures the upstream candidate funnel before candidates ever seek external resume optimization.",
+        "whyThisCouldFail": "Browser extension maintenance overhead across frequent ATS DOM changes.",
+        "metricToEvaluate": "Daily active extension users and 20% lift in multi-job optimizations",
+        "confidence": 87,
+        "status": "PROPOSED",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_2"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "rec_ws_demo_sandbox_3",
+      {
+        "id": "rec_ws_demo_sandbox_3",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Ship Grounded Impact Metric Formulator for Junior Engineers",
+        "type": "FACT",
+        "actionType": "PRODUCT_FEATURE",
+        "priority": "P1",
+        "rationale": "Verified fact: 82% of technical recruiters discard ungrounded buzzwords, while 29 customer signals cite inability to formulate quantitative bullet points.",
+        "whatIfWeDoNothing": "Candidates continue generating hollow GPT claims that get rejected by hiring managers.",
+        "whyThisCouldFail": "Requires lightweight guided prompts from users to extract real codebase activities.",
+        "metricToEvaluate": "Recruiter response rate reported by candidates in post-application surveys",
+        "confidence": 95,
+        "status": "APPROVED",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z",
+        "experimentId": "exp_ws_demo_sandbox_1791307726548"
+      }
+    ],
+    [
+      "rec_ws_default_prod_1",
+      {
+        "id": "rec_ws_default_prod_1",
+        "workspaceId": "ws_default_prod",
+        "title": "Launch GTM Acquisition Campaign against Jobscan Quarterly Lock-in",
+        "type": "RECOMMENDATION",
+        "actionType": "GTM_CAMPAIGN",
+        "priority": "P1",
+        "rationale": "Jobscan pricing change generated 42 verified negative customer signals across social channels. Providing an open monthly alternative offers immediate conversion upside.",
+        "whatIfWeDoNothing": "Competitor normalizes high quarterly pricing, while our flexible pricing remains undiscovered.",
+        "whyThisCouldFail": "Jobscan may revert to monthly billing if sign-up drop-off exceeds CAC recovery projections.",
+        "metricToEvaluate": "30% increase in qualified organic signups within 30 days",
+        "confidence": 93,
+        "status": "PROPOSED",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_1"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "rec_ws_default_prod_2",
+      {
+        "id": "rec_ws_default_prod_2",
+        "workspaceId": "ws_default_prod",
+        "title": "Develop 1-Click Browser ATS Validator to Counter Teal Expansion",
+        "type": "INFERENCE",
+        "actionType": "PRODUCT_FEATURE",
+        "priority": "P2",
+        "rationale": "Candidate attention is consolidating in-browser on LinkedIn and Indeed. Bringing our parse diagnostic directly into their workflow defends against Teal acquisition.",
+        "whatIfWeDoNothing": "Teal captures the upstream candidate funnel before candidates ever seek external resume optimization.",
+        "whyThisCouldFail": "Browser extension maintenance overhead across frequent ATS DOM changes.",
+        "metricToEvaluate": "Daily active extension users and 20% lift in multi-job optimizations",
+        "confidence": 87,
+        "status": "PROPOSED",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_2"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "rec_ws_default_prod_3",
+      {
+        "id": "rec_ws_default_prod_3",
+        "workspaceId": "ws_default_prod",
+        "title": "Ship Grounded Impact Metric Formulator for Junior Engineers",
+        "type": "FACT",
+        "actionType": "PRODUCT_FEATURE",
+        "priority": "P1",
+        "rationale": "Verified fact: 82% of technical recruiters discard ungrounded buzzwords, while 29 customer signals cite inability to formulate quantitative bullet points.",
+        "whatIfWeDoNothing": "Candidates continue generating hollow GPT claims that get rejected by hiring managers.",
+        "whyThisCouldFail": "Requires lightweight guided prompts from users to extract real codebase activities.",
+        "metricToEvaluate": "Recruiter response rate reported by candidates in post-application surveys",
+        "confidence": 95,
+        "status": "PROPOSED",
+        "evidenceIds": [
+          "ev_job_demo_resume_ai_3"
+        ],
+        "createdAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "rec_ws_test_warroom_1791307726536_init_1",
+      {
+        "id": "rec_ws_test_warroom_1791307726536_init_1",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "title": "Position around \"Deterministic evidence graph\" against incumbent pricing models",
+        "type": "RECOMMENDATION",
+        "actionType": "GTM_CAMPAIGN",
+        "priority": "P1",
+        "rationale": "Target customers (Chief Information Security Officers and Enterprise Compliance Directors) actively look for evidence and reliability rather than generic vendor promises.",
+        "whatIfWeDoNothing": "Incumbent competitors will capture search volume with high ad spend, crowding out differentiation.",
+        "whyThisCouldFail": "Competitors may attempt superficial copycat messaging before our brand gains traction.",
+        "metricToEvaluate": "Qualified sign-up conversion rate and customer acquisition cost",
+        "confidence": 91,
+        "status": "PROPOSED",
+        "evidenceIds": [],
+        "createdAt": "2026-10-06T17:28:46.537Z"
+      }
+    ]
+  ],
+  "scenarioSimulations": [
+    [
+      "sim_ws_test_warroom_1791307726536_1791307726545",
+      {
+        "id": "sim_ws_test_warroom_1791307726536_1791307726545",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "scenarioTitle": "Vanta drops entry tier pricing to zero with VC subsidies",
+        "triggerDescription": "Competitor announced freemium tier at annual summit",
+        "competitorName": "Vanta",
+        "firstOrderEffects": [
+          "Vanta captures short-term price-sensitive customer acquisition volume by 15-25%.",
+          "Customer inquiries regarding feature parity and price match will spike within 14 days.",
+          "Gross margin pressure intensifies across standard commodity offerings."
+        ],
+        "secondOrderEffects": [
+          "Competitor unit economics deteriorate if higher CAC payback cannot be sustained.",
+          "Market perception shifts from premium capability to commodity price war.",
+          "Enterprise and technical customers seek differentiated verification guarantees over discounted basic tools."
+        ],
+        "recommendedHedges": [
+          "Avoid engaging in a retaliatory race-to-the-bottom price cut; highlight verified outcome accuracy.",
+          "Publish transparent benchmark proofs exposing structural failure rates in competitor tools.",
+          "Offer a frictionless pay-per-use diagnostic trial to capture dissatisfied switchers without compromising ARR."
+        ],
+        "confidenceScore": 89,
+        "simulatedAt": "2026-10-06T17:28:46.545Z"
+      }
+    ]
+  ],
+  "strategicDecisions": [
+    [
+      "dec_ws_demo_sandbox_1791307726548",
+      {
+        "id": "dec_ws_demo_sandbox_1791307726548",
+        "workspaceId": "ws_demo_sandbox",
+        "recommendationId": "rec_ws_demo_sandbox_3",
+        "title": "Launched experiment for: Ship Grounded Impact Metric Formulator for Junior Engineers",
+        "decisionType": "EXPERIMENT_LAUNCH",
+        "rationale": "Verified fact: 82% of technical recruiters discard ungrounded buzzwords, while 29 customer signals cite inability to formulate quantitative bullet points.",
+        "decidedBy": "usr_tester",
+        "decidedByName": "Test Runner",
+        "decidedAt": "2026-10-06T17:28:46.548Z",
+        "targetOutcome": "Recruiter response rate reported by candidates in post-application surveys",
+        "status": "PENDING_EVALUATION"
+      }
+    ]
+  ],
+  "strategicExperiments": [
+    [
+      "exp_ws_demo_sandbox_1791307726548",
+      {
+        "id": "exp_ws_demo_sandbox_1791307726548",
+        "workspaceId": "ws_demo_sandbox",
+        "title": "Experiment: Ship Grounded Impact Metric Formulator for Junior Engineers",
+        "hypothesis": "Implementing \"Ship Grounded Impact Metric Formulator for Junior Engineers\" will achieve: Recruiter response rate reported by candidates in post-application surveys",
+        "metric": "Recruiter response rate reported by candidates in post-application surveys",
+        "baselineValue": "Current Baseline",
+        "targetValue": "+25% lift in evaluated metric",
+        "durationWeeks": 4,
+        "status": "RUNNING",
+        "resultSummary": "Experiment launched. Baseline monitoring in progress.",
+        "createdAt": "2026-10-06T17:28:46.548Z"
+      }
+    ]
+  ],
+  "companyScorecards": [
+    [
+      "ws_demo_sandbox",
+      {
+        "id": "sc_ws_demo_sandbox",
+        "workspaceId": "ws_demo_sandbox",
+        "strengths": [
+          "Verifiable ATS parse proofing vs generic keyword scoring",
+          "Grounded evidence-backed bullet generation without hallucinations",
+          "Transparent pricing model with zero forced lock-in"
+        ],
+        "weaknesses": [
+          "Absence of in-browser job board extension workflow",
+          "Lower top-of-funnel brand search volume compared to Jobscan"
+        ],
+        "defensibilityRating": "STRONG",
+        "moatScore": 86,
+        "competitiveAdvantages": [
+          "Proprietary parser regression testing",
+          "High interview callback rate"
+        ],
+        "criticalVulnerabilities": [
+          "Teal browser capture of job seekers"
+        ],
+        "evidenceGroundingCount": 38,
+        "calculatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "ws_default_prod",
+      {
+        "id": "sc_ws_default_prod",
+        "workspaceId": "ws_default_prod",
+        "strengths": [
+          "Verifiable ATS parse proofing vs generic keyword scoring",
+          "Grounded evidence-backed bullet generation without hallucinations",
+          "Transparent pricing model with zero forced lock-in"
+        ],
+        "weaknesses": [
+          "Absence of in-browser job board extension workflow",
+          "Lower top-of-funnel brand search volume compared to Jobscan"
+        ],
+        "defensibilityRating": "STRONG",
+        "moatScore": 86,
+        "competitiveAdvantages": [
+          "Proprietary parser regression testing",
+          "High interview callback rate"
+        ],
+        "criticalVulnerabilities": [
+          "Teal browser capture of job seekers"
+        ],
+        "evidenceGroundingCount": 38,
+        "calculatedAt": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "ws_test_warroom_1791307726536",
+      {
+        "id": "sc_ws_test_warroom_1791307726536",
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "strengths": [
+          "Deterministic evidence graph",
+          "Zero-hallucination verification",
+          "Multi-tenant real-time telemetry"
+        ],
+        "weaknesses": [
+          "Emerging brand awareness in enterprise tiers",
+          "Channel distribution scaling needed"
+        ],
+        "defensibilityRating": "STRONG",
+        "moatScore": 82,
+        "competitiveAdvantages": [
+          "Deterministic evidence graph",
+          "Zero-hallucination verification",
+          "Multi-tenant real-time telemetry"
+        ],
+        "criticalVulnerabilities": [
+          "Incumbents with aggressive ad spend"
+        ],
+        "evidenceGroundingCount": 0,
+        "calculatedAt": "2026-10-06T17:28:46.537Z"
+      }
+    ]
+  ],
+  "executiveBriefs": [
+    [
+      "ws_demo_sandbox",
+      {
+        "workspaceId": "ws_demo_sandbox",
+        "statusSummary": "Market positioning is solid, but competitor pricing changes and browser workflows require immediate strategic execution.",
+        "topDevelopments": [
+          "Jobscan instituted mandatory $89.85 quarterly upfront billing, creating an acute customer dissatisfaction window.",
+          "Teal rolled out Chrome extension application autofill, deepening browser-level candidate lock-in.",
+          "Customer signals confirm heavy backlash against superficial AI buzzwords and hidden download paywalls."
+        ],
+        "topRisks": [
+          "Teal expanding upstream into application workflow could bypass standalone web editors."
+        ],
+        "topOpportunities": [
+          "Acquire dissatisfied Jobscan users through targeted comparison positioning and flexible pricing.",
+          "Establish market leadership in verifiable ATS parser diagnostics."
+        ],
+        "noChangeDetected": false,
+        "recommendedActions": [
+          "Approve GTM comparison campaign against Jobscan quarterly lock-in.",
+          "Initialize Chrome Extension ATS Validator sprint to protect browser touchpoints."
+        ],
+        "generatedDate": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "ws_default_prod",
+      {
+        "workspaceId": "ws_default_prod",
+        "statusSummary": "Market positioning is solid, but competitor pricing changes and browser workflows require immediate strategic execution.",
+        "topDevelopments": [
+          "Jobscan instituted mandatory $89.85 quarterly upfront billing, creating an acute customer dissatisfaction window.",
+          "Teal rolled out Chrome extension application autofill, deepening browser-level candidate lock-in.",
+          "Customer signals confirm heavy backlash against superficial AI buzzwords and hidden download paywalls."
+        ],
+        "topRisks": [
+          "Teal expanding upstream into application workflow could bypass standalone web editors."
+        ],
+        "topOpportunities": [
+          "Acquire dissatisfied Jobscan users through targeted comparison positioning and flexible pricing.",
+          "Establish market leadership in verifiable ATS parser diagnostics."
+        ],
+        "noChangeDetected": false,
+        "recommendedActions": [
+          "Approve GTM comparison campaign against Jobscan quarterly lock-in.",
+          "Initialize Chrome Extension ATS Validator sprint to protect browser touchpoints."
+        ],
+        "generatedDate": "2026-10-06T17:17:48.871Z"
+      }
+    ],
+    [
+      "ws_test_warroom_1791307726536",
+      {
+        "workspaceId": "ws_test_warroom_1791307726536",
+        "statusSummary": "Market model established for Legit Category. Initial competitor universe mapped and prioritized.",
+        "topDevelopments": [
+          "Identified 1 direct competitor positions in target customer segment.",
+          "Synthesized primary differentiation thesis: \"Speed\"."
+        ],
+        "topRisks": [
+          "Incumbents reacting with copycat messaging or price bundling."
+        ],
+        "topOpportunities": [
+          "Direct customer acquisition through transparent pricing and verifiable outcomes."
+        ],
+        "noChangeDetected": false,
+        "recommendedActions": [
+          "Run targeted research jobs to gather verified evidence on competitor pricing changes.",
+          "Review and approve initial GTM positioning recommendations."
+        ],
+        "generatedDate": "2026-10-06T17:28:46.545Z"
       }
     ]
   ]

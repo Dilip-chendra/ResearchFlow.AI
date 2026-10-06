@@ -60,6 +60,7 @@ const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefin
 
 export const VALID_VIEWS = [
   'overview',
+  'war-room',
   'research',
   'evidence',
   'intelligence',

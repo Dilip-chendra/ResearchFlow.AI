@@ -5,6 +5,7 @@ import { conflictService } from '../services/conflictService';
 import { evaluationService } from '../services/evaluationService';
 import { demoService } from '../services/demoService';
 import { searchService } from '../services/searchService';
+import { warRoomService } from '../services/warRoomService';
 import { geminiAIService } from '../ai/gemini';
 import { aiOrchestrator } from '../ai/orchestrator';
 import { freeModelRegistry } from '../ai/openrouter/registry';
@@ -2650,6 +2651,352 @@ apiRouter.get('/intelligence/:jobId/audio-briefing', async (req: Request, res: R
       estimatedDurationSeconds: Math.ceil(fullScript.split(' ').length / 2.5),
       generatedAt: new Date().toISOString(),
     });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ===========================================================================
+// MARKET WAR ROOM — STRATEGIC INTELLIGENCE OPERATING SYSTEM ENDPOINTS
+// ===========================================================================
+
+apiRouter.get('/war-room/overview', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const overview = warRoomService.getWarRoomOverview(wsId);
+    res.json({ success: true, ...overview });
+  } catch (err: any) {
+    logger.error('Error fetching war room overview:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/map-market', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const overview = warRoomService.mapMyMarket(
+      wsId,
+      req.body,
+      user?.id || 'usr_system',
+      user?.name || 'Strategic Founder'
+    );
+    res.json({ success: true, ...overview });
+  } catch (err: any) {
+    logger.error('Error mapping market in war room:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/competitors', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const competitors = db.getWarRoomCompetitors(wsId);
+    res.json({ success: true, competitors });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/competitors/discover', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const candidates = warRoomService.discoverCompetitors(wsId, req.body?.query);
+    res.json({ success: true, candidates });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/competitors/:id', (req: Request, res: Response) => {
+  try {
+    const comp = db.getWarRoomCompetitor(req.params.id);
+    if (!comp) return res.status(404).json({ error: 'Competitor not found' });
+    res.json({ success: true, competitor: comp });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/competitors/:id/status', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const competitor = warRoomService.confirmOrRejectCompetitor(
+      wsId,
+      req.params.id,
+      req.body.status,
+      req.body.notes,
+      user?.id,
+      user?.name
+    );
+    res.json({ success: true, competitor });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/moves', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const moves = db.getCompetitorMoves(wsId);
+    res.json({ success: true, moves });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/product-gaps', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const productGaps = db.getProductGaps(wsId);
+    res.json({ success: true, productGaps });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/product-gaps/evaluate', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const productGaps = warRoomService.evaluateProductGaps(
+      wsId,
+      req.body,
+      user?.id,
+      user?.name
+    );
+    res.json({ success: true, productGaps });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/demand-signals', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const demandSignals = db.getCustomerDemandSignals(wsId);
+    res.json({ success: true, demandSignals });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/opportunities', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const opportunities = db.getMarketOpportunities(wsId);
+    res.json({ success: true, opportunities });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/opportunities/:id/campaign', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const campaign = warRoomService.convertOpportunityToCampaign(
+      wsId,
+      req.params.id,
+      user?.id || 'usr_system',
+      user?.name || 'Strategic Lead'
+    );
+    res.json({ success: true, campaign });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/threats', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const threats = db.getMarketThreats(wsId);
+    res.json({ success: true, threats });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/threats/:id/task', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const task = warRoomService.convertThreatOrGapToTask(
+      wsId,
+      'THREAT',
+      req.params.id,
+      user?.id || 'usr_system',
+      user?.name || 'Defense Lead'
+    );
+    res.json({ success: true, task });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/product-gaps/:id/task', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const task = warRoomService.convertThreatOrGapToTask(
+      wsId,
+      'GAP',
+      req.params.id,
+      user?.id || 'usr_system',
+      user?.name || 'Product Lead'
+    );
+    res.json({ success: true, task });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/recommendations', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const recommendations = db.getWarRoomRecommendations(wsId);
+    res.json({ success: true, recommendations });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/recommendations/:id/approve', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const decision = warRoomService.recordDecision(
+      wsId,
+      req.params.id,
+      'APPROVE',
+      req.body?.rationale,
+      user?.id || 'usr_system',
+      user?.name || 'Strategic Lead'
+    );
+    res.json({ success: true, decision });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/recommendations/:id/reject', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const decision = warRoomService.recordDecision(
+      wsId,
+      req.params.id,
+      'REJECT',
+      req.body?.rationale,
+      user?.id || 'usr_system',
+      user?.name || 'Strategic Lead'
+    );
+    res.json({ success: true, decision });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/recommendations/:id/experiment', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const experiment = warRoomService.convertRecommendationToExperiment(
+      wsId,
+      req.params.id,
+      user?.id || 'usr_system',
+      user?.name || 'Growth Lead'
+    );
+    res.json({ success: true, experiment });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/war-room/scenarios/run', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const simulation = warRoomService.simulateScenario(
+      wsId,
+      req.body.scenarioTitle,
+      req.body.triggerDescription,
+      req.body.competitorName,
+      user?.id,
+      user?.name
+    );
+    res.json({ success: true, simulation });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/scenarios', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const scenarios = db.getScenarioSimulations(wsId);
+    res.json({ success: true, scenarios });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/market-graph', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const graph = warRoomService.getMarketGraph(wsId);
+    res.json({ success: true, graph });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/brief', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const brief = db.getExecutiveBrief(wsId);
+    res.json({ success: true, brief });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/scorecard', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const scorecard = db.getCompanyScorecard(wsId);
+    res.json({ success: true, scorecard });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/decisions', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const decisions = db.getStrategicDecisions(wsId);
+    res.json({ success: true, decisions });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/experiments', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const experiments = db.getStrategicExperiments(wsId);
+    res.json({ success: true, experiments });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/war-room/search', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const results = warRoomService.searchMarketModel(wsId, String(req.query.q || ''));
+    res.json({ success: true, results });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

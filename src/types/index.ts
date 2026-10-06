@@ -939,3 +939,294 @@ export interface PerceptualMatrixData {
   }[];
 }
 
+// ==========================================
+// WAR ROOM — STRATEGIC INTELLIGENCE TYPES
+// ==========================================
+
+export type WarRoomRolePerspective = 'all' | 'executive' | 'product' | 'marketing' | 'sales';
+
+export type CompetitorTier = 'TIER_1' | 'TIER_2' | 'TIER_3';
+export type CompetitorCategory = 'DIRECT' | 'INDIRECT' | 'EMERGING' | 'INCUMBENT' | 'POTENTIAL_ENTRANT';
+export type CompetitorStatus = 'CONFIRMED' | 'DISCOVERED' | 'REJECTED';
+
+export type MoveType =
+  | 'PRICING'
+  | 'FEATURE'
+  | 'POSITIONING'
+  | 'GTM'
+  | 'MESSAGING'
+  | 'HIRING'
+  | 'EXECUTIVE'
+  | 'M_AND_A';
+
+export type ChangeSignificance = 'NOISE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+
+export type ProductGapClassification =
+  | 'TABLE_STAKES'
+  | 'COMPETITIVE_PARITY'
+  | 'DIFFERENTIATOR'
+  | 'COMMODITIZED';
+
+export type RecommendationAction = 'BUILD' | 'BUY' | 'PARTNER' | 'TEST' | 'IGNORE';
+
+export interface MarketModel {
+  id: string;
+  workspaceId: string;
+  marketCategory: string;
+  targetCustomers: string;
+  strategicGoal: string;
+  knownCompetitors: string[];
+  keyDifferentiators: string[];
+  status: 'ACTIVE' | 'ARCHIVED';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WarRoomCompetitor {
+  id: string;
+  workspaceId: string;
+  name: string;
+  website: string;
+  tier: CompetitorTier;
+  category: CompetitorCategory;
+  status: CompetitorStatus;
+  sourceConfidence: number; // 0-100
+  evidenceIds: string[];
+  strengths: string[];
+  weaknesses: string[];
+  pricingModel: string;
+  positioningSummary: string;
+  lastCrawledAt?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MoveWhyThisMatters {
+  strategicImplication: string;
+  competitorIntent: string;
+  likelyNextMoves: string[];
+  ourVulnerability: string;
+  recommendedResponse: string;
+}
+
+export interface CompetitorMove {
+  id: string;
+  workspaceId: string;
+  competitorId: string;
+  competitorName: string;
+  moveType: MoveType;
+  significance: ChangeSignificance;
+  title: string;
+  description: string;
+  whyThisMatters: MoveWhyThisMatters;
+  sourceUrl: string;
+  evidenceSnippet: string;
+  detectedAt: string;
+  isAddressed?: boolean;
+}
+
+export interface ProductGap {
+  id: string;
+  workspaceId: string;
+  featureName: string;
+  category: string;
+  classification: ProductGapClassification;
+  ourStatus: 'HAVE' | 'PARTIAL' | 'LACK';
+  competitorCoverage: {
+    competitorId: string;
+    competitorName: string;
+    hasCapability: boolean;
+    details?: string;
+  }[];
+  customerDemandScore: number; // 1-10
+  competitiveUrgencyScore: number; // 1-10
+  differentiationScore: number; // 1-10
+  strategicImpactScore: number; // 1-10
+  complexityScore: number; // 1-10
+  riskScore: number; // 1-10
+  evidenceStrengthScore: number; // 1-10
+  buildPriorityScore: number; // Calculated score
+  recommendationAction: RecommendationAction;
+  whyNotBuild: string;
+  doNothingScenario: string;
+  evidenceIds: string[];
+  createdAt: string;
+}
+
+export interface CustomerDemandSignal {
+  id: string;
+  workspaceId: string;
+  clusterTitle: string;
+  painPoint: string;
+  customerRole: string;
+  frequencyCount: number;
+  urgency: 'HIGH' | 'MEDIUM' | 'LOW';
+  rawQuotes: {
+    quote: string;
+    source: string;
+    date: string;
+  }[];
+  competitorWeaknessRef?: string;
+  createdAt: string;
+}
+
+export interface MarketOpportunity {
+  id: string;
+  workspaceId: string;
+  title: string;
+  category: 'WHITESPACE' | 'UNDERSERVED_SEGMENT' | 'COMPETITOR_VULNERABILITY' | 'PRICING_MISALIGNMENT';
+  description: string;
+  evidenceIds: string[];
+  expectedImpact: string;
+  difficulty: 'LOW' | 'MEDIUM' | 'HIGH';
+  confidenceScore: number; // 0-100
+  campaignCreated?: boolean;
+  campaignId?: string;
+  createdAt: string;
+}
+
+export interface MarketThreat {
+  id: string;
+  workspaceId: string;
+  title: string;
+  competitorId?: string;
+  competitorName?: string;
+  threatLevel: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  description: string;
+  leadingIndicators: string[];
+  defensiveCountermeasure: string;
+  taskCreated?: boolean;
+  taskId?: string;
+  createdAt: string;
+}
+
+export interface WarRoomRecommendation {
+  id: string;
+  workspaceId: string;
+  title: string;
+  type: 'FACT' | 'INFERENCE' | 'FORECAST' | 'RECOMMENDATION';
+  actionType: 'GTM_CAMPAIGN' | 'PRODUCT_FEATURE' | 'DEFENSIVE_TASK' | 'EXPERIMENT' | 'STRATEGIC_PIVOT';
+  priority: 'P1' | 'P2' | 'P3';
+  rationale: string;
+  whatIfWeDoNothing: string;
+  whyThisCouldFail: string;
+  metricToEvaluate: string;
+  confidence: number; // 0-100
+  status: 'PROPOSED' | 'APPROVED' | 'REJECTED' | 'IMPLEMENTED';
+  evidenceIds: string[];
+  taskId?: string;
+  campaignId?: string;
+  experimentId?: string;
+  createdAt: string;
+}
+
+export interface ScenarioSimulation {
+  id: string;
+  workspaceId: string;
+  scenarioTitle: string;
+  triggerDescription: string;
+  competitorName?: string;
+  firstOrderEffects: string[];
+  secondOrderEffects: string[];
+  recommendedHedges: string[];
+  confidenceScore: number;
+  simulatedAt: string;
+}
+
+export interface StrategicDecision {
+  id: string;
+  workspaceId: string;
+  recommendationId?: string;
+  title: string;
+  decisionType: 'APPROVE' | 'REJECT' | 'MODIFIED' | 'EXPERIMENT_LAUNCH';
+  rationale: string;
+  decidedBy: string;
+  decidedByName: string;
+  decidedAt: string;
+  targetOutcome: string;
+  actualOutcome?: string;
+  outcomeEvaluatedAt?: string;
+  learningNotes?: string;
+  status: 'PENDING_EVALUATION' | 'SUCCESS' | 'MIXED' | 'FAILED';
+}
+
+export interface StrategicExperiment {
+  id: string;
+  workspaceId: string;
+  title: string;
+  hypothesis: string;
+  metric: string;
+  baselineValue: string;
+  targetValue: string;
+  durationWeeks: number;
+  status: 'PLANNED' | 'RUNNING' | 'CONCLUDED';
+  resultSummary?: string;
+  createdAt: string;
+}
+
+export interface CompanyScorecard {
+  id: string;
+  workspaceId: string;
+  strengths: string[];
+  weaknesses: string[];
+  defensibilityRating: 'LOW' | 'MODERATE' | 'STRONG' | 'MOAT';
+  moatScore: number; // 0-100
+  competitiveAdvantages: string[];
+  criticalVulnerabilities: string[];
+  evidenceGroundingCount: number;
+  calculatedAt: string;
+}
+
+export interface MarketGraphNode {
+  id: string;
+  label: string;
+  type: 'COMPETITOR' | 'CAPABILITY' | 'MOVE' | 'SIGNAL' | 'OPPORTUNITY' | 'THREAT' | 'EVIDENCE' | 'OUR_PRODUCT';
+  category?: string;
+  significance?: string;
+  data?: any;
+}
+
+export interface MarketGraphLink {
+  source: string;
+  target: string;
+  relationship: string;
+}
+
+export interface MarketKnowledgeGraph {
+  nodes: MarketGraphNode[];
+  links: MarketGraphLink[];
+}
+
+export interface ExecutiveBrief {
+  workspaceId: string;
+  generatedDate: string;
+  statusSummary: string;
+  topDevelopments: string[];
+  topRisks: string[];
+  topOpportunities: string[];
+  noChangeDetected: boolean;
+  recommendedActions: string[];
+}
+
+export interface WarRoomOverviewResponse {
+  marketModel: MarketModel | null;
+  pulse: {
+    healthStatus: 'HEALTHY' | 'NEEDS_ATTENTION' | 'CRITICAL';
+    lastUpdated: string;
+    evidenceFreshnessPercent: number;
+    competitorCoverageCount: number;
+    topPriorityTitle: string;
+    topThreatTitle: string;
+    biggestOpportunityTitle: string;
+  };
+  competitors: WarRoomCompetitor[];
+  recentMoves: CompetitorMove[];
+  productGaps: ProductGap[];
+  demandSignals: CustomerDemandSignal[];
+  opportunities: MarketOpportunity[];
+  threats: MarketThreat[];
+  recommendations: WarRoomRecommendation[];
+  scorecard: CompanyScorecard | null;
+  executiveBrief: ExecutiveBrief | null;
+}

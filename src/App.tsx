@@ -3,6 +3,7 @@ import { WorkspaceProvider, useWorkspace } from './context/WorkspaceContext';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { OverviewDashboard } from './components/overview/OverviewDashboard';
+import { WarRoomView } from './components/warroom/WarRoomView';
 import { ResearchListView } from './components/research/ResearchListView';
 import { EvidenceExplorerView } from './components/evidence/EvidenceExplorerView';
 import { IntelligenceView } from './components/intelligence/IntelligenceView';
@@ -140,6 +141,7 @@ const MainApp: React.FC = () => {
         <Sidebar />
         <main className="flex-1 p-4 md:p-6 lg:p-10 pb-24 md:pb-10 max-w-7xl w-full mx-auto overflow-x-hidden overflow-y-auto">
           {activeView === 'overview' && <OverviewDashboard />}
+          {activeView === 'war-room' && <WarRoomView />}
           {activeView === 'research' && <ResearchListView />}
           {activeView === 'evidence' && <EvidenceExplorerView />}
           {activeView === 'intelligence' && <IntelligenceView />}

@@ -28,6 +28,20 @@ import {
   ResearchHealthSummary,
   UsageMetrics,
   ApprovalDecisionRecord,
+  MarketModel,
+  WarRoomCompetitor,
+  CompetitorMove,
+  ProductGap,
+  CustomerDemandSignal,
+  MarketOpportunity,
+  MarketThreat,
+  WarRoomRecommendation,
+  ScenarioSimulation,
+  StrategicDecision,
+  StrategicExperiment,
+  CompanyScorecard,
+  ExecutiveBrief,
+  MarketKnowledgeGraph,
 } from '../types';
 import { logger } from '../utils/logger';
 
@@ -195,6 +209,19 @@ export class PersistentDatabaseStore {
   private changeItems: Map<string, CompetitiveChangeItem> = new Map();
   private sourceHealthRecords: Map<string, SourceHealthRecord> = new Map();
   private approvalDecisions: Map<string, ApprovalDecisionRecord> = new Map();
+  private marketModels: Map<string, MarketModel> = new Map();
+  private warRoomCompetitors: Map<string, WarRoomCompetitor> = new Map();
+  private competitorMoves: Map<string, CompetitorMove> = new Map();
+  private productGaps: Map<string, ProductGap> = new Map();
+  private demandSignals: Map<string, CustomerDemandSignal> = new Map();
+  private marketOpportunities: Map<string, MarketOpportunity> = new Map();
+  private marketThreats: Map<string, MarketThreat> = new Map();
+  private warRoomRecommendations: Map<string, WarRoomRecommendation> = new Map();
+  private scenarioSimulations: Map<string, ScenarioSimulation> = new Map();
+  private strategicDecisions: Map<string, StrategicDecision> = new Map();
+  private strategicExperiments: Map<string, StrategicExperiment> = new Map();
+  private companyScorecards: Map<string, CompanyScorecard> = new Map();
+  private executiveBriefs: Map<string, ExecutiveBrief> = new Map();
 
   constructor() {
     const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -248,6 +275,7 @@ export class PersistentDatabaseStore {
       this.baselineMetrics.set(DEFAULT_BASELINE.id, DEFAULT_BASELINE);
     }
 
+    this.seedWarRoomDataIfEmpty();
     this.saveToDiskSync();
   }
 
@@ -297,6 +325,19 @@ export class PersistentDatabaseStore {
       if (parsed.changeItems) this.changeItems = new Map(parsed.changeItems);
       if (parsed.sourceHealthRecords) this.sourceHealthRecords = new Map(parsed.sourceHealthRecords);
       if (parsed.approvalDecisions) this.approvalDecisions = new Map(parsed.approvalDecisions);
+      if (parsed.marketModels) this.marketModels = new Map(parsed.marketModels);
+      if (parsed.warRoomCompetitors) this.warRoomCompetitors = new Map(parsed.warRoomCompetitors);
+      if (parsed.competitorMoves) this.competitorMoves = new Map(parsed.competitorMoves);
+      if (parsed.productGaps) this.productGaps = new Map(parsed.productGaps);
+      if (parsed.demandSignals) this.demandSignals = new Map(parsed.demandSignals);
+      if (parsed.marketOpportunities) this.marketOpportunities = new Map(parsed.marketOpportunities);
+      if (parsed.marketThreats) this.marketThreats = new Map(parsed.marketThreats);
+      if (parsed.warRoomRecommendations) this.warRoomRecommendations = new Map(parsed.warRoomRecommendations);
+      if (parsed.scenarioSimulations) this.scenarioSimulations = new Map(parsed.scenarioSimulations);
+      if (parsed.strategicDecisions) this.strategicDecisions = new Map(parsed.strategicDecisions);
+      if (parsed.strategicExperiments) this.strategicExperiments = new Map(parsed.strategicExperiments);
+      if (parsed.companyScorecards) this.companyScorecards = new Map(parsed.companyScorecards);
+      if (parsed.executiveBriefs) this.executiveBriefs = new Map(parsed.executiveBriefs);
 
       // Auto-migrate legacy avatar URLs to individual distinct initials / custom avatars
       for (const [uid, user] of this.users.entries()) {
@@ -363,6 +404,19 @@ export class PersistentDatabaseStore {
         changeItems: Array.from(this.changeItems.entries()),
         sourceHealthRecords: Array.from(this.sourceHealthRecords.entries()),
         approvalDecisions: Array.from(this.approvalDecisions.entries()),
+        marketModels: Array.from(this.marketModels.entries()),
+        warRoomCompetitors: Array.from(this.warRoomCompetitors.entries()),
+        competitorMoves: Array.from(this.competitorMoves.entries()),
+        productGaps: Array.from(this.productGaps.entries()),
+        demandSignals: Array.from(this.demandSignals.entries()),
+        marketOpportunities: Array.from(this.marketOpportunities.entries()),
+        marketThreats: Array.from(this.marketThreats.entries()),
+        warRoomRecommendations: Array.from(this.warRoomRecommendations.entries()),
+        scenarioSimulations: Array.from(this.scenarioSimulations.entries()),
+        strategicDecisions: Array.from(this.strategicDecisions.entries()),
+        strategicExperiments: Array.from(this.strategicExperiments.entries()),
+        companyScorecards: Array.from(this.companyScorecards.entries()),
+        executiveBriefs: Array.from(this.executiveBriefs.entries()),
       };
 
       const dataDir = path.dirname(this.dataFilePath);
@@ -966,6 +1020,15 @@ export class PersistentDatabaseStore {
     logger.audit(record.eventType, record.summary, record.details);
     this.scheduleSave();
     return record;
+  }
+
+  logAuditEvent(event: any): AuditEvent {
+    return this.recordAudit({
+      workspaceId: event.workspaceId,
+      eventType: event.eventType || (event.action ? `war_room_${String(event.action).toLowerCase()}` : 'war_room_action'),
+      summary: event.summary || event.details?.message || `War Room action: ${event.action || 'updated'}`,
+      details: event.details || {},
+    });
   }
 
   listAuditEvents(workspaceId: string, limit = 50): AuditEvent[] {
@@ -1577,6 +1640,688 @@ export class PersistentDatabaseStore {
       activeMembersCount: members.length,
       membersLimit: 10,
     };
+  }
+
+  // ----------------------------------------------------
+  // Market War Room — Strategic Intelligence Operations
+  // ----------------------------------------------------
+
+  public seedWarRoomDataIfEmpty(): void {
+    if (this.marketModels.has(`mm_${DEMO_WORKSPACE_ID}`) && this.warRoomCompetitors.size > 0) {
+      return;
+    }
+
+    const now = new Date().toISOString();
+    const twoDaysAgo = new Date(Date.now() - 86400000 * 2).toISOString();
+    const fiveDaysAgo = new Date(Date.now() - 86400000 * 5).toISOString();
+    const nineDaysAgo = new Date(Date.now() - 86400000 * 9).toISOString();
+
+    const targetWorkspaces = [DEMO_WORKSPACE_ID, 'ws_default_prod'];
+
+    for (const wsId of targetWorkspaces) {
+      const modelId = `mm_${wsId}`;
+      const demoModel: MarketModel = {
+        id: modelId,
+        workspaceId: wsId,
+        marketCategory: 'B2C Career Tech & AI Resume Optimization',
+        targetCustomers: 'University seniors, early-career software engineers, and mid-career pivoters targeting top tech roles',
+        strategicGoal: 'Transition from superficial AI text generation into verifiable ATS parse diagnostics and guaranteed interview conversion',
+        knownCompetitors: ['Jobscan', 'Teal', 'Kickresume', 'Rezi'],
+        keyDifferentiators: ['Verifiable ATS parse proofs', 'Grounded engineering bullet formulator', 'Deterministic keyword audit', 'Transparent match diagnostics'],
+        status: 'ACTIVE',
+        createdAt: new Date('2026-08-20T10:10:00Z').toISOString(),
+        updatedAt: now,
+      };
+      this.marketModels.set(modelId, demoModel);
+
+      // Competitors
+      const compJobscan: WarRoomCompetitor = {
+        id: `comp_jobscan_${wsId}`,
+        workspaceId: wsId,
+        name: 'Jobscan',
+        website: 'https://www.jobscan.co',
+        tier: 'TIER_1',
+        category: 'DIRECT',
+        status: 'CONFIRMED',
+        sourceConfidence: 96,
+        evidenceIds: ['ev_job_demo_resume_ai_1'],
+        strengths: ['High brand recall in ATS optimization', 'Extensive recruiter keyword corpus', 'Direct ATS partnership credibility'],
+        weaknesses: ['Cluttered, dated UI experience', 'Rigid keyword-matching without semantic context', 'Aggressive $89.85 quarterly upfront billing lock-in'],
+        pricingModel: '$49.95/month or $89.85/quarter upfront',
+        positioningSummary: 'Optimize your resume for applicant tracking systems with keyword matching',
+        lastCrawledAt: twoDaysAgo,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      const compTeal: WarRoomCompetitor = {
+        id: `comp_teal_${wsId}`,
+        workspaceId: wsId,
+        name: 'Teal',
+        website: 'https://www.tealhq.com',
+        tier: 'TIER_1',
+        category: 'DIRECT',
+        status: 'CONFIRMED',
+        sourceConfidence: 94,
+        evidenceIds: ['ev_job_demo_resume_ai_2'],
+        strengths: ['Modern, polished SaaS workflow', 'Widely adopted Chrome Extension tracker', 'Comprehensive job search dashboard'],
+        weaknesses: ['Generic AI text suggestions prone to hallucinations', 'Lacks actual ATS parse proofing', 'Premium features gated at $29/mo'],
+        pricingModel: '$9/week or $29/month',
+        positioningSummary: 'All-in-one career growth and job application management platform',
+        lastCrawledAt: fiveDaysAgo,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      const compKickresume: WarRoomCompetitor = {
+        id: `comp_kickresume_${wsId}`,
+        workspaceId: wsId,
+        name: 'Kickresume',
+        website: 'https://www.kickresume.com',
+        tier: 'TIER_2',
+        category: 'DIRECT',
+        status: 'CONFIRMED',
+        sourceConfidence: 90,
+        evidenceIds: ['ev_job_demo_resume_ai_1'],
+        strengths: ['Visually compelling design templates', 'Multi-format PDF export options', 'Cover letter and bio generators'],
+        weaknesses: ['Complex graphic templates break Workday/Greenhouse parsers', 'Paywalled downloads cause customer backlash', 'Slow mobile experience'],
+        pricingModel: '$19/month (annual) or $29/month',
+        positioningSummary: 'Create a beautiful, standout resume in minutes',
+        lastCrawledAt: nineDaysAgo,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      const compRezi: WarRoomCompetitor = {
+        id: `comp_rezi_${wsId}`,
+        workspaceId: wsId,
+        name: 'Rezi',
+        website: 'https://www.rezi.ai',
+        tier: 'TIER_2',
+        category: 'DIRECT',
+        status: 'CONFIRMED',
+        sourceConfidence: 88,
+        evidenceIds: ['ev_job_demo_resume_ai_3'],
+        strengths: ['Strict ATS-compliant markdown layout', 'Clear formatting structure', 'Lifetime deal customer loyalty'],
+        weaknesses: ['Minimalist design customization', 'Lacks integration with live job postings', 'Infrequent product feature updates'],
+        pricingModel: '$29/month or $129 lifetime access',
+        positioningSummary: 'The smartest ATS-compliant AI resume builder',
+        lastCrawledAt: nineDaysAgo,
+        createdAt: now,
+        updatedAt: now,
+      };
+
+      [compJobscan, compTeal, compKickresume, compRezi].forEach(c => this.warRoomCompetitors.set(c.id, c));
+
+      // Competitor Moves
+      const move1: CompetitorMove = {
+        id: `move_jobscan_${wsId}_1`,
+        workspaceId: wsId,
+        competitorId: compJobscan.id,
+        competitorName: 'Jobscan',
+        moveType: 'PRICING',
+        significance: 'HIGH',
+        title: 'Jobscan shifted entry tier to mandatory quarterly billing ($89.85 upfront)',
+        description: 'Removed month-to-month flexibility for new sign-ups, requiring $89.85 quarterly commitment upfront.',
+        whyThisMatters: {
+          strategicImplication: 'Forces budget-conscious job seekers to commit 3 months upfront, triggering immediate social backlash and elevated checkout drop-off.',
+          competitorIntent: 'Maximize CAC payback upfront given median job search duration is 60–90 days.',
+          likelyNextMoves: ['Introduce discounted student annual plan', 'Aggressive abandoned-cart discount retargeting'],
+          ourVulnerability: 'Low vulnerability; presents immediate acquisition window for ResearchFlow with transparent monthly or pay-per-search pricing.',
+          recommendedResponse: 'Launch GTM acquisition campaign targeting Jobscan switchers with zero-lockin pricing.',
+        },
+        sourceUrl: 'https://www.kickresume.com/en/help-center/pricing/',
+        evidenceSnippet: 'New user onboarding requires minimum $89.85 quarterly subscription.',
+        detectedAt: twoDaysAgo,
+      };
+
+      const move2: CompetitorMove = {
+        id: `move_teal_${wsId}_1`,
+        workspaceId: wsId,
+        competitorId: compTeal.id,
+        competitorName: 'Teal',
+        moveType: 'FEATURE',
+        significance: 'MEDIUM',
+        title: 'Teal launched Chrome Extension v4 with automatic job form filling',
+        description: 'Updated browser extension to autofill application forms directly on Greenhouse and Lever postings.',
+        whyThisMatters: {
+          strategicImplication: 'Captures daily active usage within candidate browser workflows rather than requiring them to visit the standalone web app.',
+          competitorIntent: 'Lock in candidate workflow on job boards to preempt competitors before resume drafting.',
+          likelyNextMoves: ['Integrate automated follow-up email drafts', 'Direct application API integrations with ATS providers'],
+          ourVulnerability: 'Users spending less time in standalone resume builders.',
+          recommendedResponse: 'Deliver a lightweight Chrome extension focusing exclusively on real-time ATS parse diagnostics.',
+        },
+        sourceUrl: 'https://news.ycombinator.com/item?id=38874139',
+        evidenceSnippet: 'Teal Chrome extension now autofills application questions across major ATS portals.',
+        detectedAt: fiveDaysAgo,
+      };
+
+      const move3: CompetitorMove = {
+        id: `move_kickresume_${wsId}_1`,
+        workspaceId: wsId,
+        competitorId: compKickresume.id,
+        competitorName: 'Kickresume',
+        moveType: 'MESSAGING',
+        significance: 'LOW',
+        title: 'Kickresume repositioned homepage hero from "AI Resume Builder" to "Your Career Superpower"',
+        description: 'Removed specific AI tooling badges in favor of broad career development messaging.',
+        whyThisMatters: {
+          strategicImplication: 'Attempts to distance brand from commodity AI copycats, but reduces clarity on core technical capabilities.',
+          competitorIntent: 'Target broader non-technical career changers with lifestyle-oriented marketing.',
+          likelyNextMoves: ['Introduce video interview coaching modules', 'Expand executive coaching marketplace'],
+          ourVulnerability: 'Minimal vulnerability for technical candidate segment.',
+          recommendedResponse: 'Maintain rigorous, quantitative positioning focused on verifiable engineering impact.',
+        },
+        sourceUrl: 'https://novoresume.com/career-blog/resume-statistics',
+        evidenceSnippet: 'Homepage hero copy updated to broad career superpower tagline.',
+        detectedAt: nineDaysAgo,
+      };
+
+      [move1, move2, move3].forEach(m => this.competitorMoves.set(m.id, m));
+
+      // Product Gaps
+      const gap1: ProductGap = {
+        id: `gap_${wsId}_1`,
+        workspaceId: wsId,
+        featureName: 'Live ATS Parse Diagnostic & Score Simulation',
+        category: 'ATS Compatibility',
+        classification: 'DIFFERENTIATOR',
+        ourStatus: 'HAVE',
+        competitorCoverage: [
+          { competitorId: compJobscan.id, competitorName: 'Jobscan', hasCapability: true, details: 'Basic keyword match without structural parser analysis' },
+          { competitorId: compTeal.id, competitorName: 'Teal', hasCapability: false, details: 'Checklist only, no parser simulation' },
+          { competitorId: compKickresume.id, competitorName: 'Kickresume', hasCapability: false, details: 'Graphic layout parser fails Workday extraction' },
+        ],
+        customerDemandScore: 9,
+        competitiveUrgencyScore: 9,
+        differentiationScore: 9,
+        strategicImpactScore: 9,
+        complexityScore: 4,
+        riskScore: 3,
+        evidenceStrengthScore: 9,
+        buildPriorityScore: Math.round((9 * 9 * 9 * 9 * 9) / (4 + 3)),
+        recommendationAction: 'BUILD',
+        whyNotBuild: 'Requires maintaining continuous parser regression tests against Workday, Greenhouse, and Lever format shifts.',
+        doNothingScenario: 'Competitors like Jobscan maintain perceived monopoly on ATS parsing despite outdated technology.',
+        evidenceIds: ['ev_job_demo_resume_ai_3'],
+        createdAt: now,
+      };
+
+      const gap2: ProductGap = {
+        id: `gap_${wsId}_2`,
+        workspaceId: wsId,
+        featureName: 'Chrome Extension 1-Click Job Matcher',
+        category: 'Workflow Automation',
+        classification: 'COMPETITIVE_PARITY',
+        ourStatus: 'PARTIAL',
+        competitorCoverage: [
+          { competitorId: compTeal.id, competitorName: 'Teal', hasCapability: true, details: 'Full application autofill and job tracker' },
+          { competitorId: compJobscan.id, competitorName: 'Jobscan', hasCapability: true, details: 'Job description scraper overlay' },
+        ],
+        customerDemandScore: 8,
+        competitiveUrgencyScore: 8,
+        differentiationScore: 5,
+        strategicImpactScore: 7,
+        complexityScore: 5,
+        riskScore: 2,
+        evidenceStrengthScore: 8,
+        buildPriorityScore: Math.round((8 * 8 * 5 * 7 * 8) / (5 + 2)),
+        recommendationAction: 'BUILD',
+        whyNotBuild: 'Browser extension maintenance overhead and Chrome Web Store review cycle dependencies.',
+        doNothingScenario: 'Candidates complete application flow in Teal without ever visiting our web application.',
+        evidenceIds: ['ev_job_demo_resume_ai_2'],
+        createdAt: now,
+      };
+
+      const gap3: ProductGap = {
+        id: `gap_${wsId}_3`,
+        workspaceId: wsId,
+        featureName: 'Canva-Style Visual Template Designer',
+        category: 'Visual Design',
+        classification: 'COMMODITIZED',
+        ourStatus: 'LACK',
+        competitorCoverage: [
+          { competitorId: compKickresume.id, competitorName: 'Kickresume', hasCapability: true, details: 'Multi-column graphic templates with custom icons' },
+        ],
+        customerDemandScore: 4,
+        competitiveUrgencyScore: 2,
+        differentiationScore: 2,
+        strategicImpactScore: 3,
+        complexityScore: 8,
+        riskScore: 6,
+        evidenceStrengthScore: 7,
+        buildPriorityScore: Math.round((4 * 2 * 2 * 3 * 7) / (8 + 6)),
+        recommendationAction: 'IGNORE',
+        whyNotBuild: 'Complex visual columns break standard ATS parsing engines, directly harming user interview conversion rates and diluting our core product promise.',
+        doNothingScenario: 'Candidates seeking purely decorative non-technical resumes use Kickresume or Canva; technical candidates continue using our high-parsing markdown format.',
+        evidenceIds: ['ev_job_demo_resume_ai_3'],
+        createdAt: now,
+      };
+
+      const gap4: ProductGap = {
+        id: `gap_${wsId}_4`,
+        workspaceId: wsId,
+        featureName: 'Verified Engineering Metric Formulator',
+        category: 'Content Generation',
+        classification: 'DIFFERENTIATOR',
+        ourStatus: 'HAVE',
+        competitorCoverage: [
+          { competitorId: compTeal.id, competitorName: 'Teal', hasCapability: false, details: 'Generic ChatGPT prompts producing generic buzzwords' },
+          { competitorId: compRezi.id, competitorName: 'Rezi', hasCapability: false, details: 'Template phrases without quantified impact formula' },
+        ],
+        customerDemandScore: 9,
+        competitiveUrgencyScore: 8,
+        differentiationScore: 9,
+        strategicImpactScore: 8,
+        complexityScore: 3,
+        riskScore: 2,
+        evidenceStrengthScore: 9,
+        buildPriorityScore: Math.round((9 * 8 * 9 * 8 * 9) / (3 + 2)),
+        recommendationAction: 'BUILD',
+        whyNotBuild: 'Users must provide actual project context or repository links; cannot be completely zero-input.',
+        doNothingScenario: 'Users generate generic AI buzzwords that 82% of technical recruiters actively reject.',
+        evidenceIds: ['ev_job_demo_resume_ai_3'],
+        createdAt: now,
+      };
+
+      [gap1, gap2, gap3, gap4].forEach(g => this.productGaps.set(g.id, g));
+
+      // Customer Demand Signals
+      const sig1: CustomerDemandSignal = {
+        id: `sig_${wsId}_1`,
+        workspaceId: wsId,
+        clusterTitle: 'Backlash against hidden paywalls after lengthy onboarding',
+        painPoint: 'Users spend 45-60 minutes inputting career history before being hit with an unexpected $29 paywall at download.',
+        customerRole: 'University Graduate / Junior Job Seeker',
+        frequencyCount: 42,
+        urgency: 'HIGH',
+        rawQuotes: [
+          { quote: 'Spent an hour making my resume on Kickresume only to find out download is $29.', source: 'Reddit r/jobs', date: '2026-08-25' },
+          { quote: 'Jobscan free tier only allows 2 scans before blocking you with a credit card popup.', source: 'Hacker News', date: '2026-08-28' },
+        ],
+        competitorWeaknessRef: compKickresume.id,
+        createdAt: now,
+      };
+
+      const sig2: CustomerDemandSignal = {
+        id: `sig_${wsId}_2`,
+        workspaceId: wsId,
+        clusterTitle: 'Anxiety over ATS rejection despite keyword stuffing',
+        painPoint: 'Candidates fear their resumes fail automated parsing filters even after stuffing buzzwords.',
+        customerRole: 'Early-career Software Engineer',
+        frequencyCount: 38,
+        urgency: 'HIGH',
+        rawQuotes: [
+          { quote: 'Jobscan told me to repeat AWS 8 times. The recruiter told me it looked spammy and unnatural.', source: 'Blind', date: '2026-08-26' },
+          { quote: 'I need to know if Workday can actually parse my tables and columns.', source: 'Reddit r/cscareerquestions', date: '2026-08-27' },
+        ],
+        competitorWeaknessRef: compJobscan.id,
+        createdAt: now,
+      };
+
+      const sig3: CustomerDemandSignal = {
+        id: `sig_${wsId}_3`,
+        workspaceId: wsId,
+        clusterTitle: 'Struggle formulating quantified impact metrics',
+        painPoint: 'Junior developers cannot quantify achievements because they worked on bug fixes or maintenance.',
+        customerRole: 'Junior Software Engineer',
+        frequencyCount: 29,
+        urgency: 'MEDIUM',
+        rawQuotes: [
+          { quote: 'Every AI resume tool asks for metrics like 40% growth. I was an intern fixing Jira tickets, I do not have revenue stats.', source: 'Discord Tech Careers', date: '2026-08-24' },
+        ],
+        competitorWeaknessRef: compTeal.id,
+        createdAt: now,
+      };
+
+      [sig1, sig2, sig3].forEach(s => this.demandSignals.set(s.id, s));
+
+      // Opportunities
+      const opp1: MarketOpportunity = {
+        id: `opp_${wsId}_1`,
+        workspaceId: wsId,
+        title: 'Zero-Lockin Transparent Pricing Campaign',
+        category: 'PRICING_MISALIGNMENT',
+        description: 'Exploit Jobscan mandatory $89.85 quarterly upfront pricing shift by launching month-to-month and pay-per-scan options.',
+        evidenceIds: ['ev_job_demo_resume_ai_1', 'ev_job_demo_resume_ai_2'],
+        expectedImpact: 'High customer acquisition among price-sensitive graduating seniors',
+        difficulty: 'LOW',
+        confidenceScore: 94,
+        createdAt: now,
+      };
+
+      const opp2: MarketOpportunity = {
+        id: `opp_${wsId}_2`,
+        workspaceId: wsId,
+        title: 'Verified ATS Parse Diagnostic Engine',
+        category: 'WHITESPACE',
+        description: 'Provide verifiable side-by-side ATS parser extraction diagnostics across Workday and Greenhouse engines rather than generic keyword scores.',
+        evidenceIds: ['ev_job_demo_resume_ai_3'],
+        expectedImpact: 'Defensible product moat against generic GPT wrappers',
+        difficulty: 'MEDIUM',
+        confidenceScore: 91,
+        createdAt: now,
+      };
+
+      [opp1, opp2].forEach(o => this.marketOpportunities.set(o.id, o));
+
+      // Threats
+      const threat1: MarketThreat = {
+        id: `threat_${wsId}_1`,
+        workspaceId: wsId,
+        title: 'Teal browser extension expanding into real-time job application lock-in',
+        competitorId: compTeal.id,
+        competitorName: 'Teal',
+        threatLevel: 'HIGH',
+        description: 'Teal is capturing candidate workflow at the moment of job board application, reducing standalone web traffic.',
+        leadingIndicators: ['Teal hiring browser extension engineers', 'Integration of direct autofill across Lever and Greenhouse'],
+        defensiveCountermeasure: 'Deploy lightweight browser diagnostic tool that checks resume match without leaving LinkedIn/Indeed.',
+        createdAt: now,
+      };
+
+      const threat2: MarketThreat = {
+        id: `threat_${wsId}_2`,
+        workspaceId: wsId,
+        title: 'Jobscan potential LLM modernization overhaul',
+        competitorId: compJobscan.id,
+        competitorName: 'Jobscan',
+        threatLevel: 'MEDIUM',
+        description: 'Jobscan may replace legacy keyword matcher with semantic embedding scoring in upcoming release.',
+        leadingIndicators: ['Jobscan posting for AI Research Engineer', 'Beta user testing of contextual match feedback'],
+        defensiveCountermeasure: 'Benchmark our parser accuracy publicly and emphasize grounded evidence vs ungrounded LLM completions.',
+        createdAt: now,
+      };
+
+      [threat1, threat2].forEach(t => this.marketThreats.set(t.id, t));
+
+      // Recommendations
+      const rec1: WarRoomRecommendation = {
+        id: `rec_${wsId}_1`,
+        workspaceId: wsId,
+        title: 'Launch GTM Acquisition Campaign against Jobscan Quarterly Lock-in',
+        type: 'RECOMMENDATION',
+        actionType: 'GTM_CAMPAIGN',
+        priority: 'P1',
+        rationale: 'Jobscan pricing change generated 42 verified negative customer signals across social channels. Providing an open monthly alternative offers immediate conversion upside.',
+        whatIfWeDoNothing: 'Competitor normalizes high quarterly pricing, while our flexible pricing remains undiscovered.',
+        whyThisCouldFail: 'Jobscan may revert to monthly billing if sign-up drop-off exceeds CAC recovery projections.',
+        metricToEvaluate: '30% increase in qualified organic signups within 30 days',
+        confidence: 93,
+        status: 'PROPOSED',
+        evidenceIds: ['ev_job_demo_resume_ai_1'],
+        createdAt: now,
+      };
+
+      const rec2: WarRoomRecommendation = {
+        id: `rec_${wsId}_2`,
+        workspaceId: wsId,
+        title: 'Develop 1-Click Browser ATS Validator to Counter Teal Expansion',
+        type: 'INFERENCE',
+        actionType: 'PRODUCT_FEATURE',
+        priority: 'P2',
+        rationale: 'Candidate attention is consolidating in-browser on LinkedIn and Indeed. Bringing our parse diagnostic directly into their workflow defends against Teal acquisition.',
+        whatIfWeDoNothing: 'Teal captures the upstream candidate funnel before candidates ever seek external resume optimization.',
+        whyThisCouldFail: 'Browser extension maintenance overhead across frequent ATS DOM changes.',
+        metricToEvaluate: 'Daily active extension users and 20% lift in multi-job optimizations',
+        confidence: 87,
+        status: 'PROPOSED',
+        evidenceIds: ['ev_job_demo_resume_ai_2'],
+        createdAt: now,
+      };
+
+      const rec3: WarRoomRecommendation = {
+        id: `rec_${wsId}_3`,
+        workspaceId: wsId,
+        title: 'Ship Grounded Impact Metric Formulator for Junior Engineers',
+        type: 'FACT',
+        actionType: 'PRODUCT_FEATURE',
+        priority: 'P1',
+        rationale: 'Verified fact: 82% of technical recruiters discard ungrounded buzzwords, while 29 customer signals cite inability to formulate quantitative bullet points.',
+        whatIfWeDoNothing: 'Candidates continue generating hollow GPT claims that get rejected by hiring managers.',
+        whyThisCouldFail: 'Requires lightweight guided prompts from users to extract real codebase activities.',
+        metricToEvaluate: 'Recruiter response rate reported by candidates in post-application surveys',
+        confidence: 95,
+        status: 'PROPOSED',
+        evidenceIds: ['ev_job_demo_resume_ai_3'],
+        createdAt: now,
+      };
+
+      [rec1, rec2, rec3].forEach(r => this.warRoomRecommendations.set(r.id, r));
+
+      // Scorecard
+      const scorecard: CompanyScorecard = {
+        id: `sc_${wsId}`,
+        workspaceId: wsId,
+        strengths: ['Verifiable ATS parse proofing vs generic keyword scoring', 'Grounded evidence-backed bullet generation without hallucinations', 'Transparent pricing model with zero forced lock-in'],
+        weaknesses: ['Absence of in-browser job board extension workflow', 'Lower top-of-funnel brand search volume compared to Jobscan'],
+        defensibilityRating: 'STRONG',
+        moatScore: 86,
+        competitiveAdvantages: ['Proprietary parser regression testing', 'High interview callback rate'],
+        criticalVulnerabilities: ['Teal browser capture of job seekers'],
+        evidenceGroundingCount: 38,
+        calculatedAt: now,
+      };
+      this.companyScorecards.set(wsId, scorecard);
+
+      // Executive Brief
+      const brief: ExecutiveBrief = {
+        workspaceId: wsId,
+        statusSummary: 'Market positioning is solid, but competitor pricing changes and browser workflows require immediate strategic execution.',
+        topDevelopments: [
+          'Jobscan instituted mandatory $89.85 quarterly upfront billing, creating an acute customer dissatisfaction window.',
+          'Teal rolled out Chrome extension application autofill, deepening browser-level candidate lock-in.',
+          'Customer signals confirm heavy backlash against superficial AI buzzwords and hidden download paywalls.',
+        ],
+        topRisks: ['Teal expanding upstream into application workflow could bypass standalone web editors.'],
+        topOpportunities: [
+          'Acquire dissatisfied Jobscan users through targeted comparison positioning and flexible pricing.',
+          'Establish market leadership in verifiable ATS parser diagnostics.',
+        ],
+        noChangeDetected: false,
+        recommendedActions: [
+          'Approve GTM comparison campaign against Jobscan quarterly lock-in.',
+          'Initialize Chrome Extension ATS Validator sprint to protect browser touchpoints.',
+        ],
+        generatedDate: now,
+      };
+      this.executiveBriefs.set(wsId, brief);
+    }
+  }
+
+  // Market Model
+  getMarketModel(workspaceId: string): MarketModel | null {
+    for (const m of this.marketModels.values()) {
+      if (m.workspaceId === workspaceId && m.status === 'ACTIVE') return m;
+    }
+    return null;
+  }
+
+  saveMarketModel(model: MarketModel): MarketModel {
+    this.marketModels.set(model.id, model);
+    this.scheduleSave();
+    return model;
+  }
+
+  // Competitors
+  getWarRoomCompetitors(workspaceId: string): WarRoomCompetitor[] {
+    return Array.from(this.warRoomCompetitors.values()).filter(c => c.workspaceId === workspaceId);
+  }
+
+  getWarRoomCompetitor(id: string): WarRoomCompetitor | null {
+    return this.warRoomCompetitors.get(id) || null;
+  }
+
+  saveWarRoomCompetitor(comp: WarRoomCompetitor): WarRoomCompetitor {
+    this.warRoomCompetitors.set(comp.id, comp);
+    this.scheduleSave();
+    return comp;
+  }
+
+  deleteWarRoomCompetitor(id: string): boolean {
+    const res = this.warRoomCompetitors.delete(id);
+    if (res) this.scheduleSave();
+    return res;
+  }
+
+  // Moves
+  getCompetitorMoves(workspaceId: string, limit = 50): CompetitorMove[] {
+    return Array.from(this.competitorMoves.values())
+      .filter(m => m.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.detectedAt).getTime() - new Date(a.detectedAt).getTime())
+      .slice(0, limit);
+  }
+
+  getCompetitorMove(id: string): CompetitorMove | null {
+    return this.competitorMoves.get(id) || null;
+  }
+
+  saveCompetitorMove(move: CompetitorMove): CompetitorMove {
+    this.competitorMoves.set(move.id, move);
+    this.scheduleSave();
+    return move;
+  }
+
+  // Product Gaps
+  getProductGaps(workspaceId: string): ProductGap[] {
+    return Array.from(this.productGaps.values())
+      .filter(g => g.workspaceId === workspaceId)
+      .sort((a, b) => b.buildPriorityScore - a.buildPriorityScore);
+  }
+
+  getProductGap(id: string): ProductGap | null {
+    return this.productGaps.get(id) || null;
+  }
+
+  saveProductGap(gap: ProductGap): ProductGap {
+    this.productGaps.set(gap.id, gap);
+    this.scheduleSave();
+    return gap;
+  }
+
+  // Customer Demand Signals
+  getCustomerDemandSignals(workspaceId: string): CustomerDemandSignal[] {
+    return Array.from(this.demandSignals.values())
+      .filter(s => s.workspaceId === workspaceId)
+      .sort((a, b) => b.frequencyCount - a.frequencyCount);
+  }
+
+  saveCustomerDemandSignal(signal: CustomerDemandSignal): CustomerDemandSignal {
+    this.demandSignals.set(signal.id, signal);
+    this.scheduleSave();
+    return signal;
+  }
+
+  // Opportunities
+  getMarketOpportunities(workspaceId: string): MarketOpportunity[] {
+    return Array.from(this.marketOpportunities.values())
+      .filter(o => o.workspaceId === workspaceId)
+      .sort((a, b) => b.confidenceScore - a.confidenceScore);
+  }
+
+  getMarketOpportunity(id: string): MarketOpportunity | null {
+    return this.marketOpportunities.get(id) || null;
+  }
+
+  saveMarketOpportunity(opp: MarketOpportunity): MarketOpportunity {
+    this.marketOpportunities.set(opp.id, opp);
+    this.scheduleSave();
+    return opp;
+  }
+
+  // Threats
+  getMarketThreats(workspaceId: string): MarketThreat[] {
+    const priorityOrder: Record<string, number> = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1 };
+    return Array.from(this.marketThreats.values())
+      .filter(t => t.workspaceId === workspaceId)
+      .sort((a, b) => (priorityOrder[b.threatLevel] || 0) - (priorityOrder[a.threatLevel] || 0));
+  }
+
+  getMarketThreat(id: string): MarketThreat | null {
+    return this.marketThreats.get(id) || null;
+  }
+
+  saveMarketThreat(threat: MarketThreat): MarketThreat {
+    this.marketThreats.set(threat.id, threat);
+    this.scheduleSave();
+    return threat;
+  }
+
+  // Recommendations
+  getWarRoomRecommendations(workspaceId: string): WarRoomRecommendation[] {
+    return Array.from(this.warRoomRecommendations.values())
+      .filter(r => r.workspaceId === workspaceId)
+      .sort((a, b) => b.confidence - a.confidence);
+  }
+
+  getWarRoomRecommendation(id: string): WarRoomRecommendation | null {
+    return this.warRoomRecommendations.get(id) || null;
+  }
+
+  saveWarRoomRecommendation(rec: WarRoomRecommendation): WarRoomRecommendation {
+    this.warRoomRecommendations.set(rec.id, rec);
+    this.scheduleSave();
+    return rec;
+  }
+
+  // Scenarios
+  getScenarioSimulations(workspaceId: string): ScenarioSimulation[] {
+    return Array.from(this.scenarioSimulations.values())
+      .filter(s => s.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.simulatedAt).getTime() - new Date(a.simulatedAt).getTime());
+  }
+
+  saveScenarioSimulation(sim: ScenarioSimulation): ScenarioSimulation {
+    this.scenarioSimulations.set(sim.id, sim);
+    this.scheduleSave();
+    return sim;
+  }
+
+  // Decisions
+  getStrategicDecisions(workspaceId: string): StrategicDecision[] {
+    return Array.from(this.strategicDecisions.values())
+      .filter(d => d.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.decidedAt).getTime() - new Date(a.decidedAt).getTime());
+  }
+
+  saveStrategicDecision(decision: StrategicDecision): StrategicDecision {
+    this.strategicDecisions.set(decision.id, decision);
+    this.scheduleSave();
+    return decision;
+  }
+
+  // Experiments
+  getStrategicExperiments(workspaceId: string): StrategicExperiment[] {
+    return Array.from(this.strategicExperiments.values())
+      .filter(e => e.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  saveStrategicExperiment(exp: StrategicExperiment): StrategicExperiment {
+    this.strategicExperiments.set(exp.id, exp);
+    this.scheduleSave();
+    return exp;
+  }
+
+  // Scorecard
+  getCompanyScorecard(workspaceId: string): CompanyScorecard | null {
+    return this.companyScorecards.get(workspaceId) || null;
+  }
+
+  saveCompanyScorecard(scorecard: CompanyScorecard): CompanyScorecard {
+    this.companyScorecards.set(scorecard.workspaceId, scorecard);
+    this.scheduleSave();
+    return scorecard;
+  }
+
+  // Executive Brief
+  getExecutiveBrief(workspaceId: string): ExecutiveBrief | null {
+    return this.executiveBriefs.get(workspaceId) || null;
+  }
+
+  saveExecutiveBrief(brief: ExecutiveBrief): ExecutiveBrief {
+    this.executiveBriefs.set(brief.workspaceId, brief);
+    this.scheduleSave();
+    return brief;
   }
 }
 

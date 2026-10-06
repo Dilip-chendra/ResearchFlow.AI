@@ -17,7 +17,21 @@ import {
   ExecutiveSummaryResult,
   WorkspaceMember,
   ResearchShareLink,
-  ResearchReviewAssignment
+  ResearchReviewAssignment,
+  WarRoomOverviewResponse,
+  WarRoomCompetitor,
+  CompetitorMove,
+  ProductGap,
+  CustomerDemandSignal,
+  MarketOpportunity,
+  MarketThreat,
+  WarRoomRecommendation,
+  ScenarioSimulation,
+  StrategicDecision,
+  StrategicExperiment,
+  CompanyScorecard,
+  ExecutiveBrief,
+  MarketKnowledgeGraph,
 } from '../types';
 
 const getStorageItem = (key: string): string | null => {
@@ -500,5 +514,51 @@ export const api = {
   // Executive Audio Briefing
   // ----------------------------------------------------
   getAudioBriefing: (jobId: string) => request<any>(`/api/intelligence/${jobId}/audio-briefing`),
+
+  // ----------------------------------------------------
+  // Market War Room — Strategic Intelligence Operating System
+  // ----------------------------------------------------
+  getWarRoomOverview: () => request<WarRoomOverviewResponse>('/api/war-room/overview'),
+  mapMyMarket: (data: {
+    marketCategory: string;
+    targetCustomers: string;
+    strategicGoal?: string;
+    knownCompetitors?: string[];
+    keyDifferentiators?: string[];
+  }) => request<WarRoomOverviewResponse>('/api/war-room/map-market', { method: 'POST', body: JSON.stringify(data) }),
+  getWarRoomCompetitors: () => request<{ success: boolean; competitors: WarRoomCompetitor[] }>('/api/war-room/competitors'),
+  discoverWarRoomCompetitors: (query?: string) =>
+    request<{ success: boolean; candidates: WarRoomCompetitor[] }>('/api/war-room/competitors/discover', { method: 'POST', body: JSON.stringify({ query }) }),
+  updateCompetitorStatus: (id: string, status: 'CONFIRMED' | 'REJECTED', notes?: string) =>
+    request<{ success: boolean; competitor: WarRoomCompetitor }>(`/api/war-room/competitors/${id}/status`, { method: 'POST', body: JSON.stringify({ status, notes }) }),
+  getCompetitorMoves: () => request<{ success: boolean; moves: CompetitorMove[] }>('/api/war-room/moves'),
+  getProductGaps: () => request<{ success: boolean; productGaps: ProductGap[] }>('/api/war-room/product-gaps'),
+  evaluateProductGap: (gap: Partial<ProductGap>) =>
+    request<{ success: boolean; productGaps: ProductGap[] }>('/api/war-room/product-gaps/evaluate', { method: 'POST', body: JSON.stringify(gap) }),
+  getDemandSignals: () => request<{ success: boolean; demandSignals: CustomerDemandSignal[] }>('/api/war-room/demand-signals'),
+  getMarketOpportunities: () => request<{ success: boolean; opportunities: MarketOpportunity[] }>('/api/war-room/opportunities'),
+  convertOpportunityToCampaign: (opportunityId: string) =>
+    request<{ success: boolean; campaign: CampaignBrief }>(`/api/war-room/opportunities/${opportunityId}/campaign`, { method: 'POST' }),
+  getMarketThreats: () => request<{ success: boolean; threats: MarketThreat[] }>('/api/war-room/threats'),
+  convertThreatToTask: (threatId: string) =>
+    request<{ success: boolean; task: ExecutionTask }>(`/api/war-room/threats/${threatId}/task`, { method: 'POST' }),
+  convertProductGapToTask: (gapId: string) =>
+    request<{ success: boolean; task: ExecutionTask }>(`/api/war-room/product-gaps/${gapId}/task`, { method: 'POST' }),
+  getWarRoomRecommendations: () => request<{ success: boolean; recommendations: WarRoomRecommendation[] }>('/api/war-room/recommendations'),
+  approveRecommendation: (id: string, rationale?: string) =>
+    request<{ success: boolean; decision: StrategicDecision }>(`/api/war-room/recommendations/${id}/approve`, { method: 'POST', body: JSON.stringify({ rationale }) }),
+  rejectRecommendation: (id: string, rationale?: string) =>
+    request<{ success: boolean; decision: StrategicDecision }>(`/api/war-room/recommendations/${id}/reject`, { method: 'POST', body: JSON.stringify({ rationale }) }),
+  convertRecommendationToExperiment: (id: string) =>
+    request<{ success: boolean; experiment: StrategicExperiment }>(`/api/war-room/recommendations/${id}/experiment`, { method: 'POST' }),
+  runScenarioSimulation: (data: { scenarioTitle: string; triggerDescription: string; competitorName?: string }) =>
+    request<{ success: boolean; simulation: ScenarioSimulation }>('/api/war-room/scenarios/run', { method: 'POST', body: JSON.stringify(data) }),
+  getScenarioSimulations: () => request<{ success: boolean; scenarios: ScenarioSimulation[] }>('/api/war-room/scenarios'),
+  getMarketGraph: () => request<{ success: boolean; graph: MarketKnowledgeGraph }>('/api/war-room/market-graph'),
+  getExecutiveBrief: () => request<{ success: boolean; brief: ExecutiveBrief }>('/api/war-room/brief'),
+  getCompanyScorecard: () => request<{ success: boolean; scorecard: CompanyScorecard }>('/api/war-room/scorecard'),
+  getStrategicDecisions: () => request<{ success: boolean; decisions: StrategicDecision[] }>('/api/war-room/decisions'),
+  getStrategicExperiments: () => request<{ success: boolean; experiments: StrategicExperiment[] }>('/api/war-room/experiments'),
+  searchWarRoom: (q: string) => request<any>(`/api/war-room/search?q=${encodeURIComponent(q)}`),
 };
 

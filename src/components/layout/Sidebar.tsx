@@ -15,7 +15,8 @@ import {
   Plus,
   Sparkles,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Target
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { BrandLogo } from '../brand/BrandLogo';
@@ -41,12 +42,13 @@ export const Sidebar: React.FC = () => {
 
   const navItems: NavItem[] = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
+    { id: 'war-room', label: 'Market War Room', icon: Target, badge: 'Strategic' },
     { id: 'research', label: 'Research Jobs', icon: Search },
     { id: 'evidence', label: 'Evidence Explorer', icon: Database },
     { id: 'intelligence', label: 'Intelligence Matrix', icon: BrainCircuit },
     { id: 'campaigns', label: 'Campaign Briefs', icon: Megaphone },
     { id: 'tasks', label: 'Execution Tasks', icon: CheckSquare },
-    { id: 'evaluation', label: 'Evaluation & Rubric', icon: TestTube2, badge: '12 TCs' },
+    { id: 'evaluation', label: 'Evaluation & Rubric', icon: TestTube2, badge: '15 TCs' },
     { id: 'audit', label: 'Audit Trail', icon: History },
     { id: 'settings', label: 'Settings & Runbook', icon: Settings },
   ];
