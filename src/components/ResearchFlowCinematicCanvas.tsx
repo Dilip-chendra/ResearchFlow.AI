@@ -433,22 +433,19 @@ export const ResearchFlowCinematicCanvas: React.FC<ResearchFlowCinematicCanvasPr
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
         style={{
           opacity: isReady ? 1 : 0.4,
-          filter: 'contrast(1.04) brightness(0.96)',
+          filter: 'contrast(1.05) brightness(1.02)',
         }}
       />
 
-      {/* Cinematic Vignette & Ambient Darkness Overlay */}
-      <div
-        className="absolute inset-0 transition-opacity duration-300"
-        style={{
-          backgroundColor: `rgba(9, 10, 15, ${overlayOpacity})`,
-          backgroundImage:
-            'radial-gradient(circle at 50% 40%, rgba(9, 10, 15, 0.25) 0%, rgba(9, 10, 15, 0.75) 85%, rgba(9, 10, 15, 0.95) 100%)',
-        }}
-      />
-
-      {/* Ambient Lighting Edge Glow */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#090A0F]/80 via-transparent to-[#090A0F]/95" />
+      {/* Ultra-sheer ambient veil (only if overlayOpacity > 0, otherwise completely transparent) */}
+      {overlayOpacity > 0 && (
+        <div
+          className="absolute inset-0 transition-opacity duration-300 pointer-events-none"
+          style={{
+            backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})`,
+          }}
+        />
+      )}
     </div>
   );
 };

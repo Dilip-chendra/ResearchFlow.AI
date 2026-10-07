@@ -45,13 +45,13 @@ export const IntroductionPipelineSection: React.FC = () => {
       {/* 04. Introducing ResearchFlow */}
       <div className="space-y-10 sm:space-y-12">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase text-[#9CCBFF]/70">
+          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-cyan-300 font-semibold drop-shadow-sm">
             04 &mdash; THE SYSTEM
           </div>
-          <h2 className="text-[clamp(1.85rem,5vw,3.5rem)] font-sans-editorial font-medium text-[#F3F5F7] tracking-tight leading-[1.15]">
+          <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
             ResearchFlow turns web noise into intelligence.
           </h2>
-          <p className="text-base sm:text-lg text-[#A8AFBA] leading-relaxed">
+          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             One cohesive system for discovering, verifying, comparing, and acting on market information.
           </p>
         </div>
@@ -63,21 +63,21 @@ export const IntroductionPipelineSection: React.FC = () => {
             return (
               <div
                 key={s.name}
-                className="group relative p-5 rounded-xl border border-[#727A86]/20 bg-[#07090C]/60 backdrop-blur-md hover:border-[#9CCBFF]/40 transition-all flex flex-col justify-between h-full min-w-0"
+                className="group relative p-5 rounded-2xl border border-white/15 bg-white/[0.05] backdrop-blur-2xl hover:border-cyan-400/50 hover:bg-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all flex flex-col justify-between h-full min-w-0"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-[#727A86]">{s.step}</span>
-                    <Icon className="w-4 h-4 text-[#9CCBFF]/80 group-hover:text-[#9CCBFF] transition-colors" />
+                    <span className="text-[10px] font-mono font-semibold text-cyan-300/80">{s.step}</span>
+                    <Icon className="w-4 h-4 text-cyan-300 group-hover:scale-110 drop-shadow-[0_0_10px_rgba(56,189,248,0.5)] transition-transform" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono tracking-wider font-semibold text-[#F3F5F7]">
+                    <div className="text-sm font-display tracking-wider font-bold text-white drop-shadow-sm">
                       {s.name}
                     </div>
-                    <div className="text-[11px] text-[#A8AFBA] mt-0.5">{s.label}</div>
+                    <div className="text-xs text-cyan-200/90 font-mono mt-0.5">{s.label}</div>
                   </div>
                 </div>
-                <p className="text-[11px] text-[#727A86] leading-relaxed pt-3 border-t border-[#727A86]/10 mt-3 font-sans">
+                <p className="text-xs text-white/80 leading-relaxed pt-3 border-t border-white/10 mt-3 font-sans-editorial drop-shadow-sm">
                   {s.desc}
                 </p>
               </div>
@@ -87,36 +87,36 @@ export const IntroductionPipelineSection: React.FC = () => {
       </div>
 
       {/* 05. Live Web Research Pipeline */}
-      <div className="space-y-8 pt-8 sm:pt-10 border-t border-[#727A86]/20">
+      <div className="space-y-8 pt-10 sm:pt-12 border-t border-white/15">
         <div className="space-y-3 max-w-2xl">
-          <div className="text-[10px] sm:text-[11px] font-mono tracking-[0.2em] uppercase text-[#727A86]">
+          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-cyan-300/80 font-semibold drop-shadow-sm">
             05 &mdash; ENGINE CAPABILITIES
           </div>
-          <h3 className="text-xl sm:text-3xl md:text-4xl font-sans-editorial font-medium text-[#F3F5F7] tracking-tight">
+          <h3 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
             Research that actually goes to the web.
           </h3>
-          <p className="text-sm sm:text-base text-[#A8AFBA] leading-relaxed">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             Not a synthetic memory query. ResearchFlow dispatches real HTTP/HTTPS retrieval workers to inspect live websites, extract visible text, and handle real web edge cases.
           </p>
         </div>
 
         {/* Technical Pipeline Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs font-mono">
-          <div className="p-4 rounded-lg border border-[#727A86]/20 bg-[#07090C]/50 space-y-1.5 min-w-0">
-            <div className="text-[#9CCBFF] font-medium">LIVE FETCHING</div>
-            <div className="text-[#727A86] text-[11px] font-sans">Direct GET/POST requests with dynamic headers & custom agents</div>
+          <div className="p-4 rounded-xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all space-y-1.5 min-w-0">
+            <div className="text-cyan-300 font-semibold drop-shadow-sm">LIVE FETCHING</div>
+            <div className="text-white/80 text-[11px] font-sans-editorial">Direct GET/POST requests with dynamic headers & custom agents</div>
           </div>
-          <div className="p-4 rounded-lg border border-[#727A86]/20 bg-[#07090C]/50 space-y-1.5 min-w-0">
-            <div className="text-[#9CCBFF] font-medium">STATUS DETECTION</div>
-            <div className="text-[#727A86] text-[11px] font-sans">Automatic recovery on 401, 403 paywalls, 504 timeouts & redirects</div>
+          <div className="p-4 rounded-xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all space-y-1.5 min-w-0">
+            <div className="text-cyan-300 font-semibold drop-shadow-sm">STATUS DETECTION</div>
+            <div className="text-white/80 text-[11px] font-sans-editorial">Automatic recovery on 401, 403 paywalls, 504 timeouts & redirects</div>
           </div>
-          <div className="p-4 rounded-lg border border-[#727A86]/20 bg-[#07090C]/50 space-y-1.5 min-w-0">
-            <div className="text-[#9CCBFF] font-medium">SPA EXTRACTION</div>
-            <div className="text-[#727A86] text-[11px] font-sans">Headless DOM extraction for client-side JavaScript applications</div>
+          <div className="p-4 rounded-xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all space-y-1.5 min-w-0">
+            <div className="text-cyan-300 font-semibold drop-shadow-sm">SPA EXTRACTION</div>
+            <div className="text-white/80 text-[11px] font-sans-editorial">Headless DOM extraction for client-side JavaScript applications</div>
           </div>
-          <div className="p-4 rounded-lg border border-[#727A86]/20 bg-[#07090C]/50 space-y-1.5 min-w-0">
-            <div className="text-[#9CCBFF] font-medium">SEARCH GROUNDING</div>
-            <div className="text-[#727A86] text-[11px] font-sans">Google Search Grounding fallback when primary domains fail</div>
+          <div className="p-4 rounded-xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all space-y-1.5 min-w-0">
+            <div className="text-cyan-300 font-semibold drop-shadow-sm">SEARCH GROUNDING</div>
+            <div className="text-white/80 text-[11px] font-sans-editorial">Google Search Grounding fallback when primary domains fail</div>
           </div>
         </div>
       </div>

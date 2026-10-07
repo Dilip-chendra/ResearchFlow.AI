@@ -7,108 +7,105 @@ export const AgenticWorkersSection: React.FC = () => {
       {/* 11. Specialized Intelligence Workers */}
       <div className="space-y-12">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#9CCBFF]/70">
+          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-cyan-300 font-semibold drop-shadow-sm">
             11 &mdash; MULTI-WORKER ORCHESTRATION
           </div>
-          <h2 className="text-3xl sm:text-5xl font-sans-editorial font-medium text-[#F3F5F7] tracking-tight leading-[1.15]">
+          <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
             One market. Multiple intelligence workers.
           </h2>
-          <p className="text-base sm:text-lg text-[#A8AFBA] leading-relaxed">
+          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             Rather than a single monolithic prompt, ResearchFlow coordinates specialized autonomous workers operating in lockstep around your business context.
           </p>
         </div>
 
         {/* Central Hub Visualization */}
-        <div className="relative p-8 sm:p-12 rounded-3xl border border-[#727A86]/20 bg-[#07090C]/80 backdrop-blur-md overflow-hidden">
-          {/* Subtle Background Radial */}
-          <div className="absolute inset-0 bg-radial-gradient from-[#9CCBFF]/5 via-transparent to-transparent pointer-events-none" />
-
+        <div className="relative p-8 sm:p-12 rounded-3xl border border-white/15 bg-white/[0.05] backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] overflow-hidden">
           {/* Central Context Node */}
           <div className="flex flex-col items-center text-center space-y-3 pb-10">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#738BFF] to-[#9CCBFF] p-0.5 shadow-[0_0_32px_rgba(156,203,255,0.3)]">
-              <div className="w-full h-full bg-[#050608] rounded-[14px] flex items-center justify-center text-[#9CCBFF]">
-                <Network className="w-7 h-7" />
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-cyan-400 to-blue-500 p-0.5 shadow-[0_0_36px_rgba(56,189,248,0.5)]">
+              <div className="w-full h-full bg-black/60 backdrop-blur-md rounded-[14px] flex items-center justify-center text-cyan-300">
+                <Network className="w-8 h-8" />
               </div>
             </div>
             <div>
-              <div className="text-sm font-mono font-semibold text-[#F3F5F7] uppercase tracking-wider">
+              <div className="text-sm font-display font-bold text-white uppercase tracking-wider drop-shadow-sm">
                 CORE BUSINESS CONTEXT
               </div>
-              <div className="text-xs text-[#A8AFBA] max-w-sm">
+              <div className="text-xs text-white/80 max-w-sm font-sans-editorial mt-1">
                 Value proposition, target customer persona, and primary campaign goals
               </div>
             </div>
           </div>
 
           {/* Radiating 5 Worker Nodes */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-6 border-t border-[#727A86]/15">
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2 text-left">
-              <Search className="w-4 h-4 text-[#9CCBFF]" />
-              <div className="text-xs font-mono font-medium text-[#F3F5F7]">RESEARCH</div>
-              <p className="text-[10px] text-[#727A86]">Live crawling & raw retrieval</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-6 border-t border-white/15">
+            <div className="p-4.5 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-lg hover:border-cyan-400/40 hover:bg-white/[0.08] transition-all space-y-2 text-left">
+              <Search className="w-5 h-5 text-cyan-300" />
+              <div className="text-xs font-display font-bold text-white tracking-wider">RESEARCH</div>
+              <p className="text-[11px] text-white/70 font-sans-editorial">Live crawling & raw retrieval</p>
             </div>
 
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2 text-left">
-              <Database className="w-4 h-4 text-[#9CCBFF]" />
-              <div className="text-xs font-mono font-medium text-[#F3F5F7]">EVIDENCE</div>
-              <p className="text-[10px] text-[#727A86]">Atomic claim extraction</p>
+            <div className="p-4.5 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-lg hover:border-cyan-400/40 hover:bg-white/[0.08] transition-all space-y-2 text-left">
+              <Database className="w-5 h-5 text-cyan-300" />
+              <div className="text-xs font-display font-bold text-white tracking-wider">EVIDENCE</div>
+              <p className="text-[11px] text-white/70 font-sans-editorial">Atomic claim extraction</p>
             </div>
 
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2 text-left">
-              <Target className="w-4 h-4 text-[#9CCBFF]" />
-              <div className="text-xs font-mono font-medium text-[#F3F5F7]">COMPETITORS</div>
-              <p className="text-[10px] text-[#727A86]">Matrix & gap mapping</p>
+            <div className="p-4.5 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-lg hover:border-cyan-400/40 hover:bg-white/[0.08] transition-all space-y-2 text-left">
+              <Target className="w-5 h-5 text-cyan-300" />
+              <div className="text-xs font-display font-bold text-white tracking-wider">COMPETITORS</div>
+              <p className="text-[11px] text-white/70 font-sans-editorial">Matrix & gap mapping</p>
             </div>
 
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2 text-left">
-              <Megaphone className="w-4 h-4 text-[#9CCBFF]" />
-              <div className="text-xs font-mono font-medium text-[#F3F5F7]">CAMPAIGNS</div>
-              <p className="text-[10px] text-[#727A86]">GTM messaging & assets</p>
+            <div className="p-4.5 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-lg hover:border-cyan-400/40 hover:bg-white/[0.08] transition-all space-y-2 text-left">
+              <Megaphone className="w-5 h-5 text-cyan-300" />
+              <div className="text-xs font-display font-bold text-white tracking-wider">CAMPAIGNS</div>
+              <p className="text-[11px] text-white/70 font-sans-editorial">GTM messaging & assets</p>
             </div>
 
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2 text-left col-span-2 sm:col-span-1">
-              <CheckSquare className="w-4 h-4 text-[#9CCBFF]" />
-              <div className="text-xs font-mono font-medium text-[#F3F5F7]">TASKS</div>
-              <p className="text-[10px] text-[#727A86]">Kanban action items</p>
+            <div className="p-4.5 rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-md shadow-lg hover:border-cyan-400/40 hover:bg-white/[0.08] transition-all space-y-2 text-left col-span-2 sm:col-span-1">
+              <CheckSquare className="w-5 h-5 text-cyan-300" />
+              <div className="text-xs font-display font-bold text-white tracking-wider">TASKS</div>
+              <p className="text-[11px] text-white/70 font-sans-editorial">Kanban action items</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* 12. Shared Business Context Flow */}
-      <div className="space-y-8 pt-10 border-t border-[#727A86]/20 max-w-3xl">
+      <div className="space-y-8 pt-10 sm:pt-12 border-t border-white/15 max-w-3xl">
         <div className="space-y-3">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#727A86]">
+          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-cyan-300/80 font-semibold drop-shadow-sm">
             12 &mdash; CONNECTED INTELLIGENCE GRAPH
           </div>
-          <h3 className="text-2xl sm:text-4xl font-sans-editorial font-medium text-[#F3F5F7] tracking-tight">
+          <h3 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
             Every decision starts from the same context.
           </h3>
-          <p className="text-sm sm:text-base text-[#A8AFBA] leading-relaxed">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             When research discovers a new competitor pricing change, that single observation ripples through the entire system:
           </p>
         </div>
 
         {/* Vertical Narrative Stepper */}
-        <div className="space-y-3 pl-4 border-l border-[#9CCBFF]/30 text-xs font-mono text-[#A8AFBA]">
-          <div className="flex items-start gap-2.5 text-[#F3F5F7]">
-            <span className="w-2 h-2 rounded-full bg-[#9CCBFF] mt-1 shrink-0" />
+        <div className="space-y-4 pl-4 border-l-2 border-cyan-400/40 text-sm font-sans-editorial text-white/80">
+          <div className="flex items-start gap-3 text-white font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 mt-1.5 shrink-0 shadow-[0_0_8px_#38bdf8]" />
             <span>1. Live research discovers a competitor update</span>
           </div>
-          <div className="flex items-start gap-2.5 text-[#A8AFBA]">
-            <span className="w-2 h-2 rounded-full bg-[#727A86] mt-1 shrink-0" />
+          <div className="flex items-start gap-3 text-white/90">
+            <span className="w-2.5 h-2.5 rounded-full bg-white/40 mt-1.5 shrink-0" />
             <span>2. Verbatim evidence is extracted and citation stored</span>
           </div>
-          <div className="flex items-start gap-2.5 text-[#A8AFBA]">
-            <span className="w-2 h-2 rounded-full bg-[#727A86] mt-1 shrink-0" />
+          <div className="flex items-start gap-3 text-white/90">
+            <span className="w-2.5 h-2.5 rounded-full bg-white/40 mt-1.5 shrink-0" />
             <span>3. Competitive landscape matrix recalculates market whitespace</span>
           </div>
-          <div className="flex items-start gap-2.5 text-[#A8AFBA]">
-            <span className="w-2 h-2 rounded-full bg-[#727A86] mt-1 shrink-0" />
+          <div className="flex items-start gap-3 text-white/90">
+            <span className="w-2.5 h-2.5 rounded-full bg-white/40 mt-1.5 shrink-0" />
             <span>4. Strategic campaign angles and channel copy adapt immediately</span>
           </div>
-          <div className="flex items-start gap-2.5 text-[#9CCBFF]">
-            <span className="w-2 h-2 rounded-full bg-[#9CCBFF] mt-1 shrink-0" />
+          <div className="flex items-start gap-3 text-cyan-200 font-semibold">
+            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 mt-1.5 shrink-0 shadow-[0_0_8px_#38bdf8]" />
             <span>5. Prioritized Kanban execution tasks are generated for your team</span>
           </div>
         </div>

@@ -7,41 +7,41 @@ export const CampaignStrategySection: React.FC = () => {
       {/* 13. Campaign Strategy */}
       <div className="space-y-10">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#9CCBFF]/70">
+          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-cyan-300 font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             13 &mdash; STRATEGY & ASSET GENERATION
           </div>
-          <h2 className="text-3xl sm:text-5xl font-sans-editorial font-medium text-[#F3F5F7] tracking-tight leading-[1.15]">
+          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             Turn market intelligence into a plan.
           </h2>
-          <p className="text-base sm:text-lg text-[#A8AFBA] leading-relaxed">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             ResearchFlow transforms validated evidence into sharp go-to-market angles, channel-specific messaging assets, and high-impact distribution plans.
           </p>
         </div>
 
         {/* Real Campaign Hub UI Composition */}
-        <div className="p-6 sm:p-8 rounded-2xl border border-[#727A86]/25 bg-[#07090C]/80 backdrop-blur-md space-y-6">
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#727A86]/15 text-xs font-mono">
-            <span className="text-[#A8AFBA]">CAMPAIGN BRIEF: ENTERPRISE ALTERNATIVE POSITIONING</span>
-            <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-[#9CCBFF]">
+        <div className="p-6 sm:p-8 rounded-2xl border border-white/15 bg-white/[0.05] backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10 text-xs font-mono">
+            <span className="text-white/80 font-medium">CAMPAIGN BRIEF: ENTERPRISE ALTERNATIVE POSITIONING</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 font-semibold">
               AWAITING REVIEW
             </span>
           </div>
 
           {/* Strategic Angle Lab */}
           <div className="space-y-2">
-            <div className="text-[11px] font-mono text-[#727A86] uppercase tracking-wider">
+            <div className="text-[11px] font-mono text-white/60 uppercase tracking-wider">
               Selected Strategic Angle:
             </div>
-            <div className="p-4 rounded-xl border border-[#9CCBFF]/40 bg-[#9CCBFF]/5 flex items-start justify-between gap-4">
+            <div className="p-4 rounded-xl border border-cyan-400/30 bg-cyan-500/[0.08] backdrop-blur-md flex items-start justify-between gap-4">
               <div>
-                <div className="text-sm font-sans font-medium text-[#F3F5F7]">
+                <div className="text-sm font-sans font-semibold text-white">
                   &ldquo;Stop Settling for Fragmented Vendor Promises&rdquo;
                 </div>
-                <p className="text-xs text-[#A8AFBA] mt-1 font-sans">
+                <p className="text-xs text-white/80 mt-1 font-sans">
                   Targeting engineering leaders dissatisfied with heavyweight annual lock-ins and disjointed analytics dashboards.
                 </p>
               </div>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 whitespace-nowrap">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 font-semibold whitespace-nowrap">
                 94% CONFIDENCE
               </span>
             </div>
@@ -49,32 +49,32 @@ export const CampaignStrategySection: React.FC = () => {
 
           {/* 3 Channel Draft Previews */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#9CCBFF]">
+            <div className="p-4 rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md space-y-2 hover:bg-white/[0.08] transition-all">
+              <div className="flex items-center gap-1.5 text-xs font-mono text-cyan-300 font-medium">
                 <FileText className="w-3.5 h-3.5" />
                 <span>LINKEDIN ASSET</span>
               </div>
-              <p className="text-xs text-[#F3F5F7] line-clamp-3">
+              <p className="text-xs text-white/90 line-clamp-3">
                 &ldquo;Why 73% of engineering teams are abandoning monolithic market monitoring suites for unified evidence pipelines...&rdquo;
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#738BFF]">
+            <div className="p-4 rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md space-y-2 hover:bg-white/[0.08] transition-all">
+              <div className="flex items-center gap-1.5 text-xs font-mono text-indigo-300 font-medium">
                 <Mail className="w-3.5 h-3.5" />
                 <span>OUTBOUND EMAIL</span>
               </div>
-              <p className="text-xs text-[#F3F5F7] line-clamp-3">
+              <p className="text-xs text-white/90 line-clamp-3">
                 Subject: Quick question about your competitor tracking stack &middot; 3-step value sequence with verified benchmarks.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl border border-[#727A86]/20 bg-[#050608]/60 space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-mono text-[#C7CED8]">
+            <div className="p-4 rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-md space-y-2 hover:bg-white/[0.08] transition-all">
+              <div className="flex items-center gap-1.5 text-xs font-mono text-white/90 font-medium">
                 <Search className="w-3.5 h-3.5" />
                 <span>SEO PILLAR</span>
               </div>
-              <p className="text-xs text-[#F3F5F7] line-clamp-3">
+              <p className="text-xs text-white/90 line-clamp-3">
                 Long-tail comparison teardown targeting high-intent decision queries: &ldquo;Best alternative to legacy suites 2026&rdquo;.
               </p>
             </div>
@@ -83,27 +83,27 @@ export const CampaignStrategySection: React.FC = () => {
       </div>
 
       {/* 14. Human Review & 15. Action */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t border-[#727A86]/20">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t border-white/15">
         {/* Human Review */}
         <div className="space-y-4">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#727A86]">
+          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-cyan-300 font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             14 &mdash; HUMAN-IN-THE-LOOP GOVERNANCE
           </div>
-          <h3 className="text-2xl sm:text-3xl font-sans-editorial font-medium text-[#F3F5F7] tracking-tight">
+          <h3 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             AI proposes. People decide.
           </h3>
-          <p className="text-sm text-[#A8AFBA] leading-relaxed">
+          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             No campaign or message is ever deployed automatically. Operators review the supporting citations, edit copy inline, adjust angles, or reject briefs with one click.
           </p>
 
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-2 text-xs font-mono">
-            <span className="h-9 px-3.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 inline-flex items-center gap-1.5 cursor-default">
+            <span className="h-9 px-3.5 rounded-lg border border-emerald-400/40 bg-emerald-500/15 text-emerald-300 backdrop-blur-md inline-flex items-center gap-1.5 cursor-default font-medium">
               <Check className="w-3.5 h-3.5" /> Approve Brief
             </span>
-            <span className="h-9 px-3.5 rounded-lg border border-[#727A86]/30 bg-[#07090C] text-[#A8AFBA] inline-flex items-center gap-1.5 cursor-default">
+            <span className="h-9 px-3.5 rounded-lg border border-white/20 bg-white/[0.08] text-white/90 backdrop-blur-md inline-flex items-center gap-1.5 cursor-default font-medium">
               <Edit3 className="w-3.5 h-3.5" /> Edit Copy
             </span>
-            <span className="h-9 px-3.5 rounded-lg border border-rose-500/30 bg-rose-500/10 text-rose-400 inline-flex items-center gap-1.5 cursor-default">
+            <span className="h-9 px-3.5 rounded-lg border border-rose-400/40 bg-rose-500/15 text-rose-300 backdrop-blur-md inline-flex items-center gap-1.5 cursor-default font-medium">
               <X className="w-3.5 h-3.5" /> Reject
             </span>
           </div>
@@ -111,28 +111,28 @@ export const CampaignStrategySection: React.FC = () => {
 
         {/* Action & Kanban */}
         <div className="space-y-4">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#727A86]">
+          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-cyan-300 font-semibold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             15 &mdash; ACTIONABLE EXECUTION
           </div>
-          <h3 className="text-2xl sm:text-3xl font-sans-editorial font-medium text-[#F3F5F7] tracking-tight">
+          <h3 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             Research should end with a decision.
           </h3>
-          <p className="text-sm text-[#A8AFBA] leading-relaxed">
+          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             Approval automatically populates execution tasks directly into your workflow Kanban, categorized by priority and channel.
           </p>
 
           <div className="space-y-2 text-xs font-mono pt-2">
-            <div className="p-3 rounded-lg border border-[#727A86]/20 bg-[#050608]/70 flex items-center justify-between">
-              <span className="text-[#F3F5F7]">Deploy LinkedIn Thought Leadership Angle</span>
-              <span className="text-[10px] text-amber-400 px-2 py-0.5 rounded bg-amber-500/10">HIGH</span>
+            <div className="p-3 rounded-lg border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-between hover:bg-white/[0.08] transition-all">
+              <span className="text-white font-medium">Deploy LinkedIn Thought Leadership Angle</span>
+              <span className="text-[10px] text-amber-300 px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 font-semibold">HIGH</span>
             </div>
-            <div className="p-3 rounded-lg border border-[#727A86]/20 bg-[#050608]/70 flex items-center justify-between">
-              <span className="text-[#F3F5F7]">Configure 3-Step Outbound Sequence in Outreach Tool</span>
-              <span className="text-[10px] text-amber-400 px-2 py-0.5 rounded bg-amber-500/10">HIGH</span>
+            <div className="p-3 rounded-lg border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-between hover:bg-white/[0.08] transition-all">
+              <span className="text-white font-medium">Configure 3-Step Outbound Sequence in Outreach Tool</span>
+              <span className="text-[10px] text-amber-300 px-2 py-0.5 rounded bg-amber-500/15 border border-amber-500/30 font-semibold">HIGH</span>
             </div>
-            <div className="p-3 rounded-lg border border-[#727A86]/20 bg-[#050608]/70 flex items-center justify-between">
-              <span className="text-[#F3F5F7]">Index SEO Comparison Pillar Article</span>
-              <span className="text-[10px] text-blue-400 px-2 py-0.5 rounded bg-blue-500/10">MEDIUM</span>
+            <div className="p-3 rounded-lg border border-white/10 bg-white/[0.04] backdrop-blur-md flex items-center justify-between hover:bg-white/[0.08] transition-all">
+              <span className="text-white font-medium">Index SEO Comparison Pillar Article</span>
+              <span className="text-[10px] text-cyan-300 px-2 py-0.5 rounded bg-cyan-500/15 border border-cyan-500/30 font-semibold">MEDIUM</span>
             </div>
           </div>
         </div>

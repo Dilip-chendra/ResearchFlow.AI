@@ -28,7 +28,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#050608] text-[#F3F5F7] font-sans-editorial selection:bg-[#9CCBFF]/20 selection:text-white antialiased">
+    <div className="relative min-h-screen bg-transparent text-white font-sans-editorial selection:bg-cyan-500/30 selection:text-white antialiased">
       {/* 
         PERSISTENT CINEMATIC CANVAS BACKGROUND
         Renders full document scroll across all 192 frames (Page Top 0% -> Footer 100%).
@@ -36,7 +36,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       */}
       <ResearchFlowCinematicCanvas
         isFixed={true}
-        overlayOpacity={0.62}
+        overlayOpacity={0.12}
         focalPoint={{ x: 0.5, y: 0.45 }}
       />
 
