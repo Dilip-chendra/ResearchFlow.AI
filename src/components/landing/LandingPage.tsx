@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react';
+import { ResearchFlowCinematicCanvas } from '../ResearchFlowCinematicCanvas';
 import { LandingNav } from './LandingNav';
-import { HeroSection } from './HeroSection';
-import { ProblemSection } from './ProblemSection';
-import { SolutionWorkflowSection } from './SolutionWorkflowSection';
-import { EvidenceFirstSection } from './EvidenceFirstSection';
-import { IntelligenceMatrixSection } from './IntelligenceMatrixSection';
-import { ChangeRadarSection } from './ChangeRadarSection';
-import { CampaignStudioSection } from './CampaignStudioSection';
-import { HumanInTheLoopSection } from './HumanInTheLoopSection';
-import { ReliabilitySection } from './ReliabilitySection';
-import { MultiModelSection } from './MultiModelSection';
-import { ProductGallerySection } from './ProductGallerySection';
-import { UseCasesSection } from './UseCasesSection';
-import { RecurringWorkflowSection } from './RecurringWorkflowSection';
-import { SecurityTrustSection } from './SecurityTrustSection';
-import { RoadmapVisionSection } from './RoadmapVisionSection';
-import { FinalCtaSection } from './FinalCtaSection';
-import { LandingFooter } from './LandingFooter';
+import { CinematicHero } from './CinematicHero';
+import { MarketEverywhereSection } from './MarketEverywhereSection';
+import { IntroductionPipelineSection } from './IntroductionPipelineSection';
+import { EvidenceProvenanceSection } from './EvidenceProvenanceSection';
+import { ConflictDetectionSection } from './ConflictDetectionSection';
+import { CompetitiveIntelligenceSection } from './CompetitiveIntelligenceSection';
+import { AgenticWorkersSection } from './AgenticWorkersSection';
+import { CampaignStrategySection } from './CampaignStrategySection';
+import { ReliabilityAndRoutingSection } from './ReliabilityAndRoutingSection';
+import { ArchitectureAndBenchmarkSection } from './ArchitectureAndBenchmarkSection';
+import { VisionAndCtaSection } from './VisionAndCtaSection';
+import { CinematicFooter } from './CinematicFooter';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -32,74 +28,72 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#090A0F] text-zinc-100 font-sans selection:bg-indigo-500 selection:text-white antialiased overflow-x-hidden">
-      {/* 1. Sticky Navigation */}
-      <LandingNav
-        onSignIn={onSignIn}
-        onGetStarted={onGetStarted}
+    <div className="relative min-h-screen bg-[#050608] text-[#F3F5F7] font-sans-editorial selection:bg-[#9CCBFF]/20 selection:text-white antialiased">
+      {/* 
+        PERSISTENT CINEMATIC CANVAS BACKGROUND
+        Renders full document scroll across all 192 frames (Page Top 0% -> Footer 100%).
+        High-DPI buffer, cover crop, progressive preloading, and requestAnimationFrame throttling.
+      */}
+      <ResearchFlowCinematicCanvas
+        isFixed={true}
+        overlayOpacity={0.62}
+        focalPoint={{ x: 0.5, y: 0.45 }}
       />
 
-      {/* 2. Hero & 3D Intelligence Core */}
-      <main>
-        <HeroSection
+      {/* FOREGROUND EDITORIAL CONTENT LAYER */}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        {/* Floating Minimal Navigation */}
+        <LandingNav
+          onSignIn={onSignIn}
+          onGetStarted={onGetStarted}
+        />
+
+        {/* 01. Cinematic Opening Hero */}
+        <CinematicHero
+          onGetStarted={onGetStarted}
+        />
+
+        {/* 02. The Market is Everywhere & 03. The Research Bottleneck */}
+        <MarketEverywhereSection />
+
+        {/* 04. Introducing ResearchFlow & 05. Live Web Research Pipeline */}
+        <IntroductionPipelineSection />
+
+        {/* 06. Evidence Provenance & 07. Confidence Scoring */}
+        <EvidenceProvenanceSection />
+
+        {/* 08. Cross-Source Conflict Detection */}
+        <ConflictDetectionSection />
+
+        {/* 09. Competitive Intelligence & 10. The Synthesis Layer */}
+        <CompetitiveIntelligenceSection />
+
+        {/* 11. Specialized Intelligence Workers & 12. Shared Context Flow */}
+        <AgenticWorkersSection />
+
+        {/* 13. Campaign Strategy & 14. Human Review & 15. Action */}
+        <CampaignStrategySection />
+
+        {/* 16. Reliability & 17. Multi-Model Routing & 18. Prompt Injection Defense */}
+        <ReliabilityAndRoutingSection />
+
+        {/* 20. Technical Architecture & 21. Benchmark & 22. The Difference & 23. Operating Loop */}
+        <ArchitectureAndBenchmarkSection />
+
+        {/* 24. Vision & 25. Final High-Impact CTA */}
+        <VisionAndCtaSection
           onGetStarted={onGetStarted}
           onSignIn={onSignIn}
         />
 
-        {/* 3. Problem Section */}
-        <ProblemSection />
-
-        {/* 4. Solution & Interactive 5-Step Pipeline */}
-        <SolutionWorkflowSection />
-
-        {/* 5. Evidence-First AI & Citation Graph */}
-        <EvidenceFirstSection />
-
-        {/* 6. Intelligence Matrix */}
-        <IntelligenceMatrixSection />
-
-        {/* 7. Competitive Change Radar */}
-        <ChangeRadarSection />
-
-        {/* 8. Campaign Intelligence & Visual Studio */}
-        <CampaignStudioSection />
-
-        {/* 9. Human-in-the-Loop Governance */}
-        <HumanInTheLoopSection />
-
-        {/* 10. Zero-Failure Reliability & Recovery */}
-        <ReliabilitySection />
-
-        {/* 11. Dynamic Multi-Model Routing */}
-        <MultiModelSection />
-
-        {/* 12. Real Application Screen Gallery */}
-        <ProductGallerySection />
-
-        {/* 13. Use Cases & Personas */}
-        <UseCasesSection />
-
-        {/* 14. Recurring Operating Cadence */}
-        <RecurringWorkflowSection />
-
-        {/* 15. Security, Isolation & Privacy */}
-        <SecurityTrustSection />
-
-        {/* 16. Long-Term Vision & Roadmap */}
-        <RoadmapVisionSection />
-
-        {/* 17. Final High-Impact CTA */}
-        <FinalCtaSection
-          onGetStarted={onGetStarted}
+        {/* 26. Persistent Dark Cinematic Footer */}
+        <CinematicFooter
           onSignIn={onSignIn}
+          onGetStarted={onGetStarted}
         />
-      </main>
-
-      {/* 18. Footer */}
-      <LandingFooter
-        onSignIn={onSignIn}
-        onGetStarted={onGetStarted}
-      />
+      </div>
     </div>
   );
 };
+
+export default LandingPage;

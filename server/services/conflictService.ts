@@ -9,17 +9,18 @@ export const conflictService = {
   detectConflicts(jobId: string, workspaceId: string, evidenceList: Evidence[]): ConflictItem[] {
     const detected: ConflictItem[] = [];
 
-    // Group evidence by category
-    const byCategory = new Map<ResearchCategory, Evidence[]>();
+    // Group evidence by category (case-insensitive normalization)
+    const byCategory = new Map<string, Evidence[]>();
     for (const item of evidenceList) {
-      if (!byCategory.has(item.category)) {
-        byCategory.set(item.category, []);
+      const normalizedCat = (item.category || '').toLowerCase();
+      if (!byCategory.has(normalizedCat)) {
+        byCategory.set(normalizedCat, []);
       }
-      byCategory.get(item.category)!.push(item);
+      byCategory.get(normalizedCat)!.push(item);
     }
 
     // Check Pricing conflicts
-    const pricingItems = byCategory.get('Pricing') || [];
+    const pricingItems = byCategory.get('pricing') || [];
     if (pricingItems.length >= 2) {
       // Look for distinct dollar figures or free vs paid discrepancies
       const distinctPrices: { price: string; evidence: Evidence }[] = [];

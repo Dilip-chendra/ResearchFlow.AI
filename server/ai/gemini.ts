@@ -1744,8 +1744,8 @@ Return a JSON array of actionable task objects.`;
 
     const domainListStr = domains.length > 0 ? domains.slice(0, 3).join(', ') : 'target competitor domains';
 
-    // Pick a random strategic synthesis lens (1: Pricing & Wedge, 2: Operational Proof & Moat, 3: Friction & Market Gap)
-    const lens = Math.floor(Math.random() * 3);
+    // Deterministically select strategic synthesis lens (0: Pricing & Wedge, 1: Operational Proof & Moat, 2: Friction & Market Gap)
+    const lens = (params.evidenceList.length + params.job.businessName.length) % 3;
 
     let pricingSummary = '';
     let painPointSummary = '';

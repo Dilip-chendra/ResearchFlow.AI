@@ -1141,14 +1141,10 @@ export const JobDetailView: React.FC<{ jobId: string }> = ({ jobId }) => {
                         <span>{(asset.content as any).cta}</span>
                       </div>
 
-                      {/* Engagement Mock Bar */}
-                      <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-zinc-500 text-[11px]">
-                        <div className="flex items-center gap-1">
-                          <span className="w-4 h-4 rounded-full bg-indigo-600 text-white text-[9px] flex items-center justify-center">👍</span>
-                          <span className="w-4 h-4 rounded-full bg-emerald-600 text-white text-[9px] flex items-center justify-center -ml-1.5">💡</span>
-                          <span className="ml-1 font-semibold text-zinc-700">48 reactions</span>
-                        </div>
-                        <span>12 comments • 6 reposts</span>
+                      {/* LinkedIn Action Preview */}
+                      <div className="pt-3 border-t border-zinc-100 flex items-center justify-between text-zinc-400 text-[11px]">
+                        <span>LinkedIn Draft Preview</span>
+                        <span className="font-mono text-[10px]">Ready to publish</span>
                       </div>
 
                       <div className="grid grid-cols-4 gap-1 pt-1 text-zinc-600 font-semibold text-center text-[11px]">

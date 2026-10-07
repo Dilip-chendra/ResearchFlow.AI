@@ -103,6 +103,18 @@ export class AIOrchestrator {
     };
   }
 
+  public getStatus() {
+    const health = this.getHealthStatus();
+    const availableProviders: string[] = [];
+    if (health.geminiStatus === 'CONNECTED') availableProviders.push('gemini');
+    if (health.openRouterStatus === 'CONNECTED') availableProviders.push('openrouter');
+    if (availableProviders.length === 0) availableProviders.push('heuristic');
+    return {
+      ...health,
+      availableProviders,
+    };
+  }
+
   /**
    * Main unified structured orchestration pipeline with multi-model fallback chain.
    */

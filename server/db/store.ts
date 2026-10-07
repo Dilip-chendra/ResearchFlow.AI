@@ -803,7 +803,7 @@ export class PersistentDatabaseStore {
     const job = this.researchJobs.get(id);
     if (!job) return undefined;
     if (workspaceId && job.workspaceId !== workspaceId) {
-      return job;
+      return undefined;
     }
     return job;
   }
@@ -930,19 +930,25 @@ export class PersistentDatabaseStore {
     return brief;
   }
 
-  getCampaignBrief(id: string): CampaignBrief | undefined {
-    return this.campaignBriefs.get(id);
+  getCampaignBrief(id: string, workspaceId?: string): CampaignBrief | undefined {
+    const brief = this.campaignBriefs.get(id);
+    if (!brief) return undefined;
+    if (workspaceId && brief.workspaceId !== workspaceId) return undefined;
+    return brief;
   }
 
-  getCampaignBriefByJobId(jobId: string): CampaignBrief | undefined {
-    return Array.from(this.campaignBriefs.values()).find(b => b.researchJobId === jobId);
+  getCampaignBriefByJobId(jobId: string, workspaceId?: string): CampaignBrief | undefined {
+    const brief = Array.from(this.campaignBriefs.values()).find(b => b.researchJobId === jobId);
+    if (!brief) return undefined;
+    if (workspaceId && brief.workspaceId !== workspaceId) return undefined;
+    return brief;
   }
 
   listCampaignBriefs(workspaceId?: string): CampaignBrief[] {
     return Array.from(this.campaignBriefs.values())
       .filter(b => {
         if (!workspaceId) return true;
-        return b.workspaceId === workspaceId || b.workspaceId === 'ws_demo_sandbox';
+        return b.workspaceId === workspaceId;
       })
       .sort((a, b) => new Date(b.generatedAt).getTime() - new Date(a.generatedAt).getTime());
   }
@@ -984,8 +990,8 @@ export class PersistentDatabaseStore {
   listTasks(workspaceId: string, jobId?: string): ExecutionTask[] {
     return Array.from(this.tasks.values())
       .filter(t => {
-        if (jobId) return t.researchJobId === jobId;
-        return t.workspaceId === workspaceId || t.workspaceId === 'ws_demo_sandbox';
+        if (jobId) return t.researchJobId === jobId && t.workspaceId === workspaceId;
+        return t.workspaceId === workspaceId;
       })
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
   }
@@ -996,8 +1002,11 @@ export class PersistentDatabaseStore {
     return task;
   }
 
-  getTask(id: string): ExecutionTask | undefined {
-    return this.tasks.get(id);
+  getTask(id: string, workspaceId?: string): ExecutionTask | undefined {
+    const task = this.tasks.get(id);
+    if (!task) return undefined;
+    if (workspaceId && task.workspaceId !== workspaceId) return undefined;
+    return task;
   }
 
   deleteTask(id: string): boolean {
@@ -2147,8 +2156,11 @@ export class PersistentDatabaseStore {
     return Array.from(this.warRoomCompetitors.values()).filter(c => c.workspaceId === workspaceId);
   }
 
-  getWarRoomCompetitor(id: string): WarRoomCompetitor | null {
-    return this.warRoomCompetitors.get(id) || null;
+  getWarRoomCompetitor(id: string, workspaceId?: string): WarRoomCompetitor | null {
+    const comp = this.warRoomCompetitors.get(id);
+    if (!comp) return null;
+    if (workspaceId && comp.workspaceId !== workspaceId) return null;
+    return comp;
   }
 
   saveWarRoomCompetitor(comp: WarRoomCompetitor): WarRoomCompetitor {

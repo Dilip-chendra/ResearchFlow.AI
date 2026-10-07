@@ -645,7 +645,7 @@ apiRouter.post('/research/jobs', (req: Request, res: Response) => {
 
 apiRouter.get('/research/jobs/:id', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
+  const job = db.getResearchJob(req.params.id, wsId);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   // Include related counts and objects
@@ -729,7 +729,7 @@ apiRouter.post('/conflicts/:id/resolve', (req: Request, res: Response) => {
 // ----------------------------------------------------
 apiRouter.post('/research/jobs/:id/share', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
+  const job = db.getResearchJob(req.params.id, wsId);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   const { scope, permission, password, passwordProtected, expiresAt } = req.body;
@@ -836,7 +836,7 @@ apiRouter.get('/share/research/:token', (req: Request, res: Response) => {
 // ----------------------------------------------------
 apiRouter.post('/research/jobs/:id/assign-review', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
+  const job = db.getResearchJob(req.params.id, wsId);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   const {
@@ -1125,7 +1125,7 @@ apiRouter.post('/tasks/batch', (req: Request, res: Response) => {
 
 apiRouter.post('/research/jobs/:id/extract-tasks', async (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
-  const job = db.getResearchJob(req.params.id, wsId) || db.getResearchJob(req.params.id);
+  const job = db.getResearchJob(req.params.id, wsId);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
 
   const { customNotes } = req.body;
@@ -2058,7 +2058,7 @@ apiRouter.get('/campaigns', (req: Request, res: Response) => {
     const briefs = db.listCampaignBriefs(wsId);
 
     const list = briefs.map(brief => {
-      const job = jobs.find(j => j.id === brief.researchJobId) || db.getResearchJob(brief.researchJobId);
+      const job = jobs.find(j => j.id === brief.researchJobId) || db.getResearchJob(brief.researchJobId, wsId);
       const assets = db.listCampaignAssets(brief.researchJobId);
       const evidence = db.listEvidence(brief.researchJobId);
 
@@ -2111,7 +2111,11 @@ apiRouter.get('/campaigns/:id', (req: Request, res: Response) => {
       return res.status(404).json({ error: 'Campaign not found' });
     }
 
-    const job = db.getResearchJob(brief.researchJobId, wsId) || db.getResearchJob(brief.researchJobId);
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
+
+    const job = db.getResearchJob(brief.researchJobId, wsId);
     const assets = db.listCampaignAssets(brief.researchJobId);
     const evidence = db.listEvidence(brief.researchJobId);
     const intel = db.getIntelligence(brief.researchJobId);
@@ -2139,6 +2143,10 @@ apiRouter.post('/campaigns/:id/angles/select', (req: Request, res: Response) => 
     let brief = db.getCampaignBrief(req.params.id);
     if (!brief) brief = db.getCampaignBriefByJobId(req.params.id);
     if (!brief) return res.status(404).json({ error: 'Campaign not found' });
+
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
 
     if (brief.strategicAngles) {
       brief.strategicAngles = brief.strategicAngles.map(a => ({
@@ -2177,6 +2185,11 @@ apiRouter.put('/campaigns/:id/assets/:assetId', (req: Request, res: Response) =>
   const { content, title, reviewStatus } = req.body;
 
   try {
+    let brief = db.getCampaignBrief(req.params.id) || db.getCampaignBriefByJobId(req.params.id);
+    if (brief && brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
+
     const asset = db.getCampaignAsset(assetId);
     if (!asset) {
       return res.status(404).json({ error: 'Asset not found' });
@@ -2214,6 +2227,10 @@ apiRouter.post('/campaigns/:id/regenerate-asset', async (req: Request, res: Resp
     if (!brief) brief = db.getCampaignBriefByJobId(req.params.id);
     if (!brief) return res.status(404).json({ error: 'Campaign not found' });
 
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
+
     const asset = db.getCampaignAsset(assetId);
     if (!asset) return res.status(404).json({ error: 'Asset not found' });
 
@@ -2250,10 +2267,15 @@ apiRouter.post('/campaigns/:id/regenerate-asset', async (req: Request, res: Resp
  * Run factuality & claim safety validation on campaign
  */
 apiRouter.post('/campaigns/:id/validate', (req: Request, res: Response) => {
+  const wsId = getWorkspaceId(req, res);
   try {
     let brief = db.getCampaignBrief(req.params.id);
     if (!brief) brief = db.getCampaignBriefByJobId(req.params.id);
     if (!brief) return res.status(404).json({ error: 'Campaign not found' });
+
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
 
     const assets = db.listCampaignAssets(brief.researchJobId);
     const evidence = db.listEvidence(brief.researchJobId);
@@ -2289,7 +2311,11 @@ apiRouter.post('/campaigns/:id/approve', (req: Request, res: Response) => {
     if (!brief) brief = db.getCampaignBriefByJobId(req.params.id);
     if (!brief) return res.status(404).json({ error: 'Campaign not found' });
 
-    const job = db.getResearchJob(brief.researchJobId, wsId) || db.getResearchJob(brief.researchJobId);
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
+
+    const job = db.getResearchJob(brief.researchJobId, wsId);
 
     brief.status = 'APPROVED';
     brief.reviewNotes = reviewNotes || 'Approved for multi-channel execution.';
@@ -2369,6 +2395,10 @@ apiRouter.post('/campaigns/:id/reject', (req: Request, res: Response) => {
     if (!brief) brief = db.getCampaignBriefByJobId(req.params.id);
     if (!brief) return res.status(404).json({ error: 'Campaign not found' });
 
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
+
     brief.status = 'REJECTED';
     brief.reviewNotes = reason || 'Rejected during quality review.';
     brief.updatedAt = new Date().toISOString();
@@ -2391,6 +2421,7 @@ apiRouter.post('/campaigns/:id/reject', (req: Request, res: Response) => {
  * Export campaign brief in formatted Markdown or JSON
  */
 apiRouter.get('/campaigns/:id/export', (req: Request, res: Response) => {
+  const wsId = getWorkspaceId(req, res);
   const format = (req.query.format as string) || 'markdown';
 
   try {
@@ -2398,7 +2429,11 @@ apiRouter.get('/campaigns/:id/export', (req: Request, res: Response) => {
     if (!brief) brief = db.getCampaignBriefByJobId(req.params.id);
     if (!brief) return res.status(404).json({ error: 'Campaign not found' });
 
-    const job = db.getResearchJob(brief.researchJobId);
+    if (brief.workspaceId && brief.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Campaign belongs to a different workspace' });
+    }
+
+    const job = db.getResearchJob(brief.researchJobId, wsId);
     const assets = db.listCampaignAssets(brief.researchJobId);
     const evidence = db.listEvidence(brief.researchJobId);
 
@@ -2710,8 +2745,12 @@ apiRouter.post('/war-room/competitors/discover', (req: Request, res: Response) =
 
 apiRouter.get('/war-room/competitors/:id', (req: Request, res: Response) => {
   try {
+    const wsId = getWorkspaceId(req, res);
     const comp = db.getWarRoomCompetitor(req.params.id);
     if (!comp) return res.status(404).json({ error: 'Competitor not found' });
+    if (comp.workspaceId && comp.workspaceId !== wsId) {
+      return res.status(403).json({ error: 'Unauthorized: Competitor belongs to a different workspace' });
+    }
     res.json({ success: true, competitor: comp });
   } catch (err: any) {
     res.status(500).json({ error: err.message });

@@ -1,0 +1,22 @@
+{
+  "totalFrames": 192,
+  "width": 1280,
+  "height": 720,
+  "aspectRatio": "16:9",
+  "fps": 24,
+  "durationSeconds": 8.0,
+  "framePattern": "/cinematic/frames/frame-{index}.jpg",
+  "padLength": 4,
+  "sourceVideo": "/cinematic/market-intelligence.mp4",
+  "format": "jpeg",
+  "codec": "h264",
+  "colorSpace": "bt709",
+  "transformationStages": [
+    { "progress": 0.0, "stage": "MARKET_CHAOS", "description": "Midnight research chaos, fragmented tabs and ungrounded claims" },
+    { "progress": 0.2, "stage": "DISCOVERY", "description": "Structured extraction and source normalization" },
+    { "progress": 0.4, "stage": "EVIDENCE", "description": "Verified claims and cross-source conflict detection" },
+    { "progress": 0.6, "stage": "INTELLIGENCE", "description": "Market landscape mapping and positioning insights" },
+    { "progress": 0.8, "stage": "STRATEGY", "description": "Strategic campaign angles and message architecture" },
+    { "progress": 1.0, "stage": "ACTION", "description": "Execution workflows and decisive GTM action at market dawn" }
+  ]
+}

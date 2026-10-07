@@ -1,188 +1,215 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Menu, X, ChevronRight } from 'lucide-react';
-import { BrandLogo } from '../brand/BrandLogo';
+import { ArrowUpRight, X } from 'lucide-react';
 
 interface LandingNavProps {
   onSignIn: () => void;
   onGetStarted: () => void;
 }
 
-export const LandingNav: React.FC<LandingNavProps> = ({
-  onSignIn,
-  onGetStarted,
-}) => {
+export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }) => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Lock body scroll and listen for Escape key when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setMobileMenuOpen(false);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [mobileMenuOpen]);
+
+  const scrollToSection = (id: string) => {
+    setMobileMenuOpen(false);
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
-          ? 'bg-[#090A0F]/85 backdrop-blur-md border-b border-zinc-800/60 py-3 shadow-2xl shadow-black/40'
-          : 'bg-transparent py-5'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand Logo */}
-        <a
-          href="#"
-          className="group focus:outline-hidden"
-          title="ResearchFlow AI — Market Intelligence to Execution"
+    <header className="fixed top-0 left-0 right-0 z-50 flex justify-center px-4 sm:px-6 pt-[calc(0.75rem+env(safe-area-inset-top,0px))] pointer-events-none">
+      <nav
+        className={`pointer-events-auto w-full max-w-5xl h-11 sm:h-12 px-4 sm:px-5 rounded-full flex items-center justify-between transition-all duration-300 ${
+          scrolled
+            ? 'bg-[#07090C]/85 backdrop-blur-md border border-[#727A86]/20 shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+            : 'bg-transparent border border-transparent'
+        }`}
+        aria-label="Main Navigation"
+      >
+        {/* Brand Mark */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="flex items-center gap-2.5 text-left group focus:outline-none min-h-[40px]"
         >
-          <BrandLogo size="sm" variant="dark" showBadge={true} showTagline={true} />
-        </a>
+          <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-[#738BFF] to-[#9CCBFF] p-0.5 flex items-center justify-center shrink-0">
+            <div className="w-full h-full bg-[#050608] rounded-[4px] flex items-center justify-center">
+              <span className="text-[10px] font-bold tracking-tight text-[#9CCBFF]">RF</span>
+            </div>
+          </div>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-sm font-semibold tracking-tight text-[#F3F5F7] group-hover:text-white transition-colors">
+              ResearchFlow
+            </span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[#9CCBFF]/80">AI</span>
+          </div>
+        </button>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-8 text-xs font-medium text-zinc-300">
-          <a
-            href="#how-it-works"
-            className="hover:text-white transition-colors hover:translate-y-[-1px]"
+        <div className="hidden md:flex items-center gap-7 text-xs font-medium text-[#A8AFBA]">
+          <button
+            onClick={() => scrollToSection('problem')}
+            className="hover:text-[#F3F5F7] transition-colors focus:outline-none py-1"
           >
-            How It Works
-          </a>
-          <a
-            href="#evidence"
-            className="hover:text-white transition-colors hover:translate-y-[-1px]"
+            Problem
+          </button>
+          <button
+            onClick={() => scrollToSection('pipeline')}
+            className="hover:text-[#F3F5F7] transition-colors focus:outline-none py-1"
           >
-            Evidence-First AI
-          </a>
-          <a
-            href="#intelligence"
-            className="hover:text-white transition-colors hover:translate-y-[-1px]"
+            Pipeline
+          </button>
+          <button
+            onClick={() => scrollToSection('evidence')}
+            className="hover:text-[#F3F5F7] transition-colors focus:outline-none py-1"
           >
-            Intelligence Matrix
-          </a>
-          <a
-            href="#change-radar"
-            className="hover:text-white transition-colors hover:translate-y-[-1px]"
+            Evidence
+          </button>
+          <button
+            onClick={() => scrollToSection('intelligence')}
+            className="hover:text-[#F3F5F7] transition-colors focus:outline-none py-1"
           >
-            Change Radar
-          </a>
-          <a
-            href="#reliability"
-            className="hover:text-white transition-colors hover:translate-y-[-1px]"
+            Intelligence
+          </button>
+          <button
+            onClick={() => scrollToSection('architecture')}
+            className="hover:text-[#F3F5F7] transition-colors focus:outline-none py-1"
           >
-            Reliability
-          </a>
-          <a
-            href="#use-cases"
-            className="hover:text-white transition-colors hover:translate-y-[-1px]"
-          >
-            Use Cases
-          </a>
-        </nav>
+            Architecture
+          </button>
+        </div>
 
-        {/* Desktop Right CTAs */}
-        <div className="hidden sm:flex items-center gap-3">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={onSignIn}
-            className="px-3.5 py-2 text-xs font-semibold text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-xl transition-all"
+            className="text-xs font-medium text-[#A8AFBA] hover:text-[#F3F5F7] px-2.5 py-1.5 min-h-[36px] transition-colors focus:outline-none"
           >
-            Sign In
+            Sign in
           </button>
-          
-          <button
-            onClick={onGetStarted}
-            className="group relative inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-400 hover:to-indigo-500 text-white text-xs font-bold rounded-xl shadow-lg shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <span>Start Researching</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </button>
-        </div>
 
-        {/* Mobile Menu Button */}
-        <div className="flex sm:hidden items-center gap-2">
           <button
             onClick={onGetStarted}
-            className="px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg shadow-sm"
+            className="group relative inline-flex items-center gap-1.5 text-xs font-medium bg-[#F3F5F7] text-[#050608] px-3.5 py-1.5 rounded-full hover:bg-white hover:shadow-[0_0_16px_rgba(156,203,255,0.35)] min-h-[36px] transition-all focus:outline-none"
           >
-            Start
+            <span>Get started</span>
+            <ArrowUpRight className="w-3 h-3 text-[#050608]/70 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </button>
+
+          {/* Mobile menu toggle button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-zinc-800/80 text-zinc-300 hover:text-white border border-zinc-700/50"
-            aria-label="Toggle Navigation Menu"
+            className="md:hidden text-[#A8AFBA] hover:text-white p-2 min-h-[44px] min-w-[44px] flex items-center justify-center focus:outline-none"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {mobileMenuOpen ? (
+              <X className="w-5 h-5 text-[#F3F5F7]" />
+            ) : (
+              <div className="w-4 h-3 flex flex-col justify-between">
+                <span className="h-0.5 bg-current rounded-full" />
+                <span className="h-0.5 bg-current rounded-full" />
+                <span className="h-0.5 bg-current rounded-full" />
+              </div>
+            )}
           </button>
         </div>
-      </div>
+      </nav>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Drawer / Overlay Backdrop */}
       {mobileMenuOpen && (
-        <div className="sm:hidden bg-[#0D1017] border-b border-zinc-800 px-6 py-6 space-y-4 animate-in slide-in-from-top-4 duration-200">
-          <nav className="flex flex-col gap-3 text-sm font-medium text-zinc-300">
-            <a
-              href="#how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-white"
-            >
-              How It Works
-            </a>
-            <a
-              href="#evidence"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-white"
-            >
-              Evidence-First AI
-            </a>
-            <a
-              href="#intelligence"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-white"
-            >
-              Intelligence Matrix
-            </a>
-            <a
-              href="#change-radar"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-white"
-            >
-              Change Radar
-            </a>
-            <a
-              href="#reliability"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-white"
-            >
-              Reliability
-            </a>
-            <a
-              href="#use-cases"
-              onClick={() => setMobileMenuOpen(false)}
-              className="py-1 hover:text-white"
-            >
-              Use Cases
-            </a>
-          </nav>
-
-          <div className="pt-4 border-t border-zinc-800 flex flex-col gap-2.5">
+        <div className="pointer-events-auto md:hidden fixed inset-0 z-50 flex flex-col bg-[#050608]/90 backdrop-blur-2xl px-6 pt-[calc(5rem+env(safe-area-inset-top,0px))] pb-8 animate-in fade-in duration-200">
+          <div className="flex items-center justify-between pb-6 border-b border-[#727A86]/20">
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono uppercase tracking-widest text-[#9CCBFF]">NAVIGATION</span>
+            </div>
             <button
-              onClick={() => {
-                setMobileMenuOpen(false);
-                onSignIn();
-              }}
-              className="w-full py-2.5 text-center text-xs font-semibold text-zinc-300 bg-zinc-800/80 hover:bg-zinc-700 rounded-xl border border-zinc-700"
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 text-[#A8AFBA] hover:text-white min-h-[44px] min-w-[44px] flex items-center justify-center"
+              aria-label="Close menu"
             >
-              Sign In
+              <X className="w-5 h-5" />
             </button>
+          </div>
+
+          <div className="flex flex-col gap-2 py-6 text-base font-sans font-medium text-[#F3F5F7]">
+            <button
+              onClick={() => scrollToSection('problem')}
+              className="text-left py-3 px-3 rounded-lg hover:bg-[#727A86]/10 text-[#A8AFBA] hover:text-[#F3F5F7] min-h-[48px] flex items-center"
+            >
+              The Problem
+            </button>
+            <button
+              onClick={() => scrollToSection('pipeline')}
+              className="text-left py-3 px-3 rounded-lg hover:bg-[#727A86]/10 text-[#A8AFBA] hover:text-[#F3F5F7] min-h-[48px] flex items-center"
+            >
+              Intelligence Pipeline
+            </button>
+            <button
+              onClick={() => scrollToSection('evidence')}
+              className="text-left py-3 px-3 rounded-lg hover:bg-[#727A86]/10 text-[#A8AFBA] hover:text-[#F3F5F7] min-h-[48px] flex items-center"
+            >
+              Evidence Provenance
+            </button>
+            <button
+              onClick={() => scrollToSection('intelligence')}
+              className="text-left py-3 px-3 rounded-lg hover:bg-[#727A86]/10 text-[#A8AFBA] hover:text-[#F3F5F7] min-h-[48px] flex items-center"
+            >
+              Competitive Matrix
+            </button>
+            <button
+              onClick={() => scrollToSection('architecture')}
+              className="text-left py-3 px-3 rounded-lg hover:bg-[#727A86]/10 text-[#A8AFBA] hover:text-[#F3F5F7] min-h-[48px] flex items-center"
+            >
+              Technical Architecture
+            </button>
+          </div>
+
+          <div className="mt-auto pt-6 border-t border-[#727A86]/20 flex flex-col gap-3">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onGetStarted();
               }}
-              className="w-full py-2.5 text-center text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-500 rounded-xl shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-1.5"
+              className="w-full h-12 text-sm font-semibold text-[#050608] bg-[#F3F5F7] rounded-xl flex items-center justify-center gap-2 hover:bg-white"
             >
-              <span>Start Researching</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>Get started</span>
+              <ArrowUpRight className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onSignIn();
+              }}
+              className="w-full h-12 text-sm text-[#A8AFBA] border border-[#727A86]/30 rounded-xl hover:text-white flex items-center justify-center"
+            >
+              Sign in to workspace
             </button>
           </div>
         </div>
