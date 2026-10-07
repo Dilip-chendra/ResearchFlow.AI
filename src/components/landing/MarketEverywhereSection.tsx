@@ -5,7 +5,7 @@ export const MarketEverywhereSection: React.FC = () => {
     <section id="problem" className="relative py-[clamp(4.5rem,10vh,8rem)] px-5 sm:px-10 md:px-12 max-w-5xl mx-auto w-full space-y-24 sm:space-y-32">
       {/* 02. The Market is Everywhere */}
       <div className="space-y-8 sm:space-y-10">
-        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
+        <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
           02 &mdash; THE LANDSCAPE
         </div>
 
@@ -30,7 +30,7 @@ export const MarketEverywhereSection: React.FC = () => {
 
       {/* 03. The Real Problem */}
       <div className="space-y-6 sm:space-y-8 pt-10 border-t border-amber-400/20 max-w-3xl">
-        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
+        <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
           03 &mdash; THE RESEARCH BOTTLENECK
         </div>
 
@@ -38,7 +38,7 @@ export const MarketEverywhereSection: React.FC = () => {
           Research breaks when information multiplies.
         </h3>
 
-        <div className="space-y-6 text-base sm:text-lg text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+        <div className="space-y-6 text-base sm:text-lg text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
           <p>
             Strategy teams manually jump between competitor websites, pricing tables, product documentation, customer search queries, notes, and disconnected spreadsheets.
           </p>

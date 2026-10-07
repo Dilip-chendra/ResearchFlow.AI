@@ -433,7 +433,7 @@ export const ResearchFlowCinematicCanvas: React.FC<ResearchFlowCinematicCanvasPr
         className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
         style={{
           opacity: isReady ? 1 : 0.4,
-          filter: 'contrast(1.05) brightness(1.02)',
+          filter: 'contrast(1.05) brightness(1.15) saturate(1.04)',
         }}
       />
 

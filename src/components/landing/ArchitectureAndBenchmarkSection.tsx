@@ -17,13 +17,13 @@ export const ArchitectureAndBenchmarkSection: React.FC = () => {
       {/* 20. Technical Architecture */}
       <div className="space-y-10">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             20 &mdash; ENGINEERING INFRASTRUCTURE
           </div>
           <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             Under the intelligence is a real system.
           </h2>
-          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             No mock interfaces or synthetic wrappers. ResearchFlow is built on verified full-stack architecture with production-hardened retrieval engines and database persistence.
           </p>
         </div>
@@ -50,7 +50,7 @@ export const ArchitectureAndBenchmarkSection: React.FC = () => {
       </div>
 
       {/* 21. Benchmark Evaluation */}
-      <div className="p-6 sm:p-8 rounded-2xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] space-y-6">
+      <div className="p-6 sm:p-8 rounded-2xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10 text-xs font-mono">
           <span className="text-white/80 font-medium">12-CASE RIGOROUS BENCHMARK EVALUATION</span>
           <span className="text-[#F5D77F] font-bold">95% TIME REDUCTION IN BENCHMARK</span>
@@ -82,13 +82,13 @@ export const ArchitectureAndBenchmarkSection: React.FC = () => {
       {/* 22. The Difference & 23. The Operating Loop */}
       <div className="space-y-10 pt-10 border-t border-amber-400/20">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             22 &mdash; THE STRATEGIC DIFFERENCE
           </div>
           <h3 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             Most research ends in a report. ResearchFlow continues.
           </h3>
-          <p className="text-base text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-base text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             A static PDF sits in an archive. ResearchFlow carries understanding forward into campaigns and live execution.
           </p>
         </div>

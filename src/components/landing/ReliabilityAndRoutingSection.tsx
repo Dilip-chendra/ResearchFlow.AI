@@ -7,19 +7,19 @@ export const ReliabilityAndRoutingSection: React.FC = () => {
       {/* 16. Reliability & Graceful Failure */}
       <div className="space-y-10">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             16 &mdash; WEB FAULT TOLERANCE
           </div>
           <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             The real web is messy.
           </h2>
-          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             Live domains fail, cloud firewalls throw 403s, and single-page apps fail to render text. ResearchFlow is engineered to isolate failures rather than crashing the pipeline.
           </p>
         </div>
 
         {/* Real Edge Cases Grid */}
-        <div className="p-5 sm:p-6 rounded-2xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] space-y-4">
+        <div className="p-5 sm:p-6 rounded-2xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] space-y-4">
           <div className="text-xs font-mono text-white/80 pb-3 border-b border-white/10 flex flex-wrap items-center justify-between gap-2 font-medium">
             <span>RESILIENT STATE TRANSITION PIPELINE</span>
             <span className="text-[#F5D77F] font-bold">PARTIAL SUCCESS GRACEFULLY HANDLED</span>
@@ -50,13 +50,13 @@ export const ReliabilityAndRoutingSection: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t border-amber-400/20">
         {/* Multi-Model Routing */}
         <div className="space-y-4">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             17 &mdash; DYNAMIC MODEL ROUTING
           </div>
           <h3 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             One intelligence layer. Multiple model paths.
           </h3>
-          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             ResearchFlow routes across Google Gemini and OpenRouter provider chains with automatic schema repair and deterministic fallback. If a provider experiences high demand, execution continues uninterrupted.
           </p>
 
@@ -78,13 +78,13 @@ export const ReliabilityAndRoutingSection: React.FC = () => {
 
         {/* Prompt Injection Defense & Security */}
         <div className="space-y-4">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             18 &mdash; UNTRUSTED CONTENT QUARANTINE
           </div>
           <h3 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             Untrusted web content stays untrusted.
           </h3>
-          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             Scraped competitor websites may contain adversarial prompt injections or malicious instructions. ResearchFlow encloses all raw text in strict boundary containers.
           </p>
 

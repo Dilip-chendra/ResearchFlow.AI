@@ -36,7 +36,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       */}
       <ResearchFlowCinematicCanvas
         isFixed={true}
-        overlayOpacity={0.12}
+        overlayOpacity={0.04}
         focalPoint={{ x: 0.5, y: 0.45 }}
       />
 

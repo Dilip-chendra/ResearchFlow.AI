@@ -7,19 +7,19 @@ export const CampaignStrategySection: React.FC = () => {
       {/* 13. Campaign Strategy */}
       <div className="space-y-10">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             13 &mdash; STRATEGY & ASSET GENERATION
           </div>
           <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight leading-[1.15] drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             Turn market intelligence into a plan.
           </h2>
-          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             ResearchFlow transforms validated evidence into sharp go-to-market angles, channel-specific messaging assets, and high-impact distribution plans.
           </p>
         </div>
 
         {/* Real Campaign Hub UI Composition */}
-        <div className="p-6 sm:p-8 rounded-2xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] space-y-6">
+        <div className="p-6 sm:p-8 rounded-2xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-white/10 text-xs font-mono">
             <span className="text-white/80 font-medium">CAMPAIGN BRIEF: ENTERPRISE ALTERNATIVE POSITIONING</span>
             <span className="px-2.5 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-[#F5D77F] font-bold">
@@ -32,7 +32,7 @@ export const CampaignStrategySection: React.FC = () => {
             <div className="text-[11px] font-mono text-white/60 uppercase tracking-wider">
               Selected Strategic Angle:
             </div>
-            <div className="p-4 rounded-xl border border-amber-400/30 bg-amber-500/10 backdrop-blur-md flex items-start justify-between gap-4">
+            <div className="p-4 rounded-xl border border-amber-400/30 bg-black/35 flex items-start justify-between gap-4">
               <div>
                 <div className="text-sm font-sans font-semibold text-white">
                   &ldquo;Stop Settling for Fragmented Vendor Promises&rdquo;
@@ -86,24 +86,24 @@ export const CampaignStrategySection: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-10 border-t border-amber-400/20">
         {/* Human Review */}
         <div className="space-y-4">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             14 &mdash; HUMAN-IN-THE-LOOP GOVERNANCE
           </div>
           <h3 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             AI proposes. People decide.
           </h3>
-          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             No campaign or message is ever deployed automatically. Operators review the supporting citations, edit copy inline, adjust angles, or reject briefs with one click.
           </p>
 
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-2 text-xs font-mono">
-            <span className="h-9 px-3.5 rounded-lg border border-emerald-400/40 bg-emerald-500/15 text-emerald-300 backdrop-blur-md inline-flex items-center gap-1.5 cursor-default font-medium">
+            <span className="h-9 px-3.5 rounded-lg border border-emerald-400/40 bg-emerald-500/15 text-emerald-300 inline-flex items-center gap-1.5 cursor-default font-medium">
               <Check className="w-3.5 h-3.5" /> Approve Brief
             </span>
-            <span className="h-9 px-3.5 rounded-lg border border-white/20 bg-white/[0.08] text-white/90 backdrop-blur-md inline-flex items-center gap-1.5 cursor-default font-medium">
+            <span className="h-9 px-3.5 rounded-lg border border-white/20 bg-white/[0.08] text-white/90 inline-flex items-center gap-1.5 cursor-default font-medium">
               <Edit3 className="w-3.5 h-3.5" /> Edit Copy
             </span>
-            <span className="h-9 px-3.5 rounded-lg border border-rose-400/40 bg-rose-500/15 text-rose-300 backdrop-blur-md inline-flex items-center gap-1.5 cursor-default font-medium">
+            <span className="h-9 px-3.5 rounded-lg border border-rose-400/40 bg-rose-500/15 text-rose-300 inline-flex items-center gap-1.5 cursor-default font-medium">
               <X className="w-3.5 h-3.5" /> Reject
             </span>
           </div>
@@ -111,13 +111,13 @@ export const CampaignStrategySection: React.FC = () => {
 
         {/* Action & Kanban */}
         <div className="space-y-4">
-          <div className="text-[11px] font-mono tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+          <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             15 &mdash; ACTIONABLE EXECUTION
           </div>
           <h3 className="text-2xl sm:text-3xl font-display font-bold text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
             Research should end with a decision.
           </h3>
-          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-sans-editorial">
+          <p className="text-sm text-white/80 leading-relaxed drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)] font-editorial">
             Approval automatically populates execution tasks directly into your workflow Kanban, categorized by priority and channel.
           </p>
 

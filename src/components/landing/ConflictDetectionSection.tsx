@@ -17,7 +17,7 @@ export const ConflictDetectionSection: React.FC = () => {
       </div>
 
       {/* Refined Conflict Comparison Visual */}
-      <div className="p-6 sm:p-8 rounded-3xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] space-y-6">
+      <div className="p-6 sm:p-8 rounded-3xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] space-y-6">
         <div className="flex items-center justify-between text-xs font-mono pb-4 border-b border-white/15">
           <span className="text-white/80 font-semibold tracking-wider">PRICING DISCREPANCY AUDIT</span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-[#F5D77F] font-semibold shadow-[0_0_12px_rgba(251,191,36,0.25)]">
@@ -57,7 +57,7 @@ export const ConflictDetectionSection: React.FC = () => {
         </div>
 
         {/* Resolution Bar */}
-        <div className="p-4 rounded-2xl border border-amber-400/30 bg-amber-500/10 backdrop-blur-md flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-lg">
+        <div className="p-4 rounded-2xl border border-amber-400/30 bg-black/35 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-lg">
           <div className="flex items-center gap-2.5 text-white">
             <UserCheck className="w-4 h-4 text-[#F5D77F] shrink-0" />
             <span className="font-sans-editorial font-medium">Contradictions become visible before polluting campaigns.</span>

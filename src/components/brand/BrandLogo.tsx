@@ -2,7 +2,7 @@ import React from 'react';
 
 export interface BrandSymbolProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number;
-  variant?: 'dark' | 'light' | 'monochrome' | 'white';
+  variant?: 'dark' | 'light' | 'monochrome' | 'white' | 'gold';
   animated?: boolean;
   className?: string;
 }
@@ -23,6 +23,7 @@ export const BrandSymbol: React.FC<BrandSymbolProps> = ({
 
   const px = typeof size === 'number' ? size : sizeMap[size] || 32;
 
+  const isGold = variant === 'gold';
   const isLight = variant === 'light';
   const isMono = variant === 'monochrome';
   const isWhite = variant === 'white';
@@ -31,6 +32,8 @@ export const BrandSymbol: React.FC<BrandSymbolProps> = ({
     ? '#FFFFFF'
     : isMono
     ? 'currentColor'
+    : isGold
+    ? 'url(#rf-symbol-gold-grad)'
     : isLight
     ? 'url(#rf-symbol-light-grad)'
     : 'url(#rf-symbol-dark-grad)';
@@ -39,6 +42,8 @@ export const BrandSymbol: React.FC<BrandSymbolProps> = ({
     ? '#FFFFFF'
     : isMono
     ? 'currentColor'
+    : isGold
+    ? 'url(#rf-thrust-gold-grad)'
     : isLight
     ? 'url(#rf-thrust-light-grad)'
     : 'url(#rf-thrust-dark-grad)';
@@ -54,6 +59,17 @@ export const BrandSymbol: React.FC<BrandSymbolProps> = ({
       aria-label="ResearchFlow Symbol"
     >
       <defs>
+        <linearGradient id="rf-symbol-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FFF3B0" />
+          <stop offset="50%" stopColor="#F5D77F" />
+          <stop offset="100%" stopColor="#D4AF37" />
+        </linearGradient>
+        <linearGradient id="rf-thrust-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#F5D77F" />
+          <stop offset="60%" stopColor="#D4AF37" />
+          <stop offset="100%" stopColor="#B38728" />
+        </linearGradient>
+
         <linearGradient id="rf-symbol-dark-grad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="#38BDF8" />
           <stop offset="40%" stopColor="#60A5FA" />

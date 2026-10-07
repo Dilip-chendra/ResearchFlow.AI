@@ -45,13 +45,13 @@ export const IntroductionPipelineSection: React.FC = () => {
       {/* 04. Introducing ResearchFlow */}
       <div className="space-y-10 sm:space-y-12">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
+          <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
             04 &mdash; THE SYSTEM
           </div>
           <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
             ResearchFlow turns web noise into intelligence.
           </h2>
-          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             One cohesive system for discovering, verifying, comparing, and acting on market information.
           </p>
         </div>
@@ -63,7 +63,7 @@ export const IntroductionPipelineSection: React.FC = () => {
             return (
               <div
                 key={s.name}
-                className="group relative p-5 rounded-2xl border border-white/15 bg-white/[0.05] backdrop-blur-xl hover:border-amber-400/50 hover:bg-white/[0.09] shadow-[0_8px_32px_rgba(0,0,0,0.25)] transition-all flex flex-col justify-between h-full min-w-0"
+                className="group relative p-5 rounded-2xl border border-amber-400/25 bg-black/30 hover:border-amber-400/60 hover:bg-black/40 shadow-[0_8px_32px_rgba(0,0,0,0.35)] transition-all flex flex-col justify-between h-full min-w-0"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
@@ -89,13 +89,13 @@ export const IntroductionPipelineSection: React.FC = () => {
       {/* 05. Live Web Research Pipeline */}
       <div className="space-y-8 pt-10 sm:pt-12 border-t border-amber-400/20">
         <div className="space-y-3 max-w-2xl">
-          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
+          <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
             05 &mdash; ENGINE CAPABILITIES
           </div>
           <h3 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
             Research that actually goes to the web.
           </h3>
-          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             Not a synthetic memory query. ResearchFlow dispatches real HTTP/HTTPS retrieval workers to inspect live websites, extract visible text, and handle real web edge cases.
           </p>
         </div>

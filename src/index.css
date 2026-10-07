@@ -1,1 +1,19 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-playfair {
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+  .font-poppins {
+    font-family: 'Poppins', sans-serif;
+  }
+  .font-montserrat {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .font-lora {
+    font-family: 'Lora', Georgia, serif;
+  }
+}

@@ -32,15 +32,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
 
       {/* Hero Narrative Core */}
       <div className="max-w-3xl space-y-6 sm:space-y-7">
-        {/* Eyebrow Label in Luxury Gold */}
-        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-amber-400/35 bg-black/35 shadow-[0_0_18px_rgba(212,175,55,0.25)]">
-          <span className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-300 to-yellow-500 shadow-[0_0_10px_#f5d77f] animate-pulse" />
-          <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
-            STRATEGIC INTELLIGENCE OPERATING SYSTEM
-          </span>
-        </div>
-
-        {/* Master Headline with Luxury Outfit Font and Gold Gradient */}
+        {/* Master Headline with Luxury Typography and Gold Gradient */}
         <h1 className="text-[clamp(2.5rem,7vw,5.25rem)] font-display font-extrabold tracking-tight text-white leading-[1.04] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
           Know your market.{' '}
           <span className="text-gold-gradient block sm:inline drop-shadow-[0_2px_28px_rgba(212,175,55,0.45)]">
@@ -71,10 +63,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
 
         {/* Subhead & Supporting Statement */}
         <div className="space-y-2 max-w-xl">
-          <p className="text-lg sm:text-xl font-sans text-white/90 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+          <p className="text-lg sm:text-xl font-editorial text-white/90 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
             Autonomous market and competitive intelligence grounded in verifiable evidence.
           </p>
-          <p className="text-xs sm:text-sm font-mono tracking-wider text-[#F5D77F]/90 uppercase font-semibold drop-shadow-sm">
+          <p className="text-xs sm:text-sm font-subheading tracking-wider text-[#F5D77F]/90 uppercase font-semibold drop-shadow-sm">
             Research &middot; Verify &middot; Understand &middot; Act
           </p>
         </div>

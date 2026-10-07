@@ -7,23 +7,23 @@ export const AgenticWorkersSection: React.FC = () => {
       {/* 11. Specialized Intelligence Workers */}
       <div className="space-y-12">
         <div className="space-y-4 max-w-2xl">
-          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
+          <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
             11 &mdash; MULTI-WORKER ORCHESTRATION
           </div>
           <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
             One market. Multiple intelligence workers.
           </h2>
-          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             Rather than a single monolithic prompt, ResearchFlow coordinates specialized autonomous workers operating in lockstep around your business context.
           </p>
         </div>
 
         {/* Central Hub Visualization */}
-        <div className="relative p-8 sm:p-12 rounded-3xl border border-white/15 bg-white/[0.05] backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.3)] overflow-hidden">
+        <div className="relative p-8 sm:p-12 rounded-3xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden">
           {/* Central Context Node */}
           <div className="flex flex-col items-center text-center space-y-3 pb-10">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] p-0.5 shadow-[0_0_36px_rgba(212,175,55,0.45)]">
-              <div className="w-full h-full bg-slate-950/85 backdrop-blur-md rounded-[14px] flex items-center justify-center text-[#F5D77F]">
+              <div className="w-full h-full bg-slate-950/90 rounded-[14px] flex items-center justify-center text-[#F5D77F]">
                 <Network className="w-8 h-8" />
               </div>
             </div>
@@ -75,13 +75,13 @@ export const AgenticWorkersSection: React.FC = () => {
       {/* 12. Shared Business Context Flow */}
       <div className="space-y-8 pt-10 sm:pt-12 border-t border-amber-400/20 max-w-3xl">
         <div className="space-y-3">
-          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
+          <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
             12 &mdash; CONNECTED INTELLIGENCE GRAPH
           </div>
           <h3 className="text-2xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
             Every decision starts from the same context.
           </h3>
-          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             When research discovers a new competitor pricing change, that single observation ripples through the entire system:
           </p>
         </div>
