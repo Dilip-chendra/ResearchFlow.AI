@@ -5,7 +5,7 @@ export const MarketEverywhereSection: React.FC = () => {
     <section id="problem" className="relative py-[clamp(4.5rem,10vh,8rem)] px-5 sm:px-10 md:px-12 max-w-5xl mx-auto w-full space-y-24 sm:space-y-32">
       {/* 02. The Market is Everywhere */}
       <div className="space-y-8 sm:space-y-10">
-        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-cyan-300 font-semibold drop-shadow-sm">
+        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
           02 &mdash; THE LANDSCAPE
         </div>
 
@@ -18,19 +18,19 @@ export const MarketEverywhereSection: React.FC = () => {
           <span className="text-white">Competitors.</span>
           <span className="text-white/90">Pricing.</span>
           <span className="text-white/80">Features.</span>
-          <span className="text-cyan-300 drop-shadow-[0_0_20px_rgba(56,189,248,0.5)]">Positioning.</span>
+          <span className="text-gold-gradient font-bold drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]">Positioning.</span>
           <span className="text-white/80">Messaging.</span>
           <span className="text-white/60">Launches.</span>
         </div>
 
-        <p className="text-xl sm:text-3xl font-display italic font-semibold text-cyan-200 max-w-xl leading-relaxed drop-shadow-[0_2px_16px_rgba(0,0,0,0.8)]">
+        <p className="text-xl sm:text-3xl font-luxury-serif italic font-medium text-[#F5D77F] max-w-xl leading-relaxed drop-shadow-[0_2px_16px_rgba(212,175,55,0.4)]">
           The signal is buried inside it.
         </p>
       </div>
 
       {/* 03. The Real Problem */}
-      <div className="space-y-6 sm:space-y-8 pt-10 border-t border-white/15 max-w-3xl">
-        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-cyan-300/80 font-semibold drop-shadow-sm">
+      <div className="space-y-6 sm:space-y-8 pt-10 border-t border-amber-400/20 max-w-3xl">
+        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
           03 &mdash; THE RESEARCH BOTTLENECK
         </div>
 
@@ -43,12 +43,12 @@ export const MarketEverywhereSection: React.FC = () => {
             Strategy teams manually jump between competitor websites, pricing tables, product documentation, customer search queries, notes, and disconnected spreadsheets.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 py-2 text-xs font-mono">
-            <div className="border border-white/15 px-4 py-3 rounded-xl bg-white/[0.05] backdrop-blur-xl text-white shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all">Competitor Websites</div>
-            <div className="border border-white/15 px-4 py-3 rounded-xl bg-white/[0.05] backdrop-blur-xl text-white shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all">Tiered Pricing Tables</div>
-            <div className="border border-white/15 px-4 py-3 rounded-xl bg-white/[0.05] backdrop-blur-xl text-white shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all">Product Release Logs</div>
-            <div className="border border-white/15 px-4 py-3 rounded-xl bg-white/[0.05] backdrop-blur-xl text-white shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all">Search Index Queries</div>
-            <div className="border border-white/15 px-4 py-3 rounded-xl bg-white/[0.05] backdrop-blur-xl text-white shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all">Field Notes & Transcripts</div>
-            <div className="border border-white/15 px-4 py-3 rounded-xl bg-white/[0.05] backdrop-blur-xl text-white shadow-lg hover:border-white/30 hover:bg-white/[0.09] transition-all">Static Spreadsheets</div>
+            <div className="border border-amber-400/20 px-4 py-3 rounded-xl bg-black/25 text-white shadow-lg hover:border-amber-400/40 hover:bg-black/35 transition-all">Competitor Websites</div>
+            <div className="border border-amber-400/20 px-4 py-3 rounded-xl bg-black/25 text-white shadow-lg hover:border-amber-400/40 hover:bg-black/35 transition-all">Tiered Pricing Tables</div>
+            <div className="border border-amber-400/20 px-4 py-3 rounded-xl bg-black/25 text-white shadow-lg hover:border-amber-400/40 hover:bg-black/35 transition-all">Product Release Logs</div>
+            <div className="border border-amber-400/20 px-4 py-3 rounded-xl bg-black/25 text-white shadow-lg hover:border-amber-400/40 hover:bg-black/35 transition-all">Search Index Queries</div>
+            <div className="border border-amber-400/20 px-4 py-3 rounded-xl bg-black/25 text-white shadow-lg hover:border-amber-400/40 hover:bg-black/35 transition-all">Field Notes & Transcripts</div>
+            <div className="border border-amber-400/20 px-4 py-3 rounded-xl bg-black/25 text-white shadow-lg hover:border-amber-400/40 hover:bg-black/35 transition-all">Static Spreadsheets</div>
           </div>
           <p className="text-white font-medium pt-1 drop-shadow-md">
             The result is slow research, inconsistent evidence, and high-stakes decisions built on stale information.

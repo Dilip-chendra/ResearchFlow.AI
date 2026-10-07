@@ -1,5 +1,6 @@
 import React from 'react';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
+import { Typewriter } from './Typewriter';
 
 interface CinematicHeroProps {
   onGetStarted: () => void;
@@ -16,6 +17,14 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
     }
   };
 
+  const intelligencePrompts = [
+    'Tracking 42 enterprise SaaS competitors for sudden pricing adjustments...',
+    'Detecting contradictory SLA & uptime claims across 16 public domains...',
+    'Synthesizing high-ground positioning angles to win enterprise switchers...',
+    'Extracting verbatim claim provenance with zero hallucinations...',
+    'Generating board-level battlecards and executable GTM tasks...',
+  ];
+
   return (
     <section className="relative min-h-[92vh] flex flex-col justify-between pt-[clamp(6.5rem,14vh,9rem)] pb-8 px-5 sm:px-10 md:px-12 max-w-6xl mx-auto w-full">
       {/* Top spacer for navigation alignment */}
@@ -23,45 +32,66 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
 
       {/* Hero Narrative Core */}
       <div className="max-w-3xl space-y-6 sm:space-y-7">
-        {/* Eyebrow Label */}
-        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/20 bg-white/[0.08] backdrop-blur-xl shadow-lg">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#38bdf8] animate-pulse" />
-          <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.24em] uppercase text-cyan-200 font-semibold drop-shadow-sm">
-            RESEARCHFLOW AI
+        {/* Eyebrow Label in Luxury Gold */}
+        <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-amber-400/35 bg-black/35 shadow-[0_0_18px_rgba(212,175,55,0.25)]">
+          <span className="w-2 h-2 rounded-full bg-gradient-to-r from-amber-300 to-yellow-500 shadow-[0_0_10px_#f5d77f] animate-pulse" />
+          <span className="text-[10px] sm:text-[11px] font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
+            STRATEGIC INTELLIGENCE OPERATING SYSTEM
           </span>
         </div>
 
-        {/* Master Headline with Trending Syne Font */}
+        {/* Master Headline with Luxury Outfit Font and Gold Gradient */}
         <h1 className="text-[clamp(2.5rem,7vw,5.25rem)] font-display font-extrabold tracking-tight text-white leading-[1.04] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
           Know your market.{' '}
-          <span className="text-cyan-300 block sm:inline drop-shadow-[0_0_32px_rgba(56,189,248,0.45)]">
+          <span className="text-gold-gradient block sm:inline drop-shadow-[0_2px_28px_rgba(212,175,55,0.45)]">
             Before it moves.
           </span>
         </h1>
 
+        {/* Live Autonomous Typewriter Terminal */}
+        <div className="p-4 rounded-2xl border border-amber-400/30 bg-black/40 shadow-[0_12px_40px_rgba(0,0,0,0.5)] max-w-2xl space-y-2">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#F5D77F]/90 pb-2 border-b border-amber-400/15">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" />
+              <span className="font-semibold tracking-wider uppercase text-white/90">AUTONOMOUS RADAR &bull; LIVE</span>
+            </div>
+            <span className="text-[#F5D77F] font-medium hidden sm:inline">MULTI-TENANT PIPELINE</span>
+          </div>
+          <div className="text-sm sm:text-base font-sans text-white/95 flex items-center min-h-[3rem] py-1">
+            <span className="text-[#F5D77F] font-mono font-bold mr-2.5 text-base">&gt;</span>
+            <Typewriter
+              words={intelligencePrompts}
+              typingSpeed={40}
+              deletingSpeed={20}
+              pauseDuration={2400}
+              className="text-white/90 font-medium"
+            />
+          </div>
+        </div>
+
         {/* Subhead & Supporting Statement */}
         <div className="space-y-2 max-w-xl">
-          <p className="text-lg sm:text-2xl font-sans-editorial font-normal text-white/90 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
-            Autonomous market and competitive intelligence grounded in evidence.
+          <p className="text-lg sm:text-xl font-sans text-white/90 leading-relaxed drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+            Autonomous market and competitive intelligence grounded in verifiable evidence.
           </p>
-          <p className="text-xs sm:text-sm font-mono tracking-wider text-cyan-200/80 uppercase font-medium drop-shadow-sm">
+          <p className="text-xs sm:text-sm font-mono tracking-wider text-[#F5D77F]/90 uppercase font-semibold drop-shadow-sm">
             Research &middot; Verify &middot; Understand &middot; Act
           </p>
         </div>
 
-        {/* Action Controls */}
-        <div className="pt-3 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 max-w-sm sm:max-w-none">
+        {/* Action Controls in White & Gold */}
+        <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 max-w-sm sm:max-w-none">
           <button
             onClick={onGetStarted}
-            className="group h-12 px-7 rounded-full bg-white text-black font-semibold text-sm inline-flex items-center justify-center gap-2 hover:bg-white hover:scale-[1.03] active:scale-[0.98] shadow-[0_0_30px_rgba(255,255,255,0.6)] transition-all min-h-[48px]"
+            className="group h-12 px-7 rounded-full bg-gradient-to-r from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] text-slate-950 font-bold text-sm inline-flex items-center justify-center gap-2 hover:shadow-[0_0_35px_rgba(245,215,127,0.75)] hover:scale-[1.03] active:scale-[0.98] transition-all min-h-[48px] shadow-[0_0_20px_rgba(212,175,55,0.4)]"
           >
             <span>Explore ResearchFlow</span>
-            <ArrowRight className="w-4 h-4 text-black group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-4 h-4 text-slate-950 group-hover:translate-x-0.5 transition-transform" />
           </button>
 
           <button
             onClick={scrollToNext}
-            className="h-12 px-6 rounded-full bg-white/[0.08] backdrop-blur-xl border border-white/25 text-white hover:bg-white/20 hover:border-white/40 text-sm font-medium inline-flex items-center justify-center gap-1.5 transition-all min-h-[48px] shadow-lg drop-shadow-sm"
+            className="h-12 px-6 rounded-full bg-black/35 border border-amber-400/35 text-white hover:text-[#F5D77F] hover:border-[#F5D77F] text-sm font-medium inline-flex items-center justify-center gap-1.5 transition-all min-h-[48px] shadow-[0_0_15px_rgba(212,175,55,0.15)] drop-shadow-sm"
           >
             <span>See how it works</span>
             <ChevronDown className="w-3.5 h-3.5 opacity-80" />
@@ -70,12 +100,12 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
       </div>
 
       {/* Bottom Editorial Cue */}
-      <div className="pt-8 sm:pt-12 flex items-center justify-between text-[11px] sm:text-xs font-mono text-white/70 border-t border-white/15 drop-shadow-sm">
+      <div className="pt-8 sm:pt-12 flex items-center justify-between text-[11px] sm:text-xs font-mono text-white/70 border-t border-amber-400/20 drop-shadow-sm">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#38bdf8]" />
+          <span className="w-2 h-2 rounded-full bg-[#F5D77F] shadow-[0_0_8px_#D4AF37]" />
           <span className="font-semibold text-white/90">STAGE 01 &mdash; MARKET CHAOS</span>
         </div>
-        <div className="hidden sm:block text-right tracking-widest text-white/60">
+        <div className="hidden sm:block text-right tracking-widest text-[#F5D77F]/80 font-medium">
           SCROLL TO INITIALIZE INTELLIGENCE ENGINE &darr;
         </div>
       </div>

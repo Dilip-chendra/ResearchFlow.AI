@@ -28,7 +28,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-transparent text-white font-sans-editorial selection:bg-cyan-500/30 selection:text-white antialiased">
+    <div className="relative min-h-screen bg-transparent text-white font-sans-editorial selection:bg-amber-400/30 selection:text-amber-100 antialiased">
       {/* 
         PERSISTENT CINEMATIC CANVAS BACKGROUND
         Renders full document scroll across all 192 frames (Page Top 0% -> Footer 100%).
