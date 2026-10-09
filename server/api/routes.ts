@@ -12,7 +12,7 @@ import { freeModelRegistry } from '../ai/openrouter/registry';
 import { openRouterProvider } from '../ai/providers/openrouterProvider';
 import { geminiProvider } from '../ai/providers/geminiProvider';
 import { logger } from '../utils/logger';
-import { User, Workspace } from '../types';
+import { User, Workspace, ActionableTaskItem, ExecutionTask, JobStatus } from '../types';
 
 export const apiRouter = Router();
 

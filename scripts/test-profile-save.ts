@@ -1,4 +1,4 @@
-﻿import 'dotenv/config';
+import 'dotenv/config';
 import { db } from '../server/db/store';
 
 let passed = 0;
@@ -103,8 +103,7 @@ async function runProfileTests() {
   assert(checkB?.displayName === 'bob-builder' && checkB?.avatarValue === '🎯', 'User B profile preserved');
   assert(checkA?.avatarValue !== checkB?.avatarValue, 'User A and User B have completely distinct avatars');
 
-  // Test 8: Workspace Members Synchronization
-  const members = Array.from(db.getWorkspacesForUser(userA.user.id)).flatMap(w => db.getWorkspaceMembers(w.id));
+  const members = Array.from(db.getWorkspacesForUser(userA.user.id)).flatMap(w => db.listMembers(w.id));
   const memberA = members.find(m => m.email.toLowerCase() === userA.user.email.toLowerCase());
   if (memberA) {
     assert(memberA.avatarType === 'EMOJI', 'WorkspaceMember avatarType synchronized');

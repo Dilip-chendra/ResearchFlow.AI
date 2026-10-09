@@ -1,4 +1,4 @@
-export type EvidenceType = 'FACT' | 'INFERENCE' | 'RECOMMENDATION' | 'WARNING';
+export type EvidenceType = 'FACT' | 'INFERENCE' | 'RECOMMENDATION' | 'WARNING' | 'STATISTIC';
 export type ConfidenceLevel = 'HIGH' | 'MEDIUM' | 'LOW';
 export type ConflictSeverity = 'HIGH' | 'MEDIUM' | 'LOW';
 export type ConflictStatus = 'UNRESOLVED' | 'HUMAN_VERIFIED' | 'DISMISSED';
@@ -21,7 +21,8 @@ export type JobStatus =
   | 'paused'
   | 'cancelling'
   | 'cancelled'
-  | 'archived';
+  | 'archived'
+  | 'completed';
 
 export type SourceStatus = 'pending' | 'fetching' | 'completed' | 'partial' | 'failed';
 
@@ -46,7 +47,13 @@ export type ResearchCategory =
   | 'Differentiators'
   | 'Pain Points'
   | 'Potential Gaps'
-  | 'Trust Signals';
+  | 'Trust Signals'
+  | 'PRICING'
+  | 'PRODUCT'
+  | 'FEATURES'
+  | 'POSITIONING'
+  | 'AUDIENCE'
+  | 'MESSAGING';
 
 export type AvatarType = 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
 
@@ -66,13 +73,15 @@ export interface User {
 export interface Workspace {
   id: string;
   name: string;
-  businessName: string;
-  description: string;
-  industry: string;
-  targetAudience: string;
+  slug?: string;
+  plan?: string;
+  businessName?: string;
+  description?: string;
+  industry?: string;
+  targetAudience?: string;
   ownerId: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ResearchSource {
@@ -114,6 +123,7 @@ export interface Evidence {
   sourceUrl: string;
   sourceTitle: string;
   retrievedAt: string;
+  createdAt?: string;
   evidenceType: EvidenceType;
   confidence: ConfidenceLevel;
   normalizedValue?: string;
@@ -185,6 +195,7 @@ export type FunnelStage = 'AWARENESS' | 'CONSIDERATION' | 'CONVERSION' | 'RETENT
 
 export interface TargetPersona {
   role: string;
+  title?: string;
   situation: string;
   pain: string;
   desiredOutcome: string;
@@ -209,9 +220,11 @@ export interface StrategicAngle {
 export interface MessageArchitecture {
   coreMessage: string;
   supportingMessages: {
-    index: number;
-    headline: string;
-    description: string;
+    index?: number;
+    headline?: string;
+    title?: string;
+    description?: string;
+    message?: string;
     evidenceReferenceIds: string[];
   }[];
   proofPoints: {
@@ -220,7 +233,8 @@ export interface MessageArchitecture {
     evidenceId: string;
     metric?: string;
   }[];
-  callToAction: string;
+  callToAction?: string;
+  cta?: string;
 }
 
 export interface ChallengeStrategyItem {
@@ -251,15 +265,18 @@ export interface QualityReviewScorecard {
 }
 
 export interface ValidationReport {
-  status: 'PASS' | 'WARNING' | 'BLOCKED';
-  factualityScore: number; // 0-100
-  unsupportedClaimsCount: number;
-  checks: {
+  status?: 'PASS' | 'WARNING' | 'BLOCKED';
+  factualityScore?: number; // 0-100
+  unsupportedClaimsCount?: number;
+  checks?: {
     name: string;
     status: 'PASS' | 'WARNING' | 'FAIL';
     message: string;
   }[];
-  validatedAt: string;
+  isValid?: boolean;
+  score?: number;
+  issues?: ValidationIssue[];
+  validatedAt?: string;
 }
 
 export interface CampaignBrief {
@@ -267,39 +284,48 @@ export interface CampaignBrief {
   researchJobId: string;
   workspaceId: string;
   title?: string;
+  businessName?: string;
   funnelStage?: FunnelStage;
-  executiveSummary: string;
-  objective: string;
-  audience: string;
-  coreProblem: string;
-  competitiveInsights: string;
-  positioning: string;
-  campaignAngle: string;
-  primaryMessage: string;
-  supportingMessages: string[];
+  executiveSummary?: string;
+  objective?: string;
+  audience?: string;
+  targetAudience?: string;
+  coreProblem?: string;
+  competitiveInsights?: string;
+  positioning?: string;
+  campaignAngle?: string;
+  strategicAngle?: string;
+  primaryMessage?: string;
+  coreMessage?: string;
+  supportingMessages?: string[];
+  proofPoints?: any[];
+  channels?: string[];
+  callToAction?: string;
+  evidenceCount?: number;
   targetPersona?: TargetPersona;
   strategicAngles?: StrategicAngle[];
   messageArchitecture?: MessageArchitecture;
   challengeStrategy?: ChallengeStrategyItem[];
   qualityReview?: QualityReviewScorecard;
   validationReport?: ValidationReport;
-  recommendedChannels: string[];
-  contentStrategy: string;
-  recommendations: string[];
-  risks: string[];
-  evidenceReferences: {
+  recommendedChannels?: string[];
+  contentStrategy?: string;
+  recommendations?: string[];
+  risks?: string[];
+  evidenceReferences?: {
     evidenceId: string;
     claim: string;
     sourceUrl: string;
     category: string;
   }[];
-  confidence: ConfidenceLevel;
+  confidence?: ConfidenceLevel;
   confidenceScore?: number;
   confidenceExplanation?: string;
-  limitations: string;
-  generatedAt: string;
+  limitations?: string;
+  generatedAt?: string;
+  createdAt?: string;
   updatedAt?: string;
-  status: 'DRAFT' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED' | 'READY_FOR_EXECUTION';
+  status?: 'DRAFT' | 'IN_REVIEW' | 'APPROVED' | 'REJECTED' | 'READY_FOR_EXECUTION' | 'ARCHIVED' | string;
   reviewNotes?: string;
   approvedAt?: string;
   approvedBy?: string;
@@ -379,16 +405,20 @@ export interface CampaignAsset {
 
 export interface ExecutionTask {
   id: string;
-  researchJobId: string;
+  researchJobId?: string;
   workspaceId: string;
+  campaignId?: string;
+  channel?: string;
+  assigneeName?: string;
   title: string;
   description: string;
   priority: 'URGENT' | 'HIGH' | 'MEDIUM' | 'LOW';
-  category: 'POSITIONING' | 'CONTENT' | 'VERIFICATION' | 'DISTRIBUTION' | 'LANDING_PAGE';
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
-  reason: string;
+  category?: 'POSITIONING' | 'CONTENT' | 'VERIFICATION' | 'DISTRIBUTION' | 'LANDING_PAGE' | string;
+  status: 'PENDING' | 'TODO' | 'IN_PROGRESS' | 'COMPLETED';
+  reason?: string;
   evidenceReference?: string;
   createdAt: string;
+  updatedAt?: string;
   completedAt?: string;
 }
 
@@ -497,6 +527,9 @@ export interface AuditEvent {
     | 'review_started'
     | 'approved'
     | 'rejected'
+    | 'campaign_approved'
+    | 'campaign_rejected'
+    | 'evidence_updated'
     | 'task_created'
     | 'task_completed'
     | 'share_link_created'
@@ -509,9 +542,11 @@ export interface AuditEvent {
     | 'ai_generation_success'
     | 'ai_validation_failed'
     | 'ai_repair'
-    | 'ai_run_completed';
+    | 'ai_run_completed'
+    | 'SYSTEM_EVENT';
   timestamp: string;
   summary: string;
+  action?: string;
   details?: Record<string, any>;
 }
 
@@ -553,13 +588,6 @@ export interface ValidationIssue {
   message: string;
   field?: string;
   remedy?: string;
-}
-
-export interface ValidationReport {
-  isValid: boolean;
-  score: number;
-  issues: ValidationIssue[];
-  validatedAt: string;
 }
 
 export interface EvaluationCase {
@@ -666,7 +694,10 @@ export type AITaskType =
   | 'TASK_IDENTIFICATION'
   | 'VALIDATION'
   | 'EVALUATION'
-  | 'STRUCTURED_REPAIR';
+  | 'QUALITY_EVALUATION'
+  | 'STRUCTURED_REPAIR'
+  | 'EXTRACTION'
+  | 'SYNTHESIS';
 
 export type FailureCategory =
   | 'RATE_LIMIT'
@@ -722,6 +753,7 @@ export interface AIRun {
   failureCategory?: FailureCategory;
   validationStatus: 'VALID' | 'WARNING' | 'REPAIRED' | 'INVALID';
   promptSummary?: string;
+  errorMessage?: string;
   createdAt: string;
 }
 
@@ -808,7 +840,7 @@ export interface NotificationItem {
   metadata?: Record<string, any>;
 }
 
-export type ChangeSignificance = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+export type ChangeSignificance = 'NOISE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export interface CompetitiveChangeItem {
   id: string;
@@ -958,8 +990,6 @@ export type MoveType =
   | 'HIRING'
   | 'EXECUTIVE'
   | 'M_AND_A';
-
-export type ChangeSignificance = 'NOISE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export type ProductGapClassification =
   | 'TABLE_STAKES'

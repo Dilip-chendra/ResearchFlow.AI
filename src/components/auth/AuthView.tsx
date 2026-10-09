@@ -13,7 +13,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
   initialMode = 'login',
   onBackToLanding,
 }) => {
-  const { login, signup, addToast } = useWorkspace();
+  const { login, signup, addToast, enterDemoMode } = useWorkspace();
   const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>(initialMode);
   
   // Login / Signup Form
@@ -149,6 +149,26 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="bg-slate-900/90 py-8 px-6 shadow-2xl rounded-2xl sm:px-10 border border-slate-800 backdrop-blur-md">
+          {/* Quick Demo Sandbox Access */}
+          <div className="mb-6 p-3.5 rounded-xl border border-amber-400/30 bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent flex items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
+                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <span>Instant Demo Sandbox</span>
+              </div>
+              <p className="text-[11px] text-zinc-400">
+                NextGen Resume AI &bull; War Room &bull; Radar
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => enterDemoMode()}
+              className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] text-slate-950 font-bold text-xs hover:shadow-[0_0_16px_rgba(245,215,127,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer"
+            >
+              Launch Demo
+            </button>
+          </div>
+
           {/* Mode Switcher Tabs */}
           <div className="flex border-b border-slate-800 mb-6 pb-2">
             <button
@@ -177,7 +197,19 @@ export const AuthView: React.FC<AuthViewProps> = ({
           {mode === 'login' && (
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="block text-xs font-medium text-slate-300">Email Address</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEmail('founder@researchflow.ai');
+                      setPassword('DemoPassword123!');
+                    }}
+                    className="text-[11px] text-amber-400 hover:text-amber-300 font-medium transition-colors"
+                  >
+                    Auto-fill Demo Founder
+                  </button>
+                </div>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input

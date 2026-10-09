@@ -76,9 +76,17 @@ ${cleaned}
       .replace(/(?:system|assistant|admin)\s*:\s*(?:ignore|disregard|forget|new instruction|override)/gi, '[blocked-override-phrase]')
       .replace(/ignore\s+(?:all\s+)?(?:previous|prior|above)\s+instructions/gi, '[blocked-instruction-reset]')
       .replace(/disregard\s+(?:all\s+)?(?:previous|prior|above)\s+prompts?/gi, '[blocked-instruction-reset]')
+      .replace(/delete\s+(?:all\s+)?(?:system\s+)?records?/gi, '[blocked-destructive-command]')
       // Neutralize raw closing XML injection attempts
       .replace(/<\/untrusted_web_evidence_data>/gi, '&lt;/untrusted_web_evidence_data&gt;')
       .replace(/<\/SECURITY_DIRECTIVE>/gi, '&lt;/SECURITY_DIRECTIVE&gt;');
+  },
+
+  /**
+   * Sanitizes prompt text to defend against indirect and direct prompt injection.
+   */
+  sanitizePrompt(text: string): string {
+    return this.sanitizeText(text);
   },
 
   /**

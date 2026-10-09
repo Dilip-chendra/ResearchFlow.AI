@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import { fileURLToPath } from 'url';
 import {
   User,
   Workspace,
@@ -285,12 +286,43 @@ export class PersistentDatabaseStore {
 
   private loadFromDisk(): void {
     const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-    const seedDbPath = path.join(process.cwd(), 'data', 'researchflow_db.json');
+    let currentDir = process.cwd();
+    try {
+      if (typeof __dirname !== 'undefined') {
+        currentDir = __dirname;
+      } else if (typeof import.meta !== 'undefined' && import.meta.url) {
+        currentDir = path.dirname(fileURLToPath(import.meta.url));
+      }
+    } catch {
+      currentDir = process.cwd();
+    }
+    const candidatePaths = [
+      path.join(process.cwd(), 'data', 'researchflow_db.json'),
+      path.join('/var/task', 'data', 'researchflow_db.json'),
+      path.resolve(process.cwd(), 'data', 'researchflow_db.json'),
+      path.join(currentDir, '..', '..', 'data', 'researchflow_db.json'),
+      path.join(currentDir, '..', 'data', 'researchflow_db.json'),
+      path.join(currentDir, 'data', 'researchflow_db.json'),
+    ];
 
     let targetPath = this.dataFilePath;
     if (!fs.existsSync(targetPath)) {
-      if (isServerless && fs.existsSync(seedDbPath)) {
-        targetPath = seedDbPath;
+      const foundCandidate = candidatePaths.find(p => {
+        try { return fs.existsSync(p); } catch { return false; }
+      });
+      if (foundCandidate) {
+        if (isServerless) {
+          try {
+            const destDir = path.dirname(this.dataFilePath);
+            if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+            fs.copyFileSync(foundCandidate, this.dataFilePath);
+            targetPath = this.dataFilePath;
+          } catch {
+            targetPath = foundCandidate;
+          }
+        } else {
+          targetPath = foundCandidate;
+        }
       } else {
         return;
       }

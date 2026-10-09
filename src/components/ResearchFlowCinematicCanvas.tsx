@@ -214,7 +214,7 @@ export const ResearchFlowCinematicCanvas: React.FC<ResearchFlowCinematicCanvasPr
         if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
           idleId = (window as any).requestIdleCallback(loadNextIdle, { timeout: 1000 });
         } else {
-          idleId = window.setTimeout(loadNextIdle, 60) as any;
+          idleId = setTimeout(loadNextIdle, 60) as any;
         }
       }
     };
@@ -222,7 +222,7 @@ export const ResearchFlowCinematicCanvas: React.FC<ResearchFlowCinematicCanvasPr
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
       idleId = (window as any).requestIdleCallback(loadNextIdle, { timeout: 1000 });
     } else {
-      idleId = window.setTimeout(loadNextIdle, 60) as any;
+      idleId = setTimeout(loadNextIdle, 60) as any;
     }
 
     return () => {

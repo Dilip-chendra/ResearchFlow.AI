@@ -13,6 +13,7 @@ import {
   EvaluationCase,
   EvaluationRun,
   BaselineMetric,
+  ValidationReport,
   SearchResponse,
   ExecutiveSummaryResult,
   WorkspaceMember,

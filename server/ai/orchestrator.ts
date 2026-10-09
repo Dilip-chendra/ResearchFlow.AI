@@ -62,6 +62,32 @@ export class AIOrchestrator {
     return freeModelRegistry.getAllModels();
   }
 
+  public async executeTask(
+    taskType: AITaskType,
+    prompt: string,
+    options: { systemInstruction?: string; preferredProvider?: string; workspaceId?: string } = {}
+  ): Promise<{ output: string; model: string; provider: string }> {
+    const result = await this.orchestrateStructured<any>(
+      {
+        taskType,
+        prompt,
+        systemInstruction: options.systemInstruction,
+        workspaceId: options.workspaceId,
+      },
+      () => ({ output: '' })
+    );
+
+    const outStr = typeof result.data === 'string'
+      ? result.data
+      : (result.data?.output || JSON.stringify(result.data));
+
+    return {
+      output: outStr,
+      model: result.usedModel,
+      provider: result.usedProvider,
+    };
+  }
+
   public getHealthStatus(): AIHealthStatus {
     const models = freeModelRegistry.getAllModels();
     const freeModels = models.filter(m => m.free);

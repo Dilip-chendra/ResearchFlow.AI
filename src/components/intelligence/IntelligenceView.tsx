@@ -68,7 +68,7 @@ export const IntelligenceView: React.FC = () => {
       await api.runResearchJob(selectedJob.id);
       const full = await api.getResearchJob(selectedJob.id);
       setIntelligence(full.intelligence || null);
-      setSelectedJob(full.job || selectedJob);
+      setSelectedJob((full as any).job || full || selectedJob);
       addToast('Intelligence synthesized successfully!', 'success');
     } catch (err: any) {
       addToast(err.message || 'Failed to synthesize intelligence', 'error');

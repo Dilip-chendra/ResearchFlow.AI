@@ -95,35 +95,36 @@ export interface IntelligenceResult {
 export interface CampaignBriefResult {
   title?: string;
   funnelStage?: FunnelStage;
-  executiveSummary: string;
-  objective: string;
-  audience: string;
-  coreProblem: string;
-  competitiveInsights: string;
-  positioning: string;
-  campaignAngle: string;
-  primaryMessage: string;
-  supportingMessages: string[];
+  executiveSummary?: string;
+  objective?: string;
+  audience?: string;
+  coreProblem?: string;
+  competitiveInsights?: string;
+  positioning?: string;
+  campaignAngle?: string;
+  primaryMessage?: string;
+  supportingMessages?: string[];
   targetPersona?: TargetPersona;
   strategicAngles?: StrategicAngle[];
   messageArchitecture?: MessageArchitecture;
   challengeStrategy?: ChallengeStrategyItem[];
   qualityReview?: QualityReviewScorecard;
   validationReport?: ValidationReport;
-  recommendedChannels: string[];
-  contentStrategy: string;
-  recommendations: string[];
-  risks: string[];
-  evidenceReferences: {
+  recommendedChannels?: string[];
+  contentStrategy?: string;
+  recommendations?: string[];
+  risks?: string[];
+  evidenceReferences?: {
     evidenceId: string;
     claim: string;
     sourceUrl: string;
     category: string;
   }[];
-  confidence: ConfidenceLevel;
+  confidence?: ConfidenceLevel;
   confidenceScore?: number;
   confidenceExplanation?: string;
-  limitations: string;
+  limitations?: string;
+  [key: string]: any;
 }
 
 export interface ChannelDraftsResult {
@@ -1745,7 +1746,7 @@ Return a JSON array of actionable task objects.`;
     const domainListStr = domains.length > 0 ? domains.slice(0, 3).join(', ') : 'target competitor domains';
 
     // Deterministically select strategic synthesis lens (0: Pricing & Wedge, 1: Operational Proof & Moat, 2: Friction & Market Gap)
-    const lens = (params.evidenceList.length + params.job.businessName.length) % 3;
+    const lens = (params.evidenceList.length + bName.length) % 3;
 
     let pricingSummary = '';
     let painPointSummary = '';

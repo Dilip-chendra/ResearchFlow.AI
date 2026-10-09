@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { ModelCapabilityProfile } from '../../../src/types/index';
 import { logger } from '../../utils/logger';
 
@@ -171,12 +172,43 @@ export class OpenRouterCatalogService {
 
   private loadFromDisk(): void {
     const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
-    const seedPath = path.join(process.cwd(), 'data', 'openrouter_catalog.json');
+    let currentDir = process.cwd();
+    try {
+      if (typeof __dirname !== 'undefined') {
+        currentDir = __dirname;
+      } else if (typeof import.meta !== 'undefined' && import.meta.url) {
+        currentDir = path.dirname(fileURLToPath(import.meta.url));
+      }
+    } catch {
+      currentDir = process.cwd();
+    }
+    const candidatePaths = [
+      path.join(process.cwd(), 'data', 'openrouter_catalog.json'),
+      path.join('/var/task', 'data', 'openrouter_catalog.json'),
+      path.resolve(process.cwd(), 'data', 'openrouter_catalog.json'),
+      path.join(currentDir, '..', '..', '..', 'data', 'openrouter_catalog.json'),
+      path.join(currentDir, '..', '..', 'data', 'openrouter_catalog.json'),
+      path.join(currentDir, 'data', 'openrouter_catalog.json'),
+    ];
 
     let targetPath = this.cacheFilePath;
     if (!fs.existsSync(targetPath)) {
-      if (isServerless && fs.existsSync(seedPath)) {
-        targetPath = seedPath;
+      const foundCandidate = candidatePaths.find(p => {
+        try { return fs.existsSync(p); } catch { return false; }
+      });
+      if (foundCandidate) {
+        if (isServerless) {
+          try {
+            const destDir = path.dirname(this.cacheFilePath);
+            if (!fs.existsSync(destDir)) fs.mkdirSync(destDir, { recursive: true });
+            fs.copyFileSync(foundCandidate, this.cacheFilePath);
+            targetPath = this.cacheFilePath;
+          } catch {
+            targetPath = foundCandidate;
+          }
+        } else {
+          targetPath = foundCandidate;
+        }
       }
     }
 

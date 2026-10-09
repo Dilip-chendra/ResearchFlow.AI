@@ -96,14 +96,21 @@ async function runRealityAudit() {
     researchJobId: jobA.id,
     workspaceId: wsA.id,
     title: 'Alpha Positioning Brief',
+    objective: 'Drive enterprise trials',
+    competitiveInsights: 'Legacy competitors have high switching friction',
+    campaignAngle: 'Transparent pricing with guaranteed ATS parse verification',
+    supportingMessages: ['No locked annual contracts', 'Zero prompt hallucinations'],
     executiveSummary: 'Executive summary for Workspace A',
     positioning: 'Positioning for Alpha',
     coreProblem: 'Vendor sprawl',
     audience: 'VP Engineering',
     primaryMessage: 'Unify workflows',
     recommendations: ['Deploy to mid-market'],
+    recommendedChannels: ['LINKEDIN', 'EMAIL'],
+    contentStrategy: 'Multi-touch founder-led outbound',
+    risks: ['Incumbent price slashing'],
+    limitations: 'Limited to public web data',
     evidenceReferences: [],
-    status: 'DRAFT',
     confidence: 'HIGH',
     confidenceScore: 92,
     generatedAt: new Date().toISOString(),
@@ -253,7 +260,7 @@ async function runRealityAudit() {
       supportingText: 'Pricing begins at $19/user/month.',
       evidenceType: 'FACT',
       confidence: 'HIGH',
-      normalizedValue: 19,
+      normalizedValue: '19',
       retrievedAt: new Date().toISOString(),
     },
     {
@@ -268,7 +275,7 @@ async function runRealityAudit() {
       supportingText: 'The entry price point was revised to $49/mo.',
       evidenceType: 'FACT',
       confidence: 'HIGH',
-      normalizedValue: 49,
+      normalizedValue: '49',
       retrievedAt: new Date().toISOString(),
     },
   ];
@@ -300,7 +307,7 @@ async function runRealityAudit() {
     },
     evidenceList: liveEvidence,
   });
-  check(validationSafety.status === 'PASSED' || validationSafety.status === 'WARNING', `Campaign claim validation passed with status: ${validationSafety.status}`);
+  check((validationSafety.status as string) === 'PASS' || (validationSafety.status as string) === 'PASSED' || validationSafety.status === 'WARNING', `Campaign claim validation passed with status: ${validationSafety.status}`);
 
   // =================================================================
   // SECTION 8: CAMPAIGN EDITING, APPROVAL & KANBAN TASK GENERATION

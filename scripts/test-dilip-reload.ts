@@ -19,8 +19,7 @@ async function testDilipReload() {
   // Force synchronous save
   db.saveToDiskSync();
 
-  // Create new store instance loading directly from disk
-  const freshDb = new PersistentDatabaseStore(path.join(process.cwd(), 'data'));
+  const freshDb = new PersistentDatabaseStore();
   const reloadedUser = freshDb.getUser('usr_1788165870953_adc607b1');
   console.log('Reloaded user from fresh store instance:', reloadedUser);
 
