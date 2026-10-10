@@ -238,6 +238,7 @@ var init_store = __esm({
         this.quotaUsages = /* @__PURE__ */ new Map();
         this.byokKeys = /* @__PURE__ */ new Map();
         this.workspaceAIConfigs = /* @__PURE__ */ new Map();
+        this.revokedTokens = /* @__PURE__ */ new Set();
         const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
         const defaultDataDir = path.join(process.cwd(), "data");
         const writableDir = isServerless ? path.join("/tmp", "data") : defaultDataDir;
@@ -512,6 +513,12 @@ var init_store = __esm({
         }
         return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
       }
+      maskEmail(email) {
+        if (!email || typeof email !== "string" || !email.includes("@")) return "***@***";
+        const [local, domain] = email.trim().toLowerCase().split("@");
+        const visible = local.length <= 2 ? local[0] : `${local[0]}***${local[local.length - 1]}`;
+        return `${visible}@${domain}`;
+      }
       // ----------------------------------------------------
       // Authentication & Session Management
       // ----------------------------------------------------
@@ -716,32 +723,124 @@ var init_store = __esm({
         return { user, token };
       }
       createSession(userId) {
-        const token = `tok_${crypto.randomBytes(32).toString("hex")}`;
+        const user = this.getUser(userId);
+        const email = user?.email || "";
+        const name = user?.name || "";
+        const secret = process.env.JWT_SECRET || "researchflow_development_secret_key_2026";
+        const expiresAtMs = Date.now() + 30 * 24 * 60 * 60 * 1e3;
+        const payload = JSON.stringify({
+          uid: userId,
+          email,
+          name,
+          iat: Date.now(),
+          exp: expiresAtMs
+        });
+        const payloadBase64 = Buffer.from(payload).toString("base64url");
+        const signature = crypto.createHmac("sha256", secret).update(payloadBase64).digest("base64url");
+        const token = `tok_${payloadBase64}.${signature}`;
         const session = {
           token,
           userId,
           createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-          expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1e3).toISOString()
+          expiresAt: new Date(expiresAtMs).toISOString()
         };
         this.sessions.set(token, session);
         this.saveToDiskSync();
+        logger.info(`[AUTH] Session created for user ${userId} (${this.maskEmail(email)})`);
         return token;
       }
       getSessionUser(token) {
         if (!token) return null;
+        if (this.revokedTokens.has(token)) return null;
         const session = this.sessions.get(token);
-        if (!session) return null;
-        if (new Date(session.expiresAt).getTime() < Date.now()) {
-          this.sessions.delete(token);
-          this.saveToDiskSync();
-          return null;
+        if (session) {
+          if (new Date(session.expiresAt).getTime() < Date.now()) {
+            this.sessions.delete(token);
+            this.saveToDiskSync();
+            return null;
+          }
+          return this.getUser(session.userId) || null;
         }
-        return this.getUser(session.userId) || null;
+        if (token.startsWith("tok_") && token.includes(".")) {
+          try {
+            const withoutPrefix = token.substring(4);
+            const [payloadBase64, signature] = withoutPrefix.split(".");
+            if (!payloadBase64 || !signature) return null;
+            const secret = process.env.JWT_SECRET || "researchflow_development_secret_key_2026";
+            const expectedSig = crypto.createHmac("sha256", secret).update(payloadBase64).digest("base64url");
+            const sigBuf = Buffer.from(signature);
+            const expBuf = Buffer.from(expectedSig);
+            if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+              logger.warn("[AUTH] Session token HMAC verification failed");
+              return null;
+            }
+            const raw = Buffer.from(payloadBase64, "base64url").toString("utf-8");
+            const payload = JSON.parse(raw);
+            if (!payload.exp || Date.now() > payload.exp) {
+              logger.warn("[AUTH] Session token expired");
+              return null;
+            }
+            let user = this.getUser(payload.uid);
+            if (!user) {
+              const displayName = payload.name || (payload.email ? payload.email.split("@")[0] : "User");
+              user = {
+                id: payload.uid,
+                email: payload.email,
+                name: payload.name || displayName,
+                displayName,
+                avatarType: "INITIALS",
+                avatarValue: this.computeInitials(payload.name || displayName),
+                avatarUrl: "",
+                createdAt: new Date(payload.iat || Date.now()).toISOString(),
+                updatedAt: new Date(payload.iat || Date.now()).toISOString()
+              };
+              this.users.set(user.id, user);
+              const userWorkspaces = this.getWorkspacesForUser(user.id);
+              if (userWorkspaces.length === 0) {
+                const ws = this.createWorkspace({
+                  id: `ws_${user.id.replace("usr_", "")}`,
+                  name: `${user.name}'s Workspace`,
+                  businessName: `${user.name}'s Product`,
+                  description: `Autonomous market intelligence and campaign workspace for ${user.name}.`,
+                  industry: "Technology & Digital Services",
+                  targetAudience: "Founders, marketers, and decision makers",
+                  ownerId: user.id,
+                  createdAt: user.createdAt,
+                  updatedAt: user.updatedAt
+                });
+                this.addMember({
+                  id: `mem_${user.id.replace("usr_", "")}`,
+                  workspaceId: ws.id,
+                  name: user.name,
+                  email: user.email,
+                  role: "OWNER",
+                  title: "Founder & CEO",
+                  department: "Leadership",
+                  joinedAt: user.createdAt
+                });
+              }
+            }
+            this.sessions.set(token, {
+              token,
+              userId: user.id,
+              createdAt: new Date(payload.iat || Date.now()).toISOString(),
+              expiresAt: new Date(payload.exp).toISOString()
+            });
+            return user;
+          } catch (err) {
+            logger.warn("[AUTH] Error recovering stateless session:", err);
+            return null;
+          }
+        }
+        return null;
       }
       invalidateSession(token) {
-        const deleted = this.sessions.delete(token);
-        if (deleted) this.saveToDiskSync();
-        return deleted;
+        if (!token) return false;
+        this.sessions.delete(token);
+        this.revokedTokens.add(token);
+        this.saveToDiskSync();
+        logger.info("[AUTH] Session invalidated on logout");
+        return true;
       }
       createPasswordResetToken(email) {
         const normalizedEmail = email.trim().toLowerCase();
@@ -790,6 +889,7 @@ var init_store = __esm({
           this.userAccounts.set(normalizedEmail, account);
         }
         this.saveToDiskSync();
+        logger.info(`[AUTH] Password reset token generated for ${this.maskEmail(normalizedEmail)}`);
         return resetToken;
       }
       resetPasswordWithToken(token, newPass) {
@@ -818,11 +918,14 @@ var init_store = __esm({
               };
               this.users.set(user.id, user);
             }
+            const sessionToken = this.createSession(user.id);
             this.saveToDiskSync();
-            return true;
+            logger.info(`[AUTH] Password reset completed successfully for ${this.maskEmail(account.email)}`);
+            return { user, token: sessionToken };
           }
         }
-        return false;
+        logger.warn("[AUTH] Password reset failed: invalid or expired token");
+        return null;
       }
       // Workspaces & Users
       getUser(id) {
@@ -12129,14 +12232,25 @@ apiRouter.delete("/auth/profile/avatar", handleRemoveAvatar);
 apiRouter.delete("/profile/avatar", handleRemoveAvatar);
 apiRouter.post(["/auth/signup", "/auth/register"], (req, res) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
-  if (!email || !name) {
-    return res.status(400).json({ error: "Email and full name are required for signup." });
+  if (!email || typeof email !== "string" || !email.trim()) {
+    return res.status(400).json({ error: "Email address is required for registration." });
   }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.trim())) {
+    return res.status(400).json({ error: "Please enter a valid email address." });
+  }
+  if (!name || typeof name !== "string" || !name.trim()) {
+    return res.status(400).json({ error: "Full name is required for registration." });
+  }
+  if (!password || typeof password !== "string" || password.trim().length < 8) {
+    return res.status(400).json({ error: "Password must be at least 8 characters long." });
+  }
+  const normalizedEmail = email.trim().toLowerCase();
   try {
     const { user, token } = db.registerUser({
-      email,
-      password: password || "DefaultPass123!",
-      name,
+      email: normalizedEmail,
+      password: password.trim(),
+      name: name.trim(),
       avatarUrl
     });
     const existingWorkspaces = db.getWorkspacesForUser(user.id);
@@ -12180,15 +12294,19 @@ apiRouter.post(["/auth/signup", "/auth/register"], (req, res) => {
 });
 apiRouter.post("/auth/login", (req, res) => {
   const { email, password, clientAccountSync } = req.body;
-  if (!email) {
-    return res.status(400).json({ error: "Email is required." });
+  if (!email || typeof email !== "string" || !email.trim()) {
+    return res.status(400).json({ error: "Email address is required." });
   }
-  let authResult = db.authenticateUser(email, password);
+  if (!password || typeof password !== "string") {
+    return res.status(400).json({ error: "Password is required." });
+  }
+  const normalizedEmail = email.trim().toLowerCase();
+  let authResult = db.authenticateUser(normalizedEmail, password.trim());
   if (!authResult && clientAccountSync && clientAccountSync.name && password) {
     try {
       const reg = db.registerUser({
-        email,
-        password,
+        email: normalizedEmail,
+        password: password.trim(),
         name: clientAccountSync.name
       });
       const ws = db.createWorkspace({
@@ -12299,10 +12417,11 @@ apiRouter.post("/auth/logout", (req, res) => {
 });
 apiRouter.post("/auth/forgot-password", (req, res) => {
   const { email } = req.body;
-  if (!email) {
-    return res.status(400).json({ error: "Email address is required." });
+  if (!email || typeof email !== "string" || !email.trim()) {
+    return res.status(400).json({ error: "Valid email address is required." });
   }
-  const resetToken = db.createPasswordResetToken(email);
+  const normalizedEmail = email.trim().toLowerCase();
+  const resetToken = db.createPasswordResetToken(normalizedEmail);
   res.json({
     success: true,
     message: resetToken ? "Password reset instructions have been generated." : "If that email is registered, instructions have been sent.",
@@ -12311,14 +12430,25 @@ apiRouter.post("/auth/forgot-password", (req, res) => {
 });
 apiRouter.post("/auth/reset-password", (req, res) => {
   const { token, newPassword } = req.body;
-  if (!token || !newPassword) {
-    return res.status(400).json({ error: "Reset token and new password are required." });
+  if (!token || typeof token !== "string" || !token.trim()) {
+    return res.status(400).json({ error: "Reset token is required." });
   }
-  const ok = db.resetPasswordWithToken(token, newPassword);
-  if (!ok) {
+  if (!newPassword || typeof newPassword !== "string" || newPassword.trim().length < 8) {
+    return res.status(400).json({ error: "New password must be at least 8 characters long." });
+  }
+  const result = db.resetPasswordWithToken(token.trim(), newPassword.trim());
+  if (!result) {
     return res.status(400).json({ error: "Invalid or expired password reset token." });
   }
-  res.json({ success: true, message: "Password updated successfully. You can now sign in." });
+  const workspaces = db.getWorkspacesForUser(result.user.id);
+  res.json({
+    success: true,
+    message: "Password updated successfully. You are now signed in.",
+    user: result.user,
+    token: result.token,
+    workspaces,
+    activeWorkspaceId: workspaces[0]?.id || ""
+  });
 });
 apiRouter.get("/workspaces", (req, res) => {
   const user = getAuthUser(req) || db.getUser("usr_default_founder");

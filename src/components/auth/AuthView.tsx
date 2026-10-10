@@ -13,8 +13,9 @@ export const AuthView: React.FC<AuthViewProps> = ({
   initialMode = 'login',
   onBackToLanding,
 }) => {
-  const { login, signup, addToast } = useWorkspace();
+  const { login, signup, loginWithSession, addToast } = useWorkspace();
   const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>(initialMode);
+  const [errorBanner, setErrorBanner] = useState<string | null>(null);
   
   // Login / Signup Form
   const [email, setEmail] = useState('');
@@ -36,15 +37,20 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) {
-      addToast('Please enter your email.', 'warning');
+    setErrorBanner(null);
+    if (!email.trim() || !password.trim()) {
+      const msg = 'Please enter both your email address and password.';
+      setErrorBanner(msg);
+      addToast(msg, 'warning');
       return;
     }
     setLoading(true);
     try {
-      await login(email.trim(), password.trim() || undefined);
+      await login(email.trim(), password.trim());
     } catch (err: any) {
-      addToast(err.message || 'Login failed', 'error');
+      const msg = err.message || 'Invalid email or password.';
+      setErrorBanner(msg);
+      addToast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -52,22 +58,33 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !name.trim()) {
-      addToast('Please provide your name and email.', 'warning');
+    setErrorBanner(null);
+    if (!email.trim() || !name.trim() || !password.trim()) {
+      const msg = 'Please provide your full name, email, and password.';
+      setErrorBanner(msg);
+      addToast(msg, 'warning');
+      return;
+    }
+    if (password.trim().length < 8) {
+      const msg = 'Password must be at least 8 characters long.';
+      setErrorBanner(msg);
+      addToast(msg, 'warning');
       return;
     }
     setLoading(true);
     try {
       await signup({
         email: email.trim(),
-        password: password.trim() || undefined,
+        password: password.trim(),
         name: name.trim(),
         workspaceName: workspaceName.trim() || undefined,
         businessName: businessName.trim() || undefined,
         industry: industry.trim() || undefined,
       });
     } catch (err: any) {
-      addToast(err.message || 'Registration failed', 'error');
+      const msg = err.message || 'Registration failed';
+      setErrorBanner(msg);
+      addToast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -75,8 +92,11 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorBanner(null);
     if (!email.trim()) {
-      addToast('Please enter your registered email.', 'warning');
+      const msg = 'Please enter your registered email address.';
+      setErrorBanner(msg);
+      addToast(msg, 'warning');
       return;
     }
     setLoading(true);
@@ -89,7 +109,9 @@ export const AuthView: React.FC<AuthViewProps> = ({
       }
       addToast('Password reset token generated.', 'success');
     } catch (err: any) {
-      addToast(err.message || 'Failed to request reset', 'error');
+      const msg = err.message || 'Failed to request reset token';
+      setErrorBanner(msg);
+      addToast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -97,13 +119,22 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
   const handleConfirmReset = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorBanner(null);
     if (!resetToken.trim() || !newPassword.trim()) {
-      addToast('Please enter the token and your new password.', 'warning');
+      const msg = 'Please enter the reset token and your new password.';
+      setErrorBanner(msg);
+      addToast(msg, 'warning');
+      return;
+    }
+    if (newPassword.trim().length < 8) {
+      const msg = 'New password must be at least 8 characters long.';
+      setErrorBanner(msg);
+      addToast(msg, 'warning');
       return;
     }
     setLoading(true);
     try {
-      await api.resetPassword(resetToken.trim(), newPassword.trim());
+      const res = await api.resetPassword(resetToken.trim(), newPassword.trim());
       const normalizedEmail = email.trim().toLowerCase();
       const backup = getClientAccountBackup(normalizedEmail);
       if (backup) {
@@ -113,13 +144,21 @@ export const AuthView: React.FC<AuthViewProps> = ({
           updatedAt: new Date().toISOString(),
         });
       }
-      setPassword(newPassword.trim());
-      addToast('Password reset successful! You can now log in.', 'success');
-      setMode('login');
-      setResetSent(false);
-      setGeneratedTokenPreview(null);
+
+      if (res.user && res.token) {
+        loginWithSession(res.user, res.token, res.workspaces || []);
+        addToast('Password reset successfully! You are now signed in.', 'success');
+      } else {
+        setPassword(newPassword.trim());
+        addToast('Password reset successful! You can now log in.', 'success');
+        setMode('login');
+        setResetSent(false);
+        setGeneratedTokenPreview(null);
+      }
     } catch (err: any) {
-      addToast(err.message || 'Password reset failed', 'error');
+      const msg = err.message || 'Password reset failed';
+      setErrorBanner(msg);
+      addToast(msg, 'error');
     } finally {
       setLoading(false);
     }
@@ -163,7 +202,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
           {/* Mode Switcher Tabs */}
           <div className="flex border-b border-slate-800 mb-6 pb-2">
             <button
-              onClick={() => { setMode('login'); setResetSent(false); }}
+              onClick={() => { setMode('login'); setResetSent(false); setErrorBanner(null); }}
               className={`flex-1 text-center pb-2 text-sm font-medium transition-colors border-b-2 ${
                 mode === 'login'
                   ? 'border-indigo-500 text-indigo-400 font-semibold'
@@ -173,7 +212,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
               Sign In
             </button>
             <button
-              onClick={() => { setMode('signup'); setResetSent(false); }}
+              onClick={() => { setMode('signup'); setResetSent(false); setErrorBanner(null); }}
               className={`flex-1 text-center pb-2 text-sm font-medium transition-colors border-b-2 ${
                 mode === 'signup'
                   ? 'border-indigo-500 text-indigo-400 font-semibold'
@@ -183,6 +222,13 @@ export const AuthView: React.FC<AuthViewProps> = ({
               Create Account
             </button>
           </div>
+
+          {errorBanner && (
+            <div className="mb-4 p-3 bg-red-950/60 border border-red-500/40 rounded-lg text-xs text-red-200 flex items-start gap-2">
+              <span className="shrink-0 font-bold">⚠️</span>
+              <span>{errorBanner}</span>
+            </div>
+          )}
 
           {/* Mode: Login */}
           {mode === 'login' && (
@@ -207,7 +253,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                   <label className="block text-xs font-medium text-slate-300">Password</label>
                   <button
                     type="button"
-                    onClick={() => setMode('forgot')}
+                    onClick={() => { setMode('forgot'); setErrorBanner(null); }}
                     className="text-xs text-indigo-400 hover:text-indigo-300"
                   >
                     Forgot password?
@@ -217,6 +263,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
                     type="password"
+                    required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
@@ -275,6 +322,8 @@ export const AuthView: React.FC<AuthViewProps> = ({
                   <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
                     type="password"
+                    required
+                    minLength={8}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Min 8 characters"

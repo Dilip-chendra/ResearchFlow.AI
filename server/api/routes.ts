@@ -236,15 +236,26 @@ apiRouter.delete('/profile/avatar', handleRemoveAvatar);
 
 apiRouter.post(['/auth/signup', '/auth/register'], (req: Request, res: Response) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
-  if (!email || !name) {
-    return res.status(400).json({ error: 'Email and full name are required for signup.' });
+  if (!email || typeof email !== 'string' || !email.trim()) {
+    return res.status(400).json({ error: 'Email address is required for registration.' });
+  }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email.trim())) {
+    return res.status(400).json({ error: 'Please enter a valid email address.' });
+  }
+  if (!name || typeof name !== 'string' || !name.trim()) {
+    return res.status(400).json({ error: 'Full name is required for registration.' });
+  }
+  if (!password || typeof password !== 'string' || password.trim().length < 8) {
+    return res.status(400).json({ error: 'Password must be at least 8 characters long.' });
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
   try {
     const { user, token } = db.registerUser({
-      email,
-      password: password || 'DefaultPass123!',
-      name,
+      email: normalizedEmail,
+      password: password.trim(),
+      name: name.trim(),
       avatarUrl,
     });
 
@@ -297,18 +308,22 @@ apiRouter.post(['/auth/signup', '/auth/register'], (req: Request, res: Response)
 
 apiRouter.post('/auth/login', (req: Request, res: Response) => {
   const { email, password, clientAccountSync } = req.body;
-  if (!email) {
-    return res.status(400).json({ error: 'Email is required.' });
+  if (!email || typeof email !== 'string' || !email.trim()) {
+    return res.status(400).json({ error: 'Email address is required.' });
+  }
+  if (!password || typeof password !== 'string') {
+    return res.status(400).json({ error: 'Password is required.' });
   }
 
-  let authResult = db.authenticateUser(email, password);
+  const normalizedEmail = email.trim().toLowerCase();
+  let authResult = db.authenticateUser(normalizedEmail, password.trim());
 
   // Cold container recovery: if account is not found in memory but client has verified backup
   if (!authResult && clientAccountSync && clientAccountSync.name && password) {
     try {
       const reg = db.registerUser({
-        email,
-        password,
+        email: normalizedEmail,
+        password: password.trim(),
         name: clientAccountSync.name,
       });
       const ws = db.createWorkspace({
@@ -432,11 +447,12 @@ apiRouter.post('/auth/logout', (req: Request, res: Response) => {
 
 apiRouter.post('/auth/forgot-password', (req: Request, res: Response) => {
   const { email } = req.body;
-  if (!email) {
-    return res.status(400).json({ error: 'Email address is required.' });
+  if (!email || typeof email !== 'string' || !email.trim()) {
+    return res.status(400).json({ error: 'Valid email address is required.' });
   }
 
-  const resetToken = db.createPasswordResetToken(email);
+  const normalizedEmail = email.trim().toLowerCase();
+  const resetToken = db.createPasswordResetToken(normalizedEmail);
   res.json({
     success: true,
     message: resetToken
@@ -448,16 +464,27 @@ apiRouter.post('/auth/forgot-password', (req: Request, res: Response) => {
 
 apiRouter.post('/auth/reset-password', (req: Request, res: Response) => {
   const { token, newPassword } = req.body;
-  if (!token || !newPassword) {
-    return res.status(400).json({ error: 'Reset token and new password are required.' });
+  if (!token || typeof token !== 'string' || !token.trim()) {
+    return res.status(400).json({ error: 'Reset token is required.' });
+  }
+  if (!newPassword || typeof newPassword !== 'string' || newPassword.trim().length < 8) {
+    return res.status(400).json({ error: 'New password must be at least 8 characters long.' });
   }
 
-  const ok = db.resetPasswordWithToken(token, newPassword);
-  if (!ok) {
+  const result = db.resetPasswordWithToken(token.trim(), newPassword.trim());
+  if (!result) {
     return res.status(400).json({ error: 'Invalid or expired password reset token.' });
   }
 
-  res.json({ success: true, message: 'Password updated successfully. You can now sign in.' });
+  const workspaces = db.getWorkspacesForUser(result.user.id);
+  res.json({
+    success: true,
+    message: 'Password updated successfully. You are now signed in.',
+    user: result.user,
+    token: result.token,
+    workspaces,
+    activeWorkspaceId: workspaces[0]?.id || '',
+  });
 });
 
 // ----------------------------------------------------

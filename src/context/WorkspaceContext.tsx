@@ -28,6 +28,7 @@ interface WorkspaceContextType {
     targetAudience?: string;
   }) => Promise<void>;
   googleLogin: (email: string, name?: string) => Promise<void>;
+  loginWithSession: (sessionUser: User, token: string, userWorkspaces: Workspace[]) => void;
   logout: () => Promise<void>;
   enterDemoMode: () => void;
   exitDemoMode: () => void;
@@ -261,14 +262,18 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           setIsOnboardingOpen(true);
         }
       }
-    } catch {
+    } catch (err: any) {
       // Unauthenticated or network issue
-      if (!isDemoMode && !localStorage.getItem('rf_auth_token')) {
-        setIsAuthenticated(false);
-        setUser(null);
-        try {
-          localStorage.removeItem('rf_user');
-        } catch {}
+      if (!isDemoMode) {
+        const isAuthError = err?.message?.includes('401') || err?.message?.includes('Unauthenticated');
+        if (isAuthError || !localStorage.getItem('rf_auth_token')) {
+          setAuthToken(null);
+          setIsAuthenticated(false);
+          setUser(null);
+          try {
+            localStorage.removeItem('rf_user');
+          } catch {}
+        }
       }
     } finally {
       setIsLoading(false);
@@ -395,6 +400,23 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       throw err;
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loginWithSession = (sessionUser: User, token: string, userWorkspaces: Workspace[]) => {
+    setAuthToken(token);
+    setDemoModeHeader(false);
+    setIsDemoMode(false);
+    setUser(sessionUser);
+    try {
+      localStorage.setItem('rf_user', JSON.stringify(sessionUser));
+    } catch {}
+    setIsAuthenticated(true);
+    setWorkspaces(userWorkspaces);
+    if (userWorkspaces.length > 0) {
+      setActiveWorkspace(userWorkspaces[0]);
+    } else {
+      setIsOnboardingOpen(true);
     }
   };
 
@@ -532,6 +554,7 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         login,
         signup,
         googleLogin,
+        loginWithSession,
         logout,
         enterDemoMode,
         exitDemoMode,

@@ -34,6 +34,7 @@ async function runTests() {
   assert(Boolean(regResult.user?.id), 'User registration returns valid user ID');
   assert(regResult.user?.email.toLowerCase() === testEmail.toLowerCase(), 'User email matches registered email');
   assert(Boolean(regResult.token), 'Registration generates valid session token');
+  assert(regResult.token.startsWith('tok_') && regResult.token.includes('.'), 'Session token is HMAC-signed cryptographic format');
 
   // Test 2: Authentication on same instance
   console.log('\n2. Testing Authentication on initial store instance');
@@ -56,8 +57,14 @@ async function runTests() {
   assert(Boolean(authCold?.user), 'Cold-start store instance loads registered user and authenticates successfully');
   assert(authCold?.user?.name === testName, 'Cold-start user preserves full profile metadata');
 
-  // Test 5: Re-registration idempotency with same password
-  console.log('\n5. Testing Re-registration with same password (Client recovery flow)');
+  // Test 5: Stateless session token verification across cold-start instance
+  console.log('\n5. Testing Stateless Cryptographic Token on db2 (container restart)');
+  const sessionUserOnDb2 = db2.getSessionUser(regResult.token);
+  assert(Boolean(sessionUserOnDb2?.email), 'Cold-start store instance validates HMAC-signed session token');
+  assert(sessionUserOnDb2?.email.toLowerCase() === testEmail.toLowerCase(), 'Validated session user email matches registered email');
+
+  // Test 6: Re-registration idempotency with same password
+  console.log('\n6. Testing Re-registration with same password (Client recovery flow)');
   const reReg = db2.registerUser({
     email: testEmail,
     password: rawPassword,
@@ -65,14 +72,15 @@ async function runTests() {
   });
   assert(Boolean(reReg.user), 'Re-registration with matching password recovers cleanly without crashing');
 
-  // Test 6: Password Reset Workflow
-  console.log('\n6. Testing Password Reset Token Generation & Execution');
+  // Test 7: Password Reset Workflow
+  console.log('\n7. Testing Password Reset Token Generation & Execution');
   const resetToken = db2.createPasswordResetToken(testEmail);
   assert(typeof resetToken === 'string' && resetToken.length > 10, 'createPasswordResetToken generates non-empty token string');
 
   const newPassword = 'NewlyUpdatedPassword2026!#';
   const resetSuccess = db2.resetPasswordWithToken(resetToken!, newPassword);
-  assert(resetSuccess === true, 'resetPasswordWithToken returns true for valid token');
+  assert(Boolean(resetSuccess?.user), 'resetPasswordWithToken returns user and new session token');
+  assert(Boolean(resetSuccess?.token), 'resetPasswordWithToken issues valid session token');
 
   // Old password should fail now
   const oldPassAuth = db2.authenticateUser(testEmail, rawPassword);
@@ -82,27 +90,34 @@ async function runTests() {
   const newPassAuth = db2.authenticateUser(testEmail, newPassword);
   assert(Boolean(newPassAuth?.user), 'New password authenticates successfully on db2');
 
-  // Test 7: Cold-start simulation after password reset
-  console.log('\n7. Testing Cold-Start Persistence after Password Reset');
+  // Test 8: Cold-start simulation after password reset
+  console.log('\n8. Testing Cold-Start Persistence after Password Reset');
   const db3 = new PersistentDatabaseStore();
   const authDb3 = db3.authenticateUser(testEmail, newPassword);
   assert(Boolean(authDb3?.user), 'New store instance db3 loads updated password hash and authenticates successfully');
 
-  // Test 8: Password Reset for Unseen Email (Auto-Recovery Placeholder)
-  console.log('\n8. Testing Password Reset for unseen email placeholder');
+  // Test 9: Session Invalidation on Logout
+  console.log('\n9. Testing Session Invalidation (Logout)');
+  const logoutOk = db3.invalidateSession(resetSuccess!.token);
+  assert(logoutOk === true, 'invalidateSession returns true');
+  const postLogoutUser = db3.getSessionUser(resetSuccess!.token);
+  assert(postLogoutUser === null, 'Session token is rejected after logout');
+
+  // Test 10: Password Reset for Unseen Email (Auto-Recovery Placeholder)
+  console.log('\n10. Testing Password Reset for unseen email placeholder');
   const unseenEmail = `unseen_${Date.now()}@newfounder.ai`;
   const unseenToken = db3.createPasswordResetToken(unseenEmail);
   assert(typeof unseenToken === 'string' && unseenToken.length > 10, 'Unseen email generates valid reset token');
 
   const unseenReset = db3.resetPasswordWithToken(unseenToken!, 'BrandNewPass2026!');
-  assert(unseenReset === true, 'Resetting unseen email placeholder succeeds');
+  assert(Boolean(unseenReset?.user), 'Resetting unseen email placeholder succeeds');
 
   const unseenLogin = db3.authenticateUser(unseenEmail, 'BrandNewPass2026!');
   assert(Boolean(unseenLogin?.user), 'Logging into newly reset placeholder succeeds');
 
   console.log('\n====================================================');
   console.log(`SUMMARY: ${testsPassed} PASSED, ${testsFailed} FAILED`);
-  console.log('====================================================');
+  console.log('====================================================\n');
 
   if (testsFailed > 0) {
     process.exit(1);
@@ -110,6 +125,6 @@ async function runTests() {
 }
 
 runTests().catch(err => {
-  console.error('Test run failed with error:', err);
+  console.error('Test suite error:', err);
   process.exit(1);
 });

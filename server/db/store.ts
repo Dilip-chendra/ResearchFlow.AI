@@ -255,6 +255,7 @@ export class PersistentDatabaseStore {
   private quotaUsages: Map<string, QuotaUsageRecord> = new Map();
   private byokKeys: Map<string, BYOKKeyRecord> = new Map();
   private workspaceAIConfigs: Map<string, WorkspaceAIConfig> = new Map();
+  private revokedTokens: Set<string> = new Set();
 
   constructor() {
     const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -551,6 +552,13 @@ export class PersistentDatabaseStore {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
 
+  public maskEmail(email: string): string {
+    if (!email || typeof email !== 'string' || !email.includes('@')) return '***@***';
+    const [local, domain] = email.trim().toLowerCase().split('@');
+    const visible = local.length <= 2 ? local[0] : `${local[0]}***${local[local.length - 1]}`;
+    return `${visible}@${domain}`;
+  }
+
   // ----------------------------------------------------
   // Authentication & Session Management
   // ----------------------------------------------------
@@ -800,36 +808,138 @@ export class PersistentDatabaseStore {
   }
 
   createSession(userId: string): string {
-    const token = `tok_${crypto.randomBytes(32).toString('hex')}`;
+    const user = this.getUser(userId);
+    const email = user?.email || '';
+    const name = user?.name || '';
+    const secret = process.env.JWT_SECRET || 'researchflow_development_secret_key_2026';
+    const expiresAtMs = Date.now() + 30 * 24 * 60 * 60 * 1000; // 30 days
+    const payload = JSON.stringify({
+      uid: userId,
+      email,
+      name,
+      iat: Date.now(),
+      exp: expiresAtMs,
+    });
+    const payloadBase64 = Buffer.from(payload).toString('base64url');
+    const signature = crypto.createHmac('sha256', secret).update(payloadBase64).digest('base64url');
+    const token = `tok_${payloadBase64}.${signature}`;
+
     const session: UserSession = {
       token,
       userId,
       createdAt: new Date().toISOString(),
-      expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+      expiresAt: new Date(expiresAtMs).toISOString(),
     };
     this.sessions.set(token, session);
     this.saveToDiskSync();
+    logger.info(`[AUTH] Session created for user ${userId} (${this.maskEmail(email)})`);
     return token;
   }
 
   getSessionUser(token: string): User | null {
     if (!token) return null;
-    const session = this.sessions.get(token);
-    if (!session) return null;
+    if (this.revokedTokens.has(token)) return null;
 
-    if (new Date(session.expiresAt).getTime() < Date.now()) {
-      this.sessions.delete(token);
-      this.saveToDiskSync();
-      return null;
+    const session = this.sessions.get(token);
+    if (session) {
+      if (new Date(session.expiresAt).getTime() < Date.now()) {
+        this.sessions.delete(token);
+        this.saveToDiskSync();
+        return null;
+      }
+      return this.getUser(session.userId) || null;
     }
 
-    return this.getUser(session.userId) || null;
+    // Stateless signed token fallback for cold-start serverless containers
+    if (token.startsWith('tok_') && token.includes('.')) {
+      try {
+        const withoutPrefix = token.substring(4);
+        const [payloadBase64, signature] = withoutPrefix.split('.');
+        if (!payloadBase64 || !signature) return null;
+
+        const secret = process.env.JWT_SECRET || 'researchflow_development_secret_key_2026';
+        const expectedSig = crypto.createHmac('sha256', secret).update(payloadBase64).digest('base64url');
+        
+        const sigBuf = Buffer.from(signature);
+        const expBuf = Buffer.from(expectedSig);
+        if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+          logger.warn('[AUTH] Session token HMAC verification failed');
+          return null;
+        }
+
+        const raw = Buffer.from(payloadBase64, 'base64url').toString('utf-8');
+        const payload = JSON.parse(raw);
+        if (!payload.exp || Date.now() > payload.exp) {
+          logger.warn('[AUTH] Session token expired');
+          return null;
+        }
+
+        let user = this.getUser(payload.uid);
+        if (!user) {
+          const displayName = payload.name || (payload.email ? payload.email.split('@')[0] : 'User');
+          user = {
+            id: payload.uid,
+            email: payload.email,
+            name: payload.name || displayName,
+            displayName,
+            avatarType: 'INITIALS',
+            avatarValue: this.computeInitials(payload.name || displayName),
+            avatarUrl: '',
+            createdAt: new Date(payload.iat || Date.now()).toISOString(),
+            updatedAt: new Date(payload.iat || Date.now()).toISOString(),
+          };
+          this.users.set(user.id, user);
+
+          const userWorkspaces = this.getWorkspacesForUser(user.id);
+          if (userWorkspaces.length === 0) {
+            const ws = this.createWorkspace({
+              id: `ws_${user.id.replace('usr_', '')}`,
+              name: `${user.name}'s Workspace`,
+              businessName: `${user.name}'s Product`,
+              description: `Autonomous market intelligence and campaign workspace for ${user.name}.`,
+              industry: 'Technology & Digital Services',
+              targetAudience: 'Founders, marketers, and decision makers',
+              ownerId: user.id,
+              createdAt: user.createdAt,
+              updatedAt: user.updatedAt,
+            });
+            this.addMember({
+              id: `mem_${user.id.replace('usr_', '')}`,
+              workspaceId: ws.id,
+              name: user.name,
+              email: user.email,
+              role: 'OWNER',
+              title: 'Founder & CEO',
+              department: 'Leadership',
+              joinedAt: user.createdAt,
+            });
+          }
+        }
+
+        this.sessions.set(token, {
+          token,
+          userId: user.id,
+          createdAt: new Date(payload.iat || Date.now()).toISOString(),
+          expiresAt: new Date(payload.exp).toISOString(),
+        });
+
+        return user;
+      } catch (err) {
+        logger.warn('[AUTH] Error recovering stateless session:', err);
+        return null;
+      }
+    }
+
+    return null;
   }
 
   invalidateSession(token: string): boolean {
-    const deleted = this.sessions.delete(token);
-    if (deleted) this.saveToDiskSync();
-    return deleted;
+    if (!token) return false;
+    this.sessions.delete(token);
+    this.revokedTokens.add(token);
+    this.saveToDiskSync();
+    logger.info('[AUTH] Session invalidated on logout');
+    return true;
   }
 
   createPasswordResetToken(email: string): string | null {
@@ -883,10 +993,11 @@ export class PersistentDatabaseStore {
     }
 
     this.saveToDiskSync();
+    logger.info(`[AUTH] Password reset token generated for ${this.maskEmail(normalizedEmail)}`);
     return resetToken;
   }
 
-  resetPasswordWithToken(token: string, newPass: string): boolean {
+  resetPasswordWithToken(token: string, newPass: string): { user: User; token: string } | null {
     for (const [email, account] of this.userAccounts.entries()) {
       if (account.resetToken === token && account.resetTokenExpires && account.resetTokenExpires > Date.now()) {
         const salt = crypto.randomBytes(16).toString('hex');
@@ -915,11 +1026,14 @@ export class PersistentDatabaseStore {
           this.users.set(user.id, user);
         }
 
+        const sessionToken = this.createSession(user.id);
         this.saveToDiskSync();
-        return true;
+        logger.info(`[AUTH] Password reset completed successfully for ${this.maskEmail(account.email)}`);
+        return { user, token: sessionToken };
       }
     }
-    return false;
+    logger.warn('[AUTH] Password reset failed: invalid or expired token');
+    return null;
   }
 
   // Workspaces & Users
