@@ -56728,6 +56728,24 @@
         "createdAt": "2026-10-10T09:51:59.611Z",
         "updatedAt": "2026-10-10T09:51:59.611Z"
       }
+    ],
+    [
+      "ws_test_1791627110334",
+      {
+        "id": "sub_pro_1791627110335",
+        "workspaceId": "ws_test_1791627110334",
+        "userId": "usr_test",
+        "planId": "pro_byok",
+        "tier": "PRO",
+        "aiMode": "BYOK",
+        "interval": "MONTHLY",
+        "status": "ACTIVE",
+        "currentPeriodStart": "2026-10-10T10:11:50.335Z",
+        "currentPeriodEnd": "2026-11-09T10:11:50.335Z",
+        "cancelAtPeriodEnd": false,
+        "createdAt": "2026-10-10T10:11:50.335Z",
+        "updatedAt": "2026-10-10T10:11:50.335Z"
+      }
     ]
   ],
   "billingOrders": [],
@@ -56782,6 +56800,31 @@
         "processedAt": "2026-10-10T09:51:59.610Z",
         "error": "Ignored: Non-ResearchFlow AI merchant payload"
       }
+    ],
+    [
+      "evt_1791627110334",
+      {
+        "id": "evt_1791627110334",
+        "eventId": "evt_1791627110334",
+        "eventType": "payment.captured",
+        "payload": {
+          "event": "payment.captured",
+          "payload": {
+            "payment": {
+              "entity": {
+                "id": "pay_veyra_111",
+                "notes": {
+                  "app": "veyra_ai",
+                  "courseId": "crs_101"
+                }
+              }
+            }
+          }
+        },
+        "processed": true,
+        "processedAt": "2026-10-10T10:11:50.334Z",
+        "error": "Ignored: Non-ResearchFlow AI merchant payload"
+      }
     ]
   ],
   "quotaUsages": [
@@ -56806,6 +56849,17 @@
         "aiTokensUsed": 0,
         "lastUpdated": "2026-10-10T09:51:59.611Z"
       }
+    ],
+    [
+      "ws_test_1791627110334_2026-10",
+      {
+        "workspaceId": "ws_test_1791627110334",
+        "periodMonth": "2026-10",
+        "researchRunsUsed": 2,
+        "competitorCrawlsUsed": 0,
+        "aiTokensUsed": 0,
+        "lastUpdated": "2026-10-10T10:11:50.335Z"
+      }
     ]
   ],
   "byokKeys": [
@@ -56822,6 +56876,21 @@
         "isValidated": true,
         "createdAt": "2026-10-10T09:52:00.645Z",
         "updatedAt": "2026-10-10T09:52:00.645Z"
+      }
+    ],
+    [
+      "ws_test_1791627110334_OPENAI",
+      {
+        "id": "byok_1791627110807",
+        "workspaceId": "ws_test_1791627110334",
+        "provider": "OPENAI",
+        "encryptedKey": "9d56e9f6114e2a9c657d5d4c:6dd6604d12139df519f2a7113b291264:f54b327e3e925313b97f8526f43a9c4a5a997ea81e4324287c35e86318e4db92",
+        "keyMask": "sk-proj-...9988",
+        "preferredModel": "gpt-4o-mini",
+        "isActive": true,
+        "isValidated": true,
+        "createdAt": "2026-10-10T10:11:50.807Z",
+        "updatedAt": "2026-10-10T10:11:50.807Z"
       }
     ]
   ],
@@ -56844,6 +56913,16 @@
         "activeProvider": "OPENROUTER",
         "strictBYOKOnly": false,
         "updatedAt": "2026-10-10T09:51:59.611Z"
+      }
+    ],
+    [
+      "ws_test_1791627110334",
+      {
+        "workspaceId": "ws_test_1791627110334",
+        "mode": "MANAGED",
+        "activeProvider": "OPENROUTER",
+        "strictBYOKOnly": false,
+        "updatedAt": "2026-10-10T10:11:50.335Z"
       }
     ]
   ]

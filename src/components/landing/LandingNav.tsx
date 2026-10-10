@@ -108,10 +108,7 @@ export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }
             onClick={() => setIsPricingModalOpen(true)}
             className="text-[#F5D77F] hover:text-white font-bold transition-colors focus:outline-none py-1 drop-shadow-sm flex items-center gap-1 cursor-pointer"
           >
-            <span>Pricing</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400/20 text-[#F5D77F] border border-amber-400/30">
-              Live
-            </span>
+            Pricing
           </button>
         </div>
 
@@ -204,12 +201,9 @@ export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }
                 setMobileMenuOpen(false);
                 setIsPricingModalOpen(true);
               }}
-              className="text-left py-3 px-3 rounded-lg hover:bg-white/10 text-[#F5D77F] hover:text-white font-bold min-h-[48px] flex items-center justify-between transition-colors"
+              className="text-left py-3 px-3 rounded-lg hover:bg-white/10 text-[#F5D77F] hover:text-white font-bold min-h-[48px] flex items-center transition-colors"
             >
-              <span>Pricing & Plans</span>
-              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/20 text-[#F5D77F] border border-amber-400/30">
-                Live Razorpay
-              </span>
+              Pricing & Plans
             </button>
           </div>
 

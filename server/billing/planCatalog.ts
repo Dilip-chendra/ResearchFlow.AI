@@ -75,8 +75,8 @@ export const DEFAULT_PLANS: SubscriptionPlan[] = [
     aiMode: 'BYOK',
     monthlyPriceINR: 399,
     yearlyPriceINR: 3990,
-    description: 'Discounted rate when you bring your own OpenAI, Anthropic, or Gemini API keys.',
-    badge: '60% BYOK Discount',
+    description: 'Cost-efficient plan for teams using direct provider API keys with zero token markup.',
+    badge: 'Direct API Keys',
     features: [
       '10 Deep Market Research Runs / month',
       '25 Competitor Crawl Pages / month',
@@ -146,8 +146,8 @@ export const DEFAULT_PLANS: SubscriptionPlan[] = [
     monthlyPriceINR: 1199,
     yearlyPriceINR: 11990,
     highlighted: true,
-    badge: 'Pro BYOK Value',
-    description: 'Pro command center powered by your enterprise API keys with massive cost savings.',
+    badge: 'Most Popular',
+    description: 'Pro command center powered by your enterprise API keys with direct provider pricing.',
     features: [
       '50 Deep Market Research Runs / month',
       '100 Competitor Crawl Pages / month',
@@ -215,7 +215,7 @@ export const DEFAULT_PLANS: SubscriptionPlan[] = [
     aiMode: 'BYOK',
     monthlyPriceINR: 3499,
     yearlyPriceINR: 34990,
-    badge: 'Scale BYOK',
+    badge: 'High Volume',
     description: 'High-volume research infrastructure backed by your custom corporate model agreements.',
     features: [
       '500 Deep Market Research Runs / month',

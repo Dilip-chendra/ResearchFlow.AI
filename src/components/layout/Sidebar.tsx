@@ -54,7 +54,7 @@ export const Sidebar: React.FC = () => {
     { id: 'tasks', label: 'Action Tasks', icon: CheckSquare },
     { id: 'evaluation', label: 'Quality Benchmark', icon: TestTube2, badge: '15 TCs' },
     { id: 'audit', label: 'Audit Log', icon: History },
-    { id: 'pricing', label: 'Pricing & Plans', icon: CreditCard, badge: 'Live' },
+    { id: 'pricing', label: 'Pricing & Plans', icon: CreditCard },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
