@@ -21,6 +21,7 @@ import {
   ExecutionTask,
 } from '../types';
 import { db } from '../db/store';
+import { entitlementEngine } from '../billing/entitlementEngine';
 import { logger } from '../utils/logger';
 
 // Prompt Injection and payload sanitizer
@@ -396,6 +397,14 @@ export const warRoomService = {
     const comp = db.getWarRoomCompetitor(competitorId);
     if (!comp || comp.workspaceId !== workspaceId) {
       throw new Error('Competitor not found in this workspace.');
+    }
+
+    if (status === 'CONFIRMED') {
+      const plan = entitlementEngine.getEffectivePlan(workspaceId).plan;
+      const existingConfirmed = db.getWarRoomCompetitors(workspaceId).filter(c => c.status === 'CONFIRMED' && c.id !== competitorId);
+      if (existingConfirmed.length >= plan.quotas.maxCompetitorUniverse) {
+        throw new Error(`Competitor universe limit reached (${existingConfirmed.length}/${plan.quotas.maxCompetitorUniverse}). Upgrade your plan to expand tracked competitors.`);
+      }
     }
 
     comp.status = status;

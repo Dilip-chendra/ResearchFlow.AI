@@ -1907,6 +1907,22 @@ apiRouter.get('/research/compare', (req: Request, res: Response) => {
 
 apiRouter.get('/research/jobs/:id/export', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req);
+
+  const exportCheck = entitlementEngine.check(wsId, 'EXPORT_REPORT');
+  if (!exportCheck.allowed) {
+    return res.status(402).json({
+      error: 'Payment Required',
+      code: 'ENTITLEMENT_RESTRICTED',
+      message: exportCheck.reason,
+      details: {
+        feature: 'EXPORT_REPORT',
+        planName: exportCheck.planName,
+        tier: exportCheck.tier,
+        upgradeUrl: '/settings?tab=billing',
+      },
+    });
+  }
+
   const format = (req.query.format as string) || 'markdown';
   const job = db.getResearchJob(req.params.id, wsId);
   if (!job) return res.status(404).json({ error: 'Research job not found' });
@@ -2447,6 +2463,22 @@ apiRouter.post('/campaigns/:id/reject', (req: Request, res: Response) => {
  */
 apiRouter.get('/campaigns/:id/export', (req: Request, res: Response) => {
   const wsId = getWorkspaceId(req, res);
+
+  const exportCheck = entitlementEngine.check(wsId, 'EXPORT_REPORT');
+  if (!exportCheck.allowed) {
+    return res.status(402).json({
+      error: 'Payment Required',
+      code: 'ENTITLEMENT_RESTRICTED',
+      message: exportCheck.reason,
+      details: {
+        feature: 'EXPORT_REPORT',
+        planName: exportCheck.planName,
+        tier: exportCheck.tier,
+        upgradeUrl: '/settings?tab=billing',
+      },
+    });
+  }
+
   const format = (req.query.format as string) || 'markdown';
 
   try {
@@ -2734,6 +2766,22 @@ apiRouter.get('/war-room/overview', (req: Request, res: Response) => {
 apiRouter.post('/war-room/map-market', (req: Request, res: Response) => {
   try {
     const wsId = getWorkspaceId(req, res);
+
+    const warRoomCheck = entitlementEngine.check(wsId, 'WAR_ROOM');
+    if (!warRoomCheck.allowed) {
+      return res.status(402).json({
+        error: 'Payment Required',
+        code: 'WAR_ROOM_UPGRADE_REQUIRED',
+        message: warRoomCheck.reason,
+        details: {
+          feature: 'WAR_ROOM',
+          planName: warRoomCheck.planName,
+          tier: warRoomCheck.tier,
+          upgradeUrl: '/settings?tab=billing',
+        },
+      });
+    }
+
     const user = getAuthUser(req);
     const overview = warRoomService.mapMyMarket(
       wsId,
@@ -2981,6 +3029,22 @@ apiRouter.post('/war-room/recommendations/:id/experiment', (req: Request, res: R
 apiRouter.post('/war-room/scenarios/run', (req: Request, res: Response) => {
   try {
     const wsId = getWorkspaceId(req, res);
+
+    const warRoomCheck = entitlementEngine.check(wsId, 'WAR_ROOM');
+    if (!warRoomCheck.allowed) {
+      return res.status(402).json({
+        error: 'Payment Required',
+        code: 'WAR_ROOM_UPGRADE_REQUIRED',
+        message: warRoomCheck.reason,
+        details: {
+          feature: 'WAR_ROOM',
+          planName: warRoomCheck.planName,
+          tier: warRoomCheck.tier,
+          upgradeUrl: '/settings?tab=billing',
+        },
+      });
+    }
+
     const user = getAuthUser(req);
     const simulation = warRoomService.simulateScenario(
       wsId,
@@ -3221,7 +3285,27 @@ apiRouter.post('/company/crawl', async (req: Request, res: Response) => {
   try {
     const wsId = getWorkspaceId(req, res);
     const { maxPageBudget, maxDepth } = req.body || {};
-    const job = await companyIntelligenceService.triggerDeepCrawl(wsId, { maxPageBudget, maxDepth });
+    const pageCount = Number(maxPageBudget) || 10;
+
+    const crawlCheck = entitlementEngine.check(wsId, 'CRAWL_PAGE', pageCount);
+    if (!crawlCheck.allowed) {
+      return res.status(402).json({
+        error: 'Payment Required',
+        code: 'QUOTA_EXCEEDED',
+        message: crawlCheck.reason,
+        details: {
+          feature: 'CRAWL_PAGE',
+          currentUsage: crawlCheck.currentUsage,
+          limit: crawlCheck.limit,
+          planName: crawlCheck.planName,
+          tier: crawlCheck.tier,
+          upgradeUrl: '/settings?tab=billing',
+        },
+      });
+    }
+
+    const job = await companyIntelligenceService.triggerDeepCrawl(wsId, { maxPageBudget: pageCount, maxDepth });
+    entitlementEngine.consume(wsId, 'CRAWL_PAGE', pageCount);
     res.json({ success: true, job });
   } catch (err: any) {
     res.status(400).json({ error: err.message });
@@ -3443,6 +3527,21 @@ apiRouter.post('/byok/save', async (req: Request, res: Response) => {
 
     if (!provider || !apiKey) {
       return res.status(400).json({ error: 'provider and apiKey are required' });
+    }
+
+    const byokCheck = entitlementEngine.check(wsId, 'BYOK_ACCESS');
+    if (!byokCheck.allowed) {
+      return res.status(402).json({
+        error: 'Payment Required',
+        code: 'BYOK_NOT_ALLOWED',
+        message: byokCheck.reason,
+        details: {
+          feature: 'BYOK_ACCESS',
+          planName: byokCheck.planName,
+          tier: byokCheck.tier,
+          upgradeUrl: '/settings?tab=billing',
+        },
+      });
     }
 
     const saved = await aiGateway.saveKey(wsId, provider as AIProviderType, apiKey, preferredModel);

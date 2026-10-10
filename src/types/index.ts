@@ -754,6 +754,10 @@ export interface AIRun {
   validationStatus: 'VALID' | 'WARNING' | 'REPAIRED' | 'INVALID';
   promptSummary?: string;
   errorMessage?: string;
+  aiMode?: 'MANAGED' | 'BYOK';
+  requestedProvider?: string;
+  credentialRef?: string;
+  completedAt?: string;
   createdAt: string;
 }
 

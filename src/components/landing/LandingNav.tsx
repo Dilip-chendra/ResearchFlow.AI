@@ -63,8 +63,8 @@ export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }
         >
           <BrandSymbol size={26} variant="gold" className="drop-shadow-[0_0_12px_rgba(212,175,55,0.45)] group-hover:scale-105 transition-transform" />
           <div className="flex items-center gap-1.5">
-            <span className="text-base font-display font-extrabold tracking-tight text-white drop-shadow-sm group-hover:text-[#F5D77F] transition-colors">
-              Research<span className="text-gold-gradient font-black ml-px">Flow</span>
+            <span className="text-base font-display font-extrabold tracking-tight text-gold-gradient drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]">
+              Research<span className="font-black ml-px">Flow</span>
             </span>
             <span className="text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-amber-400/40 bg-amber-400/15 text-[#F5D77F] font-bold shadow-[0_0_8px_rgba(212,175,55,0.3)]">
               AI

@@ -25,8 +25,8 @@ export const CinematicFooter: React.FC<CinematicFooterProps> = ({
             <div className="flex items-center gap-2.5">
               <BrandSymbol size={24} variant="gold" className="drop-shadow-[0_0_10px_rgba(212,175,55,0.4)]" />
               <div className="flex items-center gap-1.5">
-                <span className="font-display font-extrabold text-base text-white tracking-tight">
-                  Research<span className="text-gold-gradient font-black ml-px">Flow</span>
+                <span className="font-display font-extrabold text-base text-gold-gradient drop-shadow-[0_0_12px_rgba(212,175,55,0.4)] tracking-tight">
+                  Research<span className="font-black ml-px">Flow</span>
                 </span>
                 <span className="text-[10px] font-mono uppercase tracking-widest px-1.5 py-0.5 rounded-full border border-amber-400/40 bg-amber-400/15 text-[#F5D77F] font-bold">
                   AI

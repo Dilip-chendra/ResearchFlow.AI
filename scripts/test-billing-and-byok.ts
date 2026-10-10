@@ -212,9 +212,92 @@ async function runTests() {
   assert(listedKeys.length === 1 && listedKeys[0].provider === 'OPENAI', 'BYOK key listed in workspace registry');
   assert(!JSON.stringify(listedKeys).includes('abcdef9988'), 'Plaintext API token is never exposed in listed key records');
 
-  console.log('\n======================================================');
-  console.log(`📊 RESULTS: ${passed} PASSED, ${failed} FAILED`);
-  console.log('======================================================\n');
+  // TEST 7: Provider Connection Validation & Health Checks
+  console.log('\n--- 7. Provider Connection Validation & Robustness ---');
+  const emptyKeyTest = await aiGateway.testConnection('OPENAI', '');
+  assert(emptyKeyTest.healthy === false && emptyKeyTest.error?.includes('empty'), 'Empty API key rejected immediately');
+
+  const emptyGeminiTest = await aiGateway.testConnection('GEMINI', '   ');
+  assert(emptyGeminiTest.healthy === false, 'Whitespace-only Gemini API key rejected');
+
+  const unsupportedProviderTest = await aiGateway.testConnection('UNSUPPORTED' as any, 'some_token');
+  assert(unsupportedProviderTest.healthy === false && unsupportedProviderTest.error?.includes('Unsupported'), 'Unsupported provider cleanly rejected');
+
+  // TEST 8: AI Request Provenance & Audit Logging
+  console.log('\n--- 8. AI Request Provenance & Audit Trail ---');
+  const sampleRunId = `run_byok_test_${Date.now()}`;
+  db.recordAIRun({
+    id: sampleRunId,
+    workspaceId: testWsId,
+    taskType: 'INTELLIGENCE_SYNTHESIS',
+    provider: 'openai',
+    model: 'gpt-4o-mini',
+    attempt: 1,
+    status: 'SUCCESS',
+    latencyMs: 342,
+    inputTokens: 120,
+    outputTokens: 380,
+    fallbackUsed: false,
+    fallbackChain: ['gpt-4o-mini'],
+    validationStatus: 'VALID',
+    aiMode: 'BYOK',
+    requestedProvider: 'OPENAI',
+    credentialRef: 'sk-proj-...9988',
+    promptSummary: 'Analyze pricing model and key objections',
+    completedAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+  });
+
+  const retrievedRuns = db.listAIRuns(testWsId);
+  const foundRun = retrievedRuns.find((r) => r.id === sampleRunId);
+  assert(Boolean(foundRun), 'BYOK AI run successfully persisted in database');
+  assert(foundRun?.aiMode === 'BYOK', 'AIRun provenance records aiMode = BYOK');
+  assert(foundRun?.requestedProvider === 'OPENAI', 'AIRun provenance records requestedProvider = OPENAI');
+  assert(foundRun?.credentialRef === 'sk-proj-...9988', 'AIRun provenance records credentialRef mask (never raw key)');
+  assert(foundRun?.validationStatus === 'VALID', 'AIRun provenance records output validation status');
+
+  // TEST 9: Multi-Module Entitlement Matrix Enforcement
+  console.log('\n--- 9. Multi-Module Entitlement Matrix Enforcement ---');
+  const freeWsId = `ws_free_check_${Date.now()}`;
+  
+  // War Room check on Free vs Pro
+  const warRoomFreeCheck = entitlementEngine.check(freeWsId, 'WAR_ROOM');
+  assert(warRoomFreeCheck.allowed === false, 'War Room restricted on Free tier');
+
+  const warRoomProCheck = entitlementEngine.check(testWsId, 'WAR_ROOM');
+  assert(warRoomProCheck.allowed === true, 'War Room unlocked on Pro tier');
+
+  // Export check on Free vs Pro
+  const exportFreeCheck = entitlementEngine.check(freeWsId, 'EXPORT_REPORT');
+  assert(exportFreeCheck.allowed === false, 'Report export restricted on Free tier');
+
+  const exportProCheck = entitlementEngine.check(testWsId, 'EXPORT_REPORT');
+  assert(exportProCheck.allowed === true, 'Report export unlocked on Pro tier');
+
+  // Competitor crawl page check on Free (limit 5)
+  const crawlPageFreeCheck = entitlementEngine.check(freeWsId, 'CRAWL_PAGE', 6);
+  assert(crawlPageFreeCheck.allowed === false, 'Deep crawl exceeding Free limit (5 pages) correctly blocked');
+
+  // TEST 10: Strict BYOK Failure Isolation
+  console.log('\n--- 10. Strict BYOK Failure Isolation ---');
+  // Attempting BYOK with unconfigured provider must throw error and NOT fall back to managed AI
+  db.updateWorkspaceAIConfig(testWsId, {
+    mode: 'BYOK',
+    activeProvider: 'ANTHROPIC', // Anthropic key not configured in testWsId
+  });
+
+  try {
+    await (aiGateway as any).executeBYOK(testWsId, {
+      taskType: 'VALIDATION',
+      prompt: 'Test prompt',
+    });
+    assert(false, 'BYOK execution without active key should fail');
+  } catch (err: any) {
+    assert(
+      err.message.includes('no verified API key is configured for ANTHROPIC'),
+      'BYOK mode safely rejects unconfigured provider without falling back to Managed AI'
+    );
+  }
 
   if (failed > 0) {
     process.exit(1);

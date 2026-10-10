@@ -7,8 +7,8 @@ import { logger } from '../../utils/logger';
 export class OpenRouterProvider implements AIProvider {
   public readonly name = 'openrouter' as const;
 
-  private getApiKey(): string | undefined {
-    return process.env.OPENROUTER_API_KEY;
+  private getApiKey(customKey?: string): string | undefined {
+    return customKey || process.env.OPENROUTER_API_KEY;
   }
 
   public isConfigured(): boolean {
@@ -18,16 +18,18 @@ export class OpenRouterProvider implements AIProvider {
 
   public async generateText(
     modelId: string,
-    options: AIProviderRequestOptions
+    options: AIProviderRequestOptions,
+    customApiKey?: string
   ): Promise<AIProviderResponse<string>> {
-    return this.callOpenRouter(modelId, options, false);
+    return this.callOpenRouter(modelId, options, false, customApiKey);
   }
 
   public async generateStructured<T>(
     modelId: string,
-    options: AIProviderRequestOptions
+    options: AIProviderRequestOptions,
+    customApiKey?: string
   ): Promise<AIProviderResponse<T>> {
-    const response = await this.callOpenRouter(modelId, options, true);
+    const response = await this.callOpenRouter(modelId, options, true, customApiKey);
     if (!response.success) {
       return response as unknown as AIProviderResponse<T>;
     }
@@ -50,24 +52,25 @@ export class OpenRouterProvider implements AIProvider {
     }
   }
 
-  public async healthCheck(modelId = 'openrouter/free'): Promise<{ healthy: boolean; latencyMs: number; error?: string }> {
-    if (!this.isConfigured()) {
-      return { healthy: false, latencyMs: 0, error: 'OPENROUTER_API_KEY is not configured in server environment.' };
+  public async healthCheck(
+    apiKey?: string,
+    modelId = 'openrouter/free'
+  ): Promise<{ healthy: boolean; latencyMs: number; error?: string }> {
+    const key = apiKey || this.getApiKey();
+    if (!key || key.trim().length < 5) {
+      return { healthy: false, latencyMs: 0, error: 'OPENROUTER_API_KEY is not configured.' };
     }
     const start = Date.now();
     try {
-      const res = await this.callOpenRouter(modelId, {
-        taskType: 'VALIDATION',
-        prompt: 'Respond with exactly: {"status":"ok"}',
-        temperature: 0.1,
-        maxTokens: 50,
-        timeoutMs: 8000,
-      }, true);
+      const authRes = await fetch('https://openrouter.ai/api/v1/auth/key', {
+        headers: { Authorization: `Bearer ${key.trim()}` },
+      });
       const latencyMs = Date.now() - start;
-      if (res.success) {
-        return { healthy: true, latencyMs };
+      if (!authRes.ok) {
+        const errText = await authRes.text();
+        return { healthy: false, latencyMs, error: `OpenRouter authentication rejected (${authRes.status}): ${errText}` };
       }
-      return { healthy: false, latencyMs, error: res.errorMessage || 'Failed ping test' };
+      return { healthy: true, latencyMs };
     } catch (e: any) {
       return { healthy: false, latencyMs: Date.now() - start, error: e.message };
     }
@@ -76,9 +79,10 @@ export class OpenRouterProvider implements AIProvider {
   private async callOpenRouter(
     modelId: string,
     options: AIProviderRequestOptions,
-    jsonMode: boolean
+    jsonMode: boolean,
+    customApiKey?: string
   ): Promise<AIProviderResponse<string>> {
-    const apiKey = this.getApiKey();
+    const apiKey = this.getApiKey(customApiKey);
     if (!apiKey) {
       return {
         success: false,
@@ -87,7 +91,7 @@ export class OpenRouterProvider implements AIProvider {
         provider: 'openrouter',
         latencyMs: 0,
         failureCategory: 'PROVIDER_UNAVAILABLE',
-        errorMessage: 'OPENROUTER_API_KEY is not configured.',
+        errorMessage: customApiKey ? 'Invalid or empty OpenRouter API key provided.' : 'OPENROUTER_API_KEY is not configured.',
       };
     }
 

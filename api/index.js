@@ -3447,18 +3447,18 @@ var init_openrouterProvider = __esm({
       constructor() {
         this.name = "openrouter";
       }
-      getApiKey() {
-        return process.env.OPENROUTER_API_KEY;
+      getApiKey(customKey) {
+        return customKey || process.env.OPENROUTER_API_KEY;
       }
       isConfigured() {
         const key = this.getApiKey();
         return Boolean(key && key.trim().length > 5);
       }
-      async generateText(modelId, options) {
-        return this.callOpenRouter(modelId, options, false);
+      async generateText(modelId, options, customApiKey) {
+        return this.callOpenRouter(modelId, options, false, customApiKey);
       }
-      async generateStructured(modelId, options) {
-        const response = await this.callOpenRouter(modelId, options, true);
+      async generateStructured(modelId, options, customApiKey) {
+        const response = await this.callOpenRouter(modelId, options, true, customApiKey);
         if (!response.success) {
           return response;
         }
@@ -3479,30 +3479,28 @@ var init_openrouterProvider = __esm({
           };
         }
       }
-      async healthCheck(modelId = "openrouter/free") {
-        if (!this.isConfigured()) {
-          return { healthy: false, latencyMs: 0, error: "OPENROUTER_API_KEY is not configured in server environment." };
+      async healthCheck(apiKey, modelId = "openrouter/free") {
+        const key = apiKey || this.getApiKey();
+        if (!key || key.trim().length < 5) {
+          return { healthy: false, latencyMs: 0, error: "OPENROUTER_API_KEY is not configured." };
         }
         const start = Date.now();
         try {
-          const res = await this.callOpenRouter(modelId, {
-            taskType: "VALIDATION",
-            prompt: 'Respond with exactly: {"status":"ok"}',
-            temperature: 0.1,
-            maxTokens: 50,
-            timeoutMs: 8e3
-          }, true);
+          const authRes = await fetch("https://openrouter.ai/api/v1/auth/key", {
+            headers: { Authorization: `Bearer ${key.trim()}` }
+          });
           const latencyMs = Date.now() - start;
-          if (res.success) {
-            return { healthy: true, latencyMs };
+          if (!authRes.ok) {
+            const errText = await authRes.text();
+            return { healthy: false, latencyMs, error: `OpenRouter authentication rejected (${authRes.status}): ${errText}` };
           }
-          return { healthy: false, latencyMs, error: res.errorMessage || "Failed ping test" };
+          return { healthy: true, latencyMs };
         } catch (e) {
           return { healthy: false, latencyMs: Date.now() - start, error: e.message };
         }
       }
-      async callOpenRouter(modelId, options, jsonMode) {
-        const apiKey = this.getApiKey();
+      async callOpenRouter(modelId, options, jsonMode, customApiKey) {
+        const apiKey = this.getApiKey(customApiKey);
         if (!apiKey) {
           return {
             success: false,
@@ -3511,7 +3509,7 @@ var init_openrouterProvider = __esm({
             provider: "openrouter",
             latencyMs: 0,
             failureCategory: "PROVIDER_UNAVAILABLE",
-            errorMessage: "OPENROUTER_API_KEY is not configured."
+            errorMessage: customApiKey ? "Invalid or empty OpenRouter API key provided." : "OPENROUTER_API_KEY is not configured."
           };
         }
         const messages = [];
@@ -3712,24 +3710,27 @@ var init_geminiProvider = __esm({
         this.aiClient = null;
         this.defaultModel = "gemini-3.6-flash";
       }
-      getClient() {
-        const key = process.env.GEMINI_API_KEY;
+      getClient(customKey) {
+        const key = customKey || process.env.GEMINI_API_KEY;
         if (!key || key.trim().length === 0) {
           return null;
         }
+        if (customKey) {
+          return new GoogleGenAI({ apiKey: customKey.trim() });
+        }
         if (!this.aiClient) {
-          this.aiClient = new GoogleGenAI({ apiKey: key });
+          this.aiClient = new GoogleGenAI({ apiKey: key.trim() });
         }
         return this.aiClient;
       }
       isConfigured() {
         return Boolean(process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim().length > 5);
       }
-      async generateText(modelId = this.defaultModel, options) {
-        return this.callGemini(modelId, options, false);
+      async generateText(modelId = this.defaultModel, options, customApiKey) {
+        return this.callGemini(modelId, options, false, customApiKey);
       }
-      async generateStructured(modelId = this.defaultModel, options) {
-        const res = await this.callGemini(modelId, options, true);
+      async generateStructured(modelId = this.defaultModel, options, customApiKey) {
+        const res = await this.callGemini(modelId, options, true, customApiKey);
         if (!res.success) {
           return res;
         }
@@ -3749,9 +3750,10 @@ var init_geminiProvider = __esm({
           };
         }
       }
-      async healthCheck(modelId = this.defaultModel) {
-        if (!this.isConfigured()) {
-          return { healthy: false, latencyMs: 0, error: "GEMINI_API_KEY is not configured in server environment." };
+      async healthCheck(apiKey, modelId = this.defaultModel) {
+        const key = apiKey || process.env.GEMINI_API_KEY;
+        if (!key || key.trim().length < 5) {
+          return { healthy: false, latencyMs: 0, error: "GEMINI_API_KEY is not configured." };
         }
         const start = Date.now();
         try {
@@ -3760,8 +3762,8 @@ var init_geminiProvider = __esm({
             prompt: 'Return json: {"status":"healthy"}',
             temperature: 0.1,
             maxTokens: 50,
-            timeoutMs: 9e4
-          }, true);
+            timeoutMs: 15e3
+          }, true, key);
           const latencyMs = Date.now() - start;
           if (res.success) {
             return { healthy: true, latencyMs };
@@ -3771,8 +3773,8 @@ var init_geminiProvider = __esm({
           return { healthy: false, latencyMs: Date.now() - start, error: e.message };
         }
       }
-      async callGemini(modelId, options, jsonMode) {
-        const client = this.getClient();
+      async callGemini(modelId, options, jsonMode, customApiKey) {
+        const client = this.getClient(customApiKey);
         if (!client) {
           return {
             success: false,
@@ -3781,7 +3783,7 @@ var init_geminiProvider = __esm({
             provider: "gemini",
             latencyMs: 0,
             failureCategory: "PROVIDER_UNAVAILABLE",
-            errorMessage: "GEMINI_API_KEY is not configured."
+            errorMessage: customApiKey ? "Invalid or empty Gemini API key provided." : "GEMINI_API_KEY is not configured."
           };
         }
         const start = Date.now();
@@ -4263,6 +4265,9 @@ var init_orchestrator = __esm({
           fallbackChain: fallbackChainUsed,
           validationStatus,
           promptSummary: options.prompt.slice(0, 120),
+          aiMode: "MANAGED",
+          requestedProvider: "orchestrator",
+          completedAt: (/* @__PURE__ */ new Date()).toISOString(),
           createdAt: (/* @__PURE__ */ new Date()).toISOString()
         };
         db.recordAIRun(runRecord);
@@ -8391,6 +8396,489 @@ init_searchService();
 // server/services/warRoomService.ts
 init_store();
 import crypto2 from "crypto";
+
+// server/billing/entitlementEngine.ts
+init_store();
+
+// server/billing/planCatalog.ts
+var DEFAULT_PLANS = [
+  // FREE COMMUNITY TIER
+  {
+    id: "free",
+    name: "Free Community",
+    tier: "FREE",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 0,
+    yearlyPriceINR: 0,
+    description: "Explore verified market intelligence and test research pipelines for early experiments.",
+    badge: "Free Forever",
+    features: [
+      "2 Deep Market Research Runs / month",
+      "5 Competitor Crawl Pages / month",
+      "50,000 Managed AI Tokens / month",
+      "Basic Evidence Collection & Fact Extraction",
+      "Bring Your Own Key (BYOK) Allowed",
+      "Community Support"
+    ],
+    quotas: {
+      monthlyResearchRuns: 2,
+      monthlyCompetitorCrawls: 5,
+      monthlyAITokens: 5e4,
+      maxConcurrentJobs: 1,
+      maxCompetitorUniverse: 3,
+      warRoomAccess: false,
+      exportReports: false,
+      byokAllowed: true,
+      priorityRouting: false,
+      customIntegrations: false
+    }
+  },
+  // STARTER MANAGED
+  {
+    id: "starter_managed",
+    name: "Starter (Managed AI)",
+    tier: "STARTER",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 999,
+    yearlyPriceINR: 9990,
+    // Save 2 months
+    description: "All-inclusive platform with zero API keys to configure. Ideal for solo founders and early PMs.",
+    badge: "Zero Setup",
+    features: [
+      "10 Deep Market Research Runs / month",
+      "25 Competitor Crawl Pages / month",
+      "500,000 Managed AI Tokens / month",
+      "Cross-Source Conflict Detection",
+      "Market War Room & Strategic Matrix",
+      "Export PDF & Markdown Briefs",
+      "Standard Multi-Model AI Routing",
+      "Email Support (48h response)"
+    ],
+    quotas: {
+      monthlyResearchRuns: 10,
+      monthlyCompetitorCrawls: 25,
+      monthlyAITokens: 5e5,
+      maxConcurrentJobs: 2,
+      maxCompetitorUniverse: 10,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: false,
+      priorityRouting: false,
+      customIntegrations: false
+    }
+  },
+  // STARTER BYOK
+  {
+    id: "starter_byok",
+    name: "Starter (BYOK)",
+    tier: "STARTER",
+    aiMode: "BYOK",
+    monthlyPriceINR: 399,
+    yearlyPriceINR: 3990,
+    description: "Cost-efficient plan for teams using direct provider API keys with zero token markup.",
+    badge: "Direct API Keys",
+    features: [
+      "10 Deep Market Research Runs / month",
+      "25 Competitor Crawl Pages / month",
+      "Bring Your Own Key (OpenAI, Anthropic, Gemini, OpenRouter)",
+      "Direct provider token billing (No markup)",
+      "Cross-Source Conflict Detection",
+      "Market War Room & Strategic Matrix",
+      "Export PDF & Markdown Briefs",
+      "AES-256 Encrypted Key Vault"
+    ],
+    quotas: {
+      monthlyResearchRuns: 10,
+      monthlyCompetitorCrawls: 25,
+      monthlyAITokens: 0,
+      // Direct provider
+      maxConcurrentJobs: 2,
+      maxCompetitorUniverse: 10,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: true,
+      priorityRouting: false,
+      customIntegrations: false
+    }
+  },
+  // PRO MANAGED (POPULAR)
+  {
+    id: "pro_managed",
+    name: "Pro (Managed AI)",
+    tier: "PRO",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 2999,
+    yearlyPriceINR: 29990,
+    highlighted: true,
+    badge: "Most Popular",
+    description: "Full competitive command center for fast-moving product marketing and strategy teams.",
+    features: [
+      "50 Deep Market Research Runs / month",
+      "100 Competitor Crawl Pages / month",
+      "2,500,000 Managed AI Tokens / month",
+      "Unlimited Market War Room Simulations",
+      "Competitor Move Monitor & Shift Tracking",
+      "Custom Positioning & Campaign Briefs",
+      "Priority AI Routing & Automatic Fallback",
+      "Kanban Action Task Integration",
+      "Priority Support (12h response)"
+    ],
+    quotas: {
+      monthlyResearchRuns: 50,
+      monthlyCompetitorCrawls: 100,
+      monthlyAITokens: 25e5,
+      maxConcurrentJobs: 5,
+      maxCompetitorUniverse: 25,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: false,
+      priorityRouting: true,
+      customIntegrations: false
+    }
+  },
+  // PRO BYOK
+  {
+    id: "pro_byok",
+    name: "Pro (BYOK)",
+    tier: "PRO",
+    aiMode: "BYOK",
+    monthlyPriceINR: 1199,
+    yearlyPriceINR: 11990,
+    highlighted: true,
+    badge: "Most Popular",
+    description: "Pro command center powered by your enterprise API keys with direct provider pricing.",
+    features: [
+      "50 Deep Market Research Runs / month",
+      "100 Competitor Crawl Pages / month",
+      "Bring Your Own Key (OpenAI, Claude 3.7 Sonnet, Gemini 2.0 Pro)",
+      "Direct provider token billing (Zero markup)",
+      "Unlimited Market War Room Simulations",
+      "Competitor Move Monitor & Shift Tracking",
+      "Custom Positioning & Campaign Briefs",
+      "Switch between models anytime in Settings",
+      "Priority Support (12h response)"
+    ],
+    quotas: {
+      monthlyResearchRuns: 50,
+      monthlyCompetitorCrawls: 100,
+      monthlyAITokens: 0,
+      maxConcurrentJobs: 5,
+      maxCompetitorUniverse: 25,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: true,
+      priorityRouting: true,
+      customIntegrations: false
+    }
+  },
+  // BUSINESS MANAGED
+  {
+    id: "business_managed",
+    name: "Business (Managed AI)",
+    tier: "BUSINESS",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 7999,
+    yearlyPriceINR: 79990,
+    badge: "Enterprise Grade",
+    description: "Scale market intelligence across multiple business units and high-frequency monitoring.",
+    features: [
+      "500 Deep Market Research Runs / month",
+      "500 Competitor Crawl Pages / month",
+      "10,000,000 Managed AI Tokens / month",
+      "Highest Priority AI Compute Allocation",
+      "Advanced Custom Evaluation Benchmark Runs",
+      "Deep Company Footprint Discovery Engine",
+      "Dedicated Slack/Teams Channel Support",
+      "Custom SLA & 99.9% Uptime Guarantee"
+    ],
+    quotas: {
+      monthlyResearchRuns: 500,
+      monthlyCompetitorCrawls: 500,
+      monthlyAITokens: 1e7,
+      maxConcurrentJobs: 10,
+      maxCompetitorUniverse: 100,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: false,
+      priorityRouting: true,
+      customIntegrations: true
+    }
+  },
+  // BUSINESS BYOK
+  {
+    id: "business_byok",
+    name: "Business (BYOK)",
+    tier: "BUSINESS",
+    aiMode: "BYOK",
+    monthlyPriceINR: 3499,
+    yearlyPriceINR: 34990,
+    badge: "High Volume",
+    description: "High-volume research infrastructure backed by your custom corporate model agreements.",
+    features: [
+      "500 Deep Market Research Runs / month",
+      "500 Competitor Crawl Pages / month",
+      "Unlimited AI Token Usage (Billed via your provider contracts)",
+      "All Providers Supported (OpenAI, Anthropic, Gemini, OpenRouter)",
+      "Dedicated Multi-Provider Gateway Failover",
+      "Full Digital Footprint Crawler Budget",
+      "Dedicated Strategy Review Sessions",
+      "Custom SLA & Support"
+    ],
+    quotas: {
+      monthlyResearchRuns: 500,
+      monthlyCompetitorCrawls: 500,
+      monthlyAITokens: 0,
+      maxConcurrentJobs: 10,
+      maxCompetitorUniverse: 100,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: true,
+      priorityRouting: true,
+      customIntegrations: true
+    }
+  }
+];
+function getPlanById(planId) {
+  return DEFAULT_PLANS.find((p) => p.id === planId);
+}
+
+// server/billing/entitlementEngine.ts
+init_logger();
+var EntitlementEngine = class {
+  /**
+   * Retrieves effective plan for a workspace. Falls back to Free Community if plan not found.
+   */
+  getEffectivePlan(workspaceId) {
+    const subscription = db.getSubscription(workspaceId);
+    let plan = getPlanById(subscription.planId);
+    if (!plan) {
+      plan = DEFAULT_PLANS[0];
+    }
+    return { subscription, plan };
+  }
+  /**
+   * Evaluates whether a workspace can perform an action based on its subscription & quotas.
+   */
+  check(workspaceId, feature, count = 1) {
+    const { subscription, plan } = this.getEffectivePlan(workspaceId);
+    const usage = db.getQuotaUsage(workspaceId);
+    if (subscription.status === "UNPAID" || subscription.status === "EXPIRED") {
+      return {
+        allowed: false,
+        reason: `Subscription is currently ${subscription.status.toLowerCase()}. Please update your payment method.`,
+        feature,
+        currentUsage: 0,
+        limit: 0,
+        planId: plan.id,
+        planName: plan.name,
+        tier: plan.tier,
+        aiMode: plan.aiMode
+      };
+    }
+    switch (feature) {
+      case "RESEARCH_RUN": {
+        const limit = plan.quotas.monthlyResearchRuns;
+        const current = usage.researchRunsUsed;
+        if (current + count > limit) {
+          return {
+            allowed: false,
+            reason: `Monthly research runs limit reached (${current}/${limit}). Upgrade your plan to run more research jobs.`,
+            feature,
+            currentUsage: current,
+            limit,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: current,
+          limit,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "CRAWL_PAGE": {
+        const limit = plan.quotas.monthlyCompetitorCrawls;
+        const current = usage.competitorCrawlsUsed;
+        if (current + count > limit) {
+          return {
+            allowed: false,
+            reason: `Monthly competitor crawl limit reached (${current}/${limit} pages). Upgrade your plan for higher crawl capacity.`,
+            feature,
+            currentUsage: current,
+            limit,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: current,
+          limit,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "AI_TOKENS": {
+        if (plan.aiMode === "BYOK") {
+          return {
+            allowed: true,
+            feature,
+            currentUsage: usage.aiTokensUsed,
+            limit: Infinity,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        const limit = plan.quotas.monthlyAITokens;
+        const current = usage.aiTokensUsed;
+        if (current + count > limit) {
+          return {
+            allowed: false,
+            reason: `Monthly managed AI token budget reached (${current.toLocaleString()}/${limit.toLocaleString()} tokens). Upgrade or switch to BYOK.`,
+            feature,
+            currentUsage: current,
+            limit,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: current,
+          limit,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "WAR_ROOM": {
+        if (!plan.quotas.warRoomAccess) {
+          return {
+            allowed: false,
+            reason: "Market War Room & Strategic Matrix is available on Starter, Pro, and Business tiers.",
+            feature,
+            currentUsage: 0,
+            limit: 1,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 1,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "EXPORT_REPORT": {
+        if (!plan.quotas.exportReports) {
+          return {
+            allowed: false,
+            reason: "Full brief export is available on paid plans.",
+            feature,
+            currentUsage: 0,
+            limit: 1,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 1,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "BYOK_ACCESS": {
+        if (!plan.quotas.byokAllowed) {
+          return {
+            allowed: false,
+            reason: "BYOK (Bring Your Own Key) is available on BYOK plans and the Free Community tier.",
+            feature,
+            currentUsage: 0,
+            limit: 1,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 1,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      default:
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 0,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+    }
+  }
+  /**
+   * Atomically records usage against quota if permitted.
+   */
+  consume(workspaceId, feature, count = 1) {
+    const check = this.check(workspaceId, feature, count);
+    if (!check.allowed) {
+      logger.warn(`Entitlement check failed for workspace ${workspaceId}: ${check.reason}`);
+      return false;
+    }
+    if (feature === "RESEARCH_RUN") {
+      db.recordQuotaUsage(workspaceId, { runs: count });
+    } else if (feature === "CRAWL_PAGE") {
+      db.recordQuotaUsage(workspaceId, { crawls: count });
+    } else if (feature === "AI_TOKENS") {
+      db.recordQuotaUsage(workspaceId, { tokens: count });
+    }
+    return true;
+  }
+};
+var entitlementEngine = new EntitlementEngine();
+
+// server/services/warRoomService.ts
 function sanitizeStrategicInput(text) {
   if (!text || typeof text !== "string") return "";
   return text.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "").replace(/<[^>]+>/g, "").replace(/(?:ignore previous instructions|disregard system prompt|system:|assistant:)/gi, "[FILTERED]").trim();
@@ -8693,6 +9181,13 @@ var warRoomService = {
     const comp = db.getWarRoomCompetitor(competitorId);
     if (!comp || comp.workspaceId !== workspaceId) {
       throw new Error("Competitor not found in this workspace.");
+    }
+    if (status === "CONFIRMED") {
+      const plan = entitlementEngine.getEffectivePlan(workspaceId).plan;
+      const existingConfirmed = db.getWarRoomCompetitors(workspaceId).filter((c) => c.status === "CONFIRMED" && c.id !== competitorId);
+      if (existingConfirmed.length >= plan.quotas.maxCompetitorUniverse) {
+        throw new Error(`Competitor universe limit reached (${existingConfirmed.length}/${plan.quotas.maxCompetitorUniverse}). Upgrade your plan to expand tracked competitors.`);
+      }
     }
     comp.status = status;
     if (notes) comp.notes = sanitizeStrategicInput(notes);
@@ -10356,248 +10851,6 @@ var CompanyIntelligenceService = class {
 };
 var companyIntelligenceService = new CompanyIntelligenceService();
 
-// server/billing/planCatalog.ts
-var DEFAULT_PLANS = [
-  // FREE COMMUNITY TIER
-  {
-    id: "free",
-    name: "Free Community",
-    tier: "FREE",
-    aiMode: "MANAGED",
-    monthlyPriceINR: 0,
-    yearlyPriceINR: 0,
-    description: "Explore verified market intelligence and test research pipelines for early experiments.",
-    badge: "Free Forever",
-    features: [
-      "2 Deep Market Research Runs / month",
-      "5 Competitor Crawl Pages / month",
-      "50,000 Managed AI Tokens / month",
-      "Basic Evidence Collection & Fact Extraction",
-      "Bring Your Own Key (BYOK) Allowed",
-      "Community Support"
-    ],
-    quotas: {
-      monthlyResearchRuns: 2,
-      monthlyCompetitorCrawls: 5,
-      monthlyAITokens: 5e4,
-      maxConcurrentJobs: 1,
-      maxCompetitorUniverse: 3,
-      warRoomAccess: false,
-      exportReports: false,
-      byokAllowed: true,
-      priorityRouting: false,
-      customIntegrations: false
-    }
-  },
-  // STARTER MANAGED
-  {
-    id: "starter_managed",
-    name: "Starter (Managed AI)",
-    tier: "STARTER",
-    aiMode: "MANAGED",
-    monthlyPriceINR: 999,
-    yearlyPriceINR: 9990,
-    // Save 2 months
-    description: "All-inclusive platform with zero API keys to configure. Ideal for solo founders and early PMs.",
-    badge: "Zero Setup",
-    features: [
-      "10 Deep Market Research Runs / month",
-      "25 Competitor Crawl Pages / month",
-      "500,000 Managed AI Tokens / month",
-      "Cross-Source Conflict Detection",
-      "Market War Room & Strategic Matrix",
-      "Export PDF & Markdown Briefs",
-      "Standard Multi-Model AI Routing",
-      "Email Support (48h response)"
-    ],
-    quotas: {
-      monthlyResearchRuns: 10,
-      monthlyCompetitorCrawls: 25,
-      monthlyAITokens: 5e5,
-      maxConcurrentJobs: 2,
-      maxCompetitorUniverse: 10,
-      warRoomAccess: true,
-      exportReports: true,
-      byokAllowed: false,
-      priorityRouting: false,
-      customIntegrations: false
-    }
-  },
-  // STARTER BYOK
-  {
-    id: "starter_byok",
-    name: "Starter (BYOK)",
-    tier: "STARTER",
-    aiMode: "BYOK",
-    monthlyPriceINR: 399,
-    yearlyPriceINR: 3990,
-    description: "Cost-efficient plan for teams using direct provider API keys with zero token markup.",
-    badge: "Direct API Keys",
-    features: [
-      "10 Deep Market Research Runs / month",
-      "25 Competitor Crawl Pages / month",
-      "Bring Your Own Key (OpenAI, Anthropic, Gemini, OpenRouter)",
-      "Direct provider token billing (No markup)",
-      "Cross-Source Conflict Detection",
-      "Market War Room & Strategic Matrix",
-      "Export PDF & Markdown Briefs",
-      "AES-256 Encrypted Key Vault"
-    ],
-    quotas: {
-      monthlyResearchRuns: 10,
-      monthlyCompetitorCrawls: 25,
-      monthlyAITokens: 0,
-      // Direct provider
-      maxConcurrentJobs: 2,
-      maxCompetitorUniverse: 10,
-      warRoomAccess: true,
-      exportReports: true,
-      byokAllowed: true,
-      priorityRouting: false,
-      customIntegrations: false
-    }
-  },
-  // PRO MANAGED (POPULAR)
-  {
-    id: "pro_managed",
-    name: "Pro (Managed AI)",
-    tier: "PRO",
-    aiMode: "MANAGED",
-    monthlyPriceINR: 2999,
-    yearlyPriceINR: 29990,
-    highlighted: true,
-    badge: "Most Popular",
-    description: "Full competitive command center for fast-moving product marketing and strategy teams.",
-    features: [
-      "50 Deep Market Research Runs / month",
-      "100 Competitor Crawl Pages / month",
-      "2,500,000 Managed AI Tokens / month",
-      "Unlimited Market War Room Simulations",
-      "Competitor Move Monitor & Shift Tracking",
-      "Custom Positioning & Campaign Briefs",
-      "Priority AI Routing & Automatic Fallback",
-      "Kanban Action Task Integration",
-      "Priority Support (12h response)"
-    ],
-    quotas: {
-      monthlyResearchRuns: 50,
-      monthlyCompetitorCrawls: 100,
-      monthlyAITokens: 25e5,
-      maxConcurrentJobs: 5,
-      maxCompetitorUniverse: 25,
-      warRoomAccess: true,
-      exportReports: true,
-      byokAllowed: false,
-      priorityRouting: true,
-      customIntegrations: false
-    }
-  },
-  // PRO BYOK
-  {
-    id: "pro_byok",
-    name: "Pro (BYOK)",
-    tier: "PRO",
-    aiMode: "BYOK",
-    monthlyPriceINR: 1199,
-    yearlyPriceINR: 11990,
-    highlighted: true,
-    badge: "Most Popular",
-    description: "Pro command center powered by your enterprise API keys with direct provider pricing.",
-    features: [
-      "50 Deep Market Research Runs / month",
-      "100 Competitor Crawl Pages / month",
-      "Bring Your Own Key (OpenAI, Claude 3.7 Sonnet, Gemini 2.0 Pro)",
-      "Direct provider token billing (Zero markup)",
-      "Unlimited Market War Room Simulations",
-      "Competitor Move Monitor & Shift Tracking",
-      "Custom Positioning & Campaign Briefs",
-      "Switch between models anytime in Settings",
-      "Priority Support (12h response)"
-    ],
-    quotas: {
-      monthlyResearchRuns: 50,
-      monthlyCompetitorCrawls: 100,
-      monthlyAITokens: 0,
-      maxConcurrentJobs: 5,
-      maxCompetitorUniverse: 25,
-      warRoomAccess: true,
-      exportReports: true,
-      byokAllowed: true,
-      priorityRouting: true,
-      customIntegrations: false
-    }
-  },
-  // BUSINESS MANAGED
-  {
-    id: "business_managed",
-    name: "Business (Managed AI)",
-    tier: "BUSINESS",
-    aiMode: "MANAGED",
-    monthlyPriceINR: 7999,
-    yearlyPriceINR: 79990,
-    badge: "Enterprise Grade",
-    description: "Scale market intelligence across multiple business units and high-frequency monitoring.",
-    features: [
-      "500 Deep Market Research Runs / month",
-      "500 Competitor Crawl Pages / month",
-      "10,000,000 Managed AI Tokens / month",
-      "Highest Priority AI Compute Allocation",
-      "Advanced Custom Evaluation Benchmark Runs",
-      "Deep Company Footprint Discovery Engine",
-      "Dedicated Slack/Teams Channel Support",
-      "Custom SLA & 99.9% Uptime Guarantee"
-    ],
-    quotas: {
-      monthlyResearchRuns: 500,
-      monthlyCompetitorCrawls: 500,
-      monthlyAITokens: 1e7,
-      maxConcurrentJobs: 10,
-      maxCompetitorUniverse: 100,
-      warRoomAccess: true,
-      exportReports: true,
-      byokAllowed: false,
-      priorityRouting: true,
-      customIntegrations: true
-    }
-  },
-  // BUSINESS BYOK
-  {
-    id: "business_byok",
-    name: "Business (BYOK)",
-    tier: "BUSINESS",
-    aiMode: "BYOK",
-    monthlyPriceINR: 3499,
-    yearlyPriceINR: 34990,
-    badge: "High Volume",
-    description: "High-volume research infrastructure backed by your custom corporate model agreements.",
-    features: [
-      "500 Deep Market Research Runs / month",
-      "500 Competitor Crawl Pages / month",
-      "Unlimited AI Token Usage (Billed via your provider contracts)",
-      "All Providers Supported (OpenAI, Anthropic, Gemini, OpenRouter)",
-      "Dedicated Multi-Provider Gateway Failover",
-      "Full Digital Footprint Crawler Budget",
-      "Dedicated Strategy Review Sessions",
-      "Custom SLA & Support"
-    ],
-    quotas: {
-      monthlyResearchRuns: 500,
-      monthlyCompetitorCrawls: 500,
-      monthlyAITokens: 0,
-      maxConcurrentJobs: 10,
-      maxCompetitorUniverse: 100,
-      warRoomAccess: true,
-      exportReports: true,
-      byokAllowed: true,
-      priorityRouting: true,
-      customIntegrations: true
-    }
-  }
-];
-function getPlanById(planId) {
-  return DEFAULT_PLANS.find((p) => p.id === planId);
-}
-
 // server/billing/razorpayService.ts
 init_store();
 
@@ -11006,243 +11259,6 @@ var RazorpayService = class {
 };
 var razorpayService = new RazorpayService();
 
-// server/billing/entitlementEngine.ts
-init_store();
-init_logger();
-var EntitlementEngine = class {
-  /**
-   * Retrieves effective plan for a workspace. Falls back to Free Community if plan not found.
-   */
-  getEffectivePlan(workspaceId) {
-    const subscription = db.getSubscription(workspaceId);
-    let plan = getPlanById(subscription.planId);
-    if (!plan) {
-      plan = DEFAULT_PLANS[0];
-    }
-    return { subscription, plan };
-  }
-  /**
-   * Evaluates whether a workspace can perform an action based on its subscription & quotas.
-   */
-  check(workspaceId, feature, count = 1) {
-    const { subscription, plan } = this.getEffectivePlan(workspaceId);
-    const usage = db.getQuotaUsage(workspaceId);
-    if (subscription.status === "UNPAID" || subscription.status === "EXPIRED") {
-      return {
-        allowed: false,
-        reason: `Subscription is currently ${subscription.status.toLowerCase()}. Please update your payment method.`,
-        feature,
-        currentUsage: 0,
-        limit: 0,
-        planId: plan.id,
-        planName: plan.name,
-        tier: plan.tier,
-        aiMode: plan.aiMode
-      };
-    }
-    switch (feature) {
-      case "RESEARCH_RUN": {
-        const limit = plan.quotas.monthlyResearchRuns;
-        const current = usage.researchRunsUsed;
-        if (current + count > limit) {
-          return {
-            allowed: false,
-            reason: `Monthly research runs limit reached (${current}/${limit}). Upgrade your plan to run more research jobs.`,
-            feature,
-            currentUsage: current,
-            limit,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        return {
-          allowed: true,
-          feature,
-          currentUsage: current,
-          limit,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-      }
-      case "CRAWL_PAGE": {
-        const limit = plan.quotas.monthlyCompetitorCrawls;
-        const current = usage.competitorCrawlsUsed;
-        if (current + count > limit) {
-          return {
-            allowed: false,
-            reason: `Monthly competitor crawl limit reached (${current}/${limit} pages). Upgrade your plan for higher crawl capacity.`,
-            feature,
-            currentUsage: current,
-            limit,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        return {
-          allowed: true,
-          feature,
-          currentUsage: current,
-          limit,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-      }
-      case "AI_TOKENS": {
-        if (plan.aiMode === "BYOK") {
-          return {
-            allowed: true,
-            feature,
-            currentUsage: usage.aiTokensUsed,
-            limit: Infinity,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        const limit = plan.quotas.monthlyAITokens;
-        const current = usage.aiTokensUsed;
-        if (current + count > limit) {
-          return {
-            allowed: false,
-            reason: `Monthly managed AI token budget reached (${current.toLocaleString()}/${limit.toLocaleString()} tokens). Upgrade or switch to BYOK.`,
-            feature,
-            currentUsage: current,
-            limit,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        return {
-          allowed: true,
-          feature,
-          currentUsage: current,
-          limit,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-      }
-      case "WAR_ROOM": {
-        if (!plan.quotas.warRoomAccess) {
-          return {
-            allowed: false,
-            reason: "Market War Room & Strategic Matrix is available on Starter, Pro, and Business tiers.",
-            feature,
-            currentUsage: 0,
-            limit: 1,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        return {
-          allowed: true,
-          feature,
-          currentUsage: 1,
-          limit: 1,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-      }
-      case "EXPORT_REPORT": {
-        if (!plan.quotas.exportReports) {
-          return {
-            allowed: false,
-            reason: "Full brief export is available on paid plans.",
-            feature,
-            currentUsage: 0,
-            limit: 1,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        return {
-          allowed: true,
-          feature,
-          currentUsage: 1,
-          limit: 1,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-      }
-      case "BYOK_ACCESS": {
-        if (!plan.quotas.byokAllowed) {
-          return {
-            allowed: false,
-            reason: "BYOK (Bring Your Own Key) is available on BYOK plans and the Free Community tier.",
-            feature,
-            currentUsage: 0,
-            limit: 1,
-            planId: plan.id,
-            planName: plan.name,
-            tier: plan.tier,
-            aiMode: plan.aiMode
-          };
-        }
-        return {
-          allowed: true,
-          feature,
-          currentUsage: 1,
-          limit: 1,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-      }
-      default:
-        return {
-          allowed: true,
-          feature,
-          currentUsage: 0,
-          limit: 1,
-          planId: plan.id,
-          planName: plan.name,
-          tier: plan.tier,
-          aiMode: plan.aiMode
-        };
-    }
-  }
-  /**
-   * Atomically records usage against quota if permitted.
-   */
-  consume(workspaceId, feature, count = 1) {
-    const check = this.check(workspaceId, feature, count);
-    if (!check.allowed) {
-      logger.warn(`Entitlement check failed for workspace ${workspaceId}: ${check.reason}`);
-      return false;
-    }
-    if (feature === "RESEARCH_RUN") {
-      db.recordQuotaUsage(workspaceId, { runs: count });
-    } else if (feature === "CRAWL_PAGE") {
-      db.recordQuotaUsage(workspaceId, { crawls: count });
-    } else if (feature === "AI_TOKENS") {
-      db.recordQuotaUsage(workspaceId, { tokens: count });
-    }
-    return true;
-  }
-};
-var entitlementEngine = new EntitlementEngine();
-
 // server/ai/gateway.ts
 init_store();
 init_orchestrator();
@@ -11631,28 +11647,10 @@ var AIGateway = class {
           return await openaiProvider.healthCheck(trimmedKey, modelId || "gpt-4o-mini");
         case "ANTHROPIC":
           return await anthropicProvider.healthCheck(trimmedKey, modelId || "claude-3-5-haiku-20241022");
-        case "GEMINI": {
-          const start = Date.now();
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${trimmedKey}`);
-          const latency = Date.now() - start;
-          if (!res.ok) {
-            const err = await res.text();
-            return { healthy: false, latencyMs: latency, error: `Google Gemini error (${res.status}): ${err}` };
-          }
-          return { healthy: true, latencyMs: latency };
-        }
-        case "OPENROUTER": {
-          const start = Date.now();
-          const res = await fetch("https://openrouter.ai/api/v1/auth/key", {
-            headers: { Authorization: `Bearer ${trimmedKey}` }
-          });
-          const latency = Date.now() - start;
-          if (!res.ok) {
-            const err = await res.text();
-            return { healthy: false, latencyMs: latency, error: `OpenRouter auth error (${res.status}): ${err}` };
-          }
-          return { healthy: true, latencyMs: latency };
-        }
+        case "GEMINI":
+          return await geminiProvider.healthCheck(trimmedKey, modelId);
+        case "OPENROUTER":
+          return await openRouterProvider.healthCheck(trimmedKey, modelId);
         default:
           return { healthy: false, latencyMs: 0, error: `Unsupported provider: ${provider}` };
       }
@@ -11785,9 +11783,9 @@ var AIGateway = class {
     } else if (provider === "ANTHROPIC") {
       providerResponse = await anthropicProvider.generateStructured(modelId, reqOptions, plainApiKey);
     } else if (provider === "GEMINI") {
-      providerResponse = await geminiProvider.generateStructured(modelId, reqOptions);
+      providerResponse = await geminiProvider.generateStructured(modelId, reqOptions, plainApiKey);
     } else {
-      providerResponse = await openRouterProvider.generateStructured(modelId, reqOptions);
+      providerResponse = await openRouterProvider.generateStructured(modelId, reqOptions, plainApiKey);
     }
     const latencyMs = Date.now() - startTime;
     if (!providerResponse.success) {
@@ -11799,7 +11797,7 @@ var AIGateway = class {
       );
     }
     const runRecord = {
-      id: `run_byok_${Date.now()}`,
+      id: `run_byok_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       workspaceId,
       taskType: options.taskType,
       provider: provider.toLowerCase(),
@@ -11811,9 +11809,21 @@ var AIGateway = class {
       outputTokens: providerResponse.outputTokens || 0,
       fallbackUsed: false,
       fallbackChain: [modelId],
-      validationStatus: "VALID",
+      validationStatus: providerResponse.repaired ? "REPAIRED" : "VALID",
+      aiMode: "BYOK",
+      requestedProvider: provider,
+      credentialRef: keyRecord.keyMask,
+      promptSummary: options.prompt.slice(0, 120),
+      completedAt: (/* @__PURE__ */ new Date()).toISOString(),
       createdAt: (/* @__PURE__ */ new Date()).toISOString()
     };
+    db.recordAIRun(runRecord);
+    db.recordAudit({
+      workspaceId,
+      eventType: "ai_run_completed",
+      summary: `BYOK AI task ${options.taskType} completed via ${provider} (${modelId}) in ${latencyMs}ms [Credential: ${keyRecord.keyMask}]`,
+      details: { runId: runRecord.id, provider, model: modelId, latencyMs, keyMask: keyRecord.keyMask, mode: "BYOK" }
+    });
     return {
       success: true,
       data: providerResponse.structuredData,
@@ -13387,6 +13397,20 @@ apiRouter.get("/research/compare", (req, res) => {
 });
 apiRouter.get("/research/jobs/:id/export", (req, res) => {
   const wsId = getWorkspaceId(req);
+  const exportCheck = entitlementEngine.check(wsId, "EXPORT_REPORT");
+  if (!exportCheck.allowed) {
+    return res.status(402).json({
+      error: "Payment Required",
+      code: "ENTITLEMENT_RESTRICTED",
+      message: exportCheck.reason,
+      details: {
+        feature: "EXPORT_REPORT",
+        planName: exportCheck.planName,
+        tier: exportCheck.tier,
+        upgradeUrl: "/settings?tab=billing"
+      }
+    });
+  }
   const format = req.query.format || "markdown";
   const job = db.getResearchJob(req.params.id, wsId);
   if (!job) return res.status(404).json({ error: "Research job not found" });
@@ -13826,6 +13850,20 @@ apiRouter.post("/campaigns/:id/reject", (req, res) => {
 });
 apiRouter.get("/campaigns/:id/export", (req, res) => {
   const wsId = getWorkspaceId(req, res);
+  const exportCheck = entitlementEngine.check(wsId, "EXPORT_REPORT");
+  if (!exportCheck.allowed) {
+    return res.status(402).json({
+      error: "Payment Required",
+      code: "ENTITLEMENT_RESTRICTED",
+      message: exportCheck.reason,
+      details: {
+        feature: "EXPORT_REPORT",
+        planName: exportCheck.planName,
+        tier: exportCheck.tier,
+        upgradeUrl: "/settings?tab=billing"
+      }
+    });
+  }
   const format = req.query.format || "markdown";
   try {
     let brief = db.getCampaignBrief(req.params.id);
@@ -14102,6 +14140,20 @@ apiRouter.get("/war-room/overview", (req, res) => {
 apiRouter.post("/war-room/map-market", (req, res) => {
   try {
     const wsId = getWorkspaceId(req, res);
+    const warRoomCheck = entitlementEngine.check(wsId, "WAR_ROOM");
+    if (!warRoomCheck.allowed) {
+      return res.status(402).json({
+        error: "Payment Required",
+        code: "WAR_ROOM_UPGRADE_REQUIRED",
+        message: warRoomCheck.reason,
+        details: {
+          feature: "WAR_ROOM",
+          planName: warRoomCheck.planName,
+          tier: warRoomCheck.tier,
+          upgradeUrl: "/settings?tab=billing"
+        }
+      });
+    }
     const user = getAuthUser(req);
     const overview = warRoomService.mapMyMarket(
       wsId,
@@ -14331,6 +14383,20 @@ apiRouter.post("/war-room/recommendations/:id/experiment", (req, res) => {
 apiRouter.post("/war-room/scenarios/run", (req, res) => {
   try {
     const wsId = getWorkspaceId(req, res);
+    const warRoomCheck = entitlementEngine.check(wsId, "WAR_ROOM");
+    if (!warRoomCheck.allowed) {
+      return res.status(402).json({
+        error: "Payment Required",
+        code: "WAR_ROOM_UPGRADE_REQUIRED",
+        message: warRoomCheck.reason,
+        details: {
+          feature: "WAR_ROOM",
+          planName: warRoomCheck.planName,
+          tier: warRoomCheck.tier,
+          upgradeUrl: "/settings?tab=billing"
+        }
+      });
+    }
     const user = getAuthUser(req);
     const simulation = warRoomService.simulateScenario(
       wsId,
@@ -14538,7 +14604,25 @@ apiRouter.post("/company/crawl", async (req, res) => {
   try {
     const wsId = getWorkspaceId(req, res);
     const { maxPageBudget, maxDepth } = req.body || {};
-    const job = await companyIntelligenceService.triggerDeepCrawl(wsId, { maxPageBudget, maxDepth });
+    const pageCount = Number(maxPageBudget) || 10;
+    const crawlCheck = entitlementEngine.check(wsId, "CRAWL_PAGE", pageCount);
+    if (!crawlCheck.allowed) {
+      return res.status(402).json({
+        error: "Payment Required",
+        code: "QUOTA_EXCEEDED",
+        message: crawlCheck.reason,
+        details: {
+          feature: "CRAWL_PAGE",
+          currentUsage: crawlCheck.currentUsage,
+          limit: crawlCheck.limit,
+          planName: crawlCheck.planName,
+          tier: crawlCheck.tier,
+          upgradeUrl: "/settings?tab=billing"
+        }
+      });
+    }
+    const job = await companyIntelligenceService.triggerDeepCrawl(wsId, { maxPageBudget: pageCount, maxDepth });
+    entitlementEngine.consume(wsId, "CRAWL_PAGE", pageCount);
     res.json({ success: true, job });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -14726,6 +14810,20 @@ apiRouter.post("/byok/save", async (req, res) => {
     const { provider, apiKey, preferredModel } = req.body;
     if (!provider || !apiKey) {
       return res.status(400).json({ error: "provider and apiKey are required" });
+    }
+    const byokCheck = entitlementEngine.check(wsId, "BYOK_ACCESS");
+    if (!byokCheck.allowed) {
+      return res.status(402).json({
+        error: "Payment Required",
+        code: "BYOK_NOT_ALLOWED",
+        message: byokCheck.reason,
+        details: {
+          feature: "BYOK_ACCESS",
+          planName: byokCheck.planName,
+          tier: byokCheck.tier,
+          upgradeUrl: "/settings?tab=billing"
+        }
+      });
     }
     const saved = await aiGateway.saveKey(wsId, provider, apiKey, preferredModel);
     res.json({ success: true, key: saved });

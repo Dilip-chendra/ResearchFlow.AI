@@ -304,6 +304,9 @@ export class AIOrchestrator {
       fallbackChain: fallbackChainUsed,
       validationStatus,
       promptSummary: options.prompt.slice(0, 120),
+      aiMode: 'MANAGED',
+      requestedProvider: 'orchestrator',
+      completedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
 

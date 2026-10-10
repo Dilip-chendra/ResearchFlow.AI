@@ -53,29 +53,10 @@ export class AIGateway {
           return await openaiProvider.healthCheck(trimmedKey, modelId || 'gpt-4o-mini');
         case 'ANTHROPIC':
           return await anthropicProvider.healthCheck(trimmedKey, modelId || 'claude-3-5-haiku-20241022');
-        case 'GEMINI': {
-          // Verify with Google Gemini API
-          const start = Date.now();
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${trimmedKey}`);
-          const latency = Date.now() - start;
-          if (!res.ok) {
-            const err = await res.text();
-            return { healthy: false, latencyMs: latency, error: `Google Gemini error (${res.status}): ${err}` };
-          }
-          return { healthy: true, latencyMs: latency };
-        }
-        case 'OPENROUTER': {
-          const start = Date.now();
-          const res = await fetch('https://openrouter.ai/api/v1/auth/key', {
-            headers: { Authorization: `Bearer ${trimmedKey}` },
-          });
-          const latency = Date.now() - start;
-          if (!res.ok) {
-            const err = await res.text();
-            return { healthy: false, latencyMs: latency, error: `OpenRouter auth error (${res.status}): ${err}` };
-          }
-          return { healthy: true, latencyMs: latency };
-        }
+        case 'GEMINI':
+          return await geminiProvider.healthCheck(trimmedKey, modelId);
+        case 'OPENROUTER':
+          return await openRouterProvider.healthCheck(trimmedKey, modelId);
         default:
           return { healthy: false, latencyMs: 0, error: `Unsupported provider: ${provider}` };
       }
@@ -238,9 +219,9 @@ export class AIGateway {
     } else if (provider === 'ANTHROPIC') {
       providerResponse = await anthropicProvider.generateStructured<T>(modelId, reqOptions, plainApiKey);
     } else if (provider === 'GEMINI') {
-      providerResponse = await geminiProvider.generateStructured<T>(modelId, reqOptions);
+      providerResponse = await geminiProvider.generateStructured<T>(modelId, reqOptions, plainApiKey);
     } else {
-      providerResponse = await openRouterProvider.generateStructured<T>(modelId, reqOptions);
+      providerResponse = await openRouterProvider.generateStructured<T>(modelId, reqOptions, plainApiKey);
     }
 
     const latencyMs = Date.now() - startTime;
@@ -257,7 +238,7 @@ export class AIGateway {
     }
 
     const runRecord: AIRun = {
-      id: `run_byok_${Date.now()}`,
+      id: `run_byok_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
       workspaceId,
       taskType: options.taskType,
       provider: provider.toLowerCase(),
@@ -269,9 +250,23 @@ export class AIGateway {
       outputTokens: providerResponse.outputTokens || 0,
       fallbackUsed: false,
       fallbackChain: [modelId],
-      validationStatus: 'VALID',
+      validationStatus: providerResponse.repaired ? 'REPAIRED' : 'VALID',
+      aiMode: 'BYOK',
+      requestedProvider: provider,
+      credentialRef: keyRecord.keyMask,
+      promptSummary: options.prompt.slice(0, 120),
+      completedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
     };
+
+    db.recordAIRun(runRecord);
+
+    db.recordAudit({
+      workspaceId,
+      eventType: 'ai_run_completed',
+      summary: `BYOK AI task ${options.taskType} completed via ${provider} (${modelId}) in ${latencyMs}ms [Credential: ${keyRecord.keyMask}]`,
+      details: { runId: runRecord.id, provider, model: modelId, latencyMs, keyMask: keyRecord.keyMask, mode: 'BYOK' },
+    });
 
     return {
       success: true,

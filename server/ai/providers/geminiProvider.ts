@@ -9,13 +9,16 @@ export class GeminiProvider implements AIProvider {
   private aiClient: GoogleGenAI | null = null;
   private readonly defaultModel = 'gemini-3.6-flash';
 
-  private getClient(): GoogleGenAI | null {
-    const key = process.env.GEMINI_API_KEY;
+  private getClient(customKey?: string): GoogleGenAI | null {
+    const key = customKey || process.env.GEMINI_API_KEY;
     if (!key || key.trim().length === 0) {
       return null;
     }
+    if (customKey) {
+      return new GoogleGenAI({ apiKey: customKey.trim() });
+    }
     if (!this.aiClient) {
-      this.aiClient = new GoogleGenAI({ apiKey: key });
+      this.aiClient = new GoogleGenAI({ apiKey: key.trim() });
     }
     return this.aiClient;
   }
@@ -26,16 +29,18 @@ export class GeminiProvider implements AIProvider {
 
   public async generateText(
     modelId = this.defaultModel,
-    options: AIProviderRequestOptions
+    options: AIProviderRequestOptions,
+    customApiKey?: string
   ): Promise<AIProviderResponse<string>> {
-    return this.callGemini(modelId, options, false);
+    return this.callGemini(modelId, options, false, customApiKey);
   }
 
   public async generateStructured<T>(
     modelId = this.defaultModel,
-    options: AIProviderRequestOptions
+    options: AIProviderRequestOptions,
+    customApiKey?: string
   ): Promise<AIProviderResponse<T>> {
-    const res = await this.callGemini(modelId, options, true);
+    const res = await this.callGemini(modelId, options, true, customApiKey);
     if (!res.success) {
       return res as unknown as AIProviderResponse<T>;
     }
@@ -57,9 +62,13 @@ export class GeminiProvider implements AIProvider {
     }
   }
 
-  public async healthCheck(modelId = this.defaultModel): Promise<{ healthy: boolean; latencyMs: number; error?: string }> {
-    if (!this.isConfigured()) {
-      return { healthy: false, latencyMs: 0, error: 'GEMINI_API_KEY is not configured in server environment.' };
+  public async healthCheck(
+    apiKey?: string,
+    modelId = this.defaultModel
+  ): Promise<{ healthy: boolean; latencyMs: number; error?: string }> {
+    const key = apiKey || process.env.GEMINI_API_KEY;
+    if (!key || key.trim().length < 5) {
+      return { healthy: false, latencyMs: 0, error: 'GEMINI_API_KEY is not configured.' };
     }
     const start = Date.now();
     try {
@@ -68,8 +77,8 @@ export class GeminiProvider implements AIProvider {
         prompt: 'Return json: {"status":"healthy"}',
         temperature: 0.1,
         maxTokens: 50,
-        timeoutMs: 90000,
-      }, true);
+        timeoutMs: 15000,
+      }, true, key);
       const latencyMs = Date.now() - start;
       if (res.success) {
         return { healthy: true, latencyMs };
@@ -83,9 +92,10 @@ export class GeminiProvider implements AIProvider {
   private async callGemini(
     modelId: string,
     options: AIProviderRequestOptions,
-    jsonMode: boolean
+    jsonMode: boolean,
+    customApiKey?: string
   ): Promise<AIProviderResponse<string>> {
-    const client = this.getClient();
+    const client = this.getClient(customApiKey);
     if (!client) {
       return {
         success: false,
@@ -94,7 +104,7 @@ export class GeminiProvider implements AIProvider {
         provider: 'gemini',
         latencyMs: 0,
         failureCategory: 'PROVIDER_UNAVAILABLE',
-        errorMessage: 'GEMINI_API_KEY is not configured.',
+        errorMessage: customApiKey ? 'Invalid or empty Gemini API key provided.' : 'GEMINI_API_KEY is not configured.',
       };
     }
 

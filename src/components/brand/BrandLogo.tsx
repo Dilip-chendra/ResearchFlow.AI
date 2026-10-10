@@ -161,10 +161,18 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       <div className="flex flex-col justify-center">
         <div className="flex items-center gap-1.5 leading-none">
           {/* Main Brand Typography */}
-          <span className={`font-black tracking-[-0.035em] ${fontSizes[size] || 'text-xl'}`}>
+          <span
+            className={`font-black tracking-[-0.035em] ${fontSizes[size] || 'text-xl'} ${
+              isGold
+                ? 'text-gold-gradient drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]'
+                : ''
+            }`}
+          >
             <span
               className={
-                isLight
+                isGold
+                  ? ''
+                  : isLight
                   ? 'text-slate-900 drop-shadow-2xs transition-colors'
                   : 'text-white drop-shadow-2xs transition-colors'
               }
@@ -174,7 +182,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             <span
               className={
                 isGold
-                  ? 'text-gold-gradient font-black ml-px drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]'
+                  ? 'ml-px font-black'
                   : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent font-black ml-px'
               }
             >
