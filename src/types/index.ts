@@ -1323,7 +1323,8 @@ export type DigitalConnectionStatus =
   | 'CRAWLING'
   | 'CONNECTED'
   | 'ACCESS_RESTRICTED'
-  | 'FAILED';
+  | 'FAILED'
+  | 'PUBLIC_ACCESSIBLE';
 
 export interface DigitalProperty {
   id: string;

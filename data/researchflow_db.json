@@ -35796,6 +35796,18 @@
       "details": {
         "factId": "fact_ws_demo_sandbox_3",
         "correctedText": "Verified: Interview callback rate improved by measured 2.8x in cohort study.",
+        "originalText": "Verified: Interview callback rate improved by measured 2.8x in cohort study."
+      },
+      "id": "evt_1791623963239_4c60c920",
+      "timestamp": "2026-10-10T09:19:23.239Z"
+    },
+    {
+      "workspaceId": "ws_demo_sandbox",
+      "eventType": "war_room_correct_company_intelligence_fact",
+      "summary": "War Room action: CORRECT_COMPANY_INTELLIGENCE_FACT",
+      "details": {
+        "factId": "fact_ws_demo_sandbox_3",
+        "correctedText": "Verified: Interview callback rate improved by measured 2.8x in cohort study.",
         "originalText": "Company claims users experience a 3x increase in interview callbacks within 30 days."
       },
       "id": "evt_1791623731992_2ef72ee7",
@@ -41980,21 +41992,6 @@
       },
       "id": "evt_1788200342876_e6a1bf5c",
       "timestamp": "2026-08-31T18:19:02.876Z"
-    },
-    {
-      "workspaceId": "ws_demo_sandbox",
-      "eventType": "ai_routing_started",
-      "summary": "AI routing initiated for task QUALITY_EVALUATION across candidate chain [gemini-3.6-flash, openrouter/free...]",
-      "details": {
-        "taskType": "QUALITY_EVALUATION",
-        "mode": "BALANCED",
-        "candidates": [
-          "gemini-3.6-flash",
-          "openrouter/free"
-        ]
-      },
-      "id": "evt_1788200342875_955f8f23",
-      "timestamp": "2026-08-31T18:19:02.875Z"
     }
   ],
   "evaluationRuns": [
@@ -55896,8 +55893,8 @@
           "Security Architects"
         ],
         "profileCompleteness": 90,
-        "createdAt": "2026-10-10T09:15:31.991Z",
-        "updatedAt": "2026-10-10T09:15:31.991Z"
+        "createdAt": "2026-10-10T09:19:23.238Z",
+        "updatedAt": "2026-10-10T09:19:23.238Z"
       }
     ]
   ],
@@ -56678,6 +56675,19 @@
         "correctedText": "Verified: Interview callback rate improved by measured 2.8x in cohort study.",
         "correctedBy": "Alex Chen",
         "timestamp": "2026-10-10T09:15:31.992Z",
+        "status": "ACTIVE"
+      }
+    ],
+    [
+      "corr_1791623963238_xrzs",
+      {
+        "id": "corr_1791623963238_xrzs",
+        "workspaceId": "ws_demo_sandbox",
+        "factId": "fact_ws_demo_sandbox_3",
+        "originalText": "Verified: Interview callback rate improved by measured 2.8x in cohort study.",
+        "correctedText": "Verified: Interview callback rate improved by measured 2.8x in cohort study.",
+        "correctedBy": "Alex Chen",
+        "timestamp": "2026-10-10T09:19:23.238Z",
         "status": "ACTIVE"
       }
     ]

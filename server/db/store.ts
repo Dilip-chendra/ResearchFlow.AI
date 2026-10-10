@@ -863,6 +863,10 @@ export class PersistentDatabaseStore {
     return workspace;
   }
 
+  saveWorkspace(workspace: Workspace): Workspace {
+    return this.updateWorkspace(workspace);
+  }
+
   // Research Jobs
   getResearchJob(id: string, workspaceId?: string): ResearchJob | undefined {
     const job = this.researchJobs.get(id);
@@ -2722,7 +2726,7 @@ export class PersistentDatabaseStore {
               id: `fact_${wsId}_4`,
               claim: 'Independent user reviews on G2 and Reddit corroborate that download has no hidden fees and ATS formatting parses correctly.',
               category: 'CUSTOMER_SENTIMENT',
-              epistemicStatus: 'INDEPENDENT_CONFIRMED',
+              epistemicStatus: 'INDEPENDENTLY_CONFIRMED',
               sourceUrl: 'https://www.g2.com/products/nextgenresume/reviews',
               sourceTitle: 'G2 Verified Reviews',
               supportingQuote: 'Actually lets you download your resume without demanding $90 at checkout. Honest product.',

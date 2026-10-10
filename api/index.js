@@ -766,6 +766,9 @@ var init_store = __esm({
         this.scheduleSave();
         return workspace;
       }
+      saveWorkspace(workspace) {
+        return this.updateWorkspace(workspace);
+      }
       // Research Jobs
       getResearchJob(id, workspaceId) {
         const job = this.researchJobs.get(id);
@@ -2379,7 +2382,7 @@ var init_store = __esm({
                   id: `fact_${wsId}_4`,
                   claim: "Independent user reviews on G2 and Reddit corroborate that download has no hidden fees and ATS formatting parses correctly.",
                   category: "CUSTOMER_SENTIMENT",
-                  epistemicStatus: "INDEPENDENT_CONFIRMED",
+                  epistemicStatus: "INDEPENDENTLY_CONFIRMED",
                   sourceUrl: "https://www.g2.com/products/nextgenresume/reviews",
                   sourceTitle: "G2 Verified Reviews",
                   supportingQuote: "Actually lets you download your resume without demanding $90 at checkout. Honest product.",
@@ -9993,7 +9996,7 @@ var CompanyIntelligenceService = class {
         id: `fact_${workspaceId}_ind_reviews`,
         claim: `Third-party review sentiment across ${reviewProps.map((r) => r.name).join(", ")} corroborates functional satisfaction and transparency.`,
         category: "CUSTOMER_SENTIMENT",
-        epistemicStatus: "INDEPENDENT_CONFIRMED",
+        epistemicStatus: "INDEPENDENTLY_CONFIRMED",
         sourceUrl: reviewProps[0]?.url,
         confidenceScore: 92,
         isUserVerified: false,
@@ -10143,13 +10146,13 @@ var CompanyIntelligenceService = class {
   syncWithMarketModel(workspaceId, company, bi) {
     const marketModel = db.getMarketModel(workspaceId);
     if (marketModel) {
-      marketModel.ourPositioning.primaryDifferentiators = [
+      marketModel.keyDifferentiators = [
         .../* @__PURE__ */ new Set([
-          ...marketModel.ourPositioning.primaryDifferentiators,
+          ...marketModel.keyDifferentiators,
           `Deep verified footprint: ${company.primaryObjective}`
         ])
       ];
-      marketModel.lastUpdated = (/* @__PURE__ */ new Date()).toISOString();
+      marketModel.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
       db.saveMarketModel(marketModel);
     }
   }

@@ -409,7 +409,7 @@ export class CompanyIntelligenceService {
         id: `fact_${workspaceId}_ind_reviews`,
         claim: `Third-party review sentiment across ${reviewProps.map(r => r.name).join(', ')} corroborates functional satisfaction and transparency.`,
         category: 'CUSTOMER_SENTIMENT',
-        epistemicStatus: 'INDEPENDENT_CONFIRMED',
+        epistemicStatus: 'INDEPENDENTLY_CONFIRMED',
         sourceUrl: reviewProps[0]?.url,
         confidenceScore: 92,
         isUserVerified: false,
@@ -593,13 +593,13 @@ export class CompanyIntelligenceService {
   ): void {
     const marketModel = db.getMarketModel(workspaceId);
     if (marketModel) {
-      marketModel.ourPositioning.primaryDifferentiators = [
+      marketModel.keyDifferentiators = [
         ...new Set([
-          ...marketModel.ourPositioning.primaryDifferentiators,
+          ...marketModel.keyDifferentiators,
           `Deep verified footprint: ${company.primaryObjective}`,
         ]),
       ];
-      marketModel.lastUpdated = new Date().toISOString();
+      marketModel.updatedAt = new Date().toISOString();
       db.saveMarketModel(marketModel);
     }
   }
