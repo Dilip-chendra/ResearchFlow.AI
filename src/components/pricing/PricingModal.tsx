@@ -281,10 +281,10 @@ export const PricingModal: React.FC<PricingModalProps> = ({ isOpen, onClose }) =
                   >
                     {plan.badge && (
                       <div
-                        className={`absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide uppercase shadow-sm ${
+                        className={`absolute -top-3.5 left-1/2 -translate-x-1/2 px-3.5 py-1 rounded-full text-[10px] font-extrabold tracking-wide uppercase shadow-lg z-20 whitespace-nowrap ${
                           plan.highlighted
-                            ? 'bg-gradient-to-r from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] text-slate-950 font-black shadow-[0_0_12px_rgba(212,175,55,0.4)]'
-                            : 'bg-white/10 border border-white/15 text-zinc-300'
+                            ? 'bg-gradient-to-r from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] text-slate-950 font-black shadow-[0_0_16px_rgba(212,175,55,0.5)]'
+                            : 'bg-[#0C0E17] border border-amber-400/40 text-[#F5D77F] shadow-[0_2px_8px_rgba(0,0,0,0.8)]'
                         }`}
                       >
                         {plan.badge}
