@@ -317,7 +317,9 @@ export const BentoEngineSection: React.FC = () => {
                   <span className="w-2 h-2 rounded-full bg-sky-400" />
                   <span className="text-white/90">Deliver Battlecard to Sales Fleet</span>
                 </div>
-                <span className="text-[10px] text-emerald-400 font-bold">&check; Done</span>
+                <span className="text-[10px] text-emerald-400 font-bold inline-flex items-center gap-1">
+                  <Check className="w-3 h-3" /> Done
+                </span>
               </div>
             </div>
           </div>

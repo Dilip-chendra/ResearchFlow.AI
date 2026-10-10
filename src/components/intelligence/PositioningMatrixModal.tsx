@@ -127,7 +127,7 @@ export const PositioningMatrixModal: React.FC<Props> = ({ jobId, businessName, o
                     : 'bg-white text-zinc-700 hover:bg-zinc-200 border border-zinc-200'
                 }`}
               >
-                {preset.x} &times; {preset.y}
+                {preset.x} × {preset.y}
               </button>
             ))}
           </div>

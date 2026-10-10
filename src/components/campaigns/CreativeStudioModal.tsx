@@ -360,7 +360,7 @@ export const CreativeStudioModal: React.FC<Props> = ({ brief, businessName, asse
                   <div>
                     <div className="flex items-center gap-1">
                       <span className="font-bold text-zinc-900">{businessName}</span>
-                      <span className="text-blue-500 font-bold">&check;</span>
+                      <Check className="w-3.5 h-3.5 text-blue-500 stroke-[3]" />
                     </div>
                     <span className="text-[11px] text-zinc-500">@{businessName.toLowerCase().replace(/[^a-z0-9]/g, '')}</span>
                   </div>

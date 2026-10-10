@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle2, Clock, ShieldCheck, Zap, FileSpreadsheet, EyeOff, Layers, ArrowRight } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, Clock, ShieldCheck, Zap, FileSpreadsheet, EyeOff, Layers, ArrowRight, Check, X } from 'lucide-react';
 
 export const ProblemVsSolutionSection: React.FC = () => {
   return (
@@ -29,7 +29,7 @@ export const ProblemVsSolutionSection: React.FC = () => {
             <div className="flex items-center justify-between pb-4 border-b border-rose-500/20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 font-bold text-sm">
-                  &times;
+                  <X className="w-4 h-4 text-rose-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white tracking-tight">The Legacy Approach</h3>
@@ -99,7 +99,7 @@ export const ProblemVsSolutionSection: React.FC = () => {
             <div className="flex items-center justify-between pb-4 border-b border-amber-400/25">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-[#F5D77F] font-bold text-sm shadow-[0_0_12px_rgba(212,175,55,0.3)]">
-                  &check;
+                  <Check className="w-4 h-4 text-[#F5D77F]" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-white tracking-tight">The ResearchFlow Standard</h3>

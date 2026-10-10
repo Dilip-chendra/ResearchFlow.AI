@@ -228,8 +228,9 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
                       <span className="font-bold">alpha-sense.com/enterprise</span>
                       <span className="text-[10px] text-white/50 hidden sm:inline">&bull; 200 OK (145ms)</span>
                     </div>
-                    <span className="text-[11px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                      &check; 142 Claims extracted &bull; 99.8% Grounding score
+                    <span className="text-[11px] text-emerald-400 font-bold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 inline-flex items-center gap-1.5">
+                      <Check className="w-3 h-3 shrink-0" />
+                      <span>142 Claims extracted &bull; 99.8% Grounding score</span>
                     </span>
                   </div>
                 </div>
@@ -257,7 +258,10 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
                   </p>
                   <div className="flex items-center justify-between text-[11px] text-white/60 pt-1">
                     <span>Source: https://competitor.com/terms#section-4</span>
-                    <span className="text-emerald-400 font-semibold">&check; Verbatim Match Verified</span>
+                    <span className="text-emerald-400 font-semibold inline-flex items-center gap-1">
+                      <Check className="w-3 h-3 shrink-0" />
+                      <span>Verbatim Match Verified</span>
+                    </span>
                   </div>
                 </div>
               </div>
