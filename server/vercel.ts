@@ -6,8 +6,13 @@ import { logger } from './utils/logger';
 
 const app = express();
 
-// Enable JSON Body Parser & URL-encoded parser
-app.use(express.json({ limit: '10mb' }));
+// Enable JSON Body Parser with rawBody for Razorpay webhook HMAC & URL-encoded parser
+app.use(express.json({
+  limit: '10mb',
+  verify: (req: any, _res, buf) => {
+    req.rawBody = buf;
+  },
+}));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // CORS & Preflight headers for Vercel Serverless environment

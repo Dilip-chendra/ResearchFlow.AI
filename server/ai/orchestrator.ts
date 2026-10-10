@@ -32,7 +32,7 @@ export class AIOrchestrator {
     // Initial catalog sync in background
     setTimeout(() => {
       this.syncCatalog().catch(err => logger.warn('Initial OpenRouter catalog sync failed:', err));
-    }, 1000);
+    }, 1000).unref();
   }
 
   public getRoutingMode(): AIRoutingMode {

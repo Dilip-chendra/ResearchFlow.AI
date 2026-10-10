@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { Workspace, User } from '../types';
+import { Workspace, User, UserSubscription, SubscriptionPlan, QuotaUsageRecord } from '../types';
 import { api, setActiveWorkspaceHeader, setAuthToken, setDemoModeHeader } from '../lib/api';
 
 export interface ToastMessage {
@@ -54,6 +54,12 @@ interface WorkspaceContextType {
   setIsOnboardingOpen: (open: boolean) => void;
   isMobileNavOpen: boolean;
   setIsMobileNavOpen: (open: boolean) => void;
+  subscription: UserSubscription | null;
+  subscriptionPlan: SubscriptionPlan | null;
+  quotaUsage: QuotaUsageRecord | null;
+  refreshSubscription: () => Promise<void>;
+  isPricingModalOpen: boolean;
+  setIsPricingModalOpen: (open: boolean) => void;
 }
 
 const WorkspaceContext = createContext<WorkspaceContextType | undefined>(undefined);
@@ -69,7 +75,8 @@ export const VALID_VIEWS = [
   'evaluation',
   'audit',
   'settings',
-  'architecture'
+  'architecture',
+  'pricing',
 ];
 
 export function parseRouteFromLocation(): { view: string; jobId: string | null } {
@@ -125,6 +132,23 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isNewResearchModalOpen, setIsNewResearchModalOpen] = useState<boolean>(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState<boolean>(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
+  const [subscription, setSubscription] = useState<UserSubscription | null>(null);
+  const [subscriptionPlan, setSubscriptionPlan] = useState<SubscriptionPlan | null>(null);
+  const [quotaUsage, setQuotaUsage] = useState<QuotaUsageRecord | null>(null);
+  const [isPricingModalOpen, setIsPricingModalOpen] = useState<boolean>(false);
+
+  const refreshSubscription = useCallback(async () => {
+    try {
+      const res = await api.getSubscription();
+      if (res.success) {
+        setSubscription(res.subscription);
+        setSubscriptionPlan(res.plan);
+        setQuotaUsage(res.usage);
+      }
+    } catch {
+      // Fail quietly when session is loading
+    }
+  }, []);
 
   const syncBrowserUrl = useCallback((view: string, jobId: string | null) => {
     if (typeof window === 'undefined') return;
@@ -409,7 +433,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   useEffect(() => {
     refreshWorkspaces();
-  }, []);
+    refreshSubscription();
+  }, [refreshSubscription]);
 
   return (
     <WorkspaceContext.Provider
@@ -445,6 +470,12 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setIsOnboardingOpen,
         isMobileNavOpen,
         setIsMobileNavOpen,
+        subscription,
+        subscriptionPlan,
+        quotaUsage,
+        refreshSubscription,
+        isPricingModalOpen,
+        setIsPricingModalOpen,
       }}
     >
       {children}

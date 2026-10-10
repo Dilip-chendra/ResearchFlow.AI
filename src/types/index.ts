@@ -1504,3 +1504,162 @@ export interface DeepCrawlJob {
   errorMessage?: string;
 }
 
+// ---------------------------------------------------------------------------
+// SaaS Monetization, Razorpay Billing & Subscription Entitlements
+// ---------------------------------------------------------------------------
+
+export type SubscriptionTier = 'FREE' | 'STARTER' | 'PRO' | 'BUSINESS' | 'ENTERPRISE';
+export type AIMode = 'MANAGED' | 'BYOK';
+export type BillingInterval = 'MONTHLY' | 'YEARLY';
+export type SubscriptionStatus =
+  | 'ACTIVE'
+  | 'TRIALING'
+  | 'PAST_DUE'
+  | 'CANCELED'
+  | 'UNPAID'
+  | 'EXPIRED';
+
+export interface PlanQuotas {
+  monthlyResearchRuns: number; // e.g., 2 (Free), 10 (Starter), 50 (Pro), 500 (Business)
+  monthlyCompetitorCrawls: number; // e.g., 5 (Free), 25 (Starter), 100 (Pro), 500 (Business)
+  monthlyAITokens: number; // For Managed mode (0 / unlimited in BYOK)
+  maxConcurrentJobs: number;
+  maxCompetitorUniverse: number;
+  warRoomAccess: boolean;
+  exportReports: boolean;
+  byokAllowed: boolean;
+  priorityRouting: boolean;
+  customIntegrations: boolean;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  tier: SubscriptionTier;
+  aiMode: AIMode;
+  monthlyPriceINR: number;
+  yearlyPriceINR: number; // Discounted (e.g. ~10 months price for 12 months)
+  description: string;
+  features: string[];
+  quotas: PlanQuotas;
+  highlighted?: boolean;
+  badge?: string;
+}
+
+export interface UserSubscription {
+  id: string;
+  workspaceId: string;
+  userId: string;
+  planId: string;
+  tier: SubscriptionTier;
+  aiMode: AIMode;
+  interval: BillingInterval;
+  status: SubscriptionStatus;
+  currentPeriodStart: string;
+  currentPeriodEnd: string;
+  cancelAtPeriodEnd: boolean;
+  razorpaySubscriptionId?: string;
+  razorpayPaymentId?: string;
+  razorpayOrderId?: string;
+  lastPaymentAmountINR?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface QuotaUsageRecord {
+  workspaceId: string;
+  periodMonth: string; // YYYY-MM
+  researchRunsUsed: number;
+  competitorCrawlsUsed: number;
+  aiTokensUsed: number;
+  lastUpdated: string;
+}
+
+export interface BillingOrder {
+  id: string;
+  workspaceId: string;
+  userId: string;
+  planId: string;
+  tier: SubscriptionTier;
+  aiMode: AIMode;
+  interval: BillingInterval;
+  amountINR: number;
+  currency: 'INR';
+  razorpayOrderId: string;
+  receipt: string;
+  status: 'CREATED' | 'PAID' | 'FAILED' | 'EXPIRED';
+  notes: Record<string, string>;
+  createdAt: string;
+  paidAt?: string;
+}
+
+export interface BillingTransaction {
+  id: string;
+  orderId: string;
+  workspaceId: string;
+  userId: string;
+  planId: string;
+  amountINR: number;
+  currency: 'INR';
+  razorpayPaymentId: string;
+  razorpayOrderId: string;
+  status: 'SUCCESS' | 'FAILED' | 'REFUNDED';
+  method?: string;
+  email?: string;
+  contact?: string;
+  errorDescription?: string;
+  createdAt: string;
+}
+
+export interface WebhookEventRecord {
+  id: string;
+  eventId: string;
+  eventType: string;
+  payload: Record<string, any>;
+  processed: boolean;
+  processedAt: string;
+  error?: string;
+}
+
+// ---------------------------------------------------------------------------
+// Enterprise-Grade BYOK (Bring Your Own Key) & AI Gateway
+// ---------------------------------------------------------------------------
+
+export type AIProviderType = 'OPENROUTER' | 'GEMINI' | 'OPENAI' | 'ANTHROPIC';
+
+export interface BYOKKeyRecord {
+  id: string;
+  workspaceId: string;
+  provider: AIProviderType;
+  encryptedKey: string; // AES-256-GCM iv:authTag:ciphertext
+  keyMask: string; // e.g. "sk-proj-...8a12"
+  preferredModel?: string;
+  isActive: boolean;
+  isValidated: boolean;
+  lastValidatedAt?: string;
+  lastError?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BYOKPublicSummary {
+  provider: AIProviderType;
+  keyMask: string;
+  preferredModel?: string;
+  isActive: boolean;
+  isValidated: boolean;
+  lastValidatedAt?: string;
+  lastError?: string;
+}
+
+export interface WorkspaceAIConfig {
+  workspaceId: string;
+  mode: AIMode; // 'MANAGED' | 'BYOK'
+  activeProvider: AIProviderType;
+  activeModel?: string;
+  strictBYOKOnly: boolean; // Never fallback to platform keys if BYOK fails
+  lastTestedAt?: string;
+  updatedAt: string;
+}
+
+

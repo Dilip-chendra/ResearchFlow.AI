@@ -26,7 +26,7 @@ export interface AIProviderResponse<T = any> {
   structuredData?: T;
   rawResponse?: any;
   model: string;
-  provider: 'openrouter' | 'gemini' | 'heuristic';
+  provider: 'openrouter' | 'gemini' | 'openai' | 'anthropic' | 'heuristic';
   latencyMs: number;
   inputTokens?: number;
   outputTokens?: number;
@@ -36,7 +36,7 @@ export interface AIProviderResponse<T = any> {
 }
 
 export interface AIProvider {
-  readonly name: 'openrouter' | 'gemini' | 'heuristic';
+  readonly name: 'openrouter' | 'gemini' | 'openai' | 'anthropic' | 'heuristic';
   isConfigured(): boolean;
   generateText(modelId: string, options: AIProviderRequestOptions): Promise<AIProviderResponse<string>>;
   generateStructured<T>(modelId: string, options: AIProviderRequestOptions): Promise<AIProviderResponse<T>>;
@@ -62,7 +62,7 @@ export interface OrchestrationResult<T = any> {
   success: boolean;
   data: T;
   usedModel: string;
-  usedProvider: 'openrouter' | 'gemini' | 'heuristic';
+  usedProvider: 'openrouter' | 'gemini' | 'openai' | 'anthropic' | 'heuristic';
   fallbackChainUsed: string[];
   fallbackUsed: boolean;
   totalLatencyMs: number;

@@ -42,6 +42,16 @@ import {
   BusinessIntelligenceProfile,
   DeepCrawlJob,
   UserFactCorrection,
+  SubscriptionPlan,
+  UserSubscription,
+  QuotaUsageRecord,
+  BillingOrder,
+  BillingTransaction,
+  BYOKPublicSummary,
+  WorkspaceAIConfig,
+  AIProviderType,
+  BillingInterval,
+  AIMode,
 } from '../types';
 
 const getStorageItem = (key: string): string | null => {
@@ -621,5 +631,64 @@ export const api = {
       body: JSON.stringify({ factId, correctedText }),
     }),
   getFactCorrections: () => request<{ success: boolean; corrections: UserFactCorrection[] }>('/api/company/facts/corrections'),
+
+  // SaaS Monetization & Razorpay Billing
+  getSubscriptionPlans: () => request<{ success: boolean; plans: SubscriptionPlan[] }>('/api/billing/plans'),
+  getSubscription: () =>
+    request<{ success: boolean; subscription: UserSubscription; plan: SubscriptionPlan; usage: QuotaUsageRecord }>(
+      '/api/billing/subscription'
+    ),
+  createCheckoutOrder: (planId: string, interval: BillingInterval) =>
+    request<{
+      success: boolean;
+      orderId: string;
+      razorpayOrderId: string;
+      amountINR: number;
+      currency: string;
+      keyId: string;
+      plan: SubscriptionPlan;
+      isFreePlan?: boolean;
+    }>('/api/billing/create-order', {
+      method: 'POST',
+      body: JSON.stringify({ planId, interval }),
+    }),
+  verifyPayment: (payload: {
+    orderId: string;
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+  }) =>
+    request<{ success: boolean; subscription: UserSubscription; transaction: BillingTransaction }>(
+      '/api/billing/verify-payment',
+      {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      }
+    ),
+  getBillingTransactions: () =>
+    request<{ success: boolean; transactions: BillingTransaction[] }>('/api/billing/transactions'),
+  getBillingOrders: () => request<{ success: boolean; orders: BillingOrder[] }>('/api/billing/orders'),
+
+  // Enterprise BYOK & AI Configuration
+  getBYOKKeys: () => request<{ success: boolean; keys: BYOKPublicSummary[] }>('/api/byok/keys'),
+  testBYOKKey: (provider: AIProviderType, apiKey: string, modelId?: string) =>
+    request<{ success: boolean; healthy: boolean; latencyMs: number; error?: string }>('/api/byok/test', {
+      method: 'POST',
+      body: JSON.stringify({ provider, apiKey, modelId }),
+    }),
+  saveBYOKKey: (provider: AIProviderType, apiKey: string, preferredModel?: string) =>
+    request<{ success: boolean; key: BYOKPublicSummary }>('/api/byok/save', {
+      method: 'POST',
+      body: JSON.stringify({ provider, apiKey, preferredModel }),
+    }),
+  deleteBYOKKey: (provider: string) =>
+    request<{ success: boolean }>(`/api/byok/${provider}`, { method: 'DELETE' }),
+  getAIConfig: () =>
+    request<{ success: boolean; config: WorkspaceAIConfig; effectiveMode: AIMode }>('/api/byok/config'),
+  updateAIConfig: (updates: Partial<WorkspaceAIConfig>) =>
+    request<{ success: boolean; config: WorkspaceAIConfig; effectiveMode: AIMode }>('/api/byok/config', {
+      method: 'PUT',
+      body: JSON.stringify(updates),
+    }),
 };
 

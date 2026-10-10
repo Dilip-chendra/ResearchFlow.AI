@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 import { BrandSymbol } from '../brand/BrandLogo';
+import { useWorkspace } from '../../context/WorkspaceContext';
 
 interface LandingNavProps {
   onSignIn: () => void;
@@ -8,6 +9,7 @@ interface LandingNavProps {
 }
 
 export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }) => {
+  const { setIsPricingModalOpen } = useWorkspace();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -102,6 +104,15 @@ export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }
           >
             Architecture
           </button>
+          <button
+            onClick={() => setIsPricingModalOpen(true)}
+            className="text-[#F5D77F] hover:text-white font-bold transition-colors focus:outline-none py-1 drop-shadow-sm flex items-center gap-1 cursor-pointer"
+          >
+            <span>Pricing</span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-amber-400/20 text-[#F5D77F] border border-amber-400/30">
+              Live
+            </span>
+          </button>
         </div>
 
         {/* Action Buttons */}
@@ -187,6 +198,18 @@ export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }
               className="text-left py-3 px-3 rounded-lg hover:bg-white/10 text-white/90 hover:text-[#F5D77F] min-h-[48px] flex items-center transition-colors"
             >
               Technical Architecture
+            </button>
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                setIsPricingModalOpen(true);
+              }}
+              className="text-left py-3 px-3 rounded-lg hover:bg-white/10 text-[#F5D77F] hover:text-white font-bold min-h-[48px] flex items-center justify-between transition-colors"
+            >
+              <span>Pricing & Plans</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-400/20 text-[#F5D77F] border border-amber-400/30">
+                Live Razorpay
+              </span>
             </button>
           </div>
 

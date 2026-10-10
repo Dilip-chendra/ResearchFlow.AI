@@ -51,6 +51,15 @@ import {
   BusinessIntelligenceProfile,
   DeepCrawlJob,
   UserFactCorrection,
+  SubscriptionPlan,
+  UserSubscription,
+  BillingOrder,
+  BillingTransaction,
+  WebhookEventRecord,
+  QuotaUsageRecord,
+  BYOKKeyRecord,
+  WorkspaceAIConfig,
+  AIProviderType,
 } from '../types';
 import { logger } from '../utils/logger';
 
@@ -239,6 +248,13 @@ export class PersistentDatabaseStore {
   private businessIntelligenceProfiles: Map<string, BusinessIntelligenceProfile> = new Map();
   private deepCrawlJobs: Map<string, DeepCrawlJob> = new Map();
   private userFactCorrections: Map<string, UserFactCorrection> = new Map();
+  private subscriptions: Map<string, UserSubscription> = new Map();
+  private billingOrders: Map<string, BillingOrder> = new Map();
+  private billingTransactions: Map<string, BillingTransaction> = new Map();
+  private webhookEvents: Map<string, WebhookEventRecord> = new Map();
+  private quotaUsages: Map<string, QuotaUsageRecord> = new Map();
+  private byokKeys: Map<string, BYOKKeyRecord> = new Map();
+  private workspaceAIConfigs: Map<string, WorkspaceAIConfig> = new Map();
 
   constructor() {
     const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -395,6 +411,13 @@ export class PersistentDatabaseStore {
       if (parsed.businessIntelligenceProfiles) this.businessIntelligenceProfiles = new Map(parsed.businessIntelligenceProfiles);
       if (parsed.deepCrawlJobs) this.deepCrawlJobs = new Map(parsed.deepCrawlJobs);
       if (parsed.userFactCorrections) this.userFactCorrections = new Map(parsed.userFactCorrections);
+      if (parsed.subscriptions) this.subscriptions = new Map(parsed.subscriptions);
+      if (parsed.billingOrders) this.billingOrders = new Map(parsed.billingOrders);
+      if (parsed.billingTransactions) this.billingTransactions = new Map(parsed.billingTransactions);
+      if (parsed.webhookEvents) this.webhookEvents = new Map(parsed.webhookEvents);
+      if (parsed.quotaUsages) this.quotaUsages = new Map(parsed.quotaUsages);
+      if (parsed.byokKeys) this.byokKeys = new Map(parsed.byokKeys);
+      if (parsed.workspaceAIConfigs) this.workspaceAIConfigs = new Map(parsed.workspaceAIConfigs);
 
       // Auto-migrate legacy avatar URLs to individual distinct initials / custom avatars
       for (const [uid, user] of this.users.entries()) {
@@ -482,6 +505,13 @@ export class PersistentDatabaseStore {
         businessIntelligenceProfiles: Array.from(this.businessIntelligenceProfiles.entries()),
         deepCrawlJobs: Array.from(this.deepCrawlJobs.entries()),
         userFactCorrections: Array.from(this.userFactCorrections.entries()),
+        subscriptions: Array.from(this.subscriptions.entries()),
+        billingOrders: Array.from(this.billingOrders.entries()),
+        billingTransactions: Array.from(this.billingTransactions.entries()),
+        webhookEvents: Array.from(this.webhookEvents.entries()),
+        quotaUsages: Array.from(this.quotaUsages.entries()),
+        byokKeys: Array.from(this.byokKeys.entries()),
+        workspaceAIConfigs: Array.from(this.workspaceAIConfigs.entries()),
       };
 
       const dataDir = path.dirname(this.dataFilePath);
@@ -2932,6 +2962,209 @@ export class PersistentDatabaseStore {
     this.userFactCorrections.set(correction.id, correction);
     this.scheduleSave();
     return correction;
+  }
+
+  // ---------------------------------------------------------------------------
+  // SaaS Monetization & Subscriptions
+  // ---------------------------------------------------------------------------
+
+  getSubscription(workspaceId: string): UserSubscription {
+    let sub = this.subscriptions.get(workspaceId);
+    if (!sub) {
+      const ownerId = this.workspaces.get(workspaceId)?.ownerId || DEMO_USER_ID;
+      sub = {
+        id: `sub_free_${workspaceId}`,
+        workspaceId,
+        userId: ownerId,
+        planId: 'free',
+        tier: 'FREE',
+        aiMode: 'MANAGED',
+        interval: 'MONTHLY',
+        status: 'ACTIVE',
+        currentPeriodStart: new Date().toISOString(),
+        currentPeriodEnd: new Date(Date.now() + 30 * 86400000).toISOString(),
+        cancelAtPeriodEnd: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      this.subscriptions.set(workspaceId, sub);
+      this.scheduleSave();
+    }
+    return sub;
+  }
+
+  setSubscription(subscription: UserSubscription): UserSubscription {
+    this.subscriptions.set(subscription.workspaceId, subscription);
+    this.scheduleSave();
+    return subscription;
+  }
+
+  updateSubscription(workspaceId: string, updates: Partial<UserSubscription>): UserSubscription | undefined {
+    const existing = this.getSubscription(workspaceId);
+    if (!existing) return undefined;
+    const updated = {
+      ...existing,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.subscriptions.set(workspaceId, updated);
+    this.scheduleSave();
+    return updated;
+  }
+
+  // Orders & Transactions
+  createBillingOrder(order: BillingOrder): BillingOrder {
+    this.billingOrders.set(order.id, order);
+    this.scheduleSave();
+    return order;
+  }
+
+  getBillingOrder(orderId: string): BillingOrder | undefined {
+    return this.billingOrders.get(orderId);
+  }
+
+  getBillingOrderByRazorpayId(rzpOrderId: string): BillingOrder | undefined {
+    return Array.from(this.billingOrders.values()).find(o => o.razorpayOrderId === rzpOrderId);
+  }
+
+  updateBillingOrderStatus(orderId: string, status: BillingOrder['status'], paidAt?: string): BillingOrder | undefined {
+    const order = this.billingOrders.get(orderId);
+    if (!order) return undefined;
+    order.status = status;
+    if (paidAt) order.paidAt = paidAt;
+    this.billingOrders.set(orderId, order);
+    this.scheduleSave();
+    return order;
+  }
+
+  listBillingOrders(workspaceId: string): BillingOrder[] {
+    return Array.from(this.billingOrders.values())
+      .filter(o => o.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  createBillingTransaction(tx: BillingTransaction): BillingTransaction {
+    this.billingTransactions.set(tx.id, tx);
+    this.scheduleSave();
+    return tx;
+  }
+
+  listBillingTransactions(workspaceId: string): BillingTransaction[] {
+    return Array.from(this.billingTransactions.values())
+      .filter(t => t.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  // Webhooks
+  saveWebhookEvent(record: WebhookEventRecord): WebhookEventRecord {
+    this.webhookEvents.set(record.eventId || record.id, record);
+    this.scheduleSave();
+    return record;
+  }
+
+  getWebhookEvent(eventId: string): WebhookEventRecord | undefined {
+    return this.webhookEvents.get(eventId);
+  }
+
+  // Quotas & Usage Tracking
+  getQuotaUsage(workspaceId: string, periodMonth?: string): QuotaUsageRecord {
+    const month = periodMonth || new Date().toISOString().slice(0, 7);
+    const key = `${workspaceId}_${month}`;
+    let record = this.quotaUsages.get(key);
+    if (!record) {
+      record = {
+        workspaceId,
+        periodMonth: month,
+        researchRunsUsed: 0,
+        competitorCrawlsUsed: 0,
+        aiTokensUsed: 0,
+        lastUpdated: new Date().toISOString(),
+      };
+      this.quotaUsages.set(key, record);
+      this.scheduleSave();
+    }
+    return record;
+  }
+
+  recordQuotaUsage(workspaceId: string, delta: { runs?: number; crawls?: number; tokens?: number }): QuotaUsageRecord {
+    const month = new Date().toISOString().slice(0, 7);
+    const usage = this.getQuotaUsage(workspaceId, month);
+    if (delta.runs) usage.researchRunsUsed += delta.runs;
+    if (delta.crawls) usage.competitorCrawlsUsed += delta.crawls;
+    if (delta.tokens) usage.aiTokensUsed += delta.tokens;
+    usage.lastUpdated = new Date().toISOString();
+    this.quotaUsages.set(`${workspaceId}_${month}`, usage);
+    this.scheduleSave();
+    return usage;
+  }
+
+  resetMonthlyQuota(workspaceId: string, periodMonth?: string): QuotaUsageRecord {
+    const month = periodMonth || new Date().toISOString().slice(0, 7);
+    const usage: QuotaUsageRecord = {
+      workspaceId,
+      periodMonth: month,
+      researchRunsUsed: 0,
+      competitorCrawlsUsed: 0,
+      aiTokensUsed: 0,
+      lastUpdated: new Date().toISOString(),
+    };
+    this.quotaUsages.set(`${workspaceId}_${month}`, usage);
+    this.scheduleSave();
+    return usage;
+  }
+
+  // ---------------------------------------------------------------------------
+  // BYOK (Bring Your Own Key) & AI Configuration
+  // ---------------------------------------------------------------------------
+
+  saveBYOKKey(record: BYOKKeyRecord): BYOKKeyRecord {
+    const key = `${record.workspaceId}_${record.provider}`;
+    this.byokKeys.set(key, record);
+    this.scheduleSave();
+    return record;
+  }
+
+  getBYOKKey(workspaceId: string, provider: AIProviderType): BYOKKeyRecord | undefined {
+    return this.byokKeys.get(`${workspaceId}_${provider}`);
+  }
+
+  listBYOKKeys(workspaceId: string): BYOKKeyRecord[] {
+    return Array.from(this.byokKeys.values()).filter(k => k.workspaceId === workspaceId);
+  }
+
+  deleteBYOKKey(workspaceId: string, provider: AIProviderType): boolean {
+    const key = `${workspaceId}_${provider}`;
+    const deleted = this.byokKeys.delete(key);
+    if (deleted) this.scheduleSave();
+    return deleted;
+  }
+
+  getWorkspaceAIConfig(workspaceId: string): WorkspaceAIConfig {
+    let config = this.workspaceAIConfigs.get(workspaceId);
+    if (!config) {
+      config = {
+        workspaceId,
+        mode: 'MANAGED',
+        activeProvider: 'OPENROUTER',
+        strictBYOKOnly: false,
+        updatedAt: new Date().toISOString(),
+      };
+      this.workspaceAIConfigs.set(workspaceId, config);
+      this.scheduleSave();
+    }
+    return config;
+  }
+
+  updateWorkspaceAIConfig(workspaceId: string, updates: Partial<WorkspaceAIConfig>): WorkspaceAIConfig {
+    const existing = this.getWorkspaceAIConfig(workspaceId);
+    const updated = {
+      ...existing,
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    this.workspaceAIConfigs.set(workspaceId, updated);
+    this.scheduleSave();
+    return updated;
   }
 }
 

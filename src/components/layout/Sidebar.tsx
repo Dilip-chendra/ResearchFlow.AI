@@ -18,6 +18,7 @@ import {
   ArrowRight,
   Target,
   Building2,
+  CreditCard,
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { BrandLogo } from '../brand/BrandLogo';
@@ -37,6 +38,7 @@ export const Sidebar: React.FC = () => {
     isMobileNavOpen,
     setIsMobileNavOpen,
     setIsNewResearchModalOpen,
+    setIsPricingModalOpen,
     addToast,
     refreshWorkspaces
   } = useWorkspace();
@@ -52,10 +54,16 @@ export const Sidebar: React.FC = () => {
     { id: 'tasks', label: 'Action Tasks', icon: CheckSquare },
     { id: 'evaluation', label: 'Quality Benchmark', icon: TestTube2, badge: '15 TCs' },
     { id: 'audit', label: 'Audit Log', icon: History },
+    { id: 'pricing', label: 'Pricing & Plans', icon: CreditCard, badge: 'Live' },
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
   const handleNavigate = (id: string) => {
+    if (id === 'pricing') {
+      setIsPricingModalOpen(true);
+      setIsMobileNavOpen(false);
+      return;
+    }
     if (id !== 'research') {
       setSelectedJobId(null);
     }

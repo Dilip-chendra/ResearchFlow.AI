@@ -31,8 +31,12 @@ import {
   Type,
   Trash2,
   Camera,
-  Save
+  Save,
+  CreditCard,
+  KeyRound,
 } from 'lucide-react';
+import { BillingSettingsTab } from './BillingSettingsTab';
+import { AIProvidersSettingsTab } from './AIProvidersSettingsTab';
 import { AIHealthStatus, ModelCapabilityProfile, AIRun, FailureCategory, AIRoutingMode, AvatarType } from '../../types';
 
 const EMOJI_OPTIONS = [
@@ -82,6 +86,16 @@ export const SettingsView: React.FC = () => {
   const [testModeEnabled, setTestModeEnabled] = useState(false);
   const [simulatedFailure, setSimulatedFailure] = useState<FailureCategory>('RATE_LIMIT');
   const [actionNotice, setActionNotice] = useState<string | null>(null);
+  const [activeSettingsTab, setActiveSettingsTab] = useState<'profile' | 'billing' | 'byok' | 'telemetry'>(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam === 'billing') return 'billing';
+      if (tabParam === 'byok' || tabParam === 'ai-providers') return 'byok';
+      if (tabParam === 'telemetry') return 'telemetry';
+    }
+    return 'profile';
+  });
 
   const fetchAIHealth = async () => {
     setLoadingHealth(true);
@@ -295,7 +309,71 @@ export const SettingsView: React.FC = () => {
         </div>
       )}
 
-      {/* User Profile & Avatar Customizer Card */}
+      {/* Settings Navigation Tabs */}
+      <div className="flex items-center gap-2 border-b border-zinc-200 pb-px overflow-x-auto">
+        <button
+          onClick={() => setActiveSettingsTab('profile')}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+            activeSettingsTab === 'profile'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent text-zinc-500 hover:text-zinc-900'
+          }`}
+        >
+          <User className="w-4 h-4" />
+          <span>Profile & Avatar</span>
+        </button>
+
+        <button
+          onClick={() => setActiveSettingsTab('billing')}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+            activeSettingsTab === 'billing'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent text-zinc-500 hover:text-zinc-900'
+          }`}
+        >
+          <CreditCard className="w-4 h-4" />
+          <span>Billing & Subscription</span>
+          <span className="px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 text-[10px] font-bold">
+            Razorpay Live
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveSettingsTab('byok')}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+            activeSettingsTab === 'byok'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent text-zinc-500 hover:text-zinc-900'
+          }`}
+        >
+          <KeyRound className="w-4 h-4" />
+          <span>AI Providers & BYOK</span>
+          <span className="px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 text-[10px] font-bold">
+            AES-256 Vault
+          </span>
+        </button>
+
+        <button
+          onClick={() => setActiveSettingsTab('telemetry')}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer whitespace-nowrap ${
+            activeSettingsTab === 'telemetry'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent text-zinc-500 hover:text-zinc-900'
+          }`}
+        >
+          <Cpu className="w-4 h-4" />
+          <span>AI Diagnostics & Health</span>
+        </button>
+      </div>
+
+      {/* Tab: Billing & Subscription */}
+      {activeSettingsTab === 'billing' && <BillingSettingsTab />}
+
+      {/* Tab: AI Providers & BYOK */}
+      {activeSettingsTab === 'byok' && <AIProvidersSettingsTab />}
+
+      {/* Tab: Profile & Avatar Identity */}
+      {activeSettingsTab === 'profile' && (
       <div className="bg-white rounded-2xl border border-zinc-200 p-6 shadow-xs space-y-6">
         <div className="flex items-center justify-between border-b border-zinc-100 pb-4">
           <div className="flex items-center gap-2.5">
@@ -527,7 +605,11 @@ export const SettingsView: React.FC = () => {
           </div>
         </form>
       </div>
+      )}
 
+      {/* Tab: AI Diagnostics & Telemetry */}
+      {activeSettingsTab === 'telemetry' && (
+      <>
       {/* AI Multi-Model Orchestration Health Card */}
       <div className="bg-white rounded-2xl border border-zinc-200 p-6 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-zinc-100 pb-4">
@@ -1112,6 +1194,8 @@ export const SettingsView: React.FC = () => {
           </div>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 };

@@ -10,8 +10,13 @@ async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-  // JSON Body Parser & CORS headers
-  app.use(express.json({ limit: '10mb' }));
+  // JSON Body Parser with rawBody preservation for Razorpay webhook HMAC verification
+  app.use(express.json({
+    limit: '10mb',
+    verify: (req: any, _res, buf) => {
+      req.rawBody = buf;
+    },
+  }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
   // Seed demo data on boot strictly for isolated demo sandbox

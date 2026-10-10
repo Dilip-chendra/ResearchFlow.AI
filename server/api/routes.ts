@@ -13,7 +13,11 @@ import { openRouterProvider } from '../ai/providers/openrouterProvider';
 import { geminiProvider } from '../ai/providers/geminiProvider';
 import { logger } from '../utils/logger';
 import { companyIntelligenceService } from '../services/companyIntelligenceService';
-import { User, Workspace, ActionableTaskItem, ExecutionTask, JobStatus } from '../types';
+import { DEFAULT_PLANS, getPlanById } from '../billing/planCatalog';
+import { razorpayService } from '../billing/razorpayService';
+import { entitlementEngine } from '../billing/entitlementEngine';
+import { aiGateway } from '../ai/gateway';
+import { User, Workspace, ActionableTaskItem, ExecutionTask, JobStatus, AIProviderType } from '../types';
 
 export const apiRouter = Router();
 
@@ -625,6 +629,24 @@ apiRouter.post('/research/jobs', (req: Request, res: Response) => {
     additionalUrls,
   } = req.body;
 
+  // Enforce SaaS Subscription Quota
+  const entitlementCheck = entitlementEngine.check(wsId, 'RESEARCH_RUN', 1);
+  if (!entitlementCheck.allowed) {
+    return res.status(402).json({
+      error: 'Payment Required',
+      code: 'QUOTA_EXCEEDED',
+      message: entitlementCheck.reason,
+      details: {
+        feature: 'RESEARCH_RUN',
+        currentUsage: entitlementCheck.currentUsage,
+        limit: entitlementCheck.limit,
+        planName: entitlementCheck.planName,
+        tier: entitlementCheck.tier,
+        upgradeUrl: '/settings?tab=billing',
+      },
+    });
+  }
+
   try {
     const job = researchService.createJob(
       {
@@ -637,6 +659,8 @@ apiRouter.post('/research/jobs', (req: Request, res: Response) => {
       },
       wsId
     );
+    // Deduct run from quota
+    entitlementEngine.consume(wsId, 'RESEARCH_RUN', 1);
     res.json(job);
   } catch (err: any) {
     logger.error('Failed to create research job', err);
@@ -3251,6 +3275,218 @@ apiRouter.get('/company/facts/corrections', (req: Request, res: Response) => {
     const wsId = getWorkspaceId(req, res);
     const corrections = db.getUserFactCorrections(wsId);
     res.json({ success: true, corrections });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// SaaS Monetization & Razorpay Billing Routes
+// ---------------------------------------------------------------------------
+
+apiRouter.get('/billing/plans', (req: Request, res: Response) => {
+  res.json({
+    success: true,
+    plans: DEFAULT_PLANS,
+  });
+});
+
+apiRouter.get('/billing/subscription', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { subscription, plan } = entitlementEngine.getEffectivePlan(wsId);
+    const usage = db.getQuotaUsage(wsId);
+
+    res.json({
+      success: true,
+      subscription,
+      plan,
+      usage,
+    });
+  } catch (err: any) {
+    logger.error('Failed to get subscription:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/billing/create-order', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const userId = user?.id || 'usr_default_founder';
+    const { planId, interval } = req.body;
+
+    if (!planId) {
+      return res.status(400).json({ error: 'planId is required' });
+    }
+
+    const orderResult = await razorpayService.createCheckoutOrder({
+      workspaceId: wsId,
+      userId,
+      planId,
+      interval: interval === 'YEARLY' ? 'YEARLY' : 'MONTHLY',
+    });
+
+    res.json({
+      success: true,
+      ...orderResult,
+    });
+  } catch (err: any) {
+    logger.error('Failed to create checkout order:', err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/billing/verify-payment', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const userId = user?.id || 'usr_default_founder';
+    const { orderId, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+
+    if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
+      return res.status(400).json({
+        error: 'Missing required Razorpay verification parameters (razorpayOrderId, razorpayPaymentId, razorpaySignature)',
+      });
+    }
+
+    const result = await razorpayService.verifyAndFulfillPayment({
+      orderId: orderId || '',
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+      workspaceId: wsId,
+      userId,
+    });
+
+    res.json({
+      success: true,
+      subscription: result.subscription,
+      transaction: result.transaction,
+    });
+  } catch (err: any) {
+    logger.error('Payment verification failed:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/billing/webhook', async (req: Request, res: Response) => {
+  try {
+    const signature = (req.headers['x-razorpay-signature'] || '') as string;
+    const rawBody = (req as any).rawBody || JSON.stringify(req.body);
+
+    if (!signature) {
+      logger.warn('Razorpay webhook called without signature header');
+      return res.status(400).json({ error: 'Missing x-razorpay-signature header' });
+    }
+
+    const result = await razorpayService.handleWebhook(rawBody, signature);
+    res.json({ success: true, ...result });
+  } catch (err: any) {
+    logger.error('Razorpay webhook handling error:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/billing/transactions', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const transactions = db.listBillingTransactions(wsId);
+    res.json({ success: true, transactions });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/billing/orders', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const orders = db.listBillingOrders(wsId);
+    res.json({ success: true, orders });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Enterprise BYOK (Bring Your Own Key) & AI Gateway Routes
+// ---------------------------------------------------------------------------
+
+apiRouter.get('/byok/keys', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const keys = aiGateway.listKeys(wsId);
+    res.json({ success: true, keys });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/byok/test', async (req: Request, res: Response) => {
+  try {
+    const { provider, apiKey, modelId } = req.body;
+    if (!provider || !apiKey) {
+      return res.status(400).json({ error: 'provider and apiKey are required' });
+    }
+
+    const result = await aiGateway.testConnection(provider as AIProviderType, apiKey, modelId);
+    res.json({ success: result.healthy, ...result });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/byok/save', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { provider, apiKey, preferredModel } = req.body;
+
+    if (!provider || !apiKey) {
+      return res.status(400).json({ error: 'provider and apiKey are required' });
+    }
+
+    const saved = await aiGateway.saveKey(wsId, provider as AIProviderType, apiKey, preferredModel);
+    res.json({ success: true, key: saved });
+  } catch (err: any) {
+    logger.error('Failed to save BYOK key:', err);
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.delete('/byok/:provider', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const provider = req.params.provider.toUpperCase() as AIProviderType;
+    const deleted = aiGateway.deleteKey(wsId, provider);
+    res.json({ success: deleted });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/byok/config', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const config = db.getWorkspaceAIConfig(wsId);
+    const effectiveMode = aiGateway.getEffectiveMode(wsId);
+    res.json({ success: true, config, effectiveMode });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.put('/byok/config', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { mode, activeProvider, activeModel, strictBYOKOnly } = req.body;
+    const updated = db.updateWorkspaceAIConfig(wsId, {
+      mode,
+      activeProvider,
+      activeModel,
+      strictBYOKOnly,
+    });
+    const effectiveMode = aiGateway.getEffectiveMode(wsId);
+    res.json({ success: true, config: updated, effectiveMode });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

@@ -18,6 +18,7 @@ import { NewResearchModal } from './components/research/NewResearchModal';
 import { AuthView } from './components/auth/AuthView';
 import { LandingPage } from './components/landing/LandingPage';
 import { OnboardingModal } from './components/auth/OnboardingModal';
+import { PricingModal } from './components/pricing/PricingModal';
 import { BrandSymbol } from './components/brand/BrandLogo';
 import { X, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
 
@@ -65,7 +66,7 @@ const ToastContainer: React.FC = () => {
 };
 
 const MainApp: React.FC = () => {
-  const { activeView, isAuthenticated, isLoading } = useWorkspace();
+  const { activeView, isAuthenticated, isLoading, isPricingModalOpen, setIsPricingModalOpen } = useWorkspace();
   const [publicView, setPublicView] = useState<'landing' | 'auth'>('landing');
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
 
@@ -115,6 +116,10 @@ const MainApp: React.FC = () => {
               window.scrollTo({ top: 0, behavior: 'instant' as any });
             }}
           />
+          <PricingModal
+            isOpen={isPricingModalOpen}
+            onClose={() => setIsPricingModalOpen(false)}
+          />
           <ToastContainer />
         </>
       );
@@ -128,6 +133,10 @@ const MainApp: React.FC = () => {
             setPublicView('landing');
             window.scrollTo({ top: 0, behavior: 'instant' as any });
           }}
+        />
+        <PricingModal
+          isOpen={isPricingModalOpen}
+          onClose={() => setIsPricingModalOpen(false)}
         />
         <ToastContainer />
       </>
@@ -151,13 +160,17 @@ const MainApp: React.FC = () => {
           {activeView === 'tasks' && <TasksView />}
           {activeView === 'evaluation' && <EvaluationView />}
           {activeView === 'audit' && <AuditView />}
-          {activeView === 'settings' && <SettingsView />}
+          {(activeView === 'settings' || activeView === 'pricing') && <SettingsView />}
           {activeView === 'architecture' && <ArchitectureView />}
         </main>
       </div>
 
       <NewResearchModal />
       <OnboardingModal />
+      <PricingModal
+        isOpen={isPricingModalOpen}
+        onClose={() => setIsPricingModalOpen(false)}
+      />
       <ToastContainer />
     </div>
   );

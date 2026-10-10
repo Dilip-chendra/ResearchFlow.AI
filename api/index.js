@@ -231,6 +231,13 @@ var init_store = __esm({
         this.businessIntelligenceProfiles = /* @__PURE__ */ new Map();
         this.deepCrawlJobs = /* @__PURE__ */ new Map();
         this.userFactCorrections = /* @__PURE__ */ new Map();
+        this.subscriptions = /* @__PURE__ */ new Map();
+        this.billingOrders = /* @__PURE__ */ new Map();
+        this.billingTransactions = /* @__PURE__ */ new Map();
+        this.webhookEvents = /* @__PURE__ */ new Map();
+        this.quotaUsages = /* @__PURE__ */ new Map();
+        this.byokKeys = /* @__PURE__ */ new Map();
+        this.workspaceAIConfigs = /* @__PURE__ */ new Map();
         const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
         const defaultDataDir = path.join(process.cwd(), "data");
         const writableDir = isServerless ? path.join("/tmp", "data") : defaultDataDir;
@@ -374,6 +381,13 @@ var init_store = __esm({
           if (parsed.businessIntelligenceProfiles) this.businessIntelligenceProfiles = new Map(parsed.businessIntelligenceProfiles);
           if (parsed.deepCrawlJobs) this.deepCrawlJobs = new Map(parsed.deepCrawlJobs);
           if (parsed.userFactCorrections) this.userFactCorrections = new Map(parsed.userFactCorrections);
+          if (parsed.subscriptions) this.subscriptions = new Map(parsed.subscriptions);
+          if (parsed.billingOrders) this.billingOrders = new Map(parsed.billingOrders);
+          if (parsed.billingTransactions) this.billingTransactions = new Map(parsed.billingTransactions);
+          if (parsed.webhookEvents) this.webhookEvents = new Map(parsed.webhookEvents);
+          if (parsed.quotaUsages) this.quotaUsages = new Map(parsed.quotaUsages);
+          if (parsed.byokKeys) this.byokKeys = new Map(parsed.byokKeys);
+          if (parsed.workspaceAIConfigs) this.workspaceAIConfigs = new Map(parsed.workspaceAIConfigs);
           for (const [uid, user] of this.users.entries()) {
             if (user.avatarUrl?.includes("images.unsplash.com/photo-1534528741775-53994a69daeb")) {
               user.avatarUrl = "";
@@ -455,7 +469,14 @@ var init_store = __esm({
             customerIntelligenceProfiles: Array.from(this.customerIntelligenceProfiles.entries()),
             businessIntelligenceProfiles: Array.from(this.businessIntelligenceProfiles.entries()),
             deepCrawlJobs: Array.from(this.deepCrawlJobs.entries()),
-            userFactCorrections: Array.from(this.userFactCorrections.entries())
+            userFactCorrections: Array.from(this.userFactCorrections.entries()),
+            subscriptions: Array.from(this.subscriptions.entries()),
+            billingOrders: Array.from(this.billingOrders.entries()),
+            billingTransactions: Array.from(this.billingTransactions.entries()),
+            webhookEvents: Array.from(this.webhookEvents.entries()),
+            quotaUsages: Array.from(this.quotaUsages.entries()),
+            byokKeys: Array.from(this.byokKeys.entries()),
+            workspaceAIConfigs: Array.from(this.workspaceAIConfigs.entries())
           };
           const dataDir = path.dirname(this.dataFilePath);
           if (!fs.existsSync(dataDir)) {
@@ -2558,6 +2579,182 @@ var init_store = __esm({
         this.scheduleSave();
         return correction;
       }
+      // ---------------------------------------------------------------------------
+      // SaaS Monetization & Subscriptions
+      // ---------------------------------------------------------------------------
+      getSubscription(workspaceId) {
+        let sub = this.subscriptions.get(workspaceId);
+        if (!sub) {
+          const ownerId = this.workspaces.get(workspaceId)?.ownerId || DEMO_USER_ID;
+          sub = {
+            id: `sub_free_${workspaceId}`,
+            workspaceId,
+            userId: ownerId,
+            planId: "free",
+            tier: "FREE",
+            aiMode: "MANAGED",
+            interval: "MONTHLY",
+            status: "ACTIVE",
+            currentPeriodStart: (/* @__PURE__ */ new Date()).toISOString(),
+            currentPeriodEnd: new Date(Date.now() + 30 * 864e5).toISOString(),
+            cancelAtPeriodEnd: false,
+            createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          this.subscriptions.set(workspaceId, sub);
+          this.scheduleSave();
+        }
+        return sub;
+      }
+      setSubscription(subscription) {
+        this.subscriptions.set(subscription.workspaceId, subscription);
+        this.scheduleSave();
+        return subscription;
+      }
+      updateSubscription(workspaceId, updates) {
+        const existing = this.getSubscription(workspaceId);
+        if (!existing) return void 0;
+        const updated = {
+          ...existing,
+          ...updates,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        this.subscriptions.set(workspaceId, updated);
+        this.scheduleSave();
+        return updated;
+      }
+      // Orders & Transactions
+      createBillingOrder(order) {
+        this.billingOrders.set(order.id, order);
+        this.scheduleSave();
+        return order;
+      }
+      getBillingOrder(orderId) {
+        return this.billingOrders.get(orderId);
+      }
+      getBillingOrderByRazorpayId(rzpOrderId) {
+        return Array.from(this.billingOrders.values()).find((o) => o.razorpayOrderId === rzpOrderId);
+      }
+      updateBillingOrderStatus(orderId, status, paidAt) {
+        const order = this.billingOrders.get(orderId);
+        if (!order) return void 0;
+        order.status = status;
+        if (paidAt) order.paidAt = paidAt;
+        this.billingOrders.set(orderId, order);
+        this.scheduleSave();
+        return order;
+      }
+      listBillingOrders(workspaceId) {
+        return Array.from(this.billingOrders.values()).filter((o) => o.workspaceId === workspaceId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      createBillingTransaction(tx) {
+        this.billingTransactions.set(tx.id, tx);
+        this.scheduleSave();
+        return tx;
+      }
+      listBillingTransactions(workspaceId) {
+        return Array.from(this.billingTransactions.values()).filter((t) => t.workspaceId === workspaceId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      // Webhooks
+      saveWebhookEvent(record) {
+        this.webhookEvents.set(record.eventId || record.id, record);
+        this.scheduleSave();
+        return record;
+      }
+      getWebhookEvent(eventId) {
+        return this.webhookEvents.get(eventId);
+      }
+      // Quotas & Usage Tracking
+      getQuotaUsage(workspaceId, periodMonth) {
+        const month = periodMonth || (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+        const key = `${workspaceId}_${month}`;
+        let record = this.quotaUsages.get(key);
+        if (!record) {
+          record = {
+            workspaceId,
+            periodMonth: month,
+            researchRunsUsed: 0,
+            competitorCrawlsUsed: 0,
+            aiTokensUsed: 0,
+            lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          this.quotaUsages.set(key, record);
+          this.scheduleSave();
+        }
+        return record;
+      }
+      recordQuotaUsage(workspaceId, delta) {
+        const month = (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+        const usage = this.getQuotaUsage(workspaceId, month);
+        if (delta.runs) usage.researchRunsUsed += delta.runs;
+        if (delta.crawls) usage.competitorCrawlsUsed += delta.crawls;
+        if (delta.tokens) usage.aiTokensUsed += delta.tokens;
+        usage.lastUpdated = (/* @__PURE__ */ new Date()).toISOString();
+        this.quotaUsages.set(`${workspaceId}_${month}`, usage);
+        this.scheduleSave();
+        return usage;
+      }
+      resetMonthlyQuota(workspaceId, periodMonth) {
+        const month = periodMonth || (/* @__PURE__ */ new Date()).toISOString().slice(0, 7);
+        const usage = {
+          workspaceId,
+          periodMonth: month,
+          researchRunsUsed: 0,
+          competitorCrawlsUsed: 0,
+          aiTokensUsed: 0,
+          lastUpdated: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        this.quotaUsages.set(`${workspaceId}_${month}`, usage);
+        this.scheduleSave();
+        return usage;
+      }
+      // ---------------------------------------------------------------------------
+      // BYOK (Bring Your Own Key) & AI Configuration
+      // ---------------------------------------------------------------------------
+      saveBYOKKey(record) {
+        const key = `${record.workspaceId}_${record.provider}`;
+        this.byokKeys.set(key, record);
+        this.scheduleSave();
+        return record;
+      }
+      getBYOKKey(workspaceId, provider) {
+        return this.byokKeys.get(`${workspaceId}_${provider}`);
+      }
+      listBYOKKeys(workspaceId) {
+        return Array.from(this.byokKeys.values()).filter((k) => k.workspaceId === workspaceId);
+      }
+      deleteBYOKKey(workspaceId, provider) {
+        const key = `${workspaceId}_${provider}`;
+        const deleted = this.byokKeys.delete(key);
+        if (deleted) this.scheduleSave();
+        return deleted;
+      }
+      getWorkspaceAIConfig(workspaceId) {
+        let config = this.workspaceAIConfigs.get(workspaceId);
+        if (!config) {
+          config = {
+            workspaceId,
+            mode: "MANAGED",
+            activeProvider: "OPENROUTER",
+            strictBYOKOnly: false,
+            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          this.workspaceAIConfigs.set(workspaceId, config);
+          this.scheduleSave();
+        }
+        return config;
+      }
+      updateWorkspaceAIConfig(workspaceId, updates) {
+        const existing = this.getWorkspaceAIConfig(workspaceId);
+        const updated = {
+          ...existing,
+          ...updates,
+          updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+        };
+        this.workspaceAIConfigs.set(workspaceId, updated);
+        this.scheduleSave();
+        return updated;
+      }
     };
     db = new PersistentDatabaseStore();
   }
@@ -3843,7 +4040,7 @@ var init_orchestrator = __esm({
         };
         setTimeout(() => {
           this.syncCatalog().catch((err) => logger.warn("Initial OpenRouter catalog sync failed:", err));
-        }, 1e3);
+        }, 1e3).unref();
       }
       getRoutingMode() {
         return this.routingMode;
@@ -10159,6 +10356,1492 @@ var CompanyIntelligenceService = class {
 };
 var companyIntelligenceService = new CompanyIntelligenceService();
 
+// server/billing/planCatalog.ts
+var DEFAULT_PLANS = [
+  // FREE COMMUNITY TIER
+  {
+    id: "free",
+    name: "Free Community",
+    tier: "FREE",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 0,
+    yearlyPriceINR: 0,
+    description: "Explore verified market intelligence and test research pipelines for early experiments.",
+    badge: "Free Forever",
+    features: [
+      "2 Deep Market Research Runs / month",
+      "5 Competitor Crawl Pages / month",
+      "50,000 Managed AI Tokens / month",
+      "Basic Evidence Collection & Fact Extraction",
+      "Bring Your Own Key (BYOK) Allowed",
+      "Community Support"
+    ],
+    quotas: {
+      monthlyResearchRuns: 2,
+      monthlyCompetitorCrawls: 5,
+      monthlyAITokens: 5e4,
+      maxConcurrentJobs: 1,
+      maxCompetitorUniverse: 3,
+      warRoomAccess: false,
+      exportReports: false,
+      byokAllowed: true,
+      priorityRouting: false,
+      customIntegrations: false
+    }
+  },
+  // STARTER MANAGED
+  {
+    id: "starter_managed",
+    name: "Starter (Managed AI)",
+    tier: "STARTER",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 999,
+    yearlyPriceINR: 9990,
+    // Save 2 months
+    description: "All-inclusive platform with zero API keys to configure. Ideal for solo founders and early PMs.",
+    badge: "Zero Setup",
+    features: [
+      "10 Deep Market Research Runs / month",
+      "25 Competitor Crawl Pages / month",
+      "500,000 Managed AI Tokens / month",
+      "Cross-Source Conflict Detection",
+      "Market War Room & Strategic Matrix",
+      "Export PDF & Markdown Briefs",
+      "Standard Multi-Model AI Routing",
+      "Email Support (48h response)"
+    ],
+    quotas: {
+      monthlyResearchRuns: 10,
+      monthlyCompetitorCrawls: 25,
+      monthlyAITokens: 5e5,
+      maxConcurrentJobs: 2,
+      maxCompetitorUniverse: 10,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: false,
+      priorityRouting: false,
+      customIntegrations: false
+    }
+  },
+  // STARTER BYOK
+  {
+    id: "starter_byok",
+    name: "Starter (BYOK)",
+    tier: "STARTER",
+    aiMode: "BYOK",
+    monthlyPriceINR: 399,
+    yearlyPriceINR: 3990,
+    description: "Discounted rate when you bring your own OpenAI, Anthropic, or Gemini API keys.",
+    badge: "60% BYOK Discount",
+    features: [
+      "10 Deep Market Research Runs / month",
+      "25 Competitor Crawl Pages / month",
+      "Bring Your Own Key (OpenAI, Anthropic, Gemini, OpenRouter)",
+      "Direct provider token billing (No markup)",
+      "Cross-Source Conflict Detection",
+      "Market War Room & Strategic Matrix",
+      "Export PDF & Markdown Briefs",
+      "AES-256 Encrypted Key Vault"
+    ],
+    quotas: {
+      monthlyResearchRuns: 10,
+      monthlyCompetitorCrawls: 25,
+      monthlyAITokens: 0,
+      // Direct provider
+      maxConcurrentJobs: 2,
+      maxCompetitorUniverse: 10,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: true,
+      priorityRouting: false,
+      customIntegrations: false
+    }
+  },
+  // PRO MANAGED (POPULAR)
+  {
+    id: "pro_managed",
+    name: "Pro (Managed AI)",
+    tier: "PRO",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 2999,
+    yearlyPriceINR: 29990,
+    highlighted: true,
+    badge: "Most Popular",
+    description: "Full competitive command center for fast-moving product marketing and strategy teams.",
+    features: [
+      "50 Deep Market Research Runs / month",
+      "100 Competitor Crawl Pages / month",
+      "2,500,000 Managed AI Tokens / month",
+      "Unlimited Market War Room Simulations",
+      "Competitor Move Monitor & Shift Tracking",
+      "Custom Positioning & Campaign Briefs",
+      "Priority AI Routing & Automatic Fallback",
+      "Kanban Action Task Integration",
+      "Priority Support (12h response)"
+    ],
+    quotas: {
+      monthlyResearchRuns: 50,
+      monthlyCompetitorCrawls: 100,
+      monthlyAITokens: 25e5,
+      maxConcurrentJobs: 5,
+      maxCompetitorUniverse: 25,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: false,
+      priorityRouting: true,
+      customIntegrations: false
+    }
+  },
+  // PRO BYOK
+  {
+    id: "pro_byok",
+    name: "Pro (BYOK)",
+    tier: "PRO",
+    aiMode: "BYOK",
+    monthlyPriceINR: 1199,
+    yearlyPriceINR: 11990,
+    highlighted: true,
+    badge: "Pro BYOK Value",
+    description: "Pro command center powered by your enterprise API keys with massive cost savings.",
+    features: [
+      "50 Deep Market Research Runs / month",
+      "100 Competitor Crawl Pages / month",
+      "Bring Your Own Key (OpenAI, Claude 3.7 Sonnet, Gemini 2.0 Pro)",
+      "Direct provider token billing (Zero markup)",
+      "Unlimited Market War Room Simulations",
+      "Competitor Move Monitor & Shift Tracking",
+      "Custom Positioning & Campaign Briefs",
+      "Switch between models anytime in Settings",
+      "Priority Support (12h response)"
+    ],
+    quotas: {
+      monthlyResearchRuns: 50,
+      monthlyCompetitorCrawls: 100,
+      monthlyAITokens: 0,
+      maxConcurrentJobs: 5,
+      maxCompetitorUniverse: 25,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: true,
+      priorityRouting: true,
+      customIntegrations: false
+    }
+  },
+  // BUSINESS MANAGED
+  {
+    id: "business_managed",
+    name: "Business (Managed AI)",
+    tier: "BUSINESS",
+    aiMode: "MANAGED",
+    monthlyPriceINR: 7999,
+    yearlyPriceINR: 79990,
+    badge: "Enterprise Grade",
+    description: "Scale market intelligence across multiple business units and high-frequency monitoring.",
+    features: [
+      "500 Deep Market Research Runs / month",
+      "500 Competitor Crawl Pages / month",
+      "10,000,000 Managed AI Tokens / month",
+      "Highest Priority AI Compute Allocation",
+      "Advanced Custom Evaluation Benchmark Runs",
+      "Deep Company Footprint Discovery Engine",
+      "Dedicated Slack/Teams Channel Support",
+      "Custom SLA & 99.9% Uptime Guarantee"
+    ],
+    quotas: {
+      monthlyResearchRuns: 500,
+      monthlyCompetitorCrawls: 500,
+      monthlyAITokens: 1e7,
+      maxConcurrentJobs: 10,
+      maxCompetitorUniverse: 100,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: false,
+      priorityRouting: true,
+      customIntegrations: true
+    }
+  },
+  // BUSINESS BYOK
+  {
+    id: "business_byok",
+    name: "Business (BYOK)",
+    tier: "BUSINESS",
+    aiMode: "BYOK",
+    monthlyPriceINR: 3499,
+    yearlyPriceINR: 34990,
+    badge: "Scale BYOK",
+    description: "High-volume research infrastructure backed by your custom corporate model agreements.",
+    features: [
+      "500 Deep Market Research Runs / month",
+      "500 Competitor Crawl Pages / month",
+      "Unlimited AI Token Usage (Billed via your provider contracts)",
+      "All Providers Supported (OpenAI, Anthropic, Gemini, OpenRouter)",
+      "Dedicated Multi-Provider Gateway Failover",
+      "Full Digital Footprint Crawler Budget",
+      "Dedicated Strategy Review Sessions",
+      "Custom SLA & Support"
+    ],
+    quotas: {
+      monthlyResearchRuns: 500,
+      monthlyCompetitorCrawls: 500,
+      monthlyAITokens: 0,
+      maxConcurrentJobs: 10,
+      maxCompetitorUniverse: 100,
+      warRoomAccess: true,
+      exportReports: true,
+      byokAllowed: true,
+      priorityRouting: true,
+      customIntegrations: true
+    }
+  }
+];
+function getPlanById(planId) {
+  return DEFAULT_PLANS.find((p) => p.id === planId);
+}
+
+// server/billing/razorpayService.ts
+init_store();
+
+// server/billing/razorpayClient.ts
+init_logger();
+import crypto4 from "crypto";
+var RazorpayClient = class {
+  constructor() {
+    this.apiBaseUrl = "https://api.razorpay.com/v1";
+    this.keyId = process.env.RAZORPAY_KEY_ID || "";
+    this.keySecret = process.env.RAZORPAY_KEY_SECRET || "";
+    this.webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || "";
+    if (!this.keyId || !this.keySecret) {
+      logger.warn("Razorpay credentials not fully configured in environment variables.");
+    }
+  }
+  getKeyId() {
+    return this.keyId;
+  }
+  isConfigured() {
+    return Boolean(this.keyId && this.keySecret);
+  }
+  getAuthHeader() {
+    const credentials = Buffer.from(`${this.keyId}:${this.keySecret}`).toString("base64");
+    return `Basic ${credentials}`;
+  }
+  /**
+   * Create an order on Razorpay for checkout.
+   * Amount is converted to paise (INR * 100).
+   */
+  async createOrder(params) {
+    if (!this.isConfigured()) {
+      throw new Error("Razorpay API keys are not configured on the server.");
+    }
+    const amountInPaise = Math.round(params.amountINR * 100);
+    const payload = {
+      amount: amountInPaise,
+      currency: params.currency || "INR",
+      receipt: params.receipt,
+      notes: {
+        ...params.notes,
+        app: "researchflow_ai"
+        // Explicitly namespace to isolate from Veyra AI or other merchant apps
+      }
+    };
+    logger.info(`Creating Razorpay order for receipt ${params.receipt}, amount: \u20B9${params.amountINR}`);
+    const response = await fetch(`${this.apiBaseUrl}/orders`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: this.getAuthHeader()
+      },
+      body: JSON.stringify(payload)
+    });
+    if (!response.ok) {
+      const errBody = await response.text();
+      logger.error(`Razorpay order creation failed with status ${response.status}:`, errBody);
+      throw new Error(`Razorpay order creation failed: ${errBody}`);
+    }
+    const data = await response.json();
+    logger.info(`Razorpay order created successfully: ${data.id}`);
+    return data;
+  }
+  /**
+   * Fetch payment details from Razorpay to verify status.
+   */
+  async fetchPayment(paymentId) {
+    if (!this.isConfigured()) {
+      throw new Error("Razorpay API keys are not configured on the server.");
+    }
+    const response = await fetch(`${this.apiBaseUrl}/payments/${paymentId}`, {
+      method: "GET",
+      headers: {
+        Authorization: this.getAuthHeader()
+      }
+    });
+    if (!response.ok) {
+      const errBody = await response.text();
+      logger.error(`Razorpay fetchPayment failed for ${paymentId}:`, errBody);
+      throw new Error(`Failed to fetch payment details: ${errBody}`);
+    }
+    return await response.json();
+  }
+  /**
+   * Cryptographically verify payment signature returned after checkout:
+   * generated_signature = hmac_sha256(order_id + "|" + razorpay_payment_id, secret)
+   */
+  verifyPaymentSignature(params) {
+    if (!this.keySecret) {
+      logger.error("Cannot verify payment signature: RAZORPAY_KEY_SECRET is missing");
+      return false;
+    }
+    const payload = `${params.orderId}|${params.paymentId}`;
+    const expectedSignature = crypto4.createHmac("sha256", this.keySecret).update(payload).digest("hex");
+    const isValid = crypto4.timingSafeEqual(
+      Buffer.from(expectedSignature, "utf8"),
+      Buffer.from(params.signature, "utf8")
+    );
+    if (!isValid) {
+      logger.warn(`Signature verification failed for order ${params.orderId}`);
+    }
+    return isValid;
+  }
+  /**
+   * Cryptographically verify Razorpay Webhook signature using raw request body:
+   * generated_signature = hmac_sha256(raw_body, webhook_secret)
+   */
+  verifyWebhookSignature(rawBody, signature) {
+    if (!this.webhookSecret) {
+      logger.warn("RAZORPAY_WEBHOOK_SECRET is not configured. Webhook signature check failed.");
+      return false;
+    }
+    try {
+      const expectedSignature = crypto4.createHmac("sha256", this.webhookSecret).update(rawBody).digest("hex");
+      return crypto4.timingSafeEqual(
+        Buffer.from(expectedSignature, "utf8"),
+        Buffer.from(signature, "utf8")
+      );
+    } catch (err) {
+      logger.error("Error verifying webhook signature:", err);
+      return false;
+    }
+  }
+};
+var razorpayClient = new RazorpayClient();
+
+// server/billing/razorpayService.ts
+init_logger();
+var RazorpayService = class {
+  /**
+   * Creates an order for Razorpay Standard Checkout.
+   */
+  async createCheckoutOrder(input) {
+    const plan = getPlanById(input.planId);
+    if (!plan) {
+      throw new Error(`Invalid plan identifier: ${input.planId}`);
+    }
+    const price = input.interval === "YEARLY" ? plan.yearlyPriceINR : plan.monthlyPriceINR;
+    if (price === 0) {
+      const sub = {
+        id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+        workspaceId: input.workspaceId,
+        userId: input.userId,
+        planId: plan.id,
+        tier: plan.tier,
+        aiMode: plan.aiMode,
+        interval: input.interval,
+        status: "ACTIVE",
+        currentPeriodStart: (/* @__PURE__ */ new Date()).toISOString(),
+        currentPeriodEnd: new Date(Date.now() + 30 * 864e5).toISOString(),
+        cancelAtPeriodEnd: false,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      };
+      db.setSubscription(sub);
+      logger.info(`Workspace ${input.workspaceId} enrolled directly into Free tier.`);
+      return {
+        orderId: `free_${Date.now()}`,
+        razorpayOrderId: `free_${Date.now()}`,
+        amountINR: 0,
+        currency: "INR",
+        keyId: razorpayClient.getKeyId(),
+        plan,
+        isFreePlan: true
+      };
+    }
+    const receipt = `rcpt_rf_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 6)}`;
+    const rzpOrder = await razorpayClient.createOrder({
+      amountINR: price,
+      currency: "INR",
+      receipt,
+      notes: {
+        app: "researchflow_ai",
+        workspaceId: input.workspaceId,
+        userId: input.userId,
+        planId: plan.id,
+        interval: input.interval,
+        tier: plan.tier,
+        aiMode: plan.aiMode
+      }
+    });
+    const localOrder = {
+      id: `ord_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      workspaceId: input.workspaceId,
+      userId: input.userId,
+      planId: plan.id,
+      tier: plan.tier,
+      aiMode: plan.aiMode,
+      interval: input.interval,
+      amountINR: price,
+      currency: "INR",
+      razorpayOrderId: rzpOrder.id,
+      receipt,
+      status: "CREATED",
+      notes: {
+        app: "researchflow_ai",
+        workspaceId: input.workspaceId,
+        userId: input.userId,
+        planId: plan.id,
+        interval: input.interval
+      },
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    db.createBillingOrder(localOrder);
+    return {
+      orderId: localOrder.id,
+      razorpayOrderId: rzpOrder.id,
+      amountINR: price,
+      currency: "INR",
+      keyId: razorpayClient.getKeyId(),
+      plan
+    };
+  }
+  /**
+   * Verifies cryptographic signature and fulfills subscription activation.
+   */
+  async verifyAndFulfillPayment(input) {
+    const isValidSignature = razorpayClient.verifyPaymentSignature({
+      orderId: input.razorpayOrderId,
+      paymentId: input.razorpayPaymentId,
+      signature: input.razorpaySignature
+    });
+    if (!isValidSignature) {
+      logger.error(`Cryptographic signature verification failed for payment: ${input.razorpayPaymentId}`);
+      throw new Error("Payment signature verification failed. Possible tampering detected.");
+    }
+    const order = db.getBillingOrder(input.orderId) || db.getBillingOrderByRazorpayId(input.razorpayOrderId);
+    if (!order) {
+      throw new Error(`Order not found for Razorpay order ID ${input.razorpayOrderId}`);
+    }
+    const plan = getPlanById(order.planId);
+    if (!plan) {
+      throw new Error(`Plan ${order.planId} not recognized`);
+    }
+    db.updateBillingOrderStatus(order.id, "PAID", (/* @__PURE__ */ new Date()).toISOString());
+    const tx = {
+      id: `tx_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      orderId: order.id,
+      workspaceId: order.workspaceId,
+      userId: input.userId || order.userId,
+      planId: order.planId,
+      amountINR: order.amountINR,
+      currency: "INR",
+      razorpayPaymentId: input.razorpayPaymentId,
+      razorpayOrderId: input.razorpayOrderId,
+      status: "SUCCESS",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    db.createBillingTransaction(tx);
+    const daysToAdd = order.interval === "YEARLY" ? 365 : 30;
+    const now = /* @__PURE__ */ new Date();
+    const periodEnd = new Date(now.getTime() + daysToAdd * 864e5);
+    const subscription = {
+      id: `sub_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+      workspaceId: order.workspaceId,
+      userId: order.userId,
+      planId: plan.id,
+      tier: plan.tier,
+      aiMode: plan.aiMode,
+      interval: order.interval,
+      status: "ACTIVE",
+      currentPeriodStart: now.toISOString(),
+      currentPeriodEnd: periodEnd.toISOString(),
+      cancelAtPeriodEnd: false,
+      razorpayPaymentId: input.razorpayPaymentId,
+      razorpayOrderId: input.razorpayOrderId,
+      lastPaymentAmountINR: order.amountINR,
+      createdAt: now.toISOString(),
+      updatedAt: now.toISOString()
+    };
+    db.setSubscription(subscription);
+    db.resetMonthlyQuota(order.workspaceId);
+    logger.info(`Subscription successfully activated for workspace ${order.workspaceId} on plan ${plan.name}`);
+    return {
+      success: true,
+      subscription,
+      transaction: tx
+    };
+  }
+  /**
+   * Handles incoming Razorpay webhook with signature verification and Veyra AI isolation.
+   */
+  async handleWebhook(rawBody, signature) {
+    const isValid = razorpayClient.verifyWebhookSignature(rawBody, signature);
+    if (!isValid) {
+      logger.warn("Razorpay webhook HMAC signature verification failed.");
+      throw new Error("Invalid webhook signature");
+    }
+    const payload = typeof rawBody === "string" ? JSON.parse(rawBody) : JSON.parse(rawBody.toString("utf-8"));
+    const eventId = payload.event_id || payload.id || `evt_${Date.now()}`;
+    const eventType = payload.event;
+    const existing = db.getWebhookEvent(eventId);
+    if (existing && existing.processed) {
+      logger.info(`Webhook event ${eventId} already processed.`);
+      return { processed: true, ignored: true, reason: "Already processed" };
+    }
+    const paymentNotes = payload.payload?.payment?.entity?.notes || {};
+    const orderNotes = payload.payload?.order?.entity?.notes || {};
+    const appTag = paymentNotes.app || orderNotes.app;
+    if (appTag !== "researchflow_ai") {
+      logger.info(`Webhook event ${eventType} ignored: not tagged for researchflow_ai (tag: ${appTag || "none"})`);
+      db.saveWebhookEvent({
+        id: eventId,
+        eventId,
+        eventType,
+        payload,
+        processed: true,
+        processedAt: (/* @__PURE__ */ new Date()).toISOString(),
+        error: "Ignored: Non-ResearchFlow AI merchant payload"
+      });
+      return { processed: true, ignored: true, reason: "Non-ResearchFlow AI payload" };
+    }
+    logger.info(`Processing verified ResearchFlow AI webhook event: ${eventType}`);
+    try {
+      if (eventType === "payment.captured") {
+        const payment = payload.payload.payment.entity;
+        const rzpOrderId = payment.order_id;
+        const paymentId = payment.id;
+        const workspaceId = paymentNotes.workspaceId || orderNotes.workspaceId;
+        const userId = paymentNotes.userId || orderNotes.userId;
+        if (rzpOrderId) {
+          const order = db.getBillingOrderByRazorpayId(rzpOrderId);
+          if (order && order.status !== "PAID") {
+            await this.verifyAndFulfillPayment({
+              orderId: order.id,
+              razorpayOrderId: rzpOrderId,
+              razorpayPaymentId: paymentId,
+              razorpaySignature: "",
+              // Internal fulfillment via webhook
+              workspaceId,
+              userId
+            }).catch((err) => {
+              db.updateBillingOrderStatus(order.id, "PAID", (/* @__PURE__ */ new Date()).toISOString());
+              const plan = getPlanById(order.planId);
+              if (plan) {
+                const days = order.interval === "YEARLY" ? 365 : 30;
+                db.setSubscription({
+                  id: `sub_${Date.now()}`,
+                  workspaceId: order.workspaceId,
+                  userId: order.userId,
+                  planId: plan.id,
+                  tier: plan.tier,
+                  aiMode: plan.aiMode,
+                  interval: order.interval,
+                  status: "ACTIVE",
+                  currentPeriodStart: (/* @__PURE__ */ new Date()).toISOString(),
+                  currentPeriodEnd: new Date(Date.now() + days * 864e5).toISOString(),
+                  cancelAtPeriodEnd: false,
+                  razorpayPaymentId: paymentId,
+                  razorpayOrderId: rzpOrderId,
+                  lastPaymentAmountINR: order.amountINR,
+                  createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+                  updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+                });
+              }
+            });
+          }
+        }
+      } else if (eventType === "payment.failed") {
+        const payment = payload.payload.payment.entity;
+        const rzpOrderId = payment.order_id;
+        if (rzpOrderId) {
+          const order = db.getBillingOrderByRazorpayId(rzpOrderId);
+          if (order) {
+            db.updateBillingOrderStatus(order.id, "FAILED");
+            db.createBillingTransaction({
+              id: `tx_${Date.now()}`,
+              orderId: order.id,
+              workspaceId: order.workspaceId,
+              userId: order.userId,
+              planId: order.planId,
+              amountINR: order.amountINR,
+              currency: "INR",
+              razorpayPaymentId: payment.id,
+              razorpayOrderId: rzpOrderId,
+              status: "FAILED",
+              errorDescription: payment.error_description || "Payment failed",
+              createdAt: (/* @__PURE__ */ new Date()).toISOString()
+            });
+          }
+        }
+      }
+      db.saveWebhookEvent({
+        id: eventId,
+        eventId,
+        eventType,
+        payload,
+        processed: true,
+        processedAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      return { processed: true };
+    } catch (err) {
+      logger.error(`Error processing webhook event ${eventType}:`, err);
+      db.saveWebhookEvent({
+        id: eventId,
+        eventId,
+        eventType,
+        payload,
+        processed: false,
+        processedAt: (/* @__PURE__ */ new Date()).toISOString(),
+        error: err.message
+      });
+      throw err;
+    }
+  }
+};
+var razorpayService = new RazorpayService();
+
+// server/billing/entitlementEngine.ts
+init_store();
+init_logger();
+var EntitlementEngine = class {
+  /**
+   * Retrieves effective plan for a workspace. Falls back to Free Community if plan not found.
+   */
+  getEffectivePlan(workspaceId) {
+    const subscription = db.getSubscription(workspaceId);
+    let plan = getPlanById(subscription.planId);
+    if (!plan) {
+      plan = DEFAULT_PLANS[0];
+    }
+    return { subscription, plan };
+  }
+  /**
+   * Evaluates whether a workspace can perform an action based on its subscription & quotas.
+   */
+  check(workspaceId, feature, count = 1) {
+    const { subscription, plan } = this.getEffectivePlan(workspaceId);
+    const usage = db.getQuotaUsage(workspaceId);
+    if (subscription.status === "UNPAID" || subscription.status === "EXPIRED") {
+      return {
+        allowed: false,
+        reason: `Subscription is currently ${subscription.status.toLowerCase()}. Please update your payment method.`,
+        feature,
+        currentUsage: 0,
+        limit: 0,
+        planId: plan.id,
+        planName: plan.name,
+        tier: plan.tier,
+        aiMode: plan.aiMode
+      };
+    }
+    switch (feature) {
+      case "RESEARCH_RUN": {
+        const limit = plan.quotas.monthlyResearchRuns;
+        const current = usage.researchRunsUsed;
+        if (current + count > limit) {
+          return {
+            allowed: false,
+            reason: `Monthly research runs limit reached (${current}/${limit}). Upgrade your plan to run more research jobs.`,
+            feature,
+            currentUsage: current,
+            limit,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: current,
+          limit,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "CRAWL_PAGE": {
+        const limit = plan.quotas.monthlyCompetitorCrawls;
+        const current = usage.competitorCrawlsUsed;
+        if (current + count > limit) {
+          return {
+            allowed: false,
+            reason: `Monthly competitor crawl limit reached (${current}/${limit} pages). Upgrade your plan for higher crawl capacity.`,
+            feature,
+            currentUsage: current,
+            limit,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: current,
+          limit,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "AI_TOKENS": {
+        if (plan.aiMode === "BYOK") {
+          return {
+            allowed: true,
+            feature,
+            currentUsage: usage.aiTokensUsed,
+            limit: Infinity,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        const limit = plan.quotas.monthlyAITokens;
+        const current = usage.aiTokensUsed;
+        if (current + count > limit) {
+          return {
+            allowed: false,
+            reason: `Monthly managed AI token budget reached (${current.toLocaleString()}/${limit.toLocaleString()} tokens). Upgrade or switch to BYOK.`,
+            feature,
+            currentUsage: current,
+            limit,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: current,
+          limit,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "WAR_ROOM": {
+        if (!plan.quotas.warRoomAccess) {
+          return {
+            allowed: false,
+            reason: "Market War Room & Strategic Matrix is available on Starter, Pro, and Business tiers.",
+            feature,
+            currentUsage: 0,
+            limit: 1,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 1,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "EXPORT_REPORT": {
+        if (!plan.quotas.exportReports) {
+          return {
+            allowed: false,
+            reason: "Full brief export is available on paid plans.",
+            feature,
+            currentUsage: 0,
+            limit: 1,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 1,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      case "BYOK_ACCESS": {
+        if (!plan.quotas.byokAllowed) {
+          return {
+            allowed: false,
+            reason: "BYOK (Bring Your Own Key) is available on BYOK plans and the Free Community tier.",
+            feature,
+            currentUsage: 0,
+            limit: 1,
+            planId: plan.id,
+            planName: plan.name,
+            tier: plan.tier,
+            aiMode: plan.aiMode
+          };
+        }
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 1,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+      }
+      default:
+        return {
+          allowed: true,
+          feature,
+          currentUsage: 0,
+          limit: 1,
+          planId: plan.id,
+          planName: plan.name,
+          tier: plan.tier,
+          aiMode: plan.aiMode
+        };
+    }
+  }
+  /**
+   * Atomically records usage against quota if permitted.
+   */
+  consume(workspaceId, feature, count = 1) {
+    const check = this.check(workspaceId, feature, count);
+    if (!check.allowed) {
+      logger.warn(`Entitlement check failed for workspace ${workspaceId}: ${check.reason}`);
+      return false;
+    }
+    if (feature === "RESEARCH_RUN") {
+      db.recordQuotaUsage(workspaceId, { runs: count });
+    } else if (feature === "CRAWL_PAGE") {
+      db.recordQuotaUsage(workspaceId, { crawls: count });
+    } else if (feature === "AI_TOKENS") {
+      db.recordQuotaUsage(workspaceId, { tokens: count });
+    }
+    return true;
+  }
+};
+var entitlementEngine = new EntitlementEngine();
+
+// server/ai/gateway.ts
+init_store();
+init_orchestrator();
+
+// server/ai/providers/openaiProvider.ts
+init_jsonParser();
+init_logger();
+var OpenAIProvider = class _OpenAIProvider {
+  constructor() {
+    this.name = "openai";
+    this.defaultModel = "gpt-4o-mini";
+  }
+  static {
+    this.API_ENDPOINT = "https://api.openai.com/v1/chat/completions";
+  }
+  isConfigured() {
+    return Boolean(process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.trim().length > 5);
+  }
+  async generateText(modelId = this.defaultModel, options, customApiKey) {
+    return this.callOpenAI(modelId, options, false, customApiKey);
+  }
+  async generateStructured(modelId = this.defaultModel, options, customApiKey) {
+    const res = await this.callOpenAI(modelId, options, true, customApiKey);
+    if (!res.success) {
+      return res;
+    }
+    try {
+      const parsed = extractAndParseJson(res.content);
+      return {
+        ...res,
+        structuredData: parsed.data,
+        repaired: parsed.repaired
+      };
+    } catch (err) {
+      return {
+        ...res,
+        success: false,
+        failureCategory: "SCHEMA_FAILURE",
+        errorMessage: `OpenAI JSON parse failed: ${err.message}`
+      };
+    }
+  }
+  async healthCheck(apiKey, modelId = "gpt-4o-mini") {
+    const key = apiKey || process.env.OPENAI_API_KEY;
+    if (!key) {
+      return { healthy: false, latencyMs: 0, error: "OpenAI API key not provided" };
+    }
+    const start = Date.now();
+    try {
+      const response = await fetch(_OpenAIProvider.API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key.trim()}`
+        },
+        body: JSON.stringify({
+          model: modelId,
+          messages: [{ role: "user", content: 'Respond with "PONG"' }],
+          max_tokens: 5
+        })
+      });
+      const latency = Date.now() - start;
+      if (!response.ok) {
+        const errorText = await response.text();
+        return { healthy: false, latencyMs: latency, error: `HTTP ${response.status}: ${errorText}` };
+      }
+      return { healthy: true, latencyMs: latency };
+    } catch (err) {
+      return { healthy: false, latencyMs: Date.now() - start, error: err.message };
+    }
+  }
+  async callOpenAI(modelId, options, isJsonMode, customApiKey) {
+    const key = customApiKey || process.env.OPENAI_API_KEY;
+    if (!key) {
+      return {
+        success: false,
+        content: "",
+        model: modelId,
+        provider: "openai",
+        latencyMs: 0,
+        failureCategory: "PROVIDER_UNAVAILABLE",
+        errorMessage: "OpenAI API key not provided for call."
+      };
+    }
+    const startTime = Date.now();
+    const messages = [];
+    if (options.systemInstruction) {
+      messages.push({ role: "system", content: options.systemInstruction });
+    }
+    messages.push({ role: "user", content: options.prompt });
+    const payload = {
+      model: modelId,
+      messages,
+      temperature: options.temperature ?? 0.3,
+      max_tokens: options.maxTokens ?? 2500
+    };
+    if (isJsonMode) {
+      payload.response_format = { type: "json_object" };
+    }
+    try {
+      const response = await fetch(_OpenAIProvider.API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${key.trim()}`
+        },
+        body: JSON.stringify(payload)
+      });
+      const latencyMs = Date.now() - startTime;
+      if (!response.ok) {
+        const errorBody = await response.text();
+        logger.error(`OpenAI error HTTP ${response.status}:`, errorBody);
+        let failureCategory = "PROVIDER_UNAVAILABLE";
+        if (response.status === 401) failureCategory = "PROVIDER_UNAVAILABLE";
+        if (response.status === 429) failureCategory = "RATE_LIMIT";
+        return {
+          success: false,
+          content: "",
+          model: modelId,
+          provider: "openai",
+          latencyMs,
+          failureCategory,
+          errorMessage: `OpenAI returned status ${response.status}: ${errorBody}`
+        };
+      }
+      const data = await response.json();
+      const content = data.choices?.[0]?.message?.content || "";
+      const inputTokens = data.usage?.prompt_tokens;
+      const outputTokens = data.usage?.completion_tokens;
+      return {
+        success: true,
+        content,
+        model: modelId,
+        provider: "openai",
+        latencyMs,
+        inputTokens,
+        outputTokens,
+        rawResponse: data
+      };
+    } catch (err) {
+      return {
+        success: false,
+        content: "",
+        model: modelId,
+        provider: "openai",
+        latencyMs: Date.now() - startTime,
+        failureCategory: "TIMEOUT",
+        errorMessage: err.message
+      };
+    }
+  }
+};
+var openaiProvider = new OpenAIProvider();
+
+// server/ai/providers/anthropicProvider.ts
+init_jsonParser();
+init_logger();
+var AnthropicProvider = class _AnthropicProvider {
+  constructor() {
+    this.name = "anthropic";
+    this.defaultModel = "claude-3-5-sonnet-20241022";
+  }
+  static {
+    this.API_ENDPOINT = "https://api.anthropic.com/v1/messages";
+  }
+  isConfigured() {
+    return Boolean(process.env.ANTHROPIC_API_KEY && process.env.ANTHROPIC_API_KEY.trim().length > 5);
+  }
+  async generateText(modelId = this.defaultModel, options, customApiKey) {
+    return this.callAnthropic(modelId, options, false, customApiKey);
+  }
+  async generateStructured(modelId = this.defaultModel, options, customApiKey) {
+    const res = await this.callAnthropic(modelId, options, true, customApiKey);
+    if (!res.success) {
+      return res;
+    }
+    try {
+      const parsed = extractAndParseJson(res.content);
+      return {
+        ...res,
+        structuredData: parsed.data,
+        repaired: parsed.repaired
+      };
+    } catch (err) {
+      return {
+        ...res,
+        success: false,
+        failureCategory: "SCHEMA_FAILURE",
+        errorMessage: `Anthropic JSON parse failed: ${err.message}`
+      };
+    }
+  }
+  async healthCheck(apiKey, modelId = "claude-3-5-haiku-20241022") {
+    const key = apiKey || process.env.ANTHROPIC_API_KEY;
+    if (!key) {
+      return { healthy: false, latencyMs: 0, error: "Anthropic API key not provided" };
+    }
+    const start = Date.now();
+    try {
+      const response = await fetch(_AnthropicProvider.API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": key.trim(),
+          "anthropic-version": "2023-06-01"
+        },
+        body: JSON.stringify({
+          model: modelId,
+          messages: [{ role: "user", content: 'Respond with "PONG"' }],
+          max_tokens: 5
+        })
+      });
+      const latency = Date.now() - start;
+      if (!response.ok) {
+        const errorText = await response.text();
+        return { healthy: false, latencyMs: latency, error: `HTTP ${response.status}: ${errorText}` };
+      }
+      return { healthy: true, latencyMs: latency };
+    } catch (err) {
+      return { healthy: false, latencyMs: Date.now() - start, error: err.message };
+    }
+  }
+  async callAnthropic(modelId, options, isJsonMode, customApiKey) {
+    const key = customApiKey || process.env.ANTHROPIC_API_KEY;
+    if (!key) {
+      return {
+        success: false,
+        content: "",
+        model: modelId,
+        provider: "anthropic",
+        latencyMs: 0,
+        failureCategory: "PROVIDER_UNAVAILABLE",
+        errorMessage: "Anthropic API key not provided for call."
+      };
+    }
+    const startTime = Date.now();
+    let userPrompt = options.prompt;
+    if (isJsonMode) {
+      userPrompt += "\n\nIMPORTANT: Respond ONLY with valid, RFC 8259 compliant JSON. Do not wrap with conversational filler.";
+    }
+    const payload = {
+      model: modelId,
+      max_tokens: options.maxTokens ?? 2500,
+      temperature: options.temperature ?? 0.3,
+      messages: [{ role: "user", content: userPrompt }]
+    };
+    if (options.systemInstruction) {
+      payload.system = options.systemInstruction;
+    }
+    try {
+      const response = await fetch(_AnthropicProvider.API_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": key.trim(),
+          "anthropic-version": "2023-06-01"
+        },
+        body: JSON.stringify(payload)
+      });
+      const latencyMs = Date.now() - startTime;
+      if (!response.ok) {
+        const errorBody = await response.text();
+        logger.error(`Anthropic error HTTP ${response.status}:`, errorBody);
+        let failureCategory = "PROVIDER_UNAVAILABLE";
+        if (response.status === 401) failureCategory = "PROVIDER_UNAVAILABLE";
+        if (response.status === 429) failureCategory = "RATE_LIMIT";
+        return {
+          success: false,
+          content: "",
+          model: modelId,
+          provider: "anthropic",
+          latencyMs,
+          failureCategory,
+          errorMessage: `Anthropic returned status ${response.status}: ${errorBody}`
+        };
+      }
+      const data = await response.json();
+      const content = data.content?.[0]?.text || "";
+      const inputTokens = data.usage?.input_tokens;
+      const outputTokens = data.usage?.output_tokens;
+      return {
+        success: true,
+        content,
+        model: modelId,
+        provider: "anthropic",
+        latencyMs,
+        inputTokens,
+        outputTokens,
+        rawResponse: data
+      };
+    } catch (err) {
+      return {
+        success: false,
+        content: "",
+        model: modelId,
+        provider: "anthropic",
+        latencyMs: Date.now() - startTime,
+        failureCategory: "TIMEOUT",
+        errorMessage: err.message
+      };
+    }
+  }
+};
+var anthropicProvider = new AnthropicProvider();
+
+// server/ai/gateway.ts
+init_geminiProvider();
+init_openrouterProvider();
+
+// server/ai/security/cryptoVault.ts
+init_logger();
+import crypto5 from "crypto";
+var ENCRYPTION_KEY_HEX = process.env.AI_ENCRYPTION_KEY || "b68eb4f2e383e6678b37d128415bc4aca233e6d13ad536260acb1713a59de4fb";
+function getEncryptionKey() {
+  if (!ENCRYPTION_KEY_HEX || ENCRYPTION_KEY_HEX.length !== 64) {
+    logger.warn("AI_ENCRYPTION_KEY is not a 64-char hex string. Using derived 32-byte buffer.");
+    return crypto5.createHash("sha256").update(ENCRYPTION_KEY_HEX || "rf_fallback_key").digest();
+  }
+  return Buffer.from(ENCRYPTION_KEY_HEX, "hex");
+}
+function encryptSecret(plainText) {
+  if (!plainText) return "";
+  const iv = crypto5.randomBytes(12);
+  const key = getEncryptionKey();
+  const cipher = crypto5.createCipheriv("aes-256-gcm", key, iv);
+  let encrypted = cipher.update(plainText, "utf8", "hex");
+  encrypted += cipher.final("hex");
+  const authTag = cipher.getAuthTag().toString("hex");
+  return `${iv.toString("hex")}:${authTag}:${encrypted}`;
+}
+function decryptSecret(encryptedPayload) {
+  if (!encryptedPayload) return "";
+  const parts = encryptedPayload.split(":");
+  if (parts.length !== 3) {
+    throw new Error("Invalid encrypted payload format. Expected iv:authTag:ciphertext");
+  }
+  const [ivHex, authTagHex, cipherTextHex] = parts;
+  const key = getEncryptionKey();
+  const iv = Buffer.from(ivHex, "hex");
+  const authTag = Buffer.from(authTagHex, "hex");
+  const decipher = crypto5.createDecipheriv("aes-256-gcm", key, iv);
+  decipher.setAuthTag(authTag);
+  let decrypted = decipher.update(cipherTextHex, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+  return decrypted;
+}
+function maskApiKey(rawKey) {
+  if (!rawKey) return "";
+  const trimmed = rawKey.trim();
+  if (trimmed.length <= 8) {
+    return "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022";
+  }
+  let prefixLength = 7;
+  if (trimmed.startsWith("sk-proj-")) prefixLength = 8;
+  if (trimmed.startsWith("sk-ant-")) prefixLength = 7;
+  if (trimmed.startsWith("sk-or-v1-")) prefixLength = 9;
+  const prefix = trimmed.slice(0, prefixLength);
+  const suffix = trimmed.slice(-4);
+  return `${prefix}...${suffix}`;
+}
+
+// server/ai/gateway.ts
+init_logger();
+var AIGateway = class {
+  /**
+   * Resolves effective AI mode for a workspace.
+   */
+  getEffectiveMode(workspaceId) {
+    const sub = db.getSubscription(workspaceId);
+    const config = db.getWorkspaceAIConfig(workspaceId);
+    if (sub.aiMode === "BYOK") return "BYOK";
+    if (config.mode === "BYOK") return "BYOK";
+    return "MANAGED";
+  }
+  /**
+   * Tests an API key connection without persisting.
+   */
+  async testConnection(provider, apiKey, modelId) {
+    const trimmedKey = apiKey.trim();
+    if (!trimmedKey) {
+      return { healthy: false, latencyMs: 0, error: "API key cannot be empty" };
+    }
+    try {
+      switch (provider) {
+        case "OPENAI":
+          return await openaiProvider.healthCheck(trimmedKey, modelId || "gpt-4o-mini");
+        case "ANTHROPIC":
+          return await anthropicProvider.healthCheck(trimmedKey, modelId || "claude-3-5-haiku-20241022");
+        case "GEMINI": {
+          const start = Date.now();
+          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${trimmedKey}`);
+          const latency = Date.now() - start;
+          if (!res.ok) {
+            const err = await res.text();
+            return { healthy: false, latencyMs: latency, error: `Google Gemini error (${res.status}): ${err}` };
+          }
+          return { healthy: true, latencyMs: latency };
+        }
+        case "OPENROUTER": {
+          const start = Date.now();
+          const res = await fetch("https://openrouter.ai/api/v1/auth/key", {
+            headers: { Authorization: `Bearer ${trimmedKey}` }
+          });
+          const latency = Date.now() - start;
+          if (!res.ok) {
+            const err = await res.text();
+            return { healthy: false, latencyMs: latency, error: `OpenRouter auth error (${res.status}): ${err}` };
+          }
+          return { healthy: true, latencyMs: latency };
+        }
+        default:
+          return { healthy: false, latencyMs: 0, error: `Unsupported provider: ${provider}` };
+      }
+    } catch (err) {
+      return { healthy: false, latencyMs: 0, error: err.message };
+    }
+  }
+  /**
+   * Encrypts and saves a BYOK key for a workspace.
+   */
+  async saveKey(workspaceId, provider, apiKey, preferredModel) {
+    const testResult = await this.testConnection(provider, apiKey, preferredModel);
+    if (!testResult.healthy) {
+      throw new Error(`Validation failed for ${provider}: ${testResult.error || "Connection failed"}`);
+    }
+    const encryptedKey = encryptSecret(apiKey.trim());
+    const keyMask = maskApiKey(apiKey.trim());
+    const record = {
+      id: `byok_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      workspaceId,
+      provider,
+      encryptedKey,
+      keyMask,
+      preferredModel,
+      isActive: true,
+      isValidated: true,
+      lastValidatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    db.saveBYOKKey(record);
+    db.updateWorkspaceAIConfig(workspaceId, {
+      activeProvider: provider,
+      activeModel: preferredModel,
+      lastTestedAt: (/* @__PURE__ */ new Date()).toISOString()
+    });
+    logger.info(`BYOK key securely saved for workspace ${workspaceId}, provider ${provider}`);
+    return {
+      provider: record.provider,
+      keyMask: record.keyMask,
+      preferredModel: record.preferredModel,
+      isActive: record.isActive,
+      isValidated: record.isValidated,
+      lastValidatedAt: record.lastValidatedAt
+    };
+  }
+  /**
+   * Lists public summaries of all configured BYOK keys for a workspace.
+   */
+  listKeys(workspaceId) {
+    const keys = db.listBYOKKeys(workspaceId);
+    return keys.map((k) => ({
+      provider: k.provider,
+      keyMask: k.keyMask,
+      preferredModel: k.preferredModel,
+      isActive: k.isActive,
+      isValidated: k.isValidated,
+      lastValidatedAt: k.lastValidatedAt,
+      lastError: k.lastError
+    }));
+  }
+  /**
+   * Deletes a BYOK key for a workspace.
+   */
+  deleteKey(workspaceId, provider) {
+    return db.deleteBYOKKey(workspaceId, provider);
+  }
+  /**
+   * Central unified AI execution entrypoint.
+   * Resolves Managed vs BYOK mode and executes safely without cross-contamination.
+   */
+  async execute(options) {
+    const workspaceId = options.workspaceId || "ws_default_prod";
+    const effectiveMode = this.getEffectiveMode(workspaceId);
+    if (effectiveMode === "BYOK") {
+      return this.executeBYOK(workspaceId, options);
+    } else {
+      return this.executeManaged(workspaceId, options);
+    }
+  }
+  /**
+   * Executes AI generation using Platform Managed AI keys with quota metering.
+   */
+  async executeManaged(workspaceId, options) {
+    const tokenCheck = entitlementEngine.check(workspaceId, "AI_TOKENS", 1500);
+    if (!tokenCheck.allowed) {
+      throw new Error(`Managed AI quota exceeded: ${tokenCheck.reason}`);
+    }
+    const result = await aiOrchestrator.orchestrateStructured(options, () => ({}));
+    if (result.success && result.runRecord) {
+      const tokensUsed = (result.runRecord.inputTokens || 0) + (result.runRecord.outputTokens || 0) || 1200;
+      entitlementEngine.consume(workspaceId, "AI_TOKENS", tokensUsed);
+    }
+    return result;
+  }
+  /**
+   * Executes AI generation using User's Bring Your Own Key.
+   * STRICT GUARANTEE: Never falls back to platform-paid keys on failure.
+   */
+  async executeBYOK(workspaceId, options) {
+    const config = db.getWorkspaceAIConfig(workspaceId);
+    const provider = config.activeProvider || "OPENROUTER";
+    const keyRecord = db.getBYOKKey(workspaceId, provider);
+    if (!keyRecord || !keyRecord.isActive) {
+      throw new Error(
+        `BYOK mode is active, but no verified API key is configured for ${provider}. Please configure your API key in Settings -> AI Providers.`
+      );
+    }
+    let plainApiKey = "";
+    try {
+      plainApiKey = decryptSecret(keyRecord.encryptedKey);
+    } catch (err) {
+      logger.error(`Failed to decrypt BYOK key for workspace ${workspaceId}:`, err);
+      throw new Error("Cryptographic vault failed to decrypt stored provider key. Please re-enter your key in Settings.");
+    }
+    const modelId = options.preferredModel || config.activeModel || this.getDefaultModelForProvider(provider);
+    const reqOptions = {
+      taskType: options.taskType,
+      prompt: options.prompt,
+      systemInstruction: options.systemInstruction,
+      schema: options.schema,
+      temperature: options.temperature,
+      workspaceId
+    };
+    const startTime = Date.now();
+    logger.info(`Routing BYOK execution to ${provider} model ${modelId} for workspace ${workspaceId}`);
+    let providerResponse;
+    if (provider === "OPENAI") {
+      providerResponse = await openaiProvider.generateStructured(modelId, reqOptions, plainApiKey);
+    } else if (provider === "ANTHROPIC") {
+      providerResponse = await anthropicProvider.generateStructured(modelId, reqOptions, plainApiKey);
+    } else if (provider === "GEMINI") {
+      providerResponse = await geminiProvider.generateStructured(modelId, reqOptions);
+    } else {
+      providerResponse = await openRouterProvider.generateStructured(modelId, reqOptions);
+    }
+    const latencyMs = Date.now() - startTime;
+    if (!providerResponse.success) {
+      logger.error(`BYOK Provider ${provider} failed: ${providerResponse.errorMessage}`);
+      keyRecord.lastError = providerResponse.errorMessage;
+      db.saveBYOKKey(keyRecord);
+      throw new Error(
+        `BYOK Provider Error (${provider}): ${providerResponse.errorMessage || "Execution failed"}. Verify your API key balance and permissions in Settings -> AI Providers.`
+      );
+    }
+    const runRecord = {
+      id: `run_byok_${Date.now()}`,
+      workspaceId,
+      taskType: options.taskType,
+      provider: provider.toLowerCase(),
+      model: modelId,
+      attempt: 1,
+      status: "SUCCESS",
+      latencyMs,
+      inputTokens: providerResponse.inputTokens || 0,
+      outputTokens: providerResponse.outputTokens || 0,
+      fallbackUsed: false,
+      fallbackChain: [modelId],
+      validationStatus: "VALID",
+      createdAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    return {
+      success: true,
+      data: providerResponse.structuredData,
+      usedModel: modelId,
+      usedProvider: provider.toLowerCase(),
+      fallbackChainUsed: [modelId],
+      fallbackUsed: false,
+      totalLatencyMs: latencyMs,
+      attemptsCount: 1,
+      runRecord
+    };
+  }
+  getDefaultModelForProvider(provider) {
+    switch (provider) {
+      case "OPENAI":
+        return "gpt-4o-mini";
+      case "ANTHROPIC":
+        return "claude-3-5-sonnet-20241022";
+      case "GEMINI":
+        return "gemini-2.0-flash";
+      case "OPENROUTER":
+      default:
+        return "google/gemini-2.0-flash-001";
+    }
+  }
+};
+var aiGateway = new AIGateway();
+
 // server/api/routes.ts
 var apiRouter = Router();
 function getAuthUser(req) {
@@ -10653,6 +12336,22 @@ apiRouter.post("/research/jobs", (req, res) => {
     competitorUrls,
     additionalUrls
   } = req.body;
+  const entitlementCheck = entitlementEngine.check(wsId, "RESEARCH_RUN", 1);
+  if (!entitlementCheck.allowed) {
+    return res.status(402).json({
+      error: "Payment Required",
+      code: "QUOTA_EXCEEDED",
+      message: entitlementCheck.reason,
+      details: {
+        feature: "RESEARCH_RUN",
+        currentUsage: entitlementCheck.currentUsage,
+        limit: entitlementCheck.limit,
+        planName: entitlementCheck.planName,
+        tier: entitlementCheck.tier,
+        upgradeUrl: "/settings?tab=billing"
+      }
+    });
+  }
   try {
     const job = researchService.createJob(
       {
@@ -10665,6 +12364,7 @@ apiRouter.post("/research/jobs", (req, res) => {
       },
       wsId
     );
+    entitlementEngine.consume(wsId, "RESEARCH_RUN", 1);
     res.json(job);
   } catch (err) {
     logger.error("Failed to create research job", err);
@@ -12891,6 +14591,185 @@ apiRouter.get("/company/facts/corrections", (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+apiRouter.get("/billing/plans", (req, res) => {
+  res.json({
+    success: true,
+    plans: DEFAULT_PLANS
+  });
+});
+apiRouter.get("/billing/subscription", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { subscription, plan } = entitlementEngine.getEffectivePlan(wsId);
+    const usage = db.getQuotaUsage(wsId);
+    res.json({
+      success: true,
+      subscription,
+      plan,
+      usage
+    });
+  } catch (err) {
+    logger.error("Failed to get subscription:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/billing/create-order", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const userId = user?.id || "usr_default_founder";
+    const { planId, interval } = req.body;
+    if (!planId) {
+      return res.status(400).json({ error: "planId is required" });
+    }
+    const orderResult = await razorpayService.createCheckoutOrder({
+      workspaceId: wsId,
+      userId,
+      planId,
+      interval: interval === "YEARLY" ? "YEARLY" : "MONTHLY"
+    });
+    res.json({
+      success: true,
+      ...orderResult
+    });
+  } catch (err) {
+    logger.error("Failed to create checkout order:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/billing/verify-payment", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const userId = user?.id || "usr_default_founder";
+    const { orderId, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
+    if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
+      return res.status(400).json({
+        error: "Missing required Razorpay verification parameters (razorpayOrderId, razorpayPaymentId, razorpaySignature)"
+      });
+    }
+    const result = await razorpayService.verifyAndFulfillPayment({
+      orderId: orderId || "",
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+      workspaceId: wsId,
+      userId
+    });
+    res.json({
+      success: true,
+      subscription: result.subscription,
+      transaction: result.transaction
+    });
+  } catch (err) {
+    logger.error("Payment verification failed:", err);
+    res.status(400).json({ error: err.message });
+  }
+});
+apiRouter.post("/billing/webhook", async (req, res) => {
+  try {
+    const signature = req.headers["x-razorpay-signature"] || "";
+    const rawBody = req.rawBody || JSON.stringify(req.body);
+    if (!signature) {
+      logger.warn("Razorpay webhook called without signature header");
+      return res.status(400).json({ error: "Missing x-razorpay-signature header" });
+    }
+    const result = await razorpayService.handleWebhook(rawBody, signature);
+    res.json({ success: true, ...result });
+  } catch (err) {
+    logger.error("Razorpay webhook handling error:", err);
+    res.status(400).json({ error: err.message });
+  }
+});
+apiRouter.get("/billing/transactions", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const transactions = db.listBillingTransactions(wsId);
+    res.json({ success: true, transactions });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/billing/orders", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const orders = db.listBillingOrders(wsId);
+    res.json({ success: true, orders });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/byok/keys", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const keys = aiGateway.listKeys(wsId);
+    res.json({ success: true, keys });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/byok/test", async (req, res) => {
+  try {
+    const { provider, apiKey, modelId } = req.body;
+    if (!provider || !apiKey) {
+      return res.status(400).json({ error: "provider and apiKey are required" });
+    }
+    const result = await aiGateway.testConnection(provider, apiKey, modelId);
+    res.json({ success: result.healthy, ...result });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/byok/save", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { provider, apiKey, preferredModel } = req.body;
+    if (!provider || !apiKey) {
+      return res.status(400).json({ error: "provider and apiKey are required" });
+    }
+    const saved = await aiGateway.saveKey(wsId, provider, apiKey, preferredModel);
+    res.json({ success: true, key: saved });
+  } catch (err) {
+    logger.error("Failed to save BYOK key:", err);
+    res.status(400).json({ error: err.message });
+  }
+});
+apiRouter.delete("/byok/:provider", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const provider = req.params.provider.toUpperCase();
+    const deleted = aiGateway.deleteKey(wsId, provider);
+    res.json({ success: deleted });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/byok/config", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const config = db.getWorkspaceAIConfig(wsId);
+    const effectiveMode = aiGateway.getEffectiveMode(wsId);
+    res.json({ success: true, config, effectiveMode });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.put("/byok/config", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { mode, activeProvider, activeModel, strictBYOKOnly } = req.body;
+    const updated = db.updateWorkspaceAIConfig(wsId, {
+      mode,
+      activeProvider,
+      activeModel,
+      strictBYOKOnly
+    });
+    const effectiveMode = aiGateway.getEffectiveMode(wsId);
+    res.json({ success: true, config: updated, effectiveMode });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 apiRouter.post("/admin/run-test-suite", async (req, res) => {
   try {
     const { runAllTests: runAllTests2 } = await Promise.resolve().then(() => (init_e2e_test(), e2e_test_exports));
@@ -12919,7 +14798,12 @@ apiRouter.use((err, req, res, next) => {
 // server/vercel.ts
 init_logger();
 var app = express();
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({
+  limit: "10mb",
+  verify: (req, _res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
