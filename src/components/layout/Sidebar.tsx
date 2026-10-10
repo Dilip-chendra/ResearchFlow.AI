@@ -16,7 +16,8 @@ import {
   Sparkles,
   Layers,
   ArrowRight,
-  Target
+  Target,
+  Building2,
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { BrandLogo } from '../brand/BrandLogo';
@@ -42,6 +43,7 @@ export const Sidebar: React.FC = () => {
 
   const navItems: NavItem[] = [
     { id: 'overview', label: 'Market Dashboard', icon: LayoutDashboard },
+    { id: 'company', label: 'Company Intelligence', icon: Building2, badge: 'Verified' },
     { id: 'war-room', label: 'Market War Room', icon: Target, badge: 'Strategic' },
     { id: 'research', label: 'Research Runs', icon: Search },
     { id: 'evidence', label: 'Verified Evidence', icon: Database },

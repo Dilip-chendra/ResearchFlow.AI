@@ -18,7 +18,8 @@ import {
   ShieldCheck,
   Zap,
   TestTube2,
-  HelpCircle
+  HelpCircle,
+  Building2,
 } from 'lucide-react';
 
 export const OverviewDashboard: React.FC = () => {
@@ -122,6 +123,13 @@ export const OverviewDashboard: React.FC = () => {
         </div>
 
         <div className="relative z-10 flex items-center gap-2.5 shrink-0 flex-wrap">
+          <button
+            onClick={() => setActiveView('company')}
+            className="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition-colors flex items-center gap-1.5 shadow-2xs"
+          >
+            <Building2 className="w-4 h-4 text-indigo-300" />
+            <span>Company Intelligence</span>
+          </button>
           <button
             onClick={() => setActiveView('evaluation')}
             className="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition-colors flex items-center gap-1.5 shadow-2xs"

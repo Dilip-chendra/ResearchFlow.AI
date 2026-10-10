@@ -12,6 +12,7 @@ import { freeModelRegistry } from '../ai/openrouter/registry';
 import { openRouterProvider } from '../ai/providers/openrouterProvider';
 import { geminiProvider } from '../ai/providers/geminiProvider';
 import { logger } from '../utils/logger';
+import { companyIntelligenceService } from '../services/companyIntelligenceService';
 import { User, Workspace, ActionableTaskItem, ExecutionTask, JobStatus } from '../types';
 
 export const apiRouter = Router();
@@ -3036,6 +3037,220 @@ apiRouter.get('/war-room/search', (req: Request, res: Response) => {
     const wsId = getWorkspaceId(req, res);
     const results = warRoomService.searchMarketModel(wsId, String(req.query.q || ''));
     res.json({ success: true, results });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Company Intelligence & Verified Digital Footprint Engine Endpoints
+// ---------------------------------------------------------------------------
+
+// 1. Company Profile
+apiRouter.get('/company/profile', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const profile = await companyIntelligenceService.getOrInitProfile(wsId);
+    res.json({ success: true, profile });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.put('/company/profile', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const profile = await companyIntelligenceService.updateProfile(wsId, req.body || {});
+    res.json({ success: true, profile });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 2. Digital Footprint
+apiRouter.get('/company/footprint', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const properties = companyIntelligenceService.getDigitalProperties(wsId);
+    res.json({ success: true, properties });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/company/footprint', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const property = await companyIntelligenceService.addDigitalProperty(wsId, req.body);
+    res.json({ success: true, property });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.delete('/company/footprint/:id', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const success = companyIntelligenceService.deleteDigitalProperty(wsId, req.params.id);
+    res.json({ success });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 3. Leadership
+apiRouter.get('/company/leadership', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const leadership = companyIntelligenceService.getLeadershipProfiles(wsId);
+    res.json({ success: true, leadership });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/company/leadership', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const leader = companyIntelligenceService.saveLeadershipProfile(wsId, req.body);
+    res.json({ success: true, leader });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.delete('/company/leadership/:id', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const success = companyIntelligenceService.deleteLeadershipProfile(wsId, req.params.id);
+    res.json({ success });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 4. Products
+apiRouter.get('/company/products', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const products = companyIntelligenceService.getProductProfiles(wsId);
+    res.json({ success: true, products });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.post('/company/products', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const product = companyIntelligenceService.saveProductProfile(wsId, req.body);
+    res.json({ success: true, product });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.delete('/company/products/:id', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const success = companyIntelligenceService.deleteProductProfile(wsId, req.params.id);
+    res.json({ success });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 5. Customer Intelligence
+apiRouter.get('/company/customer-intelligence', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const customerIntelligence = companyIntelligenceService.getCustomerIntelligence(wsId);
+    res.json({ success: true, customerIntelligence });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.put('/company/customer-intelligence', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const customerIntelligence = companyIntelligenceService.saveCustomerIntelligence(wsId, req.body);
+    res.json({ success: true, customerIntelligence });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 6. Business Intelligence (8 Dimensions)
+apiRouter.get('/company/business-intelligence', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const businessIntelligence = db.getBusinessIntelligenceProfile(wsId);
+    res.json({ success: true, businessIntelligence });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 7. Deep Crawl Trigger & Job Polling
+apiRouter.post('/company/crawl', async (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { maxPageBudget, maxDepth } = req.body || {};
+    const job = await companyIntelligenceService.triggerDeepCrawl(wsId, { maxPageBudget, maxDepth });
+    res.json({ success: true, job });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/company/crawl/jobs', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const jobs = db.getDeepCrawlJobs(wsId);
+    res.json({ success: true, jobs });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/company/crawl/jobs/:jobId', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const job = db.getDeepCrawlJob(wsId, req.params.jobId);
+    if (!job) return res.status(404).json({ error: 'Crawl job not found' });
+    res.json({ success: true, job });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 8. User Fact Correction & Audit Trail
+apiRouter.post('/company/facts/correct', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const { factId, correctedText } = req.body || {};
+    if (!factId || !correctedText) {
+      return res.status(400).json({ error: 'factId and correctedText are required' });
+    }
+    const correction = companyIntelligenceService.applyFactCorrection(
+      wsId,
+      factId,
+      correctedText,
+      user?.name || 'User'
+    );
+    res.json({ success: true, correction });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+apiRouter.get('/company/facts/corrections', (req: Request, res: Response) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const corrections = db.getUserFactCorrections(wsId);
+    res.json({ success: true, corrections });
   } catch (err: any) {
     res.status(500).json({ error: err.message });
   }

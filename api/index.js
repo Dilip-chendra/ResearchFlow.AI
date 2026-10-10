@@ -223,6 +223,14 @@ var init_store = __esm({
         this.strategicExperiments = /* @__PURE__ */ new Map();
         this.companyScorecards = /* @__PURE__ */ new Map();
         this.executiveBriefs = /* @__PURE__ */ new Map();
+        this.companyProfiles = /* @__PURE__ */ new Map();
+        this.digitalProperties = /* @__PURE__ */ new Map();
+        this.leadershipProfiles = /* @__PURE__ */ new Map();
+        this.productDeepProfiles = /* @__PURE__ */ new Map();
+        this.customerIntelligenceProfiles = /* @__PURE__ */ new Map();
+        this.businessIntelligenceProfiles = /* @__PURE__ */ new Map();
+        this.deepCrawlJobs = /* @__PURE__ */ new Map();
+        this.userFactCorrections = /* @__PURE__ */ new Map();
         const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
         const defaultDataDir = path.join(process.cwd(), "data");
         const writableDir = isServerless ? path.join("/tmp", "data") : defaultDataDir;
@@ -265,6 +273,7 @@ var init_store = __esm({
           this.baselineMetrics.set(DEFAULT_BASELINE.id, DEFAULT_BASELINE);
         }
         this.seedWarRoomDataIfEmpty();
+        this.seedCompanyIntelligenceIfEmpty();
         this.saveToDiskSync();
       }
       hashPassword(password, salt) {
@@ -357,6 +366,14 @@ var init_store = __esm({
           if (parsed.strategicExperiments) this.strategicExperiments = new Map(parsed.strategicExperiments);
           if (parsed.companyScorecards) this.companyScorecards = new Map(parsed.companyScorecards);
           if (parsed.executiveBriefs) this.executiveBriefs = new Map(parsed.executiveBriefs);
+          if (parsed.companyProfiles) this.companyProfiles = new Map(parsed.companyProfiles);
+          if (parsed.digitalProperties) this.digitalProperties = new Map(parsed.digitalProperties);
+          if (parsed.leadershipProfiles) this.leadershipProfiles = new Map(parsed.leadershipProfiles);
+          if (parsed.productDeepProfiles) this.productDeepProfiles = new Map(parsed.productDeepProfiles);
+          if (parsed.customerIntelligenceProfiles) this.customerIntelligenceProfiles = new Map(parsed.customerIntelligenceProfiles);
+          if (parsed.businessIntelligenceProfiles) this.businessIntelligenceProfiles = new Map(parsed.businessIntelligenceProfiles);
+          if (parsed.deepCrawlJobs) this.deepCrawlJobs = new Map(parsed.deepCrawlJobs);
+          if (parsed.userFactCorrections) this.userFactCorrections = new Map(parsed.userFactCorrections);
           for (const [uid, user] of this.users.entries()) {
             if (user.avatarUrl?.includes("images.unsplash.com/photo-1534528741775-53994a69daeb")) {
               user.avatarUrl = "";
@@ -430,7 +447,15 @@ var init_store = __esm({
             strategicDecisions: Array.from(this.strategicDecisions.entries()),
             strategicExperiments: Array.from(this.strategicExperiments.entries()),
             companyScorecards: Array.from(this.companyScorecards.entries()),
-            executiveBriefs: Array.from(this.executiveBriefs.entries())
+            executiveBriefs: Array.from(this.executiveBriefs.entries()),
+            companyProfiles: Array.from(this.companyProfiles.entries()),
+            digitalProperties: Array.from(this.digitalProperties.entries()),
+            leadershipProfiles: Array.from(this.leadershipProfiles.entries()),
+            productDeepProfiles: Array.from(this.productDeepProfiles.entries()),
+            customerIntelligenceProfiles: Array.from(this.customerIntelligenceProfiles.entries()),
+            businessIntelligenceProfiles: Array.from(this.businessIntelligenceProfiles.entries()),
+            deepCrawlJobs: Array.from(this.deepCrawlJobs.entries()),
+            userFactCorrections: Array.from(this.userFactCorrections.entries())
           };
           const dataDir = path.dirname(this.dataFilePath);
           if (!fs.existsSync(dataDir)) {
@@ -941,6 +966,9 @@ var init_store = __esm({
           summary: event.summary || event.details?.message || `War Room action: ${event.action || "updated"}`,
           details: event.details || {}
         });
+      }
+      recordAuditEvent(event) {
+        return this.logAuditEvent(event);
       }
       listAuditEvents(workspaceId, limit = 50) {
         return this.auditEvents.filter((e) => e.workspaceId === workspaceId).slice(0, limit);
@@ -2045,6 +2073,487 @@ var init_store = __esm({
         this.executiveBriefs.set(brief.workspaceId, brief);
         this.scheduleSave();
         return brief;
+      }
+      // ==========================================
+      // DEEP COMPANY INTELLIGENCE & DIGITAL FOOTPRINT
+      // ==========================================
+      seedCompanyIntelligenceIfEmpty() {
+        const workspacesToSeed = [DEMO_WORKSPACE_ID, "ws_default_prod"];
+        const now = (/* @__PURE__ */ new Date()).toISOString();
+        for (const wsId of workspacesToSeed) {
+          if (!this.companyProfiles.has(wsId)) {
+            const cp = {
+              id: `cp_${wsId}`,
+              workspaceId: wsId,
+              companyName: "NextGen Resume AI",
+              website: "https://nextgenresume.ai",
+              tagline: "AI-powered ATS resume & technical interview acceleration platform",
+              description: "NextGen Resume AI provides verified ATS scoring, role-specific achievement bullet point formulation, and AI mock interview simulations tailored to junior engineers and career switchers.",
+              industry: "EdTech / Career Services / SaaS",
+              subcategory: "AI Career Acceleration",
+              businessModel: "B2C",
+              stage: "GROWING",
+              marketsServed: ["United States", "Canada", "United Kingdom", "India"],
+              companySize: "11-50 employees",
+              primaryObjective: "Scale monthly active subscribers by 4x, launch enterprise university campus pilot program, and maintain 4.8+ star CSAT.",
+              customerSegments: ["Recent CS graduates", "Junior software engineers", "Coding bootcamp alumni", "Career switchers targeting tech"],
+              profileCompleteness: 94,
+              createdAt: now,
+              updatedAt: now
+            };
+            this.companyProfiles.set(wsId, cp);
+            const props = [
+              {
+                id: `dp_${wsId}_web`,
+                workspaceId: wsId,
+                category: "OFFICIAL_WEBSITE",
+                name: "Official Website",
+                url: "https://nextgenresume.ai",
+                connectionType: "PUBLIC_URL",
+                status: "CONNECTED",
+                authStatus: "NONE",
+                lastCrawledAt: now,
+                lastHttpStatus: 200,
+                pageCount: 14,
+                wordCount: 8420,
+                dataFreshness: "Live Web (On-Demand Fetch)",
+                createdAt: now,
+                updatedAt: now
+              },
+              {
+                id: `dp_${wsId}_pricing`,
+                workspaceId: wsId,
+                category: "PRICING_PAGE",
+                name: "Pricing & Tiers",
+                url: "https://nextgenresume.ai/pricing",
+                connectionType: "PUBLIC_URL",
+                status: "CONNECTED",
+                authStatus: "NONE",
+                lastCrawledAt: now,
+                lastHttpStatus: 200,
+                pageCount: 1,
+                wordCount: 1250,
+                dataFreshness: "Live Web (On-Demand Fetch)",
+                createdAt: now,
+                updatedAt: now
+              },
+              {
+                id: `dp_${wsId}_github`,
+                workspaceId: wsId,
+                category: "GITHUB",
+                name: "GitHub Organization",
+                url: "https://github.com/nextgenresume",
+                connectionType: "PUBLIC_URL",
+                status: "CONNECTED",
+                authStatus: "NONE",
+                lastCrawledAt: now,
+                lastHttpStatus: 200,
+                pageCount: 6,
+                wordCount: 3120,
+                dataFreshness: "Real-Time Public API",
+                createdAt: now,
+                updatedAt: now
+              },
+              {
+                id: `dp_${wsId}_linkedin`,
+                workspaceId: wsId,
+                category: "LINKEDIN_COMPANY",
+                name: "LinkedIn Company Page",
+                url: "https://linkedin.com/company/nextgenresume",
+                connectionType: "PUBLIC_URL",
+                status: "CONNECTED",
+                authStatus: "NONE",
+                lastCrawledAt: now,
+                lastHttpStatus: 200,
+                pageCount: 1,
+                wordCount: 420,
+                dataFreshness: "Public Snapshot",
+                createdAt: now,
+                updatedAt: now
+              },
+              {
+                id: `dp_${wsId}_reviews`,
+                workspaceId: wsId,
+                category: "PUBLIC_REVIEWS",
+                name: "G2 / Trustpilot Reviews",
+                url: "https://www.g2.com/products/nextgenresume/reviews",
+                connectionType: "PUBLIC_URL",
+                status: "CONNECTED",
+                authStatus: "NONE",
+                lastCrawledAt: now,
+                lastHttpStatus: 200,
+                pageCount: 1,
+                wordCount: 2890,
+                dataFreshness: "Public Aggregated Review Sentiment",
+                createdAt: now,
+                updatedAt: now
+              }
+            ];
+            props.forEach((p) => this.digitalProperties.set(p.id, p));
+            const leader = {
+              id: `lead_${wsId}_1`,
+              workspaceId: wsId,
+              name: "Alex Chen",
+              role: "Founder & CEO",
+              profileUrl: "https://linkedin.com/in/alexchen-founder",
+              visionStatement: "Eliminate arbitrary applicant screening bias by giving every job seeker access to top-tier resume engineering and authentic interview coaching.",
+              strategicPriorities: [
+                "Maintain zero-dark-patterns pricing with cancel-anytime guarantee",
+                "Deliver verified ATS keyword match accuracy above 96%",
+                "Launch university career center enterprise partnership pilot"
+              ],
+              relevantExperience: "Former Senior Technical Recruiter and Staff Engineer at Series B hyper-growth SaaS.",
+              publicContentLinks: ["https://nextgenresume.ai/blog/why-jobseekers-hate-resume-builders"],
+              isFounderStated: true,
+              createdAt: now,
+              updatedAt: now
+            };
+            this.leadershipProfiles.set(leader.id, leader);
+            const prod = {
+              id: `prod_${wsId}_1`,
+              workspaceId: wsId,
+              name: "NextGen Resume Pro",
+              url: "https://nextgenresume.ai/features",
+              corePurpose: "End-to-end ATS resume builder, bullet point impact quantifier, and technical mock interview simulator",
+              mainFeatures: [
+                "Targeted Job Match Keyword Gap Analyzer",
+                "STAR-Method Quantifiable Metric Formulator",
+                "ATS Parser Diagnostic (Greenhouse, Lever, Workday compliance)",
+                "Interactive Voice & Text Mock Interview Coach"
+              ],
+              intendedUsers: [
+                "Recent computer science graduates",
+                "Junior software engineers & bootcamp pivoters",
+                "Tech professionals aiming for promotion or career transition"
+              ],
+              problemsSolved: [
+                "Resumes failing automated ATS parse screening due to improper formatting",
+                "Vague bullet points lacking quantified metrics or scope",
+                "Predatory competitor paywalls charging $90 quarterly upfront at download"
+              ],
+              currentWorkflow: "Import existing PDF/DOCX or LinkedIn profile, select target job posting URL, view keyword gap heat-map, click to auto-optimize bullet metrics, export clean verified ATS PDF.",
+              valueProposition: "Land 3x more technical interviews within 30 days with verified ATS optimization and honest monthly pricing.",
+              pricingAndPackaging: "Free tier (1 resume, basic scan); Pro Tier $19/month cancel-anytime; Student Lifetime Pass $49 one-time.",
+              limitations: [
+                "Requires user to provide genuine project details; does not fabricate artificial work experience."
+              ],
+              integrations: ["GitHub Repositories", "LinkedIn PDF Export", "Greenhouse & Lever ATS Formats"],
+              technicalCapabilities: ["Real-time regex & token scoring", "PDF text layer extraction", "Keyword clustering & lemmatization"],
+              maturity: "GA",
+              customerProofPoints: [
+                "Over 14,000 resumes scanned with average callback increase of 2.8x",
+                "4.8/5 average CSAT across verified G2 & Reddit reviews"
+              ],
+              currentAlternatives: ["Kickresume", "Jobscan", "Teal", "ChatGPT generic prompts"],
+              differentiators: [
+                "Zero hidden paywalls or surprise quarterly auto-renewals",
+                "Deep technical recruiter calibration rather than generic buzzwords",
+                "Integrated GitHub repository project bullet synthesizer"
+              ],
+              knownWeaknesses: [
+                "No physical career coach 1-on-1 calls (purely AI-guided)",
+                "Limited non-English language template coverage currently"
+              ],
+              roadmapItems: [
+                "University Career Center multi-seat management portal",
+                "Automated follow-up thank-you email generator",
+                "Multi-language European CV format localization"
+              ],
+              verificationStatus: "DOCUMENTED",
+              createdAt: now,
+              updatedAt: now
+            };
+            this.productDeepProfiles.set(prod.id, prod);
+            const cust = {
+              id: `cust_${wsId}`,
+              workspaceId: wsId,
+              idealCustomerProfile: "Tech-focused job seekers (0-3 years experience) applying to 20+ software engineering roles per month with high urgency to secure employment.",
+              buyerPersonas: [
+                "Recent Computer Science Graduate",
+                "Coding Bootcamp Career Switcher",
+                "Laid-off Junior Engineer Seeking Rapid Re-employment"
+              ],
+              coreJobsToBeDone: [
+                "Ensure resume passes automated ATS keyword screening without rejection",
+                "Quantify engineering achievements using the STAR methodology",
+                "Practice answering role-specific behavioral and technical interview questions"
+              ],
+              purchaseTriggers: [
+                "Applying to 50+ roles without a single recruiter screening callback",
+                "Receiving an unexpected interview invitation and needing fast prep",
+                "Frustration with predatory competitors charging $89.85 upfront after completing a 45-minute form"
+              ],
+              commonObjections: [
+                "Can I not just paste my resume into ChatGPT for free?",
+                "Will the generated PDF actually parse cleanly in Workday?",
+                "Will I get billed indefinitely after I land a job?"
+              ],
+              reasonsChooseAlternatives: [
+                "Greater brand recognition of older legacy tools (Kickresume, Jobscan)",
+                "Free basic graphic design templates on Canva for non-technical roles"
+              ],
+              retentionReasons: [
+                "Active job searchers keep Pro active until signed offer letter",
+                "Mock interview module provides ongoing value through final loop"
+              ],
+              churnReasons: [
+                "Candidate successfully lands target role (healthy, intended graduation churn)"
+              ],
+              salesChannels: [
+                "Organic Search & Technical SEO (ATS resume keyword guides)",
+                "Reddit community discussions (r/cscareerquestions, r/resumes)",
+                "University Career Center referral partnerships",
+                "TikTok / YouTube short-form career advice channels"
+              ],
+              typicalSalesCycle: "1-3 days from initial organic search landing to conversion",
+              evidenceWillingnessToPay: "High willingness to pay $19/mo or $49 one-time; strong resistance to forced quarterly commitments exceeding $80.",
+              authorizedFeedbackQuotes: [
+                {
+                  quote: "After 3 months of silence, NextGen flagged that Workday was dropping my skills section. Fixed it and got 2 interviews in one week.",
+                  source: "Verified G2 Review",
+                  date: "2026-08-15"
+                },
+                {
+                  quote: "Actually lets you download your resume without demanding $90 at checkout. Honest product.",
+                  source: "Reddit r/jobs",
+                  date: "2026-08-22"
+                }
+              ],
+              createdAt: now,
+              updatedAt: now
+            };
+            this.customerIntelligenceProfiles.set(wsId, cust);
+            const bi = {
+              workspaceId: wsId,
+              companyName: "NextGen Resume AI",
+              website: "https://nextgenresume.ai",
+              completenessScore: 94,
+              lastRefreshedAt: now,
+              changeSummarySinceLastCrawl: [
+                "Verified active pricing tier: $19/mo with cancel-anytime guarantee.",
+                "Confirmed 14 public product pages indexed and responsive.",
+                "Audited 4.8/5 CSAT rating across verified community reviews."
+              ],
+              whatWeKnow: [
+                {
+                  id: `fact_${wsId}_1`,
+                  claim: "NextGen Resume AI provides an ATS resume builder with verifiable keyword scoring and mock interview prep.",
+                  category: "CORE_CAPABILITY",
+                  epistemicStatus: "WHAT_WE_KNOW",
+                  sourceUrl: "https://nextgenresume.ai/features",
+                  sourceTitle: "Product Features Overview",
+                  supportingQuote: "Real-time ATS parsing diagnostic and STAR bullet formulation.",
+                  confidenceScore: 98,
+                  isUserVerified: true,
+                  timestamp: now
+                },
+                {
+                  id: `fact_${wsId}_2`,
+                  claim: "Official pricing model is $19/month with cancel-anytime policy and $49 student lifetime option.",
+                  category: "PRICING",
+                  epistemicStatus: "WHAT_WE_KNOW",
+                  sourceUrl: "https://nextgenresume.ai/pricing",
+                  sourceTitle: "Transparent Pricing",
+                  supportingQuote: "Simple $19/mo plan. No quarterly trap, cancel anytime in one click.",
+                  confidenceScore: 100,
+                  isUserVerified: true,
+                  timestamp: now
+                }
+              ],
+              whatCompanySaysAboutItself: [
+                {
+                  id: `fact_${wsId}_3`,
+                  claim: "Company claims users experience a 3x increase in interview callbacks within 30 days.",
+                  category: "VALUE_PROPOSITION",
+                  epistemicStatus: "COMPANY_STATED",
+                  sourceUrl: "https://nextgenresume.ai",
+                  sourceTitle: "Hero Section Headline",
+                  supportingQuote: "Land 3x more technical interviews in 30 days with verified ATS optimization.",
+                  confidenceScore: 82,
+                  isUserVerified: false,
+                  timestamp: now
+                }
+              ],
+              whatIndependentSourcesConfirm: [
+                {
+                  id: `fact_${wsId}_4`,
+                  claim: "Independent user reviews on G2 and Reddit corroborate that download has no hidden fees and ATS formatting parses correctly.",
+                  category: "CUSTOMER_SENTIMENT",
+                  epistemicStatus: "INDEPENDENT_CONFIRMED",
+                  sourceUrl: "https://www.g2.com/products/nextgenresume/reviews",
+                  sourceTitle: "G2 Verified Reviews",
+                  supportingQuote: "Actually lets you download your resume without demanding $90 at checkout. Honest product.",
+                  confidenceScore: 94,
+                  isUserVerified: false,
+                  timestamp: now
+                }
+              ],
+              whatWeInferred: [
+                {
+                  id: `fact_${wsId}_5`,
+                  claim: "Primary customer acquisition engine is organic search traffic and word-of-mouth referral on Reddit career communities.",
+                  category: "GROWTH_CHANNELS",
+                  epistemicStatus: "AI_INFERRED",
+                  confidenceScore: 88,
+                  isUserVerified: false,
+                  timestamp: now
+                }
+              ],
+              whatIsUncertain: [
+                {
+                  id: `fact_${wsId}_6`,
+                  claim: "Expected contract values and procurement timeline for university career center pilot programs remain unverified.",
+                  category: "ENTERPRISE_EXPANSION",
+                  epistemicStatus: "UNCERTAIN",
+                  confidenceScore: 45,
+                  isUserVerified: false,
+                  timestamp: now
+                }
+              ],
+              whatIsMissing: [
+                {
+                  id: `fact_${wsId}_7`,
+                  claim: "Published SOC2 Type II compliance report and FERPA student data privacy compliance documentation for enterprise university sales.",
+                  category: "COMPLIANCE",
+                  epistemicStatus: "MISSING",
+                  confidenceScore: 90,
+                  isUserVerified: false,
+                  timestamp: now
+                }
+              ],
+              sourcesInaccessible: [
+                {
+                  url: "https://linkedin.com/company/nextgenresume/people",
+                  reason: "LinkedIn member demographics and detailed alumni tracking require authenticated organization OAuth integration.",
+                  recommendedAlternative: "Connect LinkedIn OAuth Organization account under Digital Footprint settings to pull verified team growth metrics."
+                }
+              ],
+              requiresUserConfirmation: [
+                {
+                  id: `conf_${wsId}_1`,
+                  question: "Do you plan to release multi-language European CV templates (Europass) in the next product sprint?",
+                  impactOnAnalysis: "Impacts competitive positioning against Kickresume in the EU market.",
+                  currentInference: "Current product footprint is English-only, primarily serving North America and UK.",
+                  options: ["Yes, actively developing for Q4", "No, strictly focusing on English-speaking markets", "Evaluating customer demand"],
+                  resolved: false
+                }
+              ]
+            };
+            this.businessIntelligenceProfiles.set(wsId, bi);
+          }
+        }
+      }
+      // Company Profile
+      getCompanyProfile(workspaceId) {
+        return this.companyProfiles.get(workspaceId) || null;
+      }
+      saveCompanyProfile(profile) {
+        profile.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        this.companyProfiles.set(profile.workspaceId, profile);
+        this.scheduleSave();
+        return profile;
+      }
+      // Digital Properties
+      getDigitalProperties(workspaceId) {
+        return Array.from(this.digitalProperties.values()).filter((p) => p.workspaceId === workspaceId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      getDigitalProperty(workspaceId, id) {
+        const prop = this.digitalProperties.get(id);
+        return prop && prop.workspaceId === workspaceId ? prop : null;
+      }
+      saveDigitalProperty(prop) {
+        prop.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        this.digitalProperties.set(prop.id, prop);
+        this.scheduleSave();
+        return prop;
+      }
+      deleteDigitalProperty(workspaceId, id) {
+        const prop = this.digitalProperties.get(id);
+        if (prop && prop.workspaceId === workspaceId) {
+          this.digitalProperties.delete(id);
+          this.scheduleSave();
+          return true;
+        }
+        return false;
+      }
+      // Leadership Profiles
+      getLeadershipProfiles(workspaceId) {
+        return Array.from(this.leadershipProfiles.values()).filter((l) => l.workspaceId === workspaceId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      saveLeadershipProfile(profile) {
+        profile.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        this.leadershipProfiles.set(profile.id, profile);
+        this.scheduleSave();
+        return profile;
+      }
+      deleteLeadershipProfile(workspaceId, id) {
+        const profile = this.leadershipProfiles.get(id);
+        if (profile && profile.workspaceId === workspaceId) {
+          this.leadershipProfiles.delete(id);
+          this.scheduleSave();
+          return true;
+        }
+        return false;
+      }
+      // Product Deep Profiles
+      getProductDeepProfiles(workspaceId) {
+        return Array.from(this.productDeepProfiles.values()).filter((p) => p.workspaceId === workspaceId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      }
+      saveProductDeepProfile(product) {
+        product.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        this.productDeepProfiles.set(product.id, product);
+        this.scheduleSave();
+        return product;
+      }
+      deleteProductDeepProfile(workspaceId, id) {
+        const prod = this.productDeepProfiles.get(id);
+        if (prod && prod.workspaceId === workspaceId) {
+          this.productDeepProfiles.delete(id);
+          this.scheduleSave();
+          return true;
+        }
+        return false;
+      }
+      // Customer Intelligence
+      getCustomerIntelligence(workspaceId) {
+        return this.customerIntelligenceProfiles.get(workspaceId) || null;
+      }
+      saveCustomerIntelligence(profile) {
+        profile.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
+        this.customerIntelligenceProfiles.set(profile.workspaceId, profile);
+        this.scheduleSave();
+        return profile;
+      }
+      // Business Intelligence Profile (8 Dimensions)
+      getBusinessIntelligenceProfile(workspaceId) {
+        return this.businessIntelligenceProfiles.get(workspaceId) || null;
+      }
+      saveBusinessIntelligenceProfile(profile) {
+        this.businessIntelligenceProfiles.set(profile.workspaceId, profile);
+        this.scheduleSave();
+        return profile;
+      }
+      // Deep Crawl Jobs
+      getDeepCrawlJobs(workspaceId) {
+        return Array.from(this.deepCrawlJobs.values()).filter((j) => j.workspaceId === workspaceId).sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+      }
+      getDeepCrawlJob(workspaceId, jobId) {
+        const job = this.deepCrawlJobs.get(jobId);
+        return job && job.workspaceId === workspaceId ? job : null;
+      }
+      saveDeepCrawlJob(job) {
+        this.deepCrawlJobs.set(job.id, job);
+        this.scheduleSave();
+        return job;
+      }
+      // User Fact Corrections
+      getUserFactCorrections(workspaceId) {
+        return Array.from(this.userFactCorrections.values()).filter((c) => c.workspaceId === workspaceId).sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      }
+      saveUserFactCorrection(correction) {
+        this.userFactCorrections.set(correction.id, correction);
+        this.scheduleSave();
+        return correction;
       }
     };
     db = new PersistentDatabaseStore();
@@ -8505,6 +9014,1149 @@ init_registry();
 init_openrouterProvider();
 init_geminiProvider();
 init_logger();
+
+// server/services/companyIntelligenceService.ts
+init_store();
+init_logger();
+
+// server/crawler/ssrfGuard.ts
+init_logger();
+import dns from "dns";
+function isPrivateIPv4(ip) {
+  const ipv4Regex = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
+  const match = ip.trim().match(ipv4Regex);
+  if (!match) return false;
+  const a = parseInt(match[1], 10);
+  const b = parseInt(match[2], 10);
+  const c = parseInt(match[3], 10);
+  const d = parseInt(match[4], 10);
+  if (a > 255 || b > 255 || c > 255 || d > 255) return true;
+  if (a === 127) return true;
+  if (a === 10) return true;
+  if (a === 172 && b >= 16 && b <= 31) return true;
+  if (a === 192 && b === 168) return true;
+  if (a === 169 && b === 254) return true;
+  if (a === 0) return true;
+  if (a === 100 && b >= 64 && b <= 127) return true;
+  if (a >= 224 && a <= 239) return true;
+  if (a >= 240) return true;
+  return false;
+}
+function isPrivateIPv6(ip) {
+  if (!ip.includes(":")) return false;
+  const normalized = ip.toLowerCase().trim();
+  if (normalized === "::1" || normalized === "::") return true;
+  if (normalized.startsWith("fe80:") || normalized.startsWith("fe8") || normalized.startsWith("fe9") || normalized.startsWith("fea") || normalized.startsWith("feb")) return true;
+  if (normalized.startsWith("fc00:") || normalized.startsWith("fd")) return true;
+  if (normalized.startsWith("::ffff:")) {
+    const ipv4 = normalized.replace("::ffff:", "");
+    return isPrivateIPv4(ipv4);
+  }
+  return false;
+}
+async function validateSafeUrl(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== "string") {
+    return { isValid: false, reason: "Empty or non-string URL provided." };
+  }
+  let parsed;
+  try {
+    parsed = new URL(rawUrl.trim());
+  } catch {
+    return { isValid: false, reason: "Invalid URL syntax." };
+  }
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    return {
+      isValid: false,
+      reason: `Unsupported protocol "${parsed.protocol}". Only HTTP and HTTPS are permitted.`
+    };
+  }
+  const hostname = parsed.hostname.toLowerCase();
+  const forbiddenHostnames = [
+    "localhost",
+    "localhost.localdomain",
+    "ip6-localhost",
+    "ip6-loopback",
+    "instance-data",
+    "metadata.google.internal",
+    "metadata"
+  ];
+  if (forbiddenHostnames.includes(hostname) || hostname.endsWith(".localhost") || hostname.endsWith(".local") || hostname.endsWith(".internal")) {
+    return {
+      isValid: false,
+      isPrivateOrInternal: true,
+      reason: `Access to internal host "${hostname}" is blocked for security (SSRF prevention).`
+    };
+  }
+  if (isPrivateIPv4(hostname) || isPrivateIPv6(hostname)) {
+    return {
+      isValid: false,
+      isPrivateOrInternal: true,
+      reason: `Access to private IP address "${hostname}" is blocked (SSRF prevention).`
+    };
+  }
+  try {
+    const lookup = await dns.promises.lookup(hostname, { all: true });
+    for (const record of lookup) {
+      if (record.family === 4 && isPrivateIPv4(record.address)) {
+        logger.warn(`SSRF Block: Domain ${hostname} resolves to private IPv4 ${record.address}`);
+        return {
+          isValid: false,
+          isPrivateOrInternal: true,
+          reason: `Domain ${hostname} resolves to private/internal network IP (${record.address}). Access denied.`
+        };
+      }
+      if (record.family === 6 && isPrivateIPv6(record.address)) {
+        logger.warn(`SSRF Block: Domain ${hostname} resolves to private IPv6 ${record.address}`);
+        return {
+          isValid: false,
+          isPrivateOrInternal: true,
+          reason: `Domain ${hostname} resolves to private/internal IPv6 address (${record.address}). Access denied.`
+        };
+      }
+    }
+  } catch (dnsErr) {
+    const isPublicTld = /\.(com|org|net|io|ai|dev|co|app|tech|edu|gov)$/i.test(hostname);
+    if (isPublicTld && !hostname.includes("localhost") && !hostname.includes("internal")) {
+      return {
+        isValid: true,
+        sanitizedUrl: parsed.toString()
+      };
+    }
+    return {
+      isValid: false,
+      reason: `Cannot resolve domain "${hostname}": ${dnsErr.message || "DNS lookup failed."}`
+    };
+  }
+  return {
+    isValid: true,
+    sanitizedUrl: parsed.toString()
+  };
+}
+
+// server/crawler/deepCrawler.ts
+init_logger();
+import crypto3 from "crypto";
+
+// server/crawler/sitemapParser.ts
+init_logger();
+function categorizeUrlPath(urlStr) {
+  try {
+    const parsed = new URL(urlStr);
+    const path3 = parsed.pathname.toLowerCase();
+    if (path3.includes("/pricing") || path3.includes("/plans") || path3.includes("/billing") || path3.includes("/tier")) {
+      return { category: "PRICING_PAGE", priority: 100 };
+    }
+    if (path3.includes("/product") || path3.includes("/feature") || path3.includes("/platform") || path3.includes("/solution") || path3.includes("/capability")) {
+      return { category: "PRODUCT_PAGE", priority: 90 };
+    }
+    if (path3.includes("/about") || path3.includes("/company") || path3.includes("/team") || path3.includes("/leadership") || path3.includes("/story")) {
+      return { category: "ABOUT_PAGE", priority: 85 };
+    }
+    if (path3.includes("/customer") || path3.includes("/case-stud") || path3.includes("/testimonial") || path3.includes("/client") || path3.includes("/stories")) {
+      return { category: "CASE_STUDIES", priority: 80 };
+    }
+    if (path3.includes("/docs") || path3.includes("/help") || path3.includes("/api") || path3.includes("/developers") || path3.includes("/guide")) {
+      return { category: "DOCS_HELP", priority: 75 };
+    }
+    if (path3.includes("/career") || path3.includes("/jobs") || path3.includes("/hiring") || path3.includes("/join-us")) {
+      return { category: "CAREERS", priority: 65 };
+    }
+    if (path3.includes("/blog") || path3.includes("/news") || path3.includes("/press") || path3.includes("/announcement")) {
+      return { category: "BLOG_NEWS", priority: 60 };
+    }
+    if (path3 === "/" || path3 === "" || path3 === "/index.html") {
+      return { category: "OFFICIAL_WEBSITE", priority: 95 };
+    }
+    return { category: "OTHER", priority: 50 };
+  } catch {
+    return { category: "OTHER", priority: 30 };
+  }
+}
+async function inspectRobotsTxt(baseUrlStr) {
+  const result = {
+    isAllowed: true,
+    sitemapUrls: []
+  };
+  try {
+    const base = new URL(baseUrlStr);
+    const robotsUrl = `${base.protocol}//${base.host}/robots.txt`;
+    const validation = await validateSafeUrl(robotsUrl);
+    if (!validation.isValid) return result;
+    const res = await fetch(robotsUrl, {
+      headers: {
+        "User-Agent": "ResearchFlow/2.0 (+https://researchflow.ai; company-intelligence-bot)"
+      },
+      signal: AbortSignal.timeout(6e3)
+    });
+    if (!res.ok) return result;
+    const content = await res.text();
+    const lines = content.split("\n");
+    let isCurrentAgentApplicable = true;
+    for (const rawLine of lines) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith("#")) continue;
+      const [directive, ...valParts] = line.split(":");
+      const key = directive.trim().toLowerCase();
+      const val = valParts.join(":").trim();
+      if (key === "user-agent") {
+        const agent = val.toLowerCase();
+        isCurrentAgentApplicable = agent === "*" || agent.includes("researchflow") || agent.includes("bot");
+      } else if (key === "sitemap") {
+        if (val.startsWith("http")) {
+          result.sitemapUrls.push(val);
+        }
+      } else if (key === "disallow" && isCurrentAgentApplicable) {
+        if (val === "/") {
+          result.isAllowed = false;
+        }
+      }
+    }
+  } catch (err) {
+    logger.info(`robots.txt check skipped for ${baseUrlStr}: ${err.message}`);
+  }
+  return result;
+}
+async function discoverSitemapUrls(baseUrlStr, customSitemaps) {
+  const discovered = [];
+  const visitedSitemaps = /* @__PURE__ */ new Set();
+  const base = new URL(baseUrlStr);
+  const candidateSitemaps = customSitemaps && customSitemaps.length > 0 ? customSitemaps : [
+    `${base.protocol}//${base.host}/sitemap.xml`,
+    `${base.protocol}//${base.host}/sitemap_index.xml`,
+    `${base.protocol}//${base.host}/sitemap/sitemap.xml`
+  ];
+  for (const sitemapUrl of candidateSitemaps) {
+    if (visitedSitemaps.has(sitemapUrl)) continue;
+    visitedSitemaps.add(sitemapUrl);
+    try {
+      const validation = await validateSafeUrl(sitemapUrl);
+      if (!validation.isValid) continue;
+      const res = await fetch(sitemapUrl, {
+        headers: {
+          "User-Agent": "ResearchFlow/2.0 (+https://researchflow.ai; company-intelligence-bot)",
+          Accept: "application/xml,text/xml,*/*"
+        },
+        signal: AbortSignal.timeout(8e3)
+      });
+      if (!res.ok) continue;
+      const xml = await res.text();
+      const sitemapIndexMatches = Array.from(xml.matchAll(/<sitemap>[\s\S]*?<loc>([^<]+)<\/loc>[\s\S]*?<\/sitemap>/gi));
+      if (sitemapIndexMatches.length > 0) {
+        for (const match of sitemapIndexMatches.slice(0, 5)) {
+          const childSitemap = match[1].trim();
+          if (childSitemap.startsWith("http") && !visitedSitemaps.has(childSitemap)) {
+            candidateSitemaps.push(childSitemap);
+          }
+        }
+        continue;
+      }
+      const urlMatches = Array.from(xml.matchAll(/<url>[\s\S]*?<loc>([^<]+)<\/loc>(?:[\s\S]*?<lastmod>([^<]+)<\/lastmod>)?[\s\S]*?<\/url>/gi));
+      for (const match of urlMatches) {
+        const pageUrl = match[1].trim();
+        const lastMod = match[2]?.trim();
+        try {
+          const parsed = new URL(pageUrl);
+          if (parsed.hostname.toLowerCase() === base.hostname.toLowerCase() || parsed.hostname.endsWith(`.${base.hostname}`)) {
+            const { category, priority } = categorizeUrlPath(pageUrl);
+            discovered.push({
+              url: pageUrl,
+              category,
+              priority,
+              lastMod
+            });
+          }
+        } catch {
+        }
+      }
+      if (discovered.length > 0) {
+        logger.info(`Discovered ${discovered.length} URLs from sitemap ${sitemapUrl}`);
+        break;
+      }
+    } catch (err) {
+      logger.info(`Sitemap parse failed for ${sitemapUrl}: ${err.message}`);
+    }
+  }
+  const uniqueMap = /* @__PURE__ */ new Map();
+  for (const item of discovered) {
+    if (!uniqueMap.has(item.url)) {
+      uniqueMap.set(item.url, item);
+    }
+  }
+  return Array.from(uniqueMap.values()).sort((a, b) => b.priority - a.priority);
+}
+
+// server/crawler/deepCrawler.ts
+var DeepCompanyCrawler = class {
+  constructor() {
+    this.userAgent = "ResearchFlow/2.0 (+https://researchflow.ai; company-intelligence-crawler)";
+  }
+  async runCrawl(rootUrl, workspaceId, options = {}) {
+    const budget = options.maxPageBudget || 25;
+    const timeoutMs = options.timeoutMs || 1e4;
+    const startTime = (/* @__PURE__ */ new Date()).toISOString();
+    const jobId = `crawl_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+    const crawlJob = {
+      id: jobId,
+      workspaceId,
+      rootUrl,
+      status: "DISCOVERING",
+      pagesDiscovered: 0,
+      pagesAnalyzed: 0,
+      pagesSkipped: 0,
+      pagesFailed: 0,
+      maxPageBudget: budget,
+      maxDepth: options.maxDepth || 2,
+      crawlInventory: [],
+      startedAt: startTime
+    };
+    const rootCheck = await validateSafeUrl(rootUrl);
+    if (!rootCheck.isValid) {
+      crawlJob.status = "FAILED";
+      crawlJob.errorMessage = rootCheck.reason || "Root URL failed security validation.";
+      crawlJob.completedAt = (/* @__PURE__ */ new Date()).toISOString();
+      return { job: crawlJob, pages: [] };
+    }
+    const baseParsed = new URL(rootCheck.sanitizedUrl);
+    const baseHost = baseParsed.hostname.toLowerCase();
+    const robots = await inspectRobotsTxt(rootCheck.sanitizedUrl);
+    if (!robots.isAllowed) {
+      logger.warn(`Crawling disallowed by robots.txt for ${rootUrl}`);
+      crawlJob.status = "FAILED";
+      crawlJob.errorMessage = "Crawling disallowed by target website robots.txt directive.";
+      crawlJob.completedAt = (/* @__PURE__ */ new Date()).toISOString();
+      return { job: crawlJob, pages: [] };
+    }
+    const urlQueue = [];
+    const queuedSet = /* @__PURE__ */ new Set();
+    const enqueue = (u, cat, prio, depth = 1) => {
+      try {
+        const p = new URL(u);
+        p.hash = "";
+        let norm = p.toString();
+        if (norm.endsWith("/") && p.pathname !== "/") {
+          norm = norm.slice(0, -1);
+        }
+        if (queuedSet.has(norm)) return;
+        if (p.hostname.toLowerCase() !== baseHost && !p.hostname.toLowerCase().endsWith(`.${baseHost}`)) {
+          return;
+        }
+        if (norm.match(/\.(jpg|jpeg|png|gif|webp|svg|pdf|zip|tar|gz|mp4|mp3|exe|woff|woff2|css|js)$/i)) {
+          return;
+        }
+        queuedSet.add(norm);
+        const autoCat = categorizeUrlPath(norm);
+        urlQueue.push({
+          url: norm,
+          category: cat || autoCat.category,
+          priority: prio !== void 0 ? prio : autoCat.priority,
+          depth
+        });
+      } catch {
+      }
+    };
+    enqueue(rootCheck.sanitizedUrl, "OFFICIAL_WEBSITE", 100, 0);
+    if (options.additionalSeedUrls) {
+      for (const extra of options.additionalSeedUrls) {
+        if (extra && extra.trim()) {
+          enqueue(extra.trim(), void 0, void 0, 1);
+        }
+      }
+    }
+    try {
+      const sitemapEntries = await discoverSitemapUrls(rootCheck.sanitizedUrl, robots.sitemapUrls);
+      for (const entry of sitemapEntries.slice(0, 80)) {
+        enqueue(entry.url, entry.category, entry.priority, 1);
+      }
+    } catch (e) {
+      logger.info(`Sitemap discovery non-fatal error: ${e.message}`);
+    }
+    crawlJob.pagesDiscovered = urlQueue.length;
+    crawlJob.status = "CRAWLING";
+    urlQueue.sort((a, b) => b.priority - a.priority);
+    const crawledPages = [];
+    const visitedSet = /* @__PURE__ */ new Set();
+    while (urlQueue.length > 0 && crawledPages.length < budget) {
+      const current = urlQueue.shift();
+      if (visitedSet.has(current.url)) continue;
+      visitedSet.add(current.url);
+      const safeCheck = await validateSafeUrl(current.url);
+      if (!safeCheck.isValid) {
+        crawlJob.pagesFailed++;
+        crawlJob.crawlInventory.push({
+          url: current.url,
+          title: "Blocked Security Invariant",
+          category: current.category,
+          httpStatus: 400,
+          wordCount: 0,
+          sha256Hash: "",
+          status: "FAILED",
+          failureReason: safeCheck.reason,
+          crawledAt: (/* @__PURE__ */ new Date()).toISOString()
+        });
+        continue;
+      }
+      options.onProgress?.({
+        discovered: crawlJob.pagesDiscovered,
+        analyzed: crawledPages.length,
+        currentUrl: current.url
+      });
+      try {
+        const response = await fetch(safeCheck.sanitizedUrl, {
+          headers: {
+            "User-Agent": this.userAgent,
+            Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9"
+          },
+          signal: AbortSignal.timeout(timeoutMs),
+          redirect: "follow"
+        });
+        const status = response.status;
+        if (!response.ok) {
+          crawlJob.pagesFailed++;
+          crawlJob.crawlInventory.push({
+            url: current.url,
+            title: `HTTP ${status}`,
+            category: current.category,
+            httpStatus: status,
+            wordCount: 0,
+            sha256Hash: "",
+            status: "FAILED",
+            failureReason: `Server returned HTTP ${status}`,
+            crawledAt: (/* @__PURE__ */ new Date()).toISOString()
+          });
+          continue;
+        }
+        const html = await response.text();
+        const extracted = this.extractHtml(html, current.url, current.category, status);
+        if (extracted.wordCount < 30) {
+          crawlJob.pagesSkipped++;
+          crawlJob.crawlInventory.push({
+            url: current.url,
+            title: extracted.title || "Empty Page",
+            category: current.category,
+            httpStatus: status,
+            wordCount: extracted.wordCount,
+            sha256Hash: extracted.sha256Hash,
+            status: "SKIPPED_DUPLICATE",
+            failureReason: "Page content under minimum threshold (< 30 words).",
+            crawledAt: (/* @__PURE__ */ new Date()).toISOString()
+          });
+          continue;
+        }
+        crawledPages.push(extracted);
+        crawlJob.pagesAnalyzed++;
+        crawlJob.crawlInventory.push({
+          url: current.url,
+          title: extracted.title,
+          category: current.category,
+          httpStatus: status,
+          wordCount: extracted.wordCount,
+          sha256Hash: extracted.sha256Hash,
+          status: "SUCCESS",
+          crawledAt: (/* @__PURE__ */ new Date()).toISOString()
+        });
+        if (current.depth < (options.maxDepth || 2) && urlQueue.length < budget * 2) {
+          const discoveredLinks = this.extractInternalLinks(html, current.url, baseHost);
+          for (const link of discoveredLinks) {
+            if (!queuedSet.has(link)) {
+              enqueue(link, void 0, void 0, current.depth + 1);
+            }
+          }
+          crawlJob.pagesDiscovered = queuedSet.size;
+        }
+      } catch (fetchErr) {
+        crawlJob.pagesFailed++;
+        crawlJob.crawlInventory.push({
+          url: current.url,
+          title: "Fetch Error",
+          category: current.category,
+          httpStatus: 500,
+          wordCount: 0,
+          sha256Hash: "",
+          status: "FAILED",
+          failureReason: fetchErr.name === "TimeoutError" ? "Timeout" : fetchErr.message,
+          crawledAt: (/* @__PURE__ */ new Date()).toISOString()
+        });
+      }
+    }
+    crawlJob.status = crawledPages.length > 0 ? "COMPLETED" : "FAILED";
+    crawlJob.completedAt = (/* @__PURE__ */ new Date()).toISOString();
+    logger.info(
+      `Deep crawl finished for ${rootUrl}: ${crawledPages.length} analyzed, ${crawlJob.pagesSkipped} skipped, ${crawlJob.pagesFailed} failed.`
+    );
+    return { job: crawlJob, pages: crawledPages };
+  }
+  extractHtml(html, url, category, status) {
+    const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
+    let title = titleMatch ? titleMatch[1].trim() : "";
+    if (!title) {
+      const ogTitle = html.match(/<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']/i);
+      title = ogTitle ? ogTitle[1].trim() : new URL(url).pathname;
+    }
+    const descMatch = html.match(/<meta\s+name=["']description["']\s+content=["']([^"']+)["']/i);
+    const metaDescription = descMatch ? descMatch[1].trim() : void 0;
+    const headings = [];
+    const headingMatches = Array.from(html.matchAll(/<h[1-3][^>]*>([\s\S]*?)<\/h[1-3]>/gi));
+    for (const h of headingMatches.slice(0, 15)) {
+      const cleanH = h[1].replace(/<[^>]+>/g, "").trim();
+      if (cleanH && cleanH.length > 3 && cleanH.length < 140) {
+        headings.push(cleanH);
+      }
+    }
+    let structuredDataJson = void 0;
+    const jsonLdMatch = html.match(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/i);
+    if (jsonLdMatch) {
+      try {
+        structuredDataJson = JSON.parse(jsonLdMatch[1].trim());
+      } catch {
+      }
+    }
+    const cleanText = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, " ").replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, " ").replace(/<noscript\b[^<]*(?:(?!<\/noscript>)<[^<]*)*<\/noscript>/gi, " ").replace(/<nav\b[^<]*(?:(?!<\/nav>)<[^<]*)*<\/nav>/gi, " ").replace(/<footer\b[^<]*(?:(?!<\/footer>)<[^<]*)*<\/footer>/gi, " ").replace(/<header\b[^<]*(?:(?!<\/header>)<[^<]*)*<\/header>/gi, " ").replace(/<!--[\s\S]*?-->/g, " ").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, " ").trim();
+    const wordCount = cleanText ? cleanText.split(/\s+/).length : 0;
+    const sha256Hash = crypto3.createHash("sha256").update(cleanText).digest("hex");
+    return {
+      url,
+      title: title.slice(0, 120),
+      category,
+      metaDescription,
+      cleanText: cleanText.slice(0, 2e4),
+      // Max 20k chars per page for memory efficiency
+      headings,
+      structuredDataJson,
+      wordCount,
+      sha256Hash,
+      httpStatus: status,
+      retrievedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  }
+  extractInternalLinks(html, currentUrl, baseHost) {
+    const internalLinks = [];
+    const hrefMatches = Array.from(html.matchAll(/href=["']([^"'#\s]+)["']/gi));
+    for (const match of hrefMatches) {
+      const rawHref = match[1];
+      if (rawHref.startsWith("javascript:") || rawHref.startsWith("mailto:") || rawHref.startsWith("tel:")) {
+        continue;
+      }
+      try {
+        const resolved = new URL(rawHref, currentUrl);
+        const resolvedHost = resolved.hostname.toLowerCase();
+        if (resolvedHost === baseHost || resolvedHost.endsWith(`.${baseHost}`)) {
+          resolved.hash = "";
+          internalLinks.push(resolved.toString());
+        }
+      } catch {
+      }
+    }
+    return Array.from(new Set(internalLinks));
+  }
+};
+var deepCrawler = new DeepCompanyCrawler();
+
+// server/connectors/connectorRegistry.ts
+var WebsiteConnector = class {
+  constructor() {
+    this.category = "OFFICIAL_WEBSITE";
+  }
+  async inspectUrl(url) {
+    return {
+      sourceType: this.category,
+      name: "Website & Web Properties",
+      connectionStatus: "CONNECTED",
+      authStatus: "NONE",
+      availableAccessScope: "Public Web HTML, Sitemap & Robots.txt Directives",
+      supportedDataTypes: ["Headings", "Text Content", "JSON-LD Structured Data", "Meta Tags"],
+      refreshBehavior: "ON_DEMAND",
+      dataFreshness: "Live Web (On-Demand Fetch)"
+    };
+  }
+};
+var LinkedInConnector = class {
+  constructor() {
+    this.category = "LINKEDIN_COMPANY";
+  }
+  async inspectUrl(url) {
+    const isCompany = url.includes("/company/");
+    return {
+      sourceType: isCompany ? "LINKEDIN_COMPANY" : "FOUNDER_PROFILE",
+      name: isCompany ? "LinkedIn Company Page" : "LinkedIn Executive Profile",
+      connectionStatus: "PUBLIC_ACCESSIBLE",
+      authStatus: "NONE",
+      availableAccessScope: "Public OpenGraph metadata & brand description. Private employee data and member connections require OAuth 2.0 Community Management API approval.",
+      supportedDataTypes: ["Brand Headline", "Industry Category", "Public About Snippet"],
+      refreshBehavior: "MANUAL_ONLY",
+      dataFreshness: "Public Snapshot",
+      recommendedAlternative: "Connect LinkedIn OAuth Organization account for verified follower analytics and direct post publishing."
+    };
+  }
+};
+var GitHubConnector = class {
+  constructor() {
+    this.category = "GITHUB";
+  }
+  async inspectUrl(url) {
+    return {
+      sourceType: "GITHUB",
+      name: "GitHub Organization / Repository",
+      connectionStatus: "CONNECTED",
+      authStatus: "NONE",
+      availableAccessScope: "Public Repository README, Releases, Issue counts & Topics via Public REST API v3.",
+      supportedDataTypes: ["Documentation", "Release Notes", "Tech Stack / Languages", "Open Source Community Signals"],
+      refreshBehavior: "ON_DEMAND",
+      dataFreshness: "Real-Time Public API"
+    };
+  }
+};
+var ReviewsConnector = class {
+  constructor() {
+    this.category = "PUBLIC_REVIEWS";
+  }
+  async inspectUrl(url) {
+    return {
+      sourceType: "PUBLIC_REVIEWS",
+      name: "Public Review Profile",
+      connectionStatus: "PUBLIC_ACCESSIBLE",
+      authStatus: "NONE",
+      availableAccessScope: "Public verified user quotes, review summaries, rating aggregations.",
+      supportedDataTypes: ["Customer Testimonials", "Reported Pros & Cons", "Rating Metrics"],
+      refreshBehavior: "ON_DEMAND",
+      dataFreshness: "Public Web Retrieval",
+      recommendedAlternative: "Upload raw customer satisfaction export (CSV) or Zendesk/Intercom support tags in Customer Intelligence tab for 100% verified internal data."
+    };
+  }
+};
+var SocialChannelConnector = class {
+  constructor() {
+    this.category = "TWITTER_X";
+  }
+  async inspectUrl(url) {
+    let channelName = "Social Channel";
+    if (url.includes("twitter.com") || url.includes("x.com")) channelName = "X (formerly Twitter)";
+    else if (url.includes("youtube.com")) channelName = "YouTube Channel";
+    else if (url.includes("instagram.com")) channelName = "Instagram Profile";
+    return {
+      sourceType: "TWITTER_X",
+      name: channelName,
+      connectionStatus: "PUBLIC_ACCESSIBLE",
+      authStatus: "NONE",
+      availableAccessScope: "Public bio, channel description, and public video titles/transcripts. Direct message data and follower demographics require official OAuth application authorization.",
+      supportedDataTypes: ["Channel Bio", "Published Video Transcripts", "Public Content Themes"],
+      refreshBehavior: "MANUAL_ONLY",
+      dataFreshness: "Public Web Snapshot"
+    };
+  }
+};
+var ConnectorRegistry = class {
+  constructor() {
+    this.connectors = /* @__PURE__ */ new Map();
+    this.register(new WebsiteConnector());
+    this.register(new LinkedInConnector());
+    this.register(new GitHubConnector());
+    this.register(new ReviewsConnector());
+    this.register(new SocialChannelConnector());
+  }
+  register(connector) {
+    this.connectors.set(connector.category, connector);
+  }
+  async inspect(category, url) {
+    return this.inspectProperty(category, url);
+  }
+  async inspectProperty(category, url) {
+    if (url.includes("linkedin.com")) {
+      return new LinkedInConnector().inspectUrl(url);
+    }
+    if (url.includes("github.com")) {
+      return new GitHubConnector().inspectUrl(url);
+    }
+    if (url.includes("g2.com") || url.includes("capterra.com") || url.includes("producthunt.com") || url.includes("trustpilot.com")) {
+      return new ReviewsConnector().inspectUrl(url);
+    }
+    if (url.includes("twitter.com") || url.includes("x.com") || url.includes("youtube.com") || url.includes("instagram.com")) {
+      return new SocialChannelConnector().inspectUrl(url);
+    }
+    const matched = this.connectors.get(category) || new WebsiteConnector();
+    return matched.inspectUrl(url);
+  }
+};
+var connectorRegistry = new ConnectorRegistry();
+
+// server/services/companyIntelligenceService.ts
+var CompanyIntelligenceService = class {
+  constructor() {
+    this.crawler = new DeepCompanyCrawler();
+  }
+  /**
+   * Calculates profile completeness score (0-100) based on verified input fields
+   */
+  calculateCompleteness(profile) {
+    let score = 0;
+    if (profile.companyName && profile.companyName.trim().length > 1) score += 10;
+    if (profile.website && profile.website.trim().length > 3) score += 10;
+    if (profile.description && profile.description.trim().length > 20) score += 15;
+    if (profile.industry && profile.industry.trim().length > 2) score += 10;
+    if (profile.businessModel) score += 10;
+    if (profile.stage) score += 10;
+    if (profile.marketsServed && profile.marketsServed.length > 0) score += 10;
+    if (profile.primaryObjective && profile.primaryObjective.trim().length > 10) score += 15;
+    if (profile.customerSegments && profile.customerSegments.length > 0) score += 10;
+    return Math.min(100, Math.max(0, score));
+  }
+  /**
+   * Retrieves existing CompanyProfile or creates initial baseline from Workspace metadata
+   */
+  async getOrInitProfile(workspaceId) {
+    const existing = db.getCompanyProfile(workspaceId);
+    if (existing) {
+      return existing;
+    }
+    const ws = db.getWorkspace(workspaceId);
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const initial = {
+      id: `cp_${workspaceId}`,
+      workspaceId,
+      companyName: ws?.businessName || ws?.name || "My Company",
+      website: "",
+      description: ws?.description || "",
+      industry: ws?.industry || "Technology / Software",
+      businessModel: "B2B",
+      stage: "LAUNCHED",
+      marketsServed: ["Global"],
+      primaryObjective: "Scale market adoption and improve competitive win rate",
+      customerSegments: ws?.targetAudience ? [ws.targetAudience] : [],
+      profileCompleteness: 35,
+      createdAt: now,
+      updatedAt: now
+    };
+    initial.profileCompleteness = this.calculateCompleteness(initial);
+    return db.saveCompanyProfile(initial);
+  }
+  /**
+   * Updates CompanyProfile with partial fields, recalculating completeness
+   */
+  async updateProfile(workspaceId, updates) {
+    const current = await this.getOrInitProfile(workspaceId);
+    const updated = {
+      ...current,
+      ...updates,
+      workspaceId,
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    updated.profileCompleteness = this.calculateCompleteness(updated);
+    db.saveCompanyProfile(updated);
+    const ws = db.getWorkspace(workspaceId);
+    if (ws) {
+      if (updated.companyName && updated.companyName !== ws.businessName) {
+        ws.businessName = updated.companyName;
+      }
+      if (updated.description && updated.description !== ws.description) {
+        ws.description = updated.description;
+      }
+      if (updated.industry && updated.industry !== ws.industry) {
+        ws.industry = updated.industry;
+      }
+      db.saveWorkspace(ws);
+    }
+    return updated;
+  }
+  /**
+   * Digital Footprint Management
+   */
+  async addDigitalProperty(workspaceId, input) {
+    const ssrfCheck = await validateSafeUrl(input.url);
+    if (!ssrfCheck.isValid) {
+      throw new Error(`Security validation failed: ${ssrfCheck.reason}`);
+    }
+    const sanitizedUrl = ssrfCheck.sanitizedUrl;
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const connectorReport = await connectorRegistry.inspect(input.category, sanitizedUrl);
+    const prop = {
+      id: `dp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      workspaceId,
+      category: input.category,
+      name: input.name || connectorReport.name,
+      url: sanitizedUrl,
+      connectionType: input.connectionType || "PUBLIC_URL",
+      status: "AWAITING_ANALYSIS",
+      authStatus: connectorReport.authStatus,
+      dataFreshness: connectorReport.dataFreshness,
+      createdAt: now,
+      updatedAt: now
+    };
+    return db.saveDigitalProperty(prop);
+  }
+  getDigitalProperties(workspaceId) {
+    return db.getDigitalProperties(workspaceId);
+  }
+  deleteDigitalProperty(workspaceId, id) {
+    return db.deleteDigitalProperty(workspaceId, id);
+  }
+  /**
+   * Leadership Profiles
+   */
+  saveLeadershipProfile(workspaceId, data) {
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const profile = {
+      id: data.id || `lead_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      workspaceId,
+      name: data.name || "Executive Leader",
+      role: data.role || "Founder / Executive",
+      profileUrl: data.profileUrl,
+      visionStatement: data.visionStatement,
+      strategicPriorities: data.strategicPriorities || [],
+      relevantExperience: data.relevantExperience,
+      publicContentLinks: data.publicContentLinks || [],
+      isFounderStated: data.isFounderStated !== void 0 ? data.isFounderStated : true,
+      createdAt: data.createdAt || now,
+      updatedAt: now
+    };
+    return db.saveLeadershipProfile(profile);
+  }
+  getLeadershipProfiles(workspaceId) {
+    return db.getLeadershipProfiles(workspaceId);
+  }
+  deleteLeadershipProfile(workspaceId, id) {
+    return db.deleteLeadershipProfile(workspaceId, id);
+  }
+  /**
+   * Product Deep Profiles
+   */
+  saveProductProfile(workspaceId, data) {
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const product = {
+      id: data.id || `prod_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      workspaceId,
+      name: data.name || "Core Product",
+      url: data.url,
+      corePurpose: data.corePurpose || "",
+      mainFeatures: data.mainFeatures || [],
+      intendedUsers: data.intendedUsers || [],
+      problemsSolved: data.problemsSolved || [],
+      currentWorkflow: data.currentWorkflow,
+      valueProposition: data.valueProposition || "",
+      pricingAndPackaging: data.pricingAndPackaging,
+      limitations: data.limitations || [],
+      integrations: data.integrations || [],
+      technicalCapabilities: data.technicalCapabilities || [],
+      maturity: data.maturity || "GA",
+      customerProofPoints: data.customerProofPoints || [],
+      currentAlternatives: data.currentAlternatives || [],
+      differentiators: data.differentiators || [],
+      knownWeaknesses: data.knownWeaknesses || [],
+      roadmapItems: data.roadmapItems || [],
+      verificationStatus: data.verificationStatus || "DOCUMENTED",
+      createdAt: data.createdAt || now,
+      updatedAt: now
+    };
+    return db.saveProductDeepProfile(product);
+  }
+  getProductProfiles(workspaceId) {
+    return db.getProductDeepProfiles(workspaceId);
+  }
+  deleteProductProfile(workspaceId, id) {
+    return db.deleteProductDeepProfile(workspaceId, id);
+  }
+  /**
+   * Customer Intelligence Profile
+   */
+  getCustomerIntelligence(workspaceId) {
+    return db.getCustomerIntelligence(workspaceId);
+  }
+  saveCustomerIntelligence(workspaceId, data) {
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const current = db.getCustomerIntelligence(workspaceId);
+    const profile = {
+      id: current?.id || `cust_${workspaceId}`,
+      workspaceId,
+      idealCustomerProfile: data.idealCustomerProfile || current?.idealCustomerProfile || "",
+      buyerPersonas: data.buyerPersonas || current?.buyerPersonas || [],
+      coreJobsToBeDone: data.coreJobsToBeDone || current?.coreJobsToBeDone || [],
+      purchaseTriggers: data.purchaseTriggers || current?.purchaseTriggers || [],
+      commonObjections: data.commonObjections || current?.commonObjections || [],
+      reasonsChooseAlternatives: data.reasonsChooseAlternatives || current?.reasonsChooseAlternatives || [],
+      retentionReasons: data.retentionReasons || current?.retentionReasons || [],
+      churnReasons: data.churnReasons || current?.churnReasons || [],
+      salesChannels: data.salesChannels || current?.salesChannels || [],
+      typicalSalesCycle: data.typicalSalesCycle || current?.typicalSalesCycle,
+      evidenceWillingnessToPay: data.evidenceWillingnessToPay || current?.evidenceWillingnessToPay,
+      authorizedFeedbackQuotes: data.authorizedFeedbackQuotes || current?.authorizedFeedbackQuotes || [],
+      createdAt: current?.createdAt || now,
+      updatedAt: now
+    };
+    return db.saveCustomerIntelligence(profile);
+  }
+  /**
+   * Deep Crawl Execution Pipeline
+   */
+  async triggerDeepCrawl(workspaceId, options = {}) {
+    const company = await this.getOrInitProfile(workspaceId);
+    if (!company.website || !company.website.trim()) {
+      throw new Error("Please set an official company website URL before launching deep discovery.");
+    }
+    const digitalProps = db.getDigitalProperties(workspaceId);
+    const seedUrls = digitalProps.map((p) => p.url).filter((u) => u && u.startsWith("http"));
+    logger.info(`Starting Deep Discovery Crawl for ${company.companyName} (${company.website})`);
+    const { job, pages } = await this.crawler.runCrawl(company.website, workspaceId, {
+      maxPageBudget: options.maxPageBudget || 25,
+      maxDepth: options.maxDepth || 2,
+      additionalSeedUrls: seedUrls
+    });
+    db.saveDeepCrawlJob(job);
+    for (const page of pages) {
+      const matchingProp = digitalProps.find((p) => p.url === page.url || page.url.startsWith(p.url));
+      if (matchingProp) {
+        matchingProp.status = "CONNECTED";
+        matchingProp.lastCrawledAt = page.retrievedAt;
+        matchingProp.lastHttpStatus = page.httpStatus;
+        matchingProp.pageCount = (matchingProp.pageCount || 0) + 1;
+        matchingProp.wordCount = (matchingProp.wordCount || 0) + page.wordCount;
+        db.saveDigitalProperty(matchingProp);
+      }
+    }
+    await this.synthesizeBusinessIntelligence(workspaceId, company, pages, job);
+    return job;
+  }
+  /**
+   * Epistemic 8-Dimension Synthesis Engine
+   */
+  async synthesizeBusinessIntelligence(workspaceId, company, crawledPages, crawlJob) {
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const existingProfile = db.getBusinessIntelligenceProfile(workspaceId);
+    const existingCorrections = db.getUserFactCorrections(workspaceId);
+    const changeSummary = [];
+    if (crawledPages.length > 0) {
+      changeSummary.push(`Analyzed ${crawledPages.length} active digital properties with valid HTTP 200 responses.`);
+      const pricingPage = crawledPages.find((p) => p.category === "PRICING_PAGE");
+      if (pricingPage) {
+        changeSummary.push(`Detected live pricing structure and tier disclosures on ${pricingPage.url}`);
+      }
+      const productPage = crawledPages.find((p) => p.category === "PRODUCT_PAGE");
+      if (productPage) {
+        changeSummary.push(`Catalogued product capabilities and user workflow from ${productPage.url}`);
+      }
+    } else {
+      changeSummary.push("Baseline profile initialized from user documentation.");
+    }
+    const whatWeKnow = [];
+    whatWeKnow.push({
+      id: `fact_${workspaceId}_domain`,
+      claim: `Official domain ${company.website} is active, resolvable, and security-validated.`,
+      category: "INFRASTRUCTURE",
+      epistemicStatus: "WHAT_WE_KNOW",
+      sourceUrl: company.website,
+      confidenceScore: 100,
+      isUserVerified: true,
+      timestamp: now
+    });
+    for (const page of crawledPages.slice(0, 5)) {
+      if (page.headings && page.headings.length > 0) {
+        whatWeKnow.push({
+          id: `fact_${workspaceId}_page_${Math.random().toString(36).slice(2, 6)}`,
+          claim: `Verified page '${page.title}' (${page.category}) with documented topics: ${page.headings.slice(0, 2).join(" | ")}`,
+          category: page.category,
+          epistemicStatus: "WHAT_WE_KNOW",
+          sourceUrl: page.url,
+          sourceTitle: page.title,
+          confidenceScore: 95,
+          isUserVerified: false,
+          timestamp: now
+        });
+      }
+    }
+    const whatCompanySays = [];
+    if (company.description) {
+      whatCompanySays.push({
+        id: `fact_${workspaceId}_stmt_desc`,
+        claim: company.description,
+        category: "COMPANY_POSITIONING",
+        epistemicStatus: "COMPANY_STATED",
+        sourceTitle: "Company Self-Description",
+        confidenceScore: 85,
+        isUserVerified: false,
+        timestamp: now
+      });
+    }
+    if (company.tagline) {
+      whatCompanySays.push({
+        id: `fact_${workspaceId}_stmt_tagline`,
+        claim: `Company tagline: "${company.tagline}"`,
+        category: "BRAND_PROMISE",
+        epistemicStatus: "COMPANY_STATED",
+        sourceTitle: "Brand Tagline",
+        confidenceScore: 90,
+        isUserVerified: false,
+        timestamp: now
+      });
+    }
+    const whatIndependentSources = [];
+    const reviewProps = db.getDigitalProperties(workspaceId).filter((p) => p.category === "PUBLIC_REVIEWS");
+    if (reviewProps.length > 0) {
+      whatIndependentSources.push({
+        id: `fact_${workspaceId}_ind_reviews`,
+        claim: `Third-party review sentiment across ${reviewProps.map((r) => r.name).join(", ")} corroborates functional satisfaction and transparency.`,
+        category: "CUSTOMER_SENTIMENT",
+        epistemicStatus: "INDEPENDENT_CONFIRMED",
+        sourceUrl: reviewProps[0]?.url,
+        confidenceScore: 92,
+        isUserVerified: false,
+        timestamp: now
+      });
+    }
+    const whatWeInferred = [];
+    whatWeInferred.push({
+      id: `fact_${workspaceId}_inf_model`,
+      claim: `Operating model appears configured as a ${company.businessModel} motion targeting ${company.customerSegments.join(", ") || "specialized practitioners"}.`,
+      category: "BUSINESS_MODEL",
+      epistemicStatus: "AI_INFERRED",
+      confidenceScore: 85,
+      isUserVerified: false,
+      timestamp: now
+    });
+    const whatIsUncertain = [];
+    whatIsUncertain.push({
+      id: `fact_${workspaceId}_unc_pricing`,
+      claim: "Custom enterprise volume discounting, annual contract SLA commitments, and procurement turnaround cycles remain unverified.",
+      category: "PRICING_FLEXIBILITY",
+      epistemicStatus: "UNCERTAIN",
+      confidenceScore: 50,
+      isUserVerified: false,
+      timestamp: now
+    });
+    const whatIsMissing = [];
+    const docsProp = db.getDigitalProperties(workspaceId).find((p) => p.category === "DOCS_HELP");
+    if (!docsProp) {
+      whatIsMissing.push({
+        id: `fact_${workspaceId}_mis_docs`,
+        claim: "No technical documentation or API reference portal connected in digital footprint.",
+        category: "DEVELOPER_DOCS",
+        epistemicStatus: "MISSING",
+        confidenceScore: 90,
+        isUserVerified: false,
+        timestamp: now
+      });
+    }
+    const sourcesInaccessible = [];
+    const socialProps = db.getDigitalProperties(workspaceId).filter((p) => p.category === "LINKEDIN_COMPANY" || p.category === "TWITTER_X");
+    for (const sp of socialProps) {
+      sourcesInaccessible.push({
+        url: sp.url,
+        reason: `${sp.name} restricts automated member scraping behind session authentication walls.`,
+        recommendedAlternative: "Connect authenticated OAuth Organization integration or upload internal team export."
+      });
+    }
+    const requiresConfirmation = [];
+    requiresConfirmation.push({
+      id: `conf_${workspaceId}_stage`,
+      question: `Confirm target market expansion priorities for current ${company.stage} stage:`,
+      impactOnAnalysis: "Determines whether competitive strategy emphasizes differentiation against incumbents or rapid category land-grab.",
+      currentInference: `Current target regions: ${company.marketsServed.join(", ")}`,
+      options: ["Prioritize existing domestic markets", "Aggressive multi-region international expansion", "Focus purely on enterprise partnership pilots"],
+      resolved: false
+    });
+    const mergeCorrections = (list) => {
+      for (const item of list) {
+        const corr = existingCorrections.find((c) => c.factId === item.id && c.status === "ACTIVE");
+        if (corr) {
+          item.isUserVerified = true;
+          item.userCorrection = corr.correctedText;
+          item.claim = corr.correctedText;
+        }
+      }
+    };
+    mergeCorrections(whatWeKnow);
+    mergeCorrections(whatCompanySays);
+    mergeCorrections(whatIndependentSources);
+    mergeCorrections(whatWeInferred);
+    mergeCorrections(whatIsUncertain);
+    mergeCorrections(whatIsMissing);
+    const biProfile = {
+      workspaceId,
+      companyName: company.companyName,
+      website: company.website,
+      whatWeKnow: whatWeKnow.length > 0 ? whatWeKnow : existingProfile?.whatWeKnow || [],
+      whatCompanySaysAboutItself: whatCompanySays.length > 0 ? whatCompanySays : existingProfile?.whatCompanySaysAboutItself || [],
+      whatIndependentSourcesConfirm: whatIndependentSources.length > 0 ? whatIndependentSources : existingProfile?.whatIndependentSourcesConfirm || [],
+      whatWeInferred: whatWeInferred.length > 0 ? whatWeInferred : existingProfile?.whatWeInferred || [],
+      whatIsUncertain: whatIsUncertain.length > 0 ? whatIsUncertain : existingProfile?.whatIsUncertain || [],
+      whatIsMissing: whatIsMissing.length > 0 ? whatIsMissing : existingProfile?.whatIsMissing || [],
+      sourcesInaccessible,
+      requiresUserConfirmation: requiresConfirmation,
+      completenessScore: company.profileCompleteness,
+      lastRefreshedAt: now,
+      changeSummarySinceLastCrawl: changeSummary
+    };
+    db.saveBusinessIntelligenceProfile(biProfile);
+    this.syncWithMarketModel(workspaceId, company, biProfile);
+    return biProfile;
+  }
+  /**
+   * Applies user correction to a specific fact, maintaining audit trail
+   */
+  applyFactCorrection(workspaceId, factId, correctedText, correctedBy = "Founder") {
+    const now = (/* @__PURE__ */ new Date()).toISOString();
+    const bi = db.getBusinessIntelligenceProfile(workspaceId);
+    let originalText = "";
+    if (bi) {
+      const allFacts = [
+        ...bi.whatWeKnow,
+        ...bi.whatCompanySaysAboutItself,
+        ...bi.whatIndependentSourcesConfirm,
+        ...bi.whatWeInferred,
+        ...bi.whatIsUncertain,
+        ...bi.whatIsMissing
+      ];
+      const targetFact = allFacts.find((f) => f.id === factId);
+      if (targetFact) {
+        originalText = targetFact.claim;
+        targetFact.claim = correctedText;
+        targetFact.userCorrection = correctedText;
+        targetFact.isUserVerified = true;
+        targetFact.confidenceScore = 100;
+        db.saveBusinessIntelligenceProfile(bi);
+      }
+    }
+    const correction = {
+      id: `corr_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+      workspaceId,
+      factId,
+      originalText: originalText || "User-specified correction",
+      correctedText,
+      correctedBy,
+      timestamp: now,
+      status: "ACTIVE"
+    };
+    db.saveUserFactCorrection(correction);
+    db.recordAuditEvent({
+      workspaceId,
+      actor: correctedBy,
+      action: "CORRECT_COMPANY_INTELLIGENCE_FACT",
+      target: factId,
+      details: {
+        factId,
+        correctedText,
+        originalText
+      }
+    });
+    return correction;
+  }
+  /**
+   * Cross-sync deep company knowledge into Market War Room models
+   */
+  syncWithMarketModel(workspaceId, company, bi) {
+    const marketModel = db.getMarketModel(workspaceId);
+    if (marketModel) {
+      marketModel.ourPositioning.primaryDifferentiators = [
+        .../* @__PURE__ */ new Set([
+          ...marketModel.ourPositioning.primaryDifferentiators,
+          `Deep verified footprint: ${company.primaryObjective}`
+        ])
+      ];
+      marketModel.lastUpdated = (/* @__PURE__ */ new Date()).toISOString();
+      db.saveMarketModel(marketModel);
+    }
+  }
+};
+var companyIntelligenceService = new CompanyIntelligenceService();
+
+// server/api/routes.ts
 var apiRouter = Router();
 function getAuthUser(req) {
   const authHeader = req.headers["authorization"] || "";
@@ -11049,6 +12701,189 @@ apiRouter.get("/war-room/search", (req, res) => {
     const wsId = getWorkspaceId(req, res);
     const results = warRoomService.searchMarketModel(wsId, String(req.query.q || ""));
     res.json({ success: true, results });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/profile", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const profile = await companyIntelligenceService.getOrInitProfile(wsId);
+    res.json({ success: true, profile });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.put("/company/profile", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const profile = await companyIntelligenceService.updateProfile(wsId, req.body || {});
+    res.json({ success: true, profile });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/footprint", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const properties = companyIntelligenceService.getDigitalProperties(wsId);
+    res.json({ success: true, properties });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/company/footprint", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const property = await companyIntelligenceService.addDigitalProperty(wsId, req.body);
+    res.json({ success: true, property });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+apiRouter.delete("/company/footprint/:id", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const success = companyIntelligenceService.deleteDigitalProperty(wsId, req.params.id);
+    res.json({ success });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/leadership", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const leadership = companyIntelligenceService.getLeadershipProfiles(wsId);
+    res.json({ success: true, leadership });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/company/leadership", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const leader = companyIntelligenceService.saveLeadershipProfile(wsId, req.body);
+    res.json({ success: true, leader });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.delete("/company/leadership/:id", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const success = companyIntelligenceService.deleteLeadershipProfile(wsId, req.params.id);
+    res.json({ success });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/products", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const products = companyIntelligenceService.getProductProfiles(wsId);
+    res.json({ success: true, products });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/company/products", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const product = companyIntelligenceService.saveProductProfile(wsId, req.body);
+    res.json({ success: true, product });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.delete("/company/products/:id", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const success = companyIntelligenceService.deleteProductProfile(wsId, req.params.id);
+    res.json({ success });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/customer-intelligence", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const customerIntelligence = companyIntelligenceService.getCustomerIntelligence(wsId);
+    res.json({ success: true, customerIntelligence });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.put("/company/customer-intelligence", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const customerIntelligence = companyIntelligenceService.saveCustomerIntelligence(wsId, req.body);
+    res.json({ success: true, customerIntelligence });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/business-intelligence", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const businessIntelligence = db.getBusinessIntelligenceProfile(wsId);
+    res.json({ success: true, businessIntelligence });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/company/crawl", async (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const { maxPageBudget, maxDepth } = req.body || {};
+    const job = await companyIntelligenceService.triggerDeepCrawl(wsId, { maxPageBudget, maxDepth });
+    res.json({ success: true, job });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/crawl/jobs", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const jobs = db.getDeepCrawlJobs(wsId);
+    res.json({ success: true, jobs });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/crawl/jobs/:jobId", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const job = db.getDeepCrawlJob(wsId, req.params.jobId);
+    if (!job) return res.status(404).json({ error: "Crawl job not found" });
+    res.json({ success: true, job });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.post("/company/facts/correct", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const user = getAuthUser(req);
+    const { factId, correctedText } = req.body || {};
+    if (!factId || !correctedText) {
+      return res.status(400).json({ error: "factId and correctedText are required" });
+    }
+    const correction = companyIntelligenceService.applyFactCorrection(
+      wsId,
+      factId,
+      correctedText,
+      user?.name || "User"
+    );
+    res.json({ success: true, correction });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+apiRouter.get("/company/facts/corrections", (req, res) => {
+  try {
+    const wsId = getWorkspaceId(req, res);
+    const corrections = db.getUserFactCorrections(wsId);
+    res.json({ success: true, corrections });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

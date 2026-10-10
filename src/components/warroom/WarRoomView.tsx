@@ -24,7 +24,8 @@ import {
   Users,
   Briefcase,
   DollarSign,
-  Cpu
+  Cpu,
+  Building2,
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { useWorkspace } from '../../context/WorkspaceContext';
@@ -312,6 +313,14 @@ export const WarRoomView: React.FC = () => {
             >
               <Play className="w-3.5 h-3.5 text-purple-600 fill-current" />
               Scenario Simulator
+            </button>
+
+            <button
+              onClick={() => setActiveView('company')}
+              className="px-3 py-2 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-xs font-semibold text-indigo-900 transition-all flex items-center gap-1.5 shadow-2xs"
+            >
+              <Building2 className="w-3.5 h-3.5 text-indigo-600" />
+              Company Intelligence
             </button>
 
             <button

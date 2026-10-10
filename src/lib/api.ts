@@ -33,6 +33,15 @@ import {
   CompanyScorecard,
   ExecutiveBrief,
   MarketKnowledgeGraph,
+  CompanyProfile,
+  DigitalProperty,
+  DigitalPropertyCategory,
+  LeadershipProfile,
+  ProductDeepProfile,
+  CustomerIntelligenceProfile,
+  BusinessIntelligenceProfile,
+  DeepCrawlJob,
+  UserFactCorrection,
 } from '../types';
 
 const getStorageItem = (key: string): string | null => {
@@ -561,5 +570,56 @@ export const api = {
   getStrategicDecisions: () => request<{ success: boolean; decisions: StrategicDecision[] }>('/api/war-room/decisions'),
   getStrategicExperiments: () => request<{ success: boolean; experiments: StrategicExperiment[] }>('/api/war-room/experiments'),
   searchWarRoom: (q: string) => request<any>(`/api/war-room/search?q=${encodeURIComponent(q)}`),
+
+  // ----------------------------------------------------
+  // Deep Company Intelligence & Digital Footprint
+  // ----------------------------------------------------
+  getCompanyProfile: () => request<{ success: boolean; profile: CompanyProfile }>('/api/company/profile'),
+  updateCompanyProfile: (profile: Partial<CompanyProfile>) =>
+    request<{ success: boolean; profile: CompanyProfile }>('/api/company/profile', {
+      method: 'PUT',
+      body: JSON.stringify(profile),
+    }),
+  getDigitalProperties: () => request<{ success: boolean; properties: DigitalProperty[] }>('/api/company/footprint'),
+  addDigitalProperty: (property: { category: DigitalPropertyCategory; name: string; url: string; connectionType?: string }) =>
+    request<{ success: boolean; property: DigitalProperty }>('/api/company/footprint', {
+      method: 'POST',
+      body: JSON.stringify(property),
+    }),
+  deleteDigitalProperty: (id: string) => request<{ success: boolean }>(`/api/company/footprint/${id}`, { method: 'DELETE' }),
+  getLeadershipProfiles: () => request<{ success: boolean; leadership: LeadershipProfile[] }>('/api/company/leadership'),
+  saveLeadershipProfile: (leader: Partial<LeadershipProfile>) =>
+    request<{ success: boolean; leader: LeadershipProfile }>('/api/company/leadership', {
+      method: 'POST',
+      body: JSON.stringify(leader),
+    }),
+  deleteLeadershipProfile: (id: string) => request<{ success: boolean }>(`/api/company/leadership/${id}`, { method: 'DELETE' }),
+  getProductProfiles: () => request<{ success: boolean; products: ProductDeepProfile[] }>('/api/company/products'),
+  saveProductProfile: (product: Partial<ProductDeepProfile>) =>
+    request<{ success: boolean; product: ProductDeepProfile }>('/api/company/products', {
+      method: 'POST',
+      body: JSON.stringify(product),
+    }),
+  deleteProductProfile: (id: string) => request<{ success: boolean }>(`/api/company/products/${id}`, { method: 'DELETE' }),
+  getCustomerIntelligence: () => request<{ success: boolean; customerIntelligence: CustomerIntelligenceProfile | null }>('/api/company/customer-intelligence'),
+  saveCustomerIntelligence: (cust: Partial<CustomerIntelligenceProfile>) =>
+    request<{ success: boolean; customerIntelligence: CustomerIntelligenceProfile }>('/api/company/customer-intelligence', {
+      method: 'PUT',
+      body: JSON.stringify(cust),
+    }),
+  getBusinessIntelligence: () => request<{ success: boolean; businessIntelligence: BusinessIntelligenceProfile | null }>('/api/company/business-intelligence'),
+  triggerDeepCrawl: (options?: { maxPageBudget?: number; maxDepth?: number }) =>
+    request<{ success: boolean; job: DeepCrawlJob }>('/api/company/crawl', {
+      method: 'POST',
+      body: JSON.stringify(options || {}),
+    }),
+  getDeepCrawlJobs: () => request<{ success: boolean; jobs: DeepCrawlJob[] }>('/api/company/crawl/jobs'),
+  getDeepCrawlJob: (jobId: string) => request<{ success: boolean; job: DeepCrawlJob }>(`/api/company/crawl/jobs/${jobId}`),
+  correctFact: (factId: string, correctedText: string) =>
+    request<{ success: boolean; correction: UserFactCorrection }>('/api/company/facts/correct', {
+      method: 'POST',
+      body: JSON.stringify({ factId, correctedText }),
+    }),
+  getFactCorrections: () => request<{ success: boolean; corrections: UserFactCorrection[] }>('/api/company/facts/corrections'),
 };
 

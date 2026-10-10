@@ -43,6 +43,14 @@ import {
   CompanyScorecard,
   ExecutiveBrief,
   MarketKnowledgeGraph,
+  CompanyProfile,
+  DigitalProperty,
+  LeadershipProfile,
+  ProductDeepProfile,
+  CustomerIntelligenceProfile,
+  BusinessIntelligenceProfile,
+  DeepCrawlJob,
+  UserFactCorrection,
 } from '../types';
 import { logger } from '../utils/logger';
 
@@ -223,6 +231,14 @@ export class PersistentDatabaseStore {
   private strategicExperiments: Map<string, StrategicExperiment> = new Map();
   private companyScorecards: Map<string, CompanyScorecard> = new Map();
   private executiveBriefs: Map<string, ExecutiveBrief> = new Map();
+  private companyProfiles: Map<string, CompanyProfile> = new Map();
+  private digitalProperties: Map<string, DigitalProperty> = new Map();
+  private leadershipProfiles: Map<string, LeadershipProfile> = new Map();
+  private productDeepProfiles: Map<string, ProductDeepProfile> = new Map();
+  private customerIntelligenceProfiles: Map<string, CustomerIntelligenceProfile> = new Map();
+  private businessIntelligenceProfiles: Map<string, BusinessIntelligenceProfile> = new Map();
+  private deepCrawlJobs: Map<string, DeepCrawlJob> = new Map();
+  private userFactCorrections: Map<string, UserFactCorrection> = new Map();
 
   constructor() {
     const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME);
@@ -277,6 +293,7 @@ export class PersistentDatabaseStore {
     }
 
     this.seedWarRoomDataIfEmpty();
+    this.seedCompanyIntelligenceIfEmpty();
     this.saveToDiskSync();
   }
 
@@ -370,6 +387,14 @@ export class PersistentDatabaseStore {
       if (parsed.strategicExperiments) this.strategicExperiments = new Map(parsed.strategicExperiments);
       if (parsed.companyScorecards) this.companyScorecards = new Map(parsed.companyScorecards);
       if (parsed.executiveBriefs) this.executiveBriefs = new Map(parsed.executiveBriefs);
+      if (parsed.companyProfiles) this.companyProfiles = new Map(parsed.companyProfiles);
+      if (parsed.digitalProperties) this.digitalProperties = new Map(parsed.digitalProperties);
+      if (parsed.leadershipProfiles) this.leadershipProfiles = new Map(parsed.leadershipProfiles);
+      if (parsed.productDeepProfiles) this.productDeepProfiles = new Map(parsed.productDeepProfiles);
+      if (parsed.customerIntelligenceProfiles) this.customerIntelligenceProfiles = new Map(parsed.customerIntelligenceProfiles);
+      if (parsed.businessIntelligenceProfiles) this.businessIntelligenceProfiles = new Map(parsed.businessIntelligenceProfiles);
+      if (parsed.deepCrawlJobs) this.deepCrawlJobs = new Map(parsed.deepCrawlJobs);
+      if (parsed.userFactCorrections) this.userFactCorrections = new Map(parsed.userFactCorrections);
 
       // Auto-migrate legacy avatar URLs to individual distinct initials / custom avatars
       for (const [uid, user] of this.users.entries()) {
@@ -449,6 +474,14 @@ export class PersistentDatabaseStore {
         strategicExperiments: Array.from(this.strategicExperiments.entries()),
         companyScorecards: Array.from(this.companyScorecards.entries()),
         executiveBriefs: Array.from(this.executiveBriefs.entries()),
+        companyProfiles: Array.from(this.companyProfiles.entries()),
+        digitalProperties: Array.from(this.digitalProperties.entries()),
+        leadershipProfiles: Array.from(this.leadershipProfiles.entries()),
+        productDeepProfiles: Array.from(this.productDeepProfiles.entries()),
+        customerIntelligenceProfiles: Array.from(this.customerIntelligenceProfiles.entries()),
+        businessIntelligenceProfiles: Array.from(this.businessIntelligenceProfiles.entries()),
+        deepCrawlJobs: Array.from(this.deepCrawlJobs.entries()),
+        userFactCorrections: Array.from(this.userFactCorrections.entries()),
       };
 
       const dataDir = path.dirname(this.dataFilePath);
@@ -1070,6 +1103,10 @@ export class PersistentDatabaseStore {
       summary: event.summary || event.details?.message || `War Room action: ${event.action || 'updated'}`,
       details: event.details || {},
     });
+  }
+
+  recordAuditEvent(event: any): AuditEvent {
+    return this.logAuditEvent(event);
   }
 
   listAuditEvents(workspaceId: string, limit = 50): AuditEvent[] {
@@ -2366,6 +2403,531 @@ export class PersistentDatabaseStore {
     this.executiveBriefs.set(brief.workspaceId, brief);
     this.scheduleSave();
     return brief;
+  }
+
+  // ==========================================
+  // DEEP COMPANY INTELLIGENCE & DIGITAL FOOTPRINT
+  // ==========================================
+
+  private seedCompanyIntelligenceIfEmpty(): void {
+    const workspacesToSeed = [DEMO_WORKSPACE_ID, 'ws_default_prod'];
+    const now = new Date().toISOString();
+
+    for (const wsId of workspacesToSeed) {
+      if (!this.companyProfiles.has(wsId)) {
+        const cp: CompanyProfile = {
+          id: `cp_${wsId}`,
+          workspaceId: wsId,
+          companyName: 'NextGen Resume AI',
+          website: 'https://nextgenresume.ai',
+          tagline: 'AI-powered ATS resume & technical interview acceleration platform',
+          description: 'NextGen Resume AI provides verified ATS scoring, role-specific achievement bullet point formulation, and AI mock interview simulations tailored to junior engineers and career switchers.',
+          industry: 'EdTech / Career Services / SaaS',
+          subcategory: 'AI Career Acceleration',
+          businessModel: 'B2C',
+          stage: 'GROWING',
+          marketsServed: ['United States', 'Canada', 'United Kingdom', 'India'],
+          companySize: '11-50 employees',
+          primaryObjective: 'Scale monthly active subscribers by 4x, launch enterprise university campus pilot program, and maintain 4.8+ star CSAT.',
+          customerSegments: ['Recent CS graduates', 'Junior software engineers', 'Coding bootcamp alumni', 'Career switchers targeting tech'],
+          profileCompleteness: 94,
+          createdAt: now,
+          updatedAt: now,
+        };
+        this.companyProfiles.set(wsId, cp);
+
+        // Seed digital properties
+        const props: DigitalProperty[] = [
+          {
+            id: `dp_${wsId}_web`,
+            workspaceId: wsId,
+            category: 'OFFICIAL_WEBSITE',
+            name: 'Official Website',
+            url: 'https://nextgenresume.ai',
+            connectionType: 'PUBLIC_URL',
+            status: 'CONNECTED',
+            authStatus: 'NONE',
+            lastCrawledAt: now,
+            lastHttpStatus: 200,
+            pageCount: 14,
+            wordCount: 8420,
+            dataFreshness: 'Live Web (On-Demand Fetch)',
+            createdAt: now,
+            updatedAt: now,
+          },
+          {
+            id: `dp_${wsId}_pricing`,
+            workspaceId: wsId,
+            category: 'PRICING_PAGE',
+            name: 'Pricing & Tiers',
+            url: 'https://nextgenresume.ai/pricing',
+            connectionType: 'PUBLIC_URL',
+            status: 'CONNECTED',
+            authStatus: 'NONE',
+            lastCrawledAt: now,
+            lastHttpStatus: 200,
+            pageCount: 1,
+            wordCount: 1250,
+            dataFreshness: 'Live Web (On-Demand Fetch)',
+            createdAt: now,
+            updatedAt: now,
+          },
+          {
+            id: `dp_${wsId}_github`,
+            workspaceId: wsId,
+            category: 'GITHUB',
+            name: 'GitHub Organization',
+            url: 'https://github.com/nextgenresume',
+            connectionType: 'PUBLIC_URL',
+            status: 'CONNECTED',
+            authStatus: 'NONE',
+            lastCrawledAt: now,
+            lastHttpStatus: 200,
+            pageCount: 6,
+            wordCount: 3120,
+            dataFreshness: 'Real-Time Public API',
+            createdAt: now,
+            updatedAt: now,
+          },
+          {
+            id: `dp_${wsId}_linkedin`,
+            workspaceId: wsId,
+            category: 'LINKEDIN_COMPANY',
+            name: 'LinkedIn Company Page',
+            url: 'https://linkedin.com/company/nextgenresume',
+            connectionType: 'PUBLIC_URL',
+            status: 'CONNECTED',
+            authStatus: 'NONE',
+            lastCrawledAt: now,
+            lastHttpStatus: 200,
+            pageCount: 1,
+            wordCount: 420,
+            dataFreshness: 'Public Snapshot',
+            createdAt: now,
+            updatedAt: now,
+          },
+          {
+            id: `dp_${wsId}_reviews`,
+            workspaceId: wsId,
+            category: 'PUBLIC_REVIEWS',
+            name: 'G2 / Trustpilot Reviews',
+            url: 'https://www.g2.com/products/nextgenresume/reviews',
+            connectionType: 'PUBLIC_URL',
+            status: 'CONNECTED',
+            authStatus: 'NONE',
+            lastCrawledAt: now,
+            lastHttpStatus: 200,
+            pageCount: 1,
+            wordCount: 2890,
+            dataFreshness: 'Public Aggregated Review Sentiment',
+            createdAt: now,
+            updatedAt: now,
+          },
+        ];
+        props.forEach(p => this.digitalProperties.set(p.id, p));
+
+        // Seed leadership
+        const leader: LeadershipProfile = {
+          id: `lead_${wsId}_1`,
+          workspaceId: wsId,
+          name: 'Alex Chen',
+          role: 'Founder & CEO',
+          profileUrl: 'https://linkedin.com/in/alexchen-founder',
+          visionStatement: 'Eliminate arbitrary applicant screening bias by giving every job seeker access to top-tier resume engineering and authentic interview coaching.',
+          strategicPriorities: [
+            'Maintain zero-dark-patterns pricing with cancel-anytime guarantee',
+            'Deliver verified ATS keyword match accuracy above 96%',
+            'Launch university career center enterprise partnership pilot',
+          ],
+          relevantExperience: 'Former Senior Technical Recruiter and Staff Engineer at Series B hyper-growth SaaS.',
+          publicContentLinks: ['https://nextgenresume.ai/blog/why-jobseekers-hate-resume-builders'],
+          isFounderStated: true,
+          createdAt: now,
+          updatedAt: now,
+        };
+        this.leadershipProfiles.set(leader.id, leader);
+
+        // Seed product
+        const prod: ProductDeepProfile = {
+          id: `prod_${wsId}_1`,
+          workspaceId: wsId,
+          name: 'NextGen Resume Pro',
+          url: 'https://nextgenresume.ai/features',
+          corePurpose: 'End-to-end ATS resume builder, bullet point impact quantifier, and technical mock interview simulator',
+          mainFeatures: [
+            'Targeted Job Match Keyword Gap Analyzer',
+            'STAR-Method Quantifiable Metric Formulator',
+            'ATS Parser Diagnostic (Greenhouse, Lever, Workday compliance)',
+            'Interactive Voice & Text Mock Interview Coach',
+          ],
+          intendedUsers: [
+            'Recent computer science graduates',
+            'Junior software engineers & bootcamp pivoters',
+            'Tech professionals aiming for promotion or career transition',
+          ],
+          problemsSolved: [
+            'Resumes failing automated ATS parse screening due to improper formatting',
+            'Vague bullet points lacking quantified metrics or scope',
+            'Predatory competitor paywalls charging $90 quarterly upfront at download',
+          ],
+          currentWorkflow: 'Import existing PDF/DOCX or LinkedIn profile, select target job posting URL, view keyword gap heat-map, click to auto-optimize bullet metrics, export clean verified ATS PDF.',
+          valueProposition: 'Land 3x more technical interviews within 30 days with verified ATS optimization and honest monthly pricing.',
+          pricingAndPackaging: 'Free tier (1 resume, basic scan); Pro Tier $19/month cancel-anytime; Student Lifetime Pass $49 one-time.',
+          limitations: [
+            'Requires user to provide genuine project details; does not fabricate artificial work experience.',
+          ],
+          integrations: ['GitHub Repositories', 'LinkedIn PDF Export', 'Greenhouse & Lever ATS Formats'],
+          technicalCapabilities: ['Real-time regex & token scoring', 'PDF text layer extraction', 'Keyword clustering & lemmatization'],
+          maturity: 'GA',
+          customerProofPoints: [
+            'Over 14,000 resumes scanned with average callback increase of 2.8x',
+            '4.8/5 average CSAT across verified G2 & Reddit reviews',
+          ],
+          currentAlternatives: ['Kickresume', 'Jobscan', 'Teal', 'ChatGPT generic prompts'],
+          differentiators: [
+            'Zero hidden paywalls or surprise quarterly auto-renewals',
+            'Deep technical recruiter calibration rather than generic buzzwords',
+            'Integrated GitHub repository project bullet synthesizer',
+          ],
+          knownWeaknesses: [
+            'No physical career coach 1-on-1 calls (purely AI-guided)',
+            'Limited non-English language template coverage currently',
+          ],
+          roadmapItems: [
+            'University Career Center multi-seat management portal',
+            'Automated follow-up thank-you email generator',
+            'Multi-language European CV format localization',
+          ],
+          verificationStatus: 'DOCUMENTED',
+          createdAt: now,
+          updatedAt: now,
+        };
+        this.productDeepProfiles.set(prod.id, prod);
+
+        // Seed Customer Intelligence
+        const cust: CustomerIntelligenceProfile = {
+          id: `cust_${wsId}`,
+          workspaceId: wsId,
+          idealCustomerProfile: 'Tech-focused job seekers (0-3 years experience) applying to 20+ software engineering roles per month with high urgency to secure employment.',
+          buyerPersonas: [
+            'Recent Computer Science Graduate',
+            'Coding Bootcamp Career Switcher',
+            'Laid-off Junior Engineer Seeking Rapid Re-employment',
+          ],
+          coreJobsToBeDone: [
+            'Ensure resume passes automated ATS keyword screening without rejection',
+            'Quantify engineering achievements using the STAR methodology',
+            'Practice answering role-specific behavioral and technical interview questions',
+          ],
+          purchaseTriggers: [
+            'Applying to 50+ roles without a single recruiter screening callback',
+            'Receiving an unexpected interview invitation and needing fast prep',
+            'Frustration with predatory competitors charging $89.85 upfront after completing a 45-minute form',
+          ],
+          commonObjections: [
+            'Can I not just paste my resume into ChatGPT for free?',
+            'Will the generated PDF actually parse cleanly in Workday?',
+            'Will I get billed indefinitely after I land a job?',
+          ],
+          reasonsChooseAlternatives: [
+            'Greater brand recognition of older legacy tools (Kickresume, Jobscan)',
+            'Free basic graphic design templates on Canva for non-technical roles',
+          ],
+          retentionReasons: [
+            'Active job searchers keep Pro active until signed offer letter',
+            'Mock interview module provides ongoing value through final loop',
+          ],
+          churnReasons: [
+            'Candidate successfully lands target role (healthy, intended graduation churn)',
+          ],
+          salesChannels: [
+            'Organic Search & Technical SEO (ATS resume keyword guides)',
+            'Reddit community discussions (r/cscareerquestions, r/resumes)',
+            'University Career Center referral partnerships',
+            'TikTok / YouTube short-form career advice channels',
+          ],
+          typicalSalesCycle: '1-3 days from initial organic search landing to conversion',
+          evidenceWillingnessToPay: 'High willingness to pay $19/mo or $49 one-time; strong resistance to forced quarterly commitments exceeding $80.',
+          authorizedFeedbackQuotes: [
+            {
+              quote: 'After 3 months of silence, NextGen flagged that Workday was dropping my skills section. Fixed it and got 2 interviews in one week.',
+              source: 'Verified G2 Review',
+              date: '2026-08-15',
+            },
+            {
+              quote: 'Actually lets you download your resume without demanding $90 at checkout. Honest product.',
+              source: 'Reddit r/jobs',
+              date: '2026-08-22',
+            },
+          ],
+          createdAt: now,
+          updatedAt: now,
+        };
+        this.customerIntelligenceProfiles.set(wsId, cust);
+
+        // Seed 8-Dimension Business Intelligence Profile
+        const bi: BusinessIntelligenceProfile = {
+          workspaceId: wsId,
+          companyName: 'NextGen Resume AI',
+          website: 'https://nextgenresume.ai',
+          completenessScore: 94,
+          lastRefreshedAt: now,
+          changeSummarySinceLastCrawl: [
+            'Verified active pricing tier: $19/mo with cancel-anytime guarantee.',
+            'Confirmed 14 public product pages indexed and responsive.',
+            'Audited 4.8/5 CSAT rating across verified community reviews.',
+          ],
+          whatWeKnow: [
+            {
+              id: `fact_${wsId}_1`,
+              claim: 'NextGen Resume AI provides an ATS resume builder with verifiable keyword scoring and mock interview prep.',
+              category: 'CORE_CAPABILITY',
+              epistemicStatus: 'WHAT_WE_KNOW',
+              sourceUrl: 'https://nextgenresume.ai/features',
+              sourceTitle: 'Product Features Overview',
+              supportingQuote: 'Real-time ATS parsing diagnostic and STAR bullet formulation.',
+              confidenceScore: 98,
+              isUserVerified: true,
+              timestamp: now,
+            },
+            {
+              id: `fact_${wsId}_2`,
+              claim: 'Official pricing model is $19/month with cancel-anytime policy and $49 student lifetime option.',
+              category: 'PRICING',
+              epistemicStatus: 'WHAT_WE_KNOW',
+              sourceUrl: 'https://nextgenresume.ai/pricing',
+              sourceTitle: 'Transparent Pricing',
+              supportingQuote: 'Simple $19/mo plan. No quarterly trap, cancel anytime in one click.',
+              confidenceScore: 100,
+              isUserVerified: true,
+              timestamp: now,
+            },
+          ],
+          whatCompanySaysAboutItself: [
+            {
+              id: `fact_${wsId}_3`,
+              claim: 'Company claims users experience a 3x increase in interview callbacks within 30 days.',
+              category: 'VALUE_PROPOSITION',
+              epistemicStatus: 'COMPANY_STATED',
+              sourceUrl: 'https://nextgenresume.ai',
+              sourceTitle: 'Hero Section Headline',
+              supportingQuote: 'Land 3x more technical interviews in 30 days with verified ATS optimization.',
+              confidenceScore: 82,
+              isUserVerified: false,
+              timestamp: now,
+            },
+          ],
+          whatIndependentSourcesConfirm: [
+            {
+              id: `fact_${wsId}_4`,
+              claim: 'Independent user reviews on G2 and Reddit corroborate that download has no hidden fees and ATS formatting parses correctly.',
+              category: 'CUSTOMER_SENTIMENT',
+              epistemicStatus: 'INDEPENDENT_CONFIRMED',
+              sourceUrl: 'https://www.g2.com/products/nextgenresume/reviews',
+              sourceTitle: 'G2 Verified Reviews',
+              supportingQuote: 'Actually lets you download your resume without demanding $90 at checkout. Honest product.',
+              confidenceScore: 94,
+              isUserVerified: false,
+              timestamp: now,
+            },
+          ],
+          whatWeInferred: [
+            {
+              id: `fact_${wsId}_5`,
+              claim: 'Primary customer acquisition engine is organic search traffic and word-of-mouth referral on Reddit career communities.',
+              category: 'GROWTH_CHANNELS',
+              epistemicStatus: 'AI_INFERRED',
+              confidenceScore: 88,
+              isUserVerified: false,
+              timestamp: now,
+            },
+          ],
+          whatIsUncertain: [
+            {
+              id: `fact_${wsId}_6`,
+              claim: 'Expected contract values and procurement timeline for university career center pilot programs remain unverified.',
+              category: 'ENTERPRISE_EXPANSION',
+              epistemicStatus: 'UNCERTAIN',
+              confidenceScore: 45,
+              isUserVerified: false,
+              timestamp: now,
+            },
+          ],
+          whatIsMissing: [
+            {
+              id: `fact_${wsId}_7`,
+              claim: 'Published SOC2 Type II compliance report and FERPA student data privacy compliance documentation for enterprise university sales.',
+              category: 'COMPLIANCE',
+              epistemicStatus: 'MISSING',
+              confidenceScore: 90,
+              isUserVerified: false,
+              timestamp: now,
+            },
+          ],
+          sourcesInaccessible: [
+            {
+              url: 'https://linkedin.com/company/nextgenresume/people',
+              reason: 'LinkedIn member demographics and detailed alumni tracking require authenticated organization OAuth integration.',
+              recommendedAlternative: 'Connect LinkedIn OAuth Organization account under Digital Footprint settings to pull verified team growth metrics.',
+            },
+          ],
+          requiresUserConfirmation: [
+            {
+              id: `conf_${wsId}_1`,
+              question: 'Do you plan to release multi-language European CV templates (Europass) in the next product sprint?',
+              impactOnAnalysis: 'Impacts competitive positioning against Kickresume in the EU market.',
+              currentInference: 'Current product footprint is English-only, primarily serving North America and UK.',
+              options: ['Yes, actively developing for Q4', 'No, strictly focusing on English-speaking markets', 'Evaluating customer demand'],
+              resolved: false,
+            },
+          ],
+        };
+        this.businessIntelligenceProfiles.set(wsId, bi);
+      }
+    }
+  }
+
+  // Company Profile
+  getCompanyProfile(workspaceId: string): CompanyProfile | null {
+    return this.companyProfiles.get(workspaceId) || null;
+  }
+
+  saveCompanyProfile(profile: CompanyProfile): CompanyProfile {
+    profile.updatedAt = new Date().toISOString();
+    this.companyProfiles.set(profile.workspaceId, profile);
+    this.scheduleSave();
+    return profile;
+  }
+
+  // Digital Properties
+  getDigitalProperties(workspaceId: string): DigitalProperty[] {
+    return Array.from(this.digitalProperties.values())
+      .filter(p => p.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  getDigitalProperty(workspaceId: string, id: string): DigitalProperty | null {
+    const prop = this.digitalProperties.get(id);
+    return prop && prop.workspaceId === workspaceId ? prop : null;
+  }
+
+  saveDigitalProperty(prop: DigitalProperty): DigitalProperty {
+    prop.updatedAt = new Date().toISOString();
+    this.digitalProperties.set(prop.id, prop);
+    this.scheduleSave();
+    return prop;
+  }
+
+  deleteDigitalProperty(workspaceId: string, id: string): boolean {
+    const prop = this.digitalProperties.get(id);
+    if (prop && prop.workspaceId === workspaceId) {
+      this.digitalProperties.delete(id);
+      this.scheduleSave();
+      return true;
+    }
+    return false;
+  }
+
+  // Leadership Profiles
+  getLeadershipProfiles(workspaceId: string): LeadershipProfile[] {
+    return Array.from(this.leadershipProfiles.values())
+      .filter(l => l.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  saveLeadershipProfile(profile: LeadershipProfile): LeadershipProfile {
+    profile.updatedAt = new Date().toISOString();
+    this.leadershipProfiles.set(profile.id, profile);
+    this.scheduleSave();
+    return profile;
+  }
+
+  deleteLeadershipProfile(workspaceId: string, id: string): boolean {
+    const profile = this.leadershipProfiles.get(id);
+    if (profile && profile.workspaceId === workspaceId) {
+      this.leadershipProfiles.delete(id);
+      this.scheduleSave();
+      return true;
+    }
+    return false;
+  }
+
+  // Product Deep Profiles
+  getProductDeepProfiles(workspaceId: string): ProductDeepProfile[] {
+    return Array.from(this.productDeepProfiles.values())
+      .filter(p => p.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  }
+
+  saveProductDeepProfile(product: ProductDeepProfile): ProductDeepProfile {
+    product.updatedAt = new Date().toISOString();
+    this.productDeepProfiles.set(product.id, product);
+    this.scheduleSave();
+    return product;
+  }
+
+  deleteProductDeepProfile(workspaceId: string, id: string): boolean {
+    const prod = this.productDeepProfiles.get(id);
+    if (prod && prod.workspaceId === workspaceId) {
+      this.productDeepProfiles.delete(id);
+      this.scheduleSave();
+      return true;
+    }
+    return false;
+  }
+
+  // Customer Intelligence
+  getCustomerIntelligence(workspaceId: string): CustomerIntelligenceProfile | null {
+    return this.customerIntelligenceProfiles.get(workspaceId) || null;
+  }
+
+  saveCustomerIntelligence(profile: CustomerIntelligenceProfile): CustomerIntelligenceProfile {
+    profile.updatedAt = new Date().toISOString();
+    this.customerIntelligenceProfiles.set(profile.workspaceId, profile);
+    this.scheduleSave();
+    return profile;
+  }
+
+  // Business Intelligence Profile (8 Dimensions)
+  getBusinessIntelligenceProfile(workspaceId: string): BusinessIntelligenceProfile | null {
+    return this.businessIntelligenceProfiles.get(workspaceId) || null;
+  }
+
+  saveBusinessIntelligenceProfile(profile: BusinessIntelligenceProfile): BusinessIntelligenceProfile {
+    this.businessIntelligenceProfiles.set(profile.workspaceId, profile);
+    this.scheduleSave();
+    return profile;
+  }
+
+  // Deep Crawl Jobs
+  getDeepCrawlJobs(workspaceId: string): DeepCrawlJob[] {
+    return Array.from(this.deepCrawlJobs.values())
+      .filter(j => j.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime());
+  }
+
+  getDeepCrawlJob(workspaceId: string, jobId: string): DeepCrawlJob | null {
+    const job = this.deepCrawlJobs.get(jobId);
+    return job && job.workspaceId === workspaceId ? job : null;
+  }
+
+  saveDeepCrawlJob(job: DeepCrawlJob): DeepCrawlJob {
+    this.deepCrawlJobs.set(job.id, job);
+    this.scheduleSave();
+    return job;
+  }
+
+  // User Fact Corrections
+  getUserFactCorrections(workspaceId: string): UserFactCorrection[] {
+    return Array.from(this.userFactCorrections.values())
+      .filter(c => c.workspaceId === workspaceId)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }
+
+  saveUserFactCorrection(correction: UserFactCorrection): UserFactCorrection {
+    this.userFactCorrections.set(correction.id, correction);
+    this.scheduleSave();
+    return correction;
   }
 }
 

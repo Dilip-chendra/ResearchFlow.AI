@@ -1260,3 +1260,246 @@ export interface WarRoomOverviewResponse {
   scorecard: CompanyScorecard | null;
   executiveBrief: ExecutiveBrief | null;
 }
+
+// ==========================================
+// DEEP COMPANY INTELLIGENCE & DIGITAL FOOTPRINT
+// ==========================================
+
+export type BusinessModelType =
+  | 'B2B'
+  | 'B2C'
+  | 'B2B2C'
+  | 'MARKETPLACE'
+  | 'SAAS'
+  | 'SERVICES'
+  | 'OPEN_SOURCE'
+  | 'OTHER';
+
+export type CompanyStage = 'IDEA' | 'PRE_LAUNCH' | 'LAUNCHED' | 'GROWING' | 'ESTABLISHED';
+
+export interface CompanyProfile {
+  id: string;
+  workspaceId: string;
+  companyName: string;
+  website: string;
+  tagline?: string;
+  description: string;
+  industry: string;
+  subcategory?: string;
+  businessModel: BusinessModelType;
+  stage: CompanyStage;
+  marketsServed: string[];
+  companySize?: string;
+  primaryObjective: string;
+  customerSegments: string[];
+  lastAnalyzedAt?: string;
+  profileCompleteness: number; // 0-100
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type DigitalPropertyCategory =
+  | 'OFFICIAL_WEBSITE'
+  | 'PRICING_PAGE'
+  | 'PRODUCT_PAGE'
+  | 'ABOUT_PAGE'
+  | 'DOCS_HELP'
+  | 'BLOG_NEWS'
+  | 'CASE_STUDIES'
+  | 'CAREERS'
+  | 'LINKEDIN_COMPANY'
+  | 'FOUNDER_PROFILE'
+  | 'TWITTER_X'
+  | 'GITHUB'
+  | 'PRODUCT_HUNT'
+  | 'PUBLIC_REVIEWS'
+  | 'APP_STORE'
+  | 'INVESTOR_NEWS'
+  | 'OTHER';
+
+export type DigitalConnectionStatus =
+  | 'DISCOVERED'
+  | 'AWAITING_ANALYSIS'
+  | 'CRAWLING'
+  | 'CONNECTED'
+  | 'ACCESS_RESTRICTED'
+  | 'FAILED';
+
+export interface DigitalProperty {
+  id: string;
+  workspaceId: string;
+  category: DigitalPropertyCategory;
+  name: string;
+  url: string;
+  connectionType: 'PUBLIC_URL' | 'OAUTH' | 'DOCUMENT_UPLOAD';
+  status: DigitalConnectionStatus;
+  authStatus: 'NONE' | 'AUTHORIZED' | 'EXPIRED' | 'UNAUTHORIZED';
+  lastCrawledAt?: string;
+  lastHttpStatus?: number;
+  errorMessage?: string;
+  pageCount?: number;
+  wordCount?: number;
+  dataFreshness?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LeadershipProfile {
+  id: string;
+  workspaceId: string;
+  name: string;
+  role: string;
+  profileUrl?: string;
+  visionStatement?: string;
+  strategicPriorities: string[];
+  relevantExperience?: string;
+  publicContentLinks: string[];
+  isFounderStated: boolean; // Distinguishes founder's own words from AI inference
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProductDeepProfile {
+  id: string;
+  workspaceId: string;
+  name: string;
+  url?: string;
+  corePurpose: string;
+  mainFeatures: string[];
+  intendedUsers: string[];
+  problemsSolved: string[];
+  currentWorkflow?: string;
+  valueProposition: string;
+  pricingAndPackaging?: string;
+  limitations: string[];
+  integrations: string[];
+  technicalCapabilities: string[];
+  maturity: 'BETA' | 'EARLY_ACCESS' | 'GA' | 'MATURE' | 'LEGACY';
+  customerProofPoints: string[];
+  currentAlternatives: string[];
+  differentiators: string[];
+  knownWeaknesses: string[];
+  roadmapItems: string[];
+  verificationStatus: 'DOCUMENTED' | 'USER_SUPPLIED' | 'UNKNOWN';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CustomerIntelligenceProfile {
+  id: string;
+  workspaceId: string;
+  idealCustomerProfile: string;
+  buyerPersonas: string[];
+  coreJobsToBeDone: string[];
+  purchaseTriggers: string[];
+  commonObjections: string[];
+  reasonsChooseAlternatives: string[];
+  retentionReasons: string[];
+  churnReasons: string[];
+  salesChannels: string[];
+  typicalSalesCycle?: string;
+  evidenceWillingnessToPay?: string;
+  authorizedFeedbackQuotes: {
+    quote: string;
+    source: string;
+    date?: string;
+  }[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type EpistemicStatus =
+  | 'WHAT_WE_KNOW'
+  | 'COMPANY_STATED'
+  | 'INDEPENDENTLY_CONFIRMED'
+  | 'AI_INFERRED'
+  | 'UNCERTAIN'
+  | 'MISSING';
+
+export interface FactEntry {
+  id: string;
+  claim: string;
+  category: string;
+  epistemicStatus: EpistemicStatus;
+  sourceUrl?: string;
+  sourceTitle?: string;
+  supportingQuote?: string;
+  confidenceScore: number; // 0-100
+  isUserVerified: boolean;
+  userCorrection?: string;
+  timestamp: string;
+}
+
+export interface InaccessibleSourceEntry {
+  url: string;
+  reason: string;
+  recommendedAlternative: string;
+}
+
+export interface ConfirmationEntry {
+  id: string;
+  question: string;
+  impactOnAnalysis: string;
+  currentInference: string;
+  options?: string[];
+  resolved: boolean;
+  userResponse?: string;
+}
+
+export interface BusinessIntelligenceProfile {
+  workspaceId: string;
+  companyName: string;
+  website: string;
+  whatWeKnow: FactEntry[];
+  whatCompanySaysAboutItself: FactEntry[];
+  whatIndependentSourcesConfirm: FactEntry[];
+  whatWeInferred: FactEntry[];
+  whatIsUncertain: FactEntry[];
+  whatIsMissing: FactEntry[];
+  sourcesInaccessible: InaccessibleSourceEntry[];
+  requiresUserConfirmation: ConfirmationEntry[];
+  completenessScore: number; // 0-100
+  lastRefreshedAt: string;
+  changeSummarySinceLastCrawl?: string[];
+}
+
+export interface UserFactCorrection {
+  id: string;
+  workspaceId: string;
+  factId: string;
+  originalText: string;
+  correctedText: string;
+  correctedBy: string;
+  timestamp: string;
+  status: 'ACTIVE' | 'REVOKED';
+}
+
+export interface CrawlPageRecord {
+  url: string;
+  title: string;
+  category: string;
+  httpStatus: number;
+  wordCount: number;
+  sha256Hash: string;
+  status: 'SUCCESS' | 'SKIPPED_DUPLICATE' | 'SKIPPED_ROBOTS' | 'FAILED';
+  failureReason?: string;
+  crawledAt: string;
+}
+
+export interface DeepCrawlJob {
+  id: string;
+  workspaceId: string;
+  rootUrl: string;
+  status: 'PENDING' | 'DISCOVERING' | 'CRAWLING' | 'ANALYZING' | 'COMPLETED' | 'PARTIAL' | 'FAILED';
+  pagesDiscovered: number;
+  pagesAnalyzed: number;
+  pagesSkipped: number;
+  pagesFailed: number;
+  maxPageBudget: number;
+  maxDepth: number;
+  crawlInventory: CrawlPageRecord[];
+  startedAt: string;
+  completedAt?: string;
+  errorMessage?: string;
+}
+

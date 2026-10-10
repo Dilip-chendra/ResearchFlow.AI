@@ -13,6 +13,7 @@ import { EvaluationView } from './components/evaluation/EvaluationView';
 import { AuditView } from './components/audit/AuditView';
 import { SettingsView } from './components/settings/SettingsView';
 import { ArchitectureView } from './components/architecture/ArchitectureView';
+import { CompanyIntelligenceDashboard } from './components/company/CompanyIntelligenceDashboard';
 import { NewResearchModal } from './components/research/NewResearchModal';
 import { AuthView } from './components/auth/AuthView';
 import { LandingPage } from './components/landing/LandingPage';
@@ -141,6 +142,7 @@ const MainApp: React.FC = () => {
         <Sidebar />
         <main className="flex-1 p-4 md:p-6 lg:p-10 pb-24 md:pb-10 max-w-7xl w-full mx-auto overflow-x-hidden overflow-y-auto">
           {activeView === 'overview' && <OverviewDashboard />}
+          {activeView === 'company' && <CompanyIntelligenceDashboard />}
           {activeView === 'war-room' && <WarRoomView />}
           {activeView === 'research' && <ResearchListView />}
           {activeView === 'evidence' && <EvidenceExplorerView />}
