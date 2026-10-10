@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useWorkspace } from '../../context/WorkspaceContext';
+import { useWorkspace, getClientAccountBackup, saveClientAccountBackup } from '../../context/WorkspaceContext';
 import { Sparkles, Shield, ArrowRight, Lock, Mail, User, Building, CheckCircle2 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { BrandLogo } from '../brand/BrandLogo';
@@ -104,6 +104,16 @@ export const AuthView: React.FC<AuthViewProps> = ({
     setLoading(true);
     try {
       await api.resetPassword(resetToken.trim(), newPassword.trim());
+      const normalizedEmail = email.trim().toLowerCase();
+      const backup = getClientAccountBackup(normalizedEmail);
+      if (backup) {
+        saveClientAccountBackup({
+          ...backup,
+          password: newPassword.trim(),
+          updatedAt: new Date().toISOString(),
+        });
+      }
+      setPassword(newPassword.trim());
       addToast('Password reset successful! You can now log in.', 'success');
       setMode('login');
       setResetSent(false);

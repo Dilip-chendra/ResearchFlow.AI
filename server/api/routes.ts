@@ -234,7 +234,7 @@ apiRouter.post('/profile/avatar', handleUploadAvatar);
 apiRouter.delete('/auth/profile/avatar', handleRemoveAvatar);
 apiRouter.delete('/profile/avatar', handleRemoveAvatar);
 
-apiRouter.post('/auth/signup', (req: Request, res: Response) => {
+apiRouter.post(['/auth/signup', '/auth/register'], (req: Request, res: Response) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
   if (!email || !name) {
     return res.status(400).json({ error: 'Email and full name are required for signup.' });
@@ -248,31 +248,38 @@ apiRouter.post('/auth/signup', (req: Request, res: Response) => {
       avatarUrl,
     });
 
-    // Auto-create personal workspace for new user
-    const initialWorkspace = db.createWorkspace({
-      id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      name: workspaceName || `${name}'s Workspace`,
-      businessName: businessName || `${name}'s Product`,
-      description: req.body.description || `Autonomous market intelligence and campaign workspace for ${businessName || name}.`,
-      industry: industry || 'Technology & Digital Services',
-      targetAudience: targetAudience || 'Founders, marketers, and decision makers',
-      ownerId: user.id,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
+    // Auto-create personal workspace for new user if they have none
+    const existingWorkspaces = db.getWorkspacesForUser(user.id);
+    let activeWorkspaceId = existingWorkspaces[0]?.id;
 
-    // Add user as owner member
-    db.addMember({
-      id: `mem_${Date.now()}`,
-      workspaceId: initialWorkspace.id,
-      name: user.name,
-      email: user.email,
-      role: 'OWNER',
-      title: 'Founder & CEO',
-      department: 'Leadership',
-      avatarUrl: user.avatarUrl,
-      joinedAt: new Date().toISOString(),
-    });
+    if (existingWorkspaces.length === 0) {
+      const initialWorkspace = db.createWorkspace({
+        id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: workspaceName || `${name}'s Workspace`,
+        businessName: businessName || `${name}'s Product`,
+        description: req.body.description || `Autonomous market intelligence and campaign workspace for ${businessName || name}.`,
+        industry: industry || 'Technology & Digital Services',
+        targetAudience: targetAudience || 'Founders, marketers, and decision makers',
+        ownerId: user.id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+
+      // Add user as owner member
+      db.addMember({
+        id: `mem_${Date.now()}`,
+        workspaceId: initialWorkspace.id,
+        name: user.name,
+        email: user.email,
+        role: 'OWNER',
+        title: 'Founder & CEO',
+        department: 'Leadership',
+        avatarUrl: user.avatarUrl,
+        joinedAt: new Date().toISOString(),
+      });
+
+      activeWorkspaceId = initialWorkspace.id;
+    }
 
     const workspaces = db.getWorkspacesForUser(user.id);
 
@@ -280,7 +287,7 @@ apiRouter.post('/auth/signup', (req: Request, res: Response) => {
       user,
       token,
       workspaces,
-      activeWorkspaceId: initialWorkspace.id,
+      activeWorkspaceId: activeWorkspaceId || workspaces[0]?.id || '',
     });
   } catch (err: any) {
     logger.warn('Signup failed:', err.message);
@@ -289,12 +296,49 @@ apiRouter.post('/auth/signup', (req: Request, res: Response) => {
 });
 
 apiRouter.post('/auth/login', (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, clientAccountSync } = req.body;
   if (!email) {
     return res.status(400).json({ error: 'Email is required.' });
   }
 
-  const authResult = db.authenticateUser(email, password);
+  let authResult = db.authenticateUser(email, password);
+
+  // Cold container recovery: if account is not found in memory but client has verified backup
+  if (!authResult && clientAccountSync && clientAccountSync.name && password) {
+    try {
+      const reg = db.registerUser({
+        email,
+        password,
+        name: clientAccountSync.name,
+      });
+      const ws = db.createWorkspace({
+        id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: clientAccountSync.workspaceName || `${clientAccountSync.name}'s Workspace`,
+        businessName: clientAccountSync.businessName || `${clientAccountSync.name}'s Product`,
+        description: `Autonomous market intelligence and campaign workspace for ${clientAccountSync.businessName || clientAccountSync.name}.`,
+        industry: clientAccountSync.industry || 'Technology & Digital Services',
+        targetAudience: 'Founders, marketers, and decision makers',
+        ownerId: reg.user.id,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+      db.addMember({
+        id: `mem_${Date.now()}`,
+        workspaceId: ws.id,
+        name: reg.user.name,
+        email: reg.user.email,
+        role: 'OWNER',
+        title: 'Founder & CEO',
+        department: 'Leadership',
+        avatarUrl: reg.user.avatarUrl,
+        joinedAt: new Date().toISOString(),
+      });
+      authResult = { user: reg.user, token: reg.token };
+    } catch (syncErr: any) {
+      logger.warn('Client sync recovery attempt:', syncErr.message);
+    }
+  }
+
   if (!authResult) {
     // If not found, check if it's default founder demo
     if (email.toLowerCase() === 'founder@researchflow.ai' || email.toLowerCase() === 'alex@growthlabs.io') {

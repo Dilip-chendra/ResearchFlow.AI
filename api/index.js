@@ -414,6 +414,10 @@ var init_store = __esm({
         }
       }
       scheduleSave() {
+        if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+          this.saveToDiskSync();
+          return;
+        }
         if (this.saveDebounceTimer) {
           clearTimeout(this.saveDebounceTimer);
         }
@@ -513,10 +517,43 @@ var init_store = __esm({
       // ----------------------------------------------------
       registerUser(data) {
         const normalizedEmail = data.email.trim().toLowerCase();
-        if (this.userAccounts.has(normalizedEmail)) {
+        let existingAccount = this.userAccounts.get(normalizedEmail);
+        if (!existingAccount) {
+          for (const [accEmail, acc] of this.userAccounts.entries()) {
+            if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+              existingAccount = acc;
+              break;
+            }
+          }
+        }
+        if (existingAccount && existingAccount.passwordHash) {
+          if (data.password) {
+            const candidateHash = this.hashPassword(data.password, existingAccount.salt);
+            if (candidateHash === existingAccount.passwordHash) {
+              let user2 = this.getUser(existingAccount.id);
+              if (!user2) {
+                user2 = {
+                  id: existingAccount.id,
+                  email: existingAccount.email,
+                  name: existingAccount.name,
+                  displayName: existingAccount.displayName || existingAccount.name,
+                  avatarType: existingAccount.avatarType || "INITIALS",
+                  avatarValue: existingAccount.avatarValue || this.computeInitials(existingAccount.name),
+                  avatarUrl: existingAccount.avatarUrl || "",
+                  profileImageUrl: existingAccount.profileImageUrl || "",
+                  createdAt: existingAccount.createdAt,
+                  updatedAt: existingAccount.updatedAt
+                };
+                this.users.set(user2.id, user2);
+              }
+              const token2 = this.createSession(user2.id);
+              this.saveToDiskSync();
+              return { user: user2, token: token2 };
+            }
+          }
           throw new Error(`An account with email "${data.email}" already exists.`);
         }
-        const userId = `usr_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
+        const userId = existingAccount?.id || `usr_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
         const salt = crypto.randomBytes(16).toString("hex");
         const passwordHash = this.hashPassword(data.password || crypto.randomBytes(16).toString("hex"), salt);
         const displayName = data.displayName || data.name.trim();
@@ -561,7 +598,7 @@ var init_store = __esm({
         this.users.set(userId, user);
         this.userAccounts.set(normalizedEmail, account);
         const token = this.createSession(userId);
-        this.scheduleSave();
+        this.saveToDiskSync();
         return { user, token };
       }
       updateUserProfile(userId, updates) {
@@ -642,7 +679,15 @@ var init_store = __esm({
       }
       authenticateUser(email, password) {
         const normalizedEmail = email.trim().toLowerCase();
-        const account = this.userAccounts.get(normalizedEmail);
+        let account = this.userAccounts.get(normalizedEmail);
+        if (!account) {
+          for (const [accEmail, acc] of this.userAccounts.entries()) {
+            if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+              account = acc;
+              break;
+            }
+          }
+        }
         if (!account) return null;
         if (password) {
           const candidateHash = this.hashPassword(password, account.salt);
@@ -650,9 +695,24 @@ var init_store = __esm({
             return null;
           }
         }
-        const user = this.users.get(account.id);
-        if (!user) return null;
+        let user = this.getUser(account.id);
+        if (!user) {
+          user = {
+            id: account.id,
+            email: account.email,
+            name: account.name,
+            displayName: account.displayName || account.name,
+            avatarType: account.avatarType || "INITIALS",
+            avatarValue: account.avatarValue || this.computeInitials(account.name),
+            avatarUrl: account.avatarUrl || "",
+            profileImageUrl: account.profileImageUrl || "",
+            createdAt: account.createdAt,
+            updatedAt: account.updatedAt
+          };
+          this.users.set(user.id, user);
+        }
         const token = this.createSession(user.id);
+        this.saveToDiskSync();
         return { user, token };
       }
       createSession(userId) {
@@ -664,7 +724,7 @@ var init_store = __esm({
           expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1e3).toISOString()
         };
         this.sessions.set(token, session);
-        this.scheduleSave();
+        this.saveToDiskSync();
         return token;
       }
       getSessionUser(token) {
@@ -673,25 +733,63 @@ var init_store = __esm({
         if (!session) return null;
         if (new Date(session.expiresAt).getTime() < Date.now()) {
           this.sessions.delete(token);
-          this.scheduleSave();
+          this.saveToDiskSync();
           return null;
         }
         return this.getUser(session.userId) || null;
       }
       invalidateSession(token) {
         const deleted = this.sessions.delete(token);
-        if (deleted) this.scheduleSave();
+        if (deleted) this.saveToDiskSync();
         return deleted;
       }
       createPasswordResetToken(email) {
         const normalizedEmail = email.trim().toLowerCase();
-        const account = this.userAccounts.get(normalizedEmail);
-        if (!account) return null;
+        let account = this.userAccounts.get(normalizedEmail);
+        if (!account) {
+          for (const [accEmail, acc] of this.userAccounts.entries()) {
+            if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+              account = acc;
+              break;
+            }
+          }
+        }
         const resetToken = crypto.randomBytes(24).toString("hex");
-        account.resetToken = resetToken;
-        account.resetTokenExpires = Date.now() + 36e5;
-        this.userAccounts.set(normalizedEmail, account);
-        this.scheduleSave();
+        const resetTokenExpires = Date.now() + 36e5;
+        if (!account) {
+          const userId = `usr_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`;
+          const salt = crypto.randomBytes(16).toString("hex");
+          const name = normalizedEmail.split("@")[0];
+          const user = {
+            id: userId,
+            email: normalizedEmail,
+            name,
+            displayName: name,
+            avatarType: "INITIALS",
+            avatarValue: this.computeInitials(name),
+            avatarUrl: "",
+            createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+            updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+          };
+          account = {
+            id: userId,
+            email: normalizedEmail,
+            name,
+            passwordHash: "",
+            salt,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            resetToken,
+            resetTokenExpires
+          };
+          this.users.set(userId, user);
+          this.userAccounts.set(normalizedEmail, account);
+        } else {
+          account.resetToken = resetToken;
+          account.resetTokenExpires = resetTokenExpires;
+          this.userAccounts.set(normalizedEmail, account);
+        }
+        this.saveToDiskSync();
         return resetToken;
       }
       resetPasswordWithToken(token, newPass) {
@@ -702,8 +800,25 @@ var init_store = __esm({
             account.salt = salt;
             delete account.resetToken;
             delete account.resetTokenExpires;
+            account.updatedAt = (/* @__PURE__ */ new Date()).toISOString();
             this.userAccounts.set(email, account);
-            this.scheduleSave();
+            let user = this.getUser(account.id);
+            if (!user) {
+              user = {
+                id: account.id,
+                email: account.email,
+                name: account.name,
+                displayName: account.displayName || account.name,
+                avatarType: account.avatarType || "INITIALS",
+                avatarValue: account.avatarValue || this.computeInitials(account.name),
+                avatarUrl: account.avatarUrl || "",
+                profileImageUrl: account.profileImageUrl || "",
+                createdAt: account.createdAt,
+                updatedAt: account.updatedAt
+              };
+              this.users.set(user.id, user);
+            }
+            this.saveToDiskSync();
             return true;
           }
         }
@@ -12012,7 +12127,7 @@ apiRouter.post("/auth/profile/avatar", handleUploadAvatar);
 apiRouter.post("/profile/avatar", handleUploadAvatar);
 apiRouter.delete("/auth/profile/avatar", handleRemoveAvatar);
 apiRouter.delete("/profile/avatar", handleRemoveAvatar);
-apiRouter.post("/auth/signup", (req, res) => {
+apiRouter.post(["/auth/signup", "/auth/register"], (req, res) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
   if (!email || !name) {
     return res.status(400).json({ error: "Email and full name are required for signup." });
@@ -12024,34 +12139,39 @@ apiRouter.post("/auth/signup", (req, res) => {
       name,
       avatarUrl
     });
-    const initialWorkspace = db.createWorkspace({
-      id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
-      name: workspaceName || `${name}'s Workspace`,
-      businessName: businessName || `${name}'s Product`,
-      description: req.body.description || `Autonomous market intelligence and campaign workspace for ${businessName || name}.`,
-      industry: industry || "Technology & Digital Services",
-      targetAudience: targetAudience || "Founders, marketers, and decision makers",
-      ownerId: user.id,
-      createdAt: (/* @__PURE__ */ new Date()).toISOString(),
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
-    });
-    db.addMember({
-      id: `mem_${Date.now()}`,
-      workspaceId: initialWorkspace.id,
-      name: user.name,
-      email: user.email,
-      role: "OWNER",
-      title: "Founder & CEO",
-      department: "Leadership",
-      avatarUrl: user.avatarUrl,
-      joinedAt: (/* @__PURE__ */ new Date()).toISOString()
-    });
+    const existingWorkspaces = db.getWorkspacesForUser(user.id);
+    let activeWorkspaceId = existingWorkspaces[0]?.id;
+    if (existingWorkspaces.length === 0) {
+      const initialWorkspace = db.createWorkspace({
+        id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: workspaceName || `${name}'s Workspace`,
+        businessName: businessName || `${name}'s Product`,
+        description: req.body.description || `Autonomous market intelligence and campaign workspace for ${businessName || name}.`,
+        industry: industry || "Technology & Digital Services",
+        targetAudience: targetAudience || "Founders, marketers, and decision makers",
+        ownerId: user.id,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      db.addMember({
+        id: `mem_${Date.now()}`,
+        workspaceId: initialWorkspace.id,
+        name: user.name,
+        email: user.email,
+        role: "OWNER",
+        title: "Founder & CEO",
+        department: "Leadership",
+        avatarUrl: user.avatarUrl,
+        joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      activeWorkspaceId = initialWorkspace.id;
+    }
     const workspaces = db.getWorkspacesForUser(user.id);
     res.json({
       user,
       token,
       workspaces,
-      activeWorkspaceId: initialWorkspace.id
+      activeWorkspaceId: activeWorkspaceId || workspaces[0]?.id || ""
     });
   } catch (err) {
     logger.warn("Signup failed:", err.message);
@@ -12059,11 +12179,45 @@ apiRouter.post("/auth/signup", (req, res) => {
   }
 });
 apiRouter.post("/auth/login", (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, clientAccountSync } = req.body;
   if (!email) {
     return res.status(400).json({ error: "Email is required." });
   }
-  const authResult = db.authenticateUser(email, password);
+  let authResult = db.authenticateUser(email, password);
+  if (!authResult && clientAccountSync && clientAccountSync.name && password) {
+    try {
+      const reg = db.registerUser({
+        email,
+        password,
+        name: clientAccountSync.name
+      });
+      const ws = db.createWorkspace({
+        id: `ws_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        name: clientAccountSync.workspaceName || `${clientAccountSync.name}'s Workspace`,
+        businessName: clientAccountSync.businessName || `${clientAccountSync.name}'s Product`,
+        description: `Autonomous market intelligence and campaign workspace for ${clientAccountSync.businessName || clientAccountSync.name}.`,
+        industry: clientAccountSync.industry || "Technology & Digital Services",
+        targetAudience: "Founders, marketers, and decision makers",
+        ownerId: reg.user.id,
+        createdAt: (/* @__PURE__ */ new Date()).toISOString(),
+        updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      db.addMember({
+        id: `mem_${Date.now()}`,
+        workspaceId: ws.id,
+        name: reg.user.name,
+        email: reg.user.email,
+        role: "OWNER",
+        title: "Founder & CEO",
+        department: "Leadership",
+        avatarUrl: reg.user.avatarUrl,
+        joinedAt: (/* @__PURE__ */ new Date()).toISOString()
+      });
+      authResult = { user: reg.user, token: reg.token };
+    } catch (syncErr) {
+      logger.warn("Client sync recovery attempt:", syncErr.message);
+    }
+  }
   if (!authResult) {
     if (email.toLowerCase() === "founder@researchflow.ai" || email.toLowerCase() === "alex@growthlabs.io") {
       const defaultUser = db.getUser("usr_demo_founder") || db.getUser("usr_default_founder");

@@ -79,6 +79,40 @@ export const VALID_VIEWS = [
   'pricing',
 ];
 
+const CLIENT_VAULT_KEY = 'rf_client_vault';
+
+export interface ClientAccountBackup {
+  email: string;
+  name: string;
+  password?: string;
+  workspaceName?: string;
+  businessName?: string;
+  industry?: string;
+  updatedAt: string;
+}
+
+export function getClientAccountBackup(email: string): ClientAccountBackup | null {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(CLIENT_VAULT_KEY);
+    if (!raw) return null;
+    const accounts: Record<string, ClientAccountBackup> = JSON.parse(raw);
+    return accounts[email.trim().toLowerCase()] || null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveClientAccountBackup(account: ClientAccountBackup) {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
+  try {
+    const raw = localStorage.getItem(CLIENT_VAULT_KEY);
+    const accounts: Record<string, ClientAccountBackup> = raw ? JSON.parse(raw) : {};
+    accounts[account.email.trim().toLowerCase()] = account;
+    localStorage.setItem(CLIENT_VAULT_KEY, JSON.stringify(accounts));
+  } catch {}
+}
+
 export function parseRouteFromLocation(): { view: string; jobId: string | null } {
   if (typeof window === 'undefined') {
     return { view: 'overview', jobId: null };
@@ -243,8 +277,28 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const login = async (email: string, password?: string) => {
     setIsLoading(true);
+    const normalizedEmail = email.trim().toLowerCase();
+    const clientBackup = getClientAccountBackup(normalizedEmail);
     try {
-      const res = await api.login({ email, password });
+      let res;
+      try {
+        res = await api.login({ email: normalizedEmail, password, clientAccountSync: clientBackup || undefined });
+      } catch (err: any) {
+        // Cold-start instance recovery: if server lost memory but user registered locally with this password
+        if (clientBackup && clientBackup.password === password) {
+          res = await api.signup({
+            email: normalizedEmail,
+            password,
+            name: clientBackup.name,
+            workspaceName: clientBackup.workspaceName,
+            businessName: clientBackup.businessName,
+            industry: clientBackup.industry,
+          });
+        } else {
+          throw err;
+        }
+      }
+
       setAuthToken(res.token);
       setDemoModeHeader(false);
       setIsDemoMode(false);
@@ -256,6 +310,18 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       } else {
         setIsOnboardingOpen(true);
       }
+
+      // Refresh client vault
+      saveClientAccountBackup({
+        email: normalizedEmail,
+        name: res.user.name,
+        password: password || clientBackup?.password,
+        workspaceName: res.workspaces[0]?.name,
+        businessName: res.workspaces[0]?.businessName,
+        industry: res.workspaces[0]?.industry,
+        updatedAt: new Date().toISOString(),
+      });
+
       addToast(`Welcome back, ${res.user.name}!`, 'success');
     } catch (err: any) {
       throw err;
@@ -274,8 +340,12 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     targetAudience?: string;
   }) => {
     setIsLoading(true);
+    const normalizedEmail = data.email.trim().toLowerCase();
     try {
-      const res = await api.signup(data);
+      const res = await api.signup({
+        ...data,
+        email: normalizedEmail,
+      });
       setAuthToken(res.token);
       setDemoModeHeader(false);
       setIsDemoMode(false);
@@ -287,6 +357,18 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       } else {
         setIsOnboardingOpen(true);
       }
+
+      // Persist in client-side vault for seamless recovery across serverless restarts
+      saveClientAccountBackup({
+        email: normalizedEmail,
+        name: data.name.trim(),
+        password: data.password,
+        workspaceName: data.workspaceName,
+        businessName: data.businessName,
+        industry: data.industry,
+        updatedAt: new Date().toISOString(),
+      });
+
       addToast(`Account created! Welcome to ResearchFlow, ${res.user.name}.`, 'success');
     } catch (err: any) {
       throw err;

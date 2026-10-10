@@ -264,37 +264,37 @@ export const WarRoomView: React.FC = () => {
   return (
     <div className="space-y-8 pb-16">
       {/* 1. WAR ROOM TOP HERO & TITLE */}
-      <div className="bg-white rounded-2xl border border-zinc-200 p-6 md:p-8 shadow-xs relative overflow-hidden">
+      <div className="bg-white rounded-2xl border border-zinc-200 p-5 md:p-7 shadow-xs relative overflow-hidden min-w-0">
         <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-indigo-50/50 via-purple-50/30 to-transparent pointer-events-none rounded-bl-full" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-2">
+        <div className="relative z-10 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5 min-w-0">
+          <div className="space-y-2 max-w-2xl min-w-0">
+            <div className="flex flex-wrap items-center gap-2 min-w-0">
               <span className="text-[10px] font-medium uppercase px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/60 font-mono tracking-wider">
                 Living Market Model & Strategy Decisions
               </span>
-              <span className="text-zinc-400 text-xs">•</span>
-              <span className="text-xs text-zinc-500 font-medium">
-                Category: <strong>{marketModel.marketCategory}</strong>
+              <span className="text-zinc-400 text-xs hidden sm:inline">•</span>
+              <span className="text-xs text-zinc-500 font-medium truncate max-w-full">
+                Category: <strong className="text-zinc-900">{marketModel.marketCategory}</strong>
               </span>
             </div>
 
-            <HeadlineEntrance as="h1" className="text-2xl md:text-3xl font-extrabold text-zinc-950 tracking-tight">
+            <HeadlineEntrance as="h1" className="text-2xl md:text-3xl font-extrabold text-zinc-950 tracking-tight break-words">
               MARKET WAR ROOM
             </HeadlineEntrance>
             <p className="text-sm font-semibold text-indigo-700">
               "Your living model of the market."
             </p>
-            <p className="text-xs text-zinc-600 leading-relaxed">
+            <p className="text-xs text-zinc-600 leading-relaxed break-words">
               ResearchFlow continuously connects competitor moves, customer signals, product gaps, market trends, and your own strategy into decisions.
             </p>
           </div>
 
           {/* Action Toolbar */}
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 w-full xl:w-auto shrink-0 pt-2 xl:pt-0 border-t xl:border-t-0 border-zinc-100">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="px-3 py-2 rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs"
+              className="px-3 py-2 rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Search className="w-3.5 h-3.5 text-zinc-500" />
               Strategic Search
@@ -302,7 +302,7 @@ export const WarRoomView: React.FC = () => {
 
             <button
               onClick={() => setIsGraphOpen(true)}
-              className="px-3 py-2 rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs"
+              className="px-3 py-2 rounded-xl border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Network className="w-3.5 h-3.5 text-zinc-500" />
               Knowledge Graph
@@ -310,7 +310,7 @@ export const WarRoomView: React.FC = () => {
 
             <button
               onClick={() => setIsScenarioOpen(true)}
-              className="px-3 py-2 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-xs font-semibold text-purple-900 transition-all flex items-center gap-1.5 shadow-2xs"
+              className="px-3 py-2 rounded-xl border border-purple-200 bg-purple-50 hover:bg-purple-100 text-xs font-semibold text-purple-900 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Play className="w-3.5 h-3.5 text-purple-600 fill-current" />
               Scenario Simulator
@@ -318,7 +318,7 @@ export const WarRoomView: React.FC = () => {
 
             <button
               onClick={() => setActiveView('company')}
-              className="px-3 py-2 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-xs font-semibold text-indigo-900 transition-all flex items-center gap-1.5 shadow-2xs"
+              className="px-3 py-2 rounded-xl border border-indigo-200 bg-indigo-50/70 hover:bg-indigo-100 text-xs font-semibold text-indigo-900 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Building2 className="w-3.5 h-3.5 text-indigo-600" />
               Company Intelligence
@@ -326,7 +326,7 @@ export const WarRoomView: React.FC = () => {
 
             <button
               onClick={() => setIsMapMarketOpen(true)}
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-all flex items-center gap-1.5 shadow-2xs"
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Compass className="w-3.5 h-3.5" />
               Update Market
@@ -335,7 +335,7 @@ export const WarRoomView: React.FC = () => {
         </div>
 
         {/* Perspective Switcher */}
-        <div className="mt-6 pt-6 border-t border-zinc-100 flex items-center gap-2 overflow-x-auto">
+        <div className="mt-6 pt-5 border-t border-zinc-100 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
           <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 mr-2 shrink-0">
             Perspective:
           </span>
@@ -362,17 +362,17 @@ export const WarRoomView: React.FC = () => {
       </div>
 
       {/* 2. MARKET PULSE METRICS BAR WITH EXPLANATIONS */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative" title="Overall market health calculated from competitor aggressiveness, evidence freshness, and unresolved threats.">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative min-w-0 overflow-hidden" title="Overall market health calculated from competitor aggressiveness, evidence freshness, and unresolved threats.">
           <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider truncate">
               Market Health
             </span>
-            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600" />
+            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600 shrink-0" />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 min-w-0">
             <span
-              className={`w-2.5 h-2.5 rounded-full ${
+              className={`w-2.5 h-2.5 rounded-full shrink-0 ${
                 pulse.healthStatus === 'HEALTHY'
                   ? 'bg-emerald-500'
                   : pulse.healthStatus === 'NEEDS_ATTENTION'
@@ -380,39 +380,39 @@ export const WarRoomView: React.FC = () => {
                   : 'bg-rose-500'
               }`}
             />
-            <span className="text-xs font-bold text-zinc-900">{pulse.healthStatus.replace('_', ' ')}</span>
+            <span className="text-xs font-bold text-zinc-900 truncate">{pulse.healthStatus.replace('_', ' ')}</span>
           </div>
-          <p className="text-[10px] text-zinc-400 hidden group-hover:block">Strategic posture score</p>
+          <p className="text-[10px] text-zinc-400 hidden group-hover:block truncate">Strategic posture score</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative" title="Active competitor domains and product alternatives monitored in this workspace.">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative min-w-0 overflow-hidden" title="Active competitor domains and product alternatives monitored in this workspace.">
           <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider truncate">
               Competitor Coverage
             </span>
-            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600" />
+            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600 shrink-0" />
           </div>
-          <div className="text-base font-extrabold text-zinc-900">
+          <div className="text-base font-extrabold text-zinc-900 truncate">
             {pulse.competitorCoverageCount} <span className="text-xs font-normal text-zinc-500">Tracked</span>
           </div>
-          <p className="text-[10px] text-zinc-400 hidden group-hover:block">Monitored rivals</p>
+          <p className="text-[10px] text-zinc-400 hidden group-hover:block truncate">Monitored rivals</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative" title="Percentage of citations, pricing claims, and feature proof verified within the last 30 days.">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative min-w-0 overflow-hidden" title="Percentage of citations, pricing claims, and feature proof verified within the last 30 days.">
           <div className="flex items-center justify-between text-zinc-400">
-            <span className="text-[10px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] font-bold uppercase tracking-wider truncate">
               Evidence Freshness
             </span>
-            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600" />
+            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600 shrink-0" />
           </div>
-          <div className="text-base font-extrabold text-indigo-600">
+          <div className="text-base font-extrabold text-indigo-600 truncate">
             {pulse.evidenceFreshnessPercent}% <span className="text-xs font-normal text-zinc-500">Last 30d</span>
           </div>
-          <p className="text-[10px] text-zinc-400 hidden group-hover:block">Verified recently</p>
+          <p className="text-[10px] text-zinc-400 hidden group-hover:block truncate">Verified recently</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1" title="Highest leverage opportunity or defensive action ranked by revenue potential.">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs min-w-0 overflow-hidden" title="Highest leverage opportunity or defensive action ranked by revenue potential.">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block truncate">
             Top Priority
           </span>
           <div className="text-xs font-bold text-zinc-900 truncate" title={pulse.topPriorityTitle}>
@@ -420,8 +420,8 @@ export const WarRoomView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1" title="Most urgent competitor release, price cut, or marketing shift requiring response.">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs min-w-0 overflow-hidden" title="Most urgent competitor release, price cut, or marketing shift requiring response.">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block truncate">
             Imminent Threat
           </span>
           <div className="text-xs font-bold text-rose-600 truncate" title={pulse.topThreatTitle}>
@@ -429,8 +429,8 @@ export const WarRoomView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1" title="Unaddressed buyer pain point or underserved feature where competitors are weak.">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs min-w-0 overflow-hidden" title="Unaddressed buyer pain point or underserved feature where competitors are weak.">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block truncate">
             Whitespace Opening
           </span>
           <div className="text-xs font-bold text-emerald-600 truncate" title={pulse.biggestOpportunityTitle}>
@@ -441,61 +441,61 @@ export const WarRoomView: React.FC = () => {
 
       {/* 3. DAILY EXECUTIVE BRIEFING */}
       {(perspective === 'all' || perspective === 'executive') && executiveBrief && (
-        <div className="p-5 rounded-2xl border border-indigo-200/80 bg-gradient-to-r from-indigo-50/50 via-white to-indigo-50/20 shadow-xs space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse" />
-              <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-950">
+        <div className="p-5 rounded-2xl border border-indigo-200/80 bg-gradient-to-r from-indigo-50/50 via-white to-indigo-50/20 shadow-xs space-y-3 min-w-0 overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-2 h-2 rounded-full bg-indigo-600 animate-pulse shrink-0" />
+              <h3 className="text-xs font-bold uppercase tracking-wider text-indigo-950 truncate">
                 Daily Strategic Executive Briefing
               </h3>
             </div>
-            <span className="text-[11px] text-zinc-400 font-mono">
+            <span className="text-[11px] text-zinc-400 font-mono shrink-0">
               {new Date(executiveBrief.generatedDate).toLocaleDateString()}
             </span>
           </div>
 
-          <p className="text-xs text-zinc-700 leading-relaxed font-medium">
+          <p className="text-xs text-zinc-700 leading-relaxed font-medium break-words">
             {executiveBrief.statusSummary}
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
-            <div className="p-3 rounded-xl bg-white border border-indigo-100 space-y-1.5">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
+            <div className="p-3 rounded-xl bg-white border border-indigo-100 space-y-1.5 min-w-0 overflow-hidden">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 truncate">
                 Key Developments
               </div>
               <ul className="text-xs text-zinc-700 space-y-1">
                 {executiveBrief.topDevelopments.map((d, i) => (
-                  <li key={i} className="flex items-start gap-1.5">
-                    <span className="text-indigo-500 font-bold">•</span>
-                    <span>{d}</span>
+                  <li key={i} className="flex items-start gap-1.5 min-w-0">
+                    <span className="text-indigo-500 font-bold shrink-0">•</span>
+                    <span className="break-words">{d}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="p-3 rounded-xl bg-white border border-rose-100 space-y-1.5">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-rose-700">
+            <div className="p-3 rounded-xl bg-white border border-rose-100 space-y-1.5 min-w-0 overflow-hidden">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-rose-700 truncate">
                 Critical Risks
               </div>
               <ul className="text-xs text-zinc-700 space-y-1">
                 {executiveBrief.topRisks.map((r, i) => (
-                  <li key={i} className="flex items-start gap-1.5">
-                    <span className="text-rose-500 font-bold">•</span>
-                    <span>{r}</span>
+                  <li key={i} className="flex items-start gap-1.5 min-w-0">
+                    <span className="text-rose-500 font-bold shrink-0">•</span>
+                    <span className="break-words">{r}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="p-3 rounded-xl bg-white border border-emerald-100 space-y-1.5">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+            <div className="p-3 rounded-xl bg-white border border-emerald-100 space-y-1.5 min-w-0 overflow-hidden">
+              <div className="text-[10px] font-bold uppercase tracking-wider text-emerald-700 truncate">
                 Recommended Actions
               </div>
               <ul className="text-xs text-zinc-700 space-y-1">
                 {executiveBrief.recommendedActions.map((a, i) => (
-                  <li key={i} className="flex items-start gap-1.5">
-                    <span className="text-emerald-500 font-bold">✓</span>
-                    <span>{a}</span>
+                  <li key={i} className="flex items-start gap-1.5 min-w-0">
+                    <span className="text-emerald-500 font-bold shrink-0">✓</span>
+                    <span className="break-words">{a}</span>
                   </li>
                 ))}
               </ul>
@@ -505,8 +505,8 @@ export const WarRoomView: React.FC = () => {
       )}
 
       {/* 4. SECTION: COMPETITOR UNIVERSE & COVERAGE */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
           <div>
             <h2 className="text-base font-bold text-zinc-900">Competitor Universe</h2>
             <p className="text-xs text-zinc-500">
@@ -514,11 +514,11 @@ export const WarRoomView: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={handleDiscoverCompetitors}
               disabled={isDiscovering}
-              className="px-3 py-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs"
+              className="px-3 py-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
               {isDiscovering ? 'Discovering...' : 'Discover Candidates'}
@@ -528,35 +528,35 @@ export const WarRoomView: React.FC = () => {
 
         {/* Discovered Candidates Drawer */}
         {discoveredCandidates.length > 0 && (
-          <div className="p-4 rounded-xl border border-purple-200 bg-purple-50/50 space-y-3 animate-in fade-in">
-            <div className="flex items-center justify-between">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-purple-900">
+          <div className="p-4 rounded-xl border border-purple-200 bg-purple-50/50 space-y-3 animate-in fade-in min-w-0 overflow-hidden">
+            <div className="flex items-center justify-between min-w-0">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-purple-900 truncate">
                 Discovered Candidate Competitors ({discoveredCandidates.length})
               </h4>
               <button
                 onClick={() => setDiscoveredCandidates([])}
-                className="text-[11px] text-purple-700 hover:underline"
+                className="text-[11px] text-purple-700 hover:underline shrink-0 ml-2"
               >
                 Dismiss
               </button>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {discoveredCandidates.map(c => (
-                <div key={c.id} className="p-3 bg-white rounded-lg border border-purple-200 text-xs flex items-center justify-between">
-                  <div>
-                    <div className="font-bold text-zinc-900">{c.name}</div>
-                    <div className="text-[11px] text-zinc-500 line-clamp-1">{c.positioningSummary}</div>
+                <div key={c.id} className="p-3 bg-white rounded-lg border border-purple-200 text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-2 min-w-0 overflow-hidden">
+                  <div className="min-w-0 flex-1">
+                    <div className="font-bold text-zinc-900 truncate">{c.name}</div>
+                    <div className="text-[11px] text-zinc-500 line-clamp-1 break-words">{c.positioningSummary}</div>
                   </div>
-                  <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                  <div className="flex items-center gap-1.5 shrink-0">
                     <button
                       onClick={() => handleConfirmCompetitor(c.id, 'CONFIRMED')}
-                      className="px-2 py-1 bg-emerald-600 text-white rounded text-[10px] font-semibold hover:bg-emerald-700"
+                      className="px-2.5 py-1 bg-emerald-600 text-white rounded text-[10px] font-semibold hover:bg-emerald-700 cursor-pointer"
                     >
                       Confirm
                     </button>
                     <button
                       onClick={() => handleConfirmCompetitor(c.id, 'REJECTED')}
-                      className="px-2 py-1 bg-zinc-200 text-zinc-700 rounded text-[10px] font-semibold hover:bg-zinc-300"
+                      className="px-2.5 py-1 bg-zinc-200 text-zinc-700 rounded text-[10px] font-semibold hover:bg-zinc-300 cursor-pointer"
                     >
                       Ignore
                     </button>
@@ -568,36 +568,36 @@ export const WarRoomView: React.FC = () => {
         )}
 
         {/* Competitor Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {competitors.map(comp => (
             <div
               key={comp.id}
-              className="p-4 rounded-xl border border-zinc-200 bg-white hover:border-zinc-300 transition-all space-y-3 shadow-2xs flex flex-col justify-between"
+              className="p-4 rounded-xl border border-zinc-200 bg-white hover:border-zinc-300 transition-all space-y-3 shadow-2xs flex flex-col justify-between min-w-0 overflow-hidden"
             >
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 font-bold border border-zinc-200">
+              <div className="min-w-0 space-y-2">
+                <div className="flex flex-wrap items-center justify-between gap-1 mb-1.5 min-w-0">
+                  <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 font-bold border border-zinc-200 truncate max-w-[65%]">
                     {comp.tier} · {comp.category}
                   </span>
-                  <span className="text-[10px] text-zinc-400 font-mono">
+                  <span className="text-[10px] text-zinc-400 font-mono shrink-0">
                     {comp.sourceConfidence}% Confidence
                   </span>
                 </div>
 
-                <h3 className="text-sm font-bold text-zinc-950">{comp.name}</h3>
-                <p className="text-[11px] text-zinc-500 line-clamp-2 mt-1">
+                <h3 className="text-sm font-bold text-zinc-950 truncate" title={comp.name}>{comp.name}</h3>
+                <p className="text-[11px] text-zinc-500 line-clamp-2 break-words">
                   {comp.positioningSummary}
                 </p>
 
-                <div className="mt-3 pt-3 border-t border-zinc-100 space-y-1.5 text-xs">
-                  <div className="text-zinc-600">
+                <div className="mt-3 pt-3 border-t border-zinc-100 space-y-1.5 text-xs min-w-0">
+                  <div className="text-zinc-600 truncate" title={comp.pricingModel}>
                     <span className="font-semibold text-zinc-900">Pricing:</span> {comp.pricingModel}
                   </div>
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">Strengths:</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1">Strengths:</span>
+                    <div className="flex flex-wrap gap-1">
                       {comp.strengths.slice(0, 2).map((s, i) => (
-                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-zinc-100 text-zinc-700 rounded">
+                        <span key={i} className="text-[10px] px-1.5 py-0.5 bg-zinc-100 text-zinc-700 rounded truncate max-w-full">
                           {s}
                         </span>
                       ))}
@@ -606,13 +606,13 @@ export const WarRoomView: React.FC = () => {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-zinc-100 flex items-center justify-between text-[11px] text-zinc-400">
-                <span>Updated {comp.lastCrawledAt ? new Date(comp.lastCrawledAt).toLocaleDateString() : 'Active'}</span>
+              <div className="pt-2 border-t border-zinc-100 flex items-center justify-between gap-2 text-[11px] text-zinc-400 min-w-0">
+                <span className="truncate">Updated {comp.lastCrawledAt ? new Date(comp.lastCrawledAt).toLocaleDateString() : 'Active'}</span>
                 <a
                   href={comp.website}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 font-semibold"
+                  className="text-indigo-600 hover:text-indigo-800 flex items-center gap-0.5 font-semibold shrink-0"
                 >
                   Site <ExternalLink className="w-3 h-3" />
                 </a>
@@ -623,7 +623,7 @@ export const WarRoomView: React.FC = () => {
       </div>
 
       {/* 5. SECTION: COMPETITOR MOVE MONITOR & "WHY THIS MATTERS" ENGINE */}
-      <div className="space-y-4">
+      <div className="space-y-4 min-w-0">
         <div>
           <h2 className="text-base font-bold text-zinc-900">Competitor Move Monitor</h2>
           <p className="text-xs text-zinc-500">
@@ -631,14 +631,14 @@ export const WarRoomView: React.FC = () => {
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 min-w-0">
           {recentMoves.map(move => {
             const isExpanded = expandedMoveId === move.id;
             const isHighOrCrit = move.significance === 'HIGH' || move.significance === 'CRITICAL';
             return (
               <div
                 key={move.id}
-                className={`rounded-xl border transition-all ${
+                className={`rounded-xl border transition-all min-w-0 overflow-hidden ${
                   isHighOrCrit
                     ? 'border-amber-200/80 bg-amber-50/20'
                     : 'border-zinc-200 bg-white'
@@ -646,11 +646,11 @@ export const WarRoomView: React.FC = () => {
               >
                 <div
                   onClick={() => setExpandedMoveId(isExpanded ? null : move.id)}
-                  className="p-4 flex items-center justify-between cursor-pointer"
+                  className="p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 cursor-pointer min-w-0"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-start sm:items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
                     <span
-                      className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded-md font-bold ${
+                      className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded-md font-bold shrink-0 mt-0.5 sm:mt-0 ${
                         move.significance === 'CRITICAL'
                           ? 'bg-rose-100 text-rose-800'
                           : move.significance === 'HIGH'
@@ -660,64 +660,64 @@ export const WarRoomView: React.FC = () => {
                     >
                       {move.significance}
                     </span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-zinc-900">{move.competitorName}:</span>
-                        <span className="text-xs font-semibold text-zinc-800">{move.title}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-baseline gap-1.5 min-w-0">
+                        <span className="text-xs font-bold text-zinc-900 shrink-0">{move.competitorName}:</span>
+                        <span className="text-xs font-semibold text-zinc-800 break-words">{move.title}</span>
                       </div>
-                      <span className="text-[11px] text-zinc-500 line-clamp-1">{move.description}</span>
+                      <span className="text-[11px] text-zinc-500 line-clamp-1 break-words mt-0.5 block">{move.description}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100">
                     <span className="text-[11px] text-zinc-400 font-mono">
                       {new Date(move.detectedAt).toLocaleDateString()}
                     </span>
-                    {isExpanded ? <ChevronUp className="w-4 h-4 text-zinc-400" /> : <ChevronDown className="w-4 h-4 text-zinc-400" />}
+                    {isExpanded ? <ChevronUp className="w-4 h-4 text-zinc-400 shrink-0" /> : <ChevronDown className="w-4 h-4 text-zinc-400 shrink-0" />}
                   </div>
                 </div>
 
                 {/* Expanded "Why This Matters" Engine */}
                 {isExpanded && (
-                  <div className="px-4 pb-4 pt-2 border-t border-zinc-100 space-y-3 text-xs bg-white/80 rounded-b-xl">
+                  <div className="px-4 pb-4 pt-2 border-t border-zinc-100 space-y-3 text-xs bg-white/80 rounded-b-xl min-w-0 overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-                      <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200/80 space-y-1">
+                      <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200/80 space-y-1 min-w-0">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700">
                           Strategic Implication
                         </span>
-                        <p className="text-xs text-zinc-700">{move.whyThisMatters.strategicImplication}</p>
+                        <p className="text-xs text-zinc-700 break-words">{move.whyThisMatters.strategicImplication}</p>
                       </div>
 
-                      <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200/80 space-y-1">
+                      <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200/80 space-y-1 min-w-0">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-purple-700">
                           Competitor Intent
                         </span>
-                        <p className="text-xs text-zinc-700">{move.whyThisMatters.competitorIntent}</p>
+                        <p className="text-xs text-zinc-700 break-words">{move.whyThisMatters.competitorIntent}</p>
                       </div>
 
-                      <div className="p-3 rounded-lg bg-rose-50/50 border border-rose-200/60 space-y-1">
+                      <div className="p-3 rounded-lg bg-rose-50/50 border border-rose-200/60 space-y-1 min-w-0">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-rose-700">
                           Our Vulnerability
                         </span>
-                        <p className="text-xs text-zinc-700">{move.whyThisMatters.ourVulnerability}</p>
+                        <p className="text-xs text-zinc-700 break-words">{move.whyThisMatters.ourVulnerability}</p>
                       </div>
 
-                      <div className="p-3 rounded-lg bg-emerald-50/50 border border-emerald-200/60 space-y-1">
+                      <div className="p-3 rounded-lg bg-emerald-50/50 border border-emerald-200/60 space-y-1 min-w-0">
                         <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
                           Recommended Response
                         </span>
-                        <p className="text-xs text-zinc-700 font-medium">{move.whyThisMatters.recommendedResponse}</p>
+                        <p className="text-xs text-zinc-700 font-medium break-words">{move.whyThisMatters.recommendedResponse}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
-                      <span className="truncate max-w-md">Snippet: "{move.evidenceSnippet}"</span>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-zinc-400 pt-1 min-w-0">
+                      <span className="truncate max-w-full">Snippet: "{move.evidenceSnippet}"</span>
                       {move.sourceUrl && (
                         <a
                           href={move.sourceUrl}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-indigo-600 hover:underline flex items-center gap-1 font-semibold"
+                          className="text-indigo-600 hover:underline flex items-center gap-1 font-semibold shrink-0"
                         >
                           Verify Source <ExternalLink className="w-3 h-3" />
                         </a>
@@ -732,8 +732,8 @@ export const WarRoomView: React.FC = () => {
       </div>
 
       {/* 6. SECTION: PRODUCT GAP RADAR & "WHAT SHOULD WE BUILD NEXT?" */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
+      <div className="space-y-4 min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
           <div>
             <h2 className="text-base font-bold text-zinc-900">Product Gap Radar & Roadmap Scoring</h2>
             <p className="text-xs text-zinc-500">
@@ -743,7 +743,7 @@ export const WarRoomView: React.FC = () => {
 
           <button
             onClick={() => setIsAddingGap(!isAddingGap)}
-            className="px-3 py-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs"
+            className="px-3 py-1.5 rounded-lg border border-zinc-200 bg-white hover:bg-zinc-50 text-xs font-semibold text-zinc-700 transition-all flex items-center gap-1.5 shadow-2xs shrink-0 cursor-pointer"
           >
             <Plus className="w-3.5 h-3.5 text-indigo-600" />
             Evaluate New Capability
@@ -752,37 +752,37 @@ export const WarRoomView: React.FC = () => {
 
         {/* Add Gap Form */}
         {isAddingGap && (
-          <form onSubmit={handleAddProductGap} className="p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 space-y-3 animate-in fade-in">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-800">
+          <form onSubmit={handleAddProductGap} className="p-4 rounded-xl border border-zinc-200 bg-zinc-50/50 space-y-3 animate-in fade-in min-w-0 overflow-hidden">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-800 truncate">
               Evaluate New Product Capability
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 min-w-0">
               <input
                 type="text"
                 placeholder="Capability Name (e.g. Chrome Extension 1-Click Scanner)"
                 value={newGapName}
                 onChange={e => setNewGapName(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-zinc-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 rounded-lg border border-zinc-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-0"
               />
               <input
                 type="text"
                 placeholder="Category (e.g. Workflow Automation)"
                 value={newGapCategory}
                 onChange={e => setNewGapCategory(e.target.value)}
-                className="px-3 py-2 rounded-lg border border-zinc-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="px-3 py-2 rounded-lg border border-zinc-200 text-xs bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-w-0"
               />
             </div>
-            <div className="flex items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 pt-1">
               <button
                 type="button"
                 onClick={() => setIsAddingGap(false)}
-                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-600 hover:bg-zinc-100"
+                className="px-3 py-1.5 rounded-lg text-xs font-semibold text-zinc-600 hover:bg-zinc-100 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700"
+                className="px-4 py-1.5 rounded-lg text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 cursor-pointer shadow-2xs"
               >
                 Run Scoring Algorithm
               </button>
@@ -790,7 +790,7 @@ export const WarRoomView: React.FC = () => {
           </form>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-3 min-w-0">
           {productGaps.map(gap => {
             const isExpanded = expandedGapId === gap.id;
             const actionColor =
@@ -803,23 +803,23 @@ export const WarRoomView: React.FC = () => {
                 : 'bg-zinc-100 text-zinc-700';
 
             return (
-              <div key={gap.id} className="p-4 rounded-xl border border-zinc-200 bg-white space-y-3 shadow-2xs">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
+              <div key={gap.id} className="p-4 rounded-xl border border-zinc-200 bg-white space-y-3 shadow-2xs min-w-0 overflow-hidden">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2 mb-1 min-w-0">
                       <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 font-bold border border-zinc-200">
                         {gap.classification.replace('_', ' ')}
                       </span>
                       <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-md font-bold ${actionColor}`}>
                         ACTION: {gap.recommendationAction}
                       </span>
-                      <span className="text-[11px] text-zinc-400">Our Status: <strong>{gap.ourStatus}</strong></span>
+                      <span className="text-[11px] text-zinc-500">Our Status: <strong className="text-zinc-800">{gap.ourStatus}</strong></span>
                     </div>
-                    <h3 className="text-sm font-bold text-zinc-900">{gap.featureName}</h3>
+                    <h3 className="text-sm font-bold text-zinc-900 break-words">{gap.featureName}</h3>
                   </div>
 
-                  <div className="flex items-center gap-3">
-                    <div className="text-right">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0 pt-2 sm:pt-0 border-t sm:border-t-0 border-zinc-100">
+                    <div className="text-left sm:text-right">
                       <div className="text-xs font-mono font-bold text-indigo-700">
                         Score: {gap.buildPriorityScore.toLocaleString()}
                       </div>
@@ -828,14 +828,14 @@ export const WarRoomView: React.FC = () => {
 
                     <button
                       onClick={() => handleConvertGap(gap.id)}
-                      className="px-3 py-1.5 bg-zinc-900 text-white hover:bg-black rounded-lg text-xs font-semibold transition-all shadow-2xs"
+                      className="px-3 py-1.5 bg-zinc-900 text-white hover:bg-black rounded-lg text-xs font-semibold transition-all shadow-2xs shrink-0 cursor-pointer"
                     >
                       Convert to Task
                     </button>
 
                     <button
                       onClick={() => setExpandedGapId(isExpanded ? null : gap.id)}
-                      className="p-1 text-zinc-400 hover:text-zinc-700"
+                      className="p-1 text-zinc-400 hover:text-zinc-700 shrink-0 cursor-pointer"
                     >
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
@@ -843,7 +843,7 @@ export const WarRoomView: React.FC = () => {
                 </div>
 
                 {/* Scoring factors pills */}
-                <div className="flex flex-wrap items-center gap-2 text-[10px] text-zinc-500 font-mono pt-1">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] text-zinc-500 font-mono pt-1 min-w-0">
                   <span className="px-2 py-0.5 rounded bg-zinc-50 border border-zinc-200">Demand: {gap.customerDemandScore}/10</span>
                   <span className="px-2 py-0.5 rounded bg-zinc-50 border border-zinc-200">Urgency: {gap.competitiveUrgencyScore}/10</span>
                   <span className="px-2 py-0.5 rounded bg-zinc-50 border border-zinc-200">Diff: {gap.differentiationScore}/10</span>
@@ -855,19 +855,19 @@ export const WarRoomView: React.FC = () => {
 
                 {/* Expanded Details: Counter-Analysis & Do Nothing */}
                 {isExpanded && (
-                  <div className="pt-3 border-t border-zinc-100 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-zinc-50/50 p-3 rounded-lg">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-rose-700">
+                  <div className="pt-3 border-t border-zinc-100 grid grid-cols-1 md:grid-cols-2 gap-3 text-xs bg-zinc-50/50 p-3 rounded-lg min-w-0 overflow-hidden">
+                    <div className="space-y-1 min-w-0">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-rose-700 block">
                         Why Not Build This? (Counter-Analysis)
                       </span>
-                      <p className="text-xs text-zinc-700">{gap.whyNotBuild}</p>
+                      <p className="text-xs text-zinc-700 break-words">{gap.whyNotBuild}</p>
                     </div>
 
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                    <div className="space-y-1 min-w-0">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 block">
                         Do Nothing Scenario
                       </span>
-                      <p className="text-xs text-zinc-700">{gap.doNothingScenario}</p>
+                      <p className="text-xs text-zinc-700 break-words">{gap.doNothingScenario}</p>
                     </div>
                   </div>
                 )}
@@ -878,7 +878,7 @@ export const WarRoomView: React.FC = () => {
       </div>
 
       {/* 7. SECTION: CUSTOMER DEMAND SIGNALS (VOICE-OF-CUSTOMER) */}
-      <div className="space-y-4">
+      <div className="space-y-4 min-w-0">
         <div>
           <h2 className="text-base font-bold text-zinc-900">Customer Demand Signals</h2>
           <p className="text-xs text-zinc-500">
@@ -886,29 +886,29 @@ export const WarRoomView: React.FC = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {demandSignals.map(signal => (
-            <div key={signal.id} className="p-4 rounded-xl border border-zinc-200 bg-white space-y-3 shadow-2xs">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700">
+            <div key={signal.id} className="p-4 rounded-xl border border-zinc-200 bg-white space-y-3 shadow-2xs min-w-0 overflow-hidden">
+              <div className="flex items-center justify-between gap-2 min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-zinc-100 text-zinc-700 truncate">
                   {signal.customerRole}
                 </span>
-                <span className="text-xs font-bold text-indigo-600 font-mono">
+                <span className="text-xs font-bold text-indigo-600 font-mono shrink-0">
                   {signal.frequencyCount} Citations
                 </span>
               </div>
 
-              <div>
-                <h4 className="text-xs font-bold text-zinc-900">{signal.clusterTitle}</h4>
-                <p className="text-[11px] text-zinc-600 mt-1">{signal.painPoint}</p>
+              <div className="min-w-0">
+                <h4 className="text-xs font-bold text-zinc-900 break-words">{signal.clusterTitle}</h4>
+                <p className="text-[11px] text-zinc-600 mt-1 break-words">{signal.painPoint}</p>
               </div>
 
-              <div className="pt-2 border-t border-zinc-100 space-y-1">
-                <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">
+              <div className="pt-2 border-t border-zinc-100 space-y-1 min-w-0">
+                <span className="text-[10px] font-semibold text-zinc-400 uppercase tracking-wider block">
                   Verified Quotes:
                 </span>
                 {signal.rawQuotes.map((q, i) => (
-                  <div key={i} className="text-[11px] text-zinc-700 italic bg-zinc-50 p-2 rounded border border-zinc-100">
+                  <div key={i} className="text-[11px] text-zinc-700 italic bg-zinc-50 p-2 rounded border border-zinc-100 break-words">
                     "{q.quote}"
                     <div className="text-[9px] text-zinc-400 not-italic text-right mt-0.5">— {q.source}</div>
                   </div>
@@ -920,39 +920,39 @@ export const WarRoomView: React.FC = () => {
       </div>
 
       {/* 8. SECTION: OPPORTUNITY & THREAT RADAR */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0">
         {/* Opportunities Radar */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
+        <div className="space-y-3 min-w-0">
+          <div className="flex items-center justify-between min-w-0">
             <div>
               <h3 className="text-sm font-bold text-emerald-950 flex items-center gap-1.5">
-                <TrendingUp className="w-4 h-4 text-emerald-600" />
+                <TrendingUp className="w-4 h-4 text-emerald-600 shrink-0" />
                 Strategic Opportunities
               </h3>
               <p className="text-[11px] text-zinc-500">Whitespace openings ready to convert into GTM campaigns.</p>
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             {opportunities.map(opp => (
-              <div key={opp.id} className="p-4 rounded-xl border border-emerald-200/80 bg-emerald-50/20 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold">
+              <div key={opp.id} className="p-4 rounded-xl border border-emerald-200/80 bg-emerald-50/20 space-y-2.5 min-w-0 overflow-hidden">
+                <div className="flex flex-wrap items-center justify-between gap-1.5 min-w-0">
+                  <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-800 font-bold truncate">
                     {opp.category.replace('_', ' ')}
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">
+                  <span className="text-[10px] text-zinc-500 font-mono shrink-0">
                     Confidence: <strong>{opp.confidenceScore}%</strong>
                   </span>
                 </div>
 
-                <h4 className="text-xs font-bold text-zinc-900">{opp.title}</h4>
-                <p className="text-[11px] text-zinc-600 leading-relaxed">{opp.description}</p>
+                <h4 className="text-xs font-bold text-zinc-900 break-words">{opp.title}</h4>
+                <p className="text-[11px] text-zinc-600 leading-relaxed break-words">{opp.description}</p>
 
-                <div className="pt-2 flex items-center justify-between">
-                  <span className="text-[10px] text-zinc-400">Impact: {opp.expectedImpact}</span>
+                <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 min-w-0">
+                  <span className="text-[10px] text-zinc-500 break-words flex-1">Impact: {opp.expectedImpact}</span>
                   <button
                     onClick={() => handleConvertOpportunity(opp.id)}
-                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition-all shadow-2xs"
+                    className="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold transition-all shadow-2xs shrink-0 cursor-pointer w-full sm:w-auto text-center"
                   >
                     Convert to Campaign
                   </button>
@@ -963,40 +963,40 @@ export const WarRoomView: React.FC = () => {
         </div>
 
         {/* Threats Radar */}
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
+        <div className="space-y-3 min-w-0">
+          <div className="flex items-center justify-between min-w-0">
             <div>
               <h3 className="text-sm font-bold text-rose-950 flex items-center gap-1.5">
-                <AlertTriangle className="w-4 h-4 text-rose-600" />
+                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
                 Strategic Threats
               </h3>
               <p className="text-[11px] text-zinc-500">Competitor expansion signals with defensive plans.</p>
             </div>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 min-w-0">
             {threats.map(threat => (
-              <div key={threat.id} className="p-4 rounded-xl border border-rose-200/80 bg-rose-50/20 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold">
+              <div key={threat.id} className="p-4 rounded-xl border border-rose-200/80 bg-rose-50/20 space-y-2.5 min-w-0 overflow-hidden">
+                <div className="flex flex-wrap items-center justify-between gap-1.5 min-w-0">
+                  <span className="text-[9px] font-mono uppercase px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold truncate">
                     {threat.threatLevel} THREAT
                   </span>
-                  <span className="text-[10px] text-zinc-500 font-mono">
+                  <span className="text-[10px] text-zinc-500 font-mono shrink-0">
                     Source: {threat.competitorName || 'Market'}
                   </span>
                 </div>
 
-                <h4 className="text-xs font-bold text-zinc-900">{threat.title}</h4>
-                <p className="text-[11px] text-zinc-600 leading-relaxed">{threat.description}</p>
+                <h4 className="text-xs font-bold text-zinc-900 break-words">{threat.title}</h4>
+                <p className="text-[11px] text-zinc-600 leading-relaxed break-words">{threat.description}</p>
 
-                <div className="text-[11px] text-rose-900 bg-white p-2 rounded border border-rose-100">
-                  <span className="font-semibold">Countermeasure:</span> {threat.defensiveCountermeasure}
+                <div className="text-[11px] text-rose-900 bg-white p-2.5 rounded-lg border border-rose-100 break-words">
+                  <span className="font-semibold text-rose-950">Countermeasure:</span> {threat.defensiveCountermeasure}
                 </div>
 
-                <div className="pt-1 flex items-center justify-end">
+                <div className="pt-1 flex items-center justify-end min-w-0">
                   <button
                     onClick={() => handleConvertThreat(threat.id)}
-                    className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold transition-all shadow-2xs"
+                    className="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-semibold transition-all shadow-2xs shrink-0 cursor-pointer w-full sm:w-auto text-center"
                   >
                     Convert to Task
                   </button>
@@ -1008,7 +1008,7 @@ export const WarRoomView: React.FC = () => {
       </div>
 
       {/* 9. SECTION: STRATEGIC RECOMMENDATIONS */}
-      <div className="space-y-4">
+      <div className="space-y-4 min-w-0">
         <div>
           <h2 className="text-base font-bold text-zinc-900">Strategic Recommendations</h2>
           <p className="text-xs text-zinc-500">
@@ -1016,7 +1016,7 @@ export const WarRoomView: React.FC = () => {
           </p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 min-w-0">
           {recommendations.map(rec => {
             const typeColor =
               rec.type === 'FACT'
@@ -1028,63 +1028,63 @@ export const WarRoomView: React.FC = () => {
                 : 'bg-indigo-100 text-indigo-800';
 
             return (
-              <div key={rec.id} className="p-5 rounded-xl border border-zinc-200 bg-white space-y-3 shadow-2xs">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
+              <div key={rec.id} className="p-4 sm:p-5 rounded-xl border border-zinc-200 bg-white space-y-3 shadow-2xs min-w-0 overflow-hidden">
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
                     <span className={`text-[9px] font-mono uppercase px-2 py-0.5 rounded-md font-bold ${typeColor}`}>
                       {rec.type}
                     </span>
                     <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-100 text-zinc-700 font-bold">
                       {rec.priority} · {rec.actionType.replace('_', ' ')}
                     </span>
-                    <span className="text-[11px] text-zinc-400">Confidence: {rec.confidence}%</span>
+                    <span className="text-[11px] text-zinc-400 font-mono">Confidence: {rec.confidence}%</span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-zinc-100">
                     <button
                       onClick={() => handleLaunchExperiment(rec.id)}
-                      className="px-3 py-1 bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 rounded-lg text-xs font-semibold"
+                      className="px-3 py-1 bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       Run Experiment
                     </button>
                     <button
                       onClick={() => handleApproveRec(rec.id)}
-                      className="px-3 py-1 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg text-xs font-semibold"
+                      className="px-3 py-1 bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg text-xs font-semibold cursor-pointer transition-colors shadow-2xs"
                     >
                       Approve
                     </button>
                     <button
                       onClick={() => handleRejectRec(rec.id)}
-                      className="px-3 py-1 bg-zinc-100 text-zinc-700 hover:bg-zinc-200 rounded-lg text-xs font-semibold"
+                      className="px-3 py-1 bg-zinc-100 text-zinc-700 hover:bg-zinc-200 rounded-lg text-xs font-semibold cursor-pointer transition-colors"
                     >
                       Reject
                     </button>
                   </div>
                 </div>
 
-                <h3 className="text-sm font-bold text-zinc-950">{rec.title}</h3>
-                <p className="text-xs text-zinc-700 leading-relaxed">{rec.rationale}</p>
+                <h3 className="text-sm font-bold text-zinc-950 break-words">{rec.title}</h3>
+                <p className="text-xs text-zinc-700 leading-relaxed break-words">{rec.rationale}</p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2 text-xs">
-                  <div className="p-2.5 rounded-lg bg-zinc-50 border border-zinc-100 space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-2 text-xs min-w-0">
+                  <div className="p-2.5 rounded-lg bg-zinc-50 border border-zinc-100 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 block truncate">
                       What If We Do Nothing?
                     </span>
-                    <p className="text-[11px] text-zinc-600">{rec.whatIfWeDoNothing}</p>
+                    <p className="text-[11px] text-zinc-600 break-words">{rec.whatIfWeDoNothing}</p>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-zinc-50 border border-zinc-100 space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600">
+                  <div className="p-2.5 rounded-lg bg-zinc-50 border border-zinc-100 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 block truncate">
                       Why This Could Fail:
                     </span>
-                    <p className="text-[11px] text-zinc-600">{rec.whyThisCouldFail}</p>
+                    <p className="text-[11px] text-zinc-600 break-words">{rec.whyThisCouldFail}</p>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-zinc-50 border border-zinc-100 space-y-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600">
+                  <div className="p-2.5 rounded-lg bg-zinc-50 border border-zinc-100 space-y-1 min-w-0 overflow-hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 block truncate">
                       Metric To Evaluate:
                     </span>
-                    <p className="text-[11px] text-zinc-600 font-medium">{rec.metricToEvaluate}</p>
+                    <p className="text-[11px] text-zinc-600 font-medium break-words">{rec.metricToEvaluate}</p>
                   </div>
                 </div>
               </div>
@@ -1095,15 +1095,15 @@ export const WarRoomView: React.FC = () => {
 
       {/* 10. SECTION: COMPANY SCORECARD */}
       {scorecard && (
-        <div className="p-6 rounded-2xl border border-zinc-200 bg-white space-y-4 shadow-xs">
-          <div className="flex items-center justify-between">
+        <div className="p-5 sm:p-6 rounded-2xl border border-zinc-200 bg-white space-y-4 shadow-xs min-w-0 overflow-hidden">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
             <div>
               <h3 className="text-sm font-bold text-zinc-900">Our Company Defensibility Scorecard</h3>
               <p className="text-xs text-zinc-500">
                 Grounded in {scorecard.evidenceGroundingCount} verified research claims. No synthetic or hallucinated metrics.
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0">
               <span className="text-[11px] text-zinc-500">Defensibility:</span>
               <span className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-100 text-indigo-800">
                 {scorecard.defensibilityRating} ({scorecard.moatScore}/100)
@@ -1111,30 +1111,30 @@ export const WarRoomView: React.FC = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-            <div className="space-y-2 p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-emerald-800">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs min-w-0">
+            <div className="space-y-2 p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 min-w-0 overflow-hidden">
+              <h4 className="text-[11px] font-bold uppercase tracking-wider text-emerald-800 truncate">
                 Verified Competitive Strengths
               </h4>
               <ul className="space-y-1.5 text-zinc-700">
                 {scorecard.strengths.map((s, i) => (
-                  <li key={i} className="flex items-start gap-1.5">
+                  <li key={i} className="flex items-start gap-1.5 min-w-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                    <span>{s}</span>
+                    <span className="break-words">{s}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="space-y-2 p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-rose-800">
+            <div className="space-y-2 p-3.5 rounded-xl bg-zinc-50 border border-zinc-200/80 min-w-0 overflow-hidden">
+              <h4 className="text-[11px] font-bold uppercase tracking-wider text-rose-800 truncate">
                 Critical Vulnerabilities & Areas to Shore Up
               </h4>
               <ul className="space-y-1.5 text-zinc-700">
                 {scorecard.weaknesses.map((w, i) => (
-                  <li key={i} className="flex items-start gap-1.5">
+                  <li key={i} className="flex items-start gap-1.5 min-w-0">
                     <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-                    <span>{w}</span>
+                    <span className="break-words">{w}</span>
                   </li>
                 ))}
               </ul>

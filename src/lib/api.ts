@@ -156,7 +156,7 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(data),
     }),
-  login: (data: { email: string; password?: string }) =>
+  login: (data: { email: string; password?: string; clientAccountSync?: any }) =>
     request<{ user: any; token: string; workspaces: Workspace[]; activeWorkspaceId: string }>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(data),

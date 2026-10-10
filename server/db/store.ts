@@ -448,6 +448,10 @@ export class PersistentDatabaseStore {
   }
 
   private scheduleSave(): void {
+    if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
+      this.saveToDiskSync();
+      return;
+    }
     if (this.saveDebounceTimer) {
       clearTimeout(this.saveDebounceTimer);
     }
@@ -561,11 +565,48 @@ export class PersistentDatabaseStore {
     avatarValue?: string;
   }): { user: User; token: string } {
     const normalizedEmail = data.email.trim().toLowerCase();
-    if (this.userAccounts.has(normalizedEmail)) {
+
+    // Check existing accounts case-insensitively
+    let existingAccount = this.userAccounts.get(normalizedEmail);
+    if (!existingAccount) {
+      for (const [accEmail, acc] of this.userAccounts.entries()) {
+        if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+          existingAccount = acc;
+          break;
+        }
+      }
+    }
+
+    if (existingAccount && existingAccount.passwordHash) {
+      // If client provides the same password, seamlessly recover and return authenticated session
+      if (data.password) {
+        const candidateHash = this.hashPassword(data.password, existingAccount.salt);
+        if (candidateHash === existingAccount.passwordHash) {
+          let user = this.getUser(existingAccount.id);
+          if (!user) {
+            user = {
+              id: existingAccount.id,
+              email: existingAccount.email,
+              name: existingAccount.name,
+              displayName: existingAccount.displayName || existingAccount.name,
+              avatarType: existingAccount.avatarType || 'INITIALS',
+              avatarValue: existingAccount.avatarValue || this.computeInitials(existingAccount.name),
+              avatarUrl: existingAccount.avatarUrl || '',
+              profileImageUrl: existingAccount.profileImageUrl || '',
+              createdAt: existingAccount.createdAt,
+              updatedAt: existingAccount.updatedAt,
+            };
+            this.users.set(user.id, user);
+          }
+          const token = this.createSession(user.id);
+          this.saveToDiskSync();
+          return { user, token };
+        }
+      }
       throw new Error(`An account with email "${data.email}" already exists.`);
     }
 
-    const userId = `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+    const userId = existingAccount?.id || `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
     const salt = crypto.randomBytes(16).toString('hex');
     const passwordHash = this.hashPassword(data.password || crypto.randomBytes(16).toString('hex'), salt);
 
@@ -616,7 +657,7 @@ export class PersistentDatabaseStore {
     this.userAccounts.set(normalizedEmail, account);
 
     const token = this.createSession(userId);
-    this.scheduleSave();
+    this.saveToDiskSync();
     return { user, token };
   }
 
@@ -718,7 +759,15 @@ export class PersistentDatabaseStore {
 
   authenticateUser(email: string, password?: string): { user: User; token: string } | null {
     const normalizedEmail = email.trim().toLowerCase();
-    const account = this.userAccounts.get(normalizedEmail);
+    let account = this.userAccounts.get(normalizedEmail);
+    if (!account) {
+      for (const [accEmail, acc] of this.userAccounts.entries()) {
+        if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+          account = acc;
+          break;
+        }
+      }
+    }
     if (!account) return null;
 
     if (password) {
@@ -728,10 +777,25 @@ export class PersistentDatabaseStore {
       }
     }
 
-    const user = this.users.get(account.id);
-    if (!user) return null;
+    let user = this.getUser(account.id);
+    if (!user) {
+      user = {
+        id: account.id,
+        email: account.email,
+        name: account.name,
+        displayName: account.displayName || account.name,
+        avatarType: account.avatarType || 'INITIALS',
+        avatarValue: account.avatarValue || this.computeInitials(account.name),
+        avatarUrl: account.avatarUrl || '',
+        profileImageUrl: account.profileImageUrl || '',
+        createdAt: account.createdAt,
+        updatedAt: account.updatedAt,
+      };
+      this.users.set(user.id, user);
+    }
 
     const token = this.createSession(user.id);
+    this.saveToDiskSync();
     return { user, token };
   }
 
@@ -744,7 +808,7 @@ export class PersistentDatabaseStore {
       expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
     };
     this.sessions.set(token, session);
-    this.scheduleSave();
+    this.saveToDiskSync();
     return token;
   }
 
@@ -755,7 +819,7 @@ export class PersistentDatabaseStore {
 
     if (new Date(session.expiresAt).getTime() < Date.now()) {
       this.sessions.delete(token);
-      this.scheduleSave();
+      this.saveToDiskSync();
       return null;
     }
 
@@ -764,20 +828,61 @@ export class PersistentDatabaseStore {
 
   invalidateSession(token: string): boolean {
     const deleted = this.sessions.delete(token);
-    if (deleted) this.scheduleSave();
+    if (deleted) this.saveToDiskSync();
     return deleted;
   }
 
   createPasswordResetToken(email: string): string | null {
     const normalizedEmail = email.trim().toLowerCase();
-    const account = this.userAccounts.get(normalizedEmail);
-    if (!account) return null;
+    let account = this.userAccounts.get(normalizedEmail);
+    if (!account) {
+      for (const [accEmail, acc] of this.userAccounts.entries()) {
+        if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+          account = acc;
+          break;
+        }
+      }
+    }
 
     const resetToken = crypto.randomBytes(24).toString('hex');
-    account.resetToken = resetToken;
-    account.resetTokenExpires = Date.now() + 3600000; // 1 hour
-    this.userAccounts.set(normalizedEmail, account);
-    this.scheduleSave();
+    const resetTokenExpires = Date.now() + 3600000; // 1 hour
+
+    if (!account) {
+      // Create user and account placeholder so the user can immediately set their new password and access their workspace
+      const userId = `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`;
+      const salt = crypto.randomBytes(16).toString('hex');
+      const name = normalizedEmail.split('@')[0];
+      const user: User = {
+        id: userId,
+        email: normalizedEmail,
+        name,
+        displayName: name,
+        avatarType: 'INITIALS',
+        avatarValue: this.computeInitials(name),
+        avatarUrl: '',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      account = {
+        id: userId,
+        email: normalizedEmail,
+        name,
+        passwordHash: '',
+        salt,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+        resetToken,
+        resetTokenExpires,
+      };
+      this.users.set(userId, user);
+      this.userAccounts.set(normalizedEmail, account);
+    } else {
+      account.resetToken = resetToken;
+      account.resetTokenExpires = resetTokenExpires;
+      this.userAccounts.set(normalizedEmail, account);
+    }
+
+    this.saveToDiskSync();
     return resetToken;
   }
 
@@ -789,8 +894,28 @@ export class PersistentDatabaseStore {
         account.salt = salt;
         delete account.resetToken;
         delete account.resetTokenExpires;
+        account.updatedAt = new Date().toISOString();
         this.userAccounts.set(email, account);
-        this.scheduleSave();
+
+        // Ensure user record exists
+        let user = this.getUser(account.id);
+        if (!user) {
+          user = {
+            id: account.id,
+            email: account.email,
+            name: account.name,
+            displayName: account.displayName || account.name,
+            avatarType: account.avatarType || 'INITIALS',
+            avatarValue: account.avatarValue || this.computeInitials(account.name),
+            avatarUrl: account.avatarUrl || '',
+            profileImageUrl: account.profileImageUrl || '',
+            createdAt: account.createdAt,
+            updatedAt: account.updatedAt,
+          };
+          this.users.set(user.id, user);
+        }
+
+        this.saveToDiskSync();
         return true;
       }
     }

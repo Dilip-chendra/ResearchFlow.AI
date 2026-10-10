@@ -170,15 +170,15 @@ export const MarketGraphModal: React.FC<MarketGraphModalProps> = ({ isOpen, onCl
                       return (
                         <div
                           key={idx}
-                          className="p-2.5 rounded-lg border border-zinc-200 bg-white text-xs flex items-center justify-between"
+                          className="p-2.5 rounded-lg border border-zinc-200 bg-white text-xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 min-w-0"
                         >
-                          <span className="font-semibold text-zinc-800 truncate max-w-[35%]">
+                          <span className="font-semibold text-zinc-800 truncate max-w-full sm:max-w-[35%]">
                             {sourceNode?.label || link.source}
                           </span>
-                          <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 font-semibold border border-zinc-200">
+                          <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-zinc-100 text-zinc-600 font-semibold border border-zinc-200 shrink-0">
                             {link.relationship.replace('_', ' ')}
                           </span>
-                          <span className="font-semibold text-zinc-800 truncate max-w-[35%] text-right">
+                          <span className="font-semibold text-zinc-800 truncate max-w-full sm:max-w-[35%] text-left sm:text-right">
                             {targetNode?.label || link.target}
                           </span>
                         </div>
