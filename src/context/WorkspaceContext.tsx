@@ -356,8 +356,8 @@ export const WorkspaceProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   }) => {
     const updatedUser: User = {
       ...(user || {
-        id: 'usr_default_founder',
-        email: 'founder@researchflow.ai',
+        id: 'usr_default_user',
+        email: 'user@company.com',
         createdAt: new Date().toISOString(),
       }),
       name: data.name?.trim() || user?.name || 'User',

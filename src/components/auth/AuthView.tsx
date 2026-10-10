@@ -13,7 +13,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
   initialMode = 'login',
   onBackToLanding,
 }) => {
-  const { login, signup, addToast, enterDemoMode } = useWorkspace();
+  const { login, signup, addToast } = useWorkspace();
   const [mode, setMode] = useState<'login' | 'signup' | 'forgot'>(initialMode);
   
   // Login / Signup Form
@@ -178,19 +178,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
           {mode === 'login' && (
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <div className="flex justify-between items-center mb-1">
-                  <label className="block text-xs font-medium text-slate-300">Email Address</label>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setEmail('founder@researchflow.ai');
-                      setPassword('DemoPassword123!');
-                    }}
-                    className="text-[11px] text-amber-400 hover:text-amber-300 font-medium transition-colors"
-                  >
-                    Auto-fill Demo Founder
-                  </button>
-                </div>
+                <label className="block text-xs font-medium text-slate-300 mb-1">Email Address</label>
                 <div className="relative">
                   <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
                   <input
@@ -198,7 +186,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="founder@researchflow.ai"
+                    placeholder="you@company.com"
                     className="w-full pl-9 pr-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   />
                 </div>
@@ -341,7 +329,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="founder@researchflow.ai"
+                      placeholder="you@company.com"
                       className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
                   </div>
