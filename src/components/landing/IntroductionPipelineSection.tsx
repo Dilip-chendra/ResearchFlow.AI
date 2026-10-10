@@ -43,7 +43,7 @@ export const IntroductionPipelineSection: React.FC = () => {
   return (
     <section id="pipeline" className="relative py-[clamp(4.5rem,10vh,8rem)] px-5 sm:px-10 md:px-12 max-w-5xl mx-auto w-full space-y-24 sm:space-y-28">
       {/* 04. Introducing ResearchFlow */}
-      <div className="space-y-10 sm:space-y-12">
+      <div className="space-y-10 sm:space-y-12 p-8 sm:p-12 rounded-3xl border border-amber-400/25 bg-black/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
         <div className="space-y-4 max-w-2xl">
           <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
             04 &mdash; THE SYSTEM
@@ -87,7 +87,7 @@ export const IntroductionPipelineSection: React.FC = () => {
       </div>
 
       {/* 05. Live Web Research Pipeline */}
-      <div className="space-y-8 pt-10 sm:pt-12 border-t border-amber-400/20">
+      <div className="space-y-8 p-8 sm:p-12 rounded-3xl border border-amber-400/25 bg-black/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
         <div className="space-y-3 max-w-2xl">
           <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F]/90 font-bold drop-shadow-sm">
             05 &mdash; ENGINE CAPABILITIES

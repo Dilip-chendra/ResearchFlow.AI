@@ -18,8 +18,33 @@ export const EvidenceProvenanceSection: React.FC = () => {
           </p>
         </div>
 
+        {/* Extraordinary Evidence Engine UI Showcase */}
+        <div className="relative rounded-2xl sm:rounded-3xl border border-amber-400/35 bg-black/75 backdrop-blur-2xl p-2.5 sm:p-4 shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(212,175,55,0.2)] overflow-hidden group">
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-amber-400/20 mb-3 text-[11px] font-mono text-[#F5D77F]/90">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" />
+              <span className="font-semibold text-white/95 tracking-wide">AI EVIDENCE VERIFICATION & CONFLICT ENGINE</span>
+            </div>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="text-emerald-400 font-bold">98% Factual Grounding</span>
+              <span className="text-white/30 hidden sm:inline">&bull;</span>
+              <span className="text-amber-300 font-semibold hidden sm:inline">Cryptographic SHA-256 Hashes</span>
+            </div>
+          </div>
+
+          <div className="relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[16/9] w-full border border-white/10 shadow-2xl">
+            <img
+              src="/images/evidence-engine-preview.jpg"
+              alt="ResearchFlow AI Evidence Verification and Provenance Engine"
+              className="w-full h-full object-cover object-center transform group-hover:scale-[1.015] transition-transform duration-700 filter brightness-[1.03] contrast-[1.02]"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+          </div>
+        </div>
+
         {/* Chain of Custody Diagram */}
-        <div className="p-6 sm:p-8 rounded-3xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] space-y-6">
+        <div className="p-6 sm:p-8 rounded-3xl border border-amber-400/25 bg-black/50 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs font-mono pb-4 border-b border-white/15">
             <span className="text-white/80 font-semibold tracking-wider">CHAIN OF CUSTODY VERIFICATION</span>
             <span className="px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-[#F5D77F] font-semibold shadow-[0_0_12px_rgba(212,175,55,0.3)]">

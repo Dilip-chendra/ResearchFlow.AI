@@ -11,9 +11,10 @@ export const VisionAndCtaSection: React.FC<VisionAndCtaSectionProps> = ({
   onSignIn,
 }) => {
   return (
-    <section className="relative py-32 sm:py-44 px-6 sm:px-12 max-w-5xl mx-auto w-full space-y-36">
-      {/* 24. Vision */}
-      <div className="space-y-8 max-w-3xl">
+    <section className="relative py-24 sm:py-32 px-5 sm:px-10 max-w-5xl mx-auto w-full">
+      <div className="p-8 sm:p-14 rounded-3xl border border-amber-400/30 bg-black/75 backdrop-blur-2xl shadow-[0_24px_80px_rgba(0,0,0,0.85)] space-y-16">
+        {/* 24. Vision */}
+        <div className="space-y-6 max-w-3xl">
         <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
           24 &mdash; THE PERSPECTIVE
         </div>
@@ -57,6 +58,7 @@ export const VisionAndCtaSection: React.FC<VisionAndCtaSectionProps> = ({
           </button>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
   );
 };

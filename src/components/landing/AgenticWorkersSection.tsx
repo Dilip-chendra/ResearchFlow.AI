@@ -5,21 +5,21 @@ export const AgenticWorkersSection: React.FC = () => {
   return (
     <section className="relative py-28 sm:py-36 px-6 sm:px-12 max-w-5xl mx-auto w-full space-y-28">
       {/* 11. Specialized Intelligence Workers */}
-      <div className="space-y-12">
+      <div className="space-y-10 p-6 sm:p-10 rounded-3xl border border-amber-400/25 bg-black/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
         <div className="space-y-4 max-w-2xl">
           <div className="text-[11px] sm:text-xs font-subheading tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
             11 &mdash; MULTI-WORKER ORCHESTRATION
           </div>
-          <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
+          <h2 className="text-[clamp(2.2rem,5vw,3.75rem)] font-display font-extrabold text-white tracking-tight leading-[1.12] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
             One market. Multiple intelligence workers.
           </h2>
-          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+          <p className="text-base sm:text-lg text-white/85 leading-relaxed font-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
             Rather than a single monolithic prompt, ResearchFlow coordinates specialized autonomous workers operating in lockstep around your business context.
           </p>
         </div>
 
         {/* Central Hub Visualization */}
-        <div className="relative p-8 sm:p-12 rounded-3xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden">
+        <div className="relative p-6 sm:p-10 rounded-2xl border border-amber-400/20 bg-black/40 overflow-hidden">
           {/* Central Context Node */}
           <div className="flex flex-col items-center text-center space-y-3 pb-10">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] p-0.5 shadow-[0_0_36px_rgba(212,175,55,0.45)]">

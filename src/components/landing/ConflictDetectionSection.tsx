@@ -3,21 +3,22 @@ import { GitCompare, UserCheck } from 'lucide-react';
 
 export const ConflictDetectionSection: React.FC = () => {
   return (
-    <section className="relative py-28 sm:py-36 px-6 sm:px-12 max-w-5xl mx-auto w-full space-y-12">
-      <div className="space-y-4 max-w-2xl">
-        <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
-          08 &mdash; CROSS-SOURCE CONFLICT DETECTION
+    <section className="relative py-24 sm:py-32 px-5 sm:px-10 max-w-5xl mx-auto w-full">
+      <div className="space-y-10 p-8 sm:p-12 rounded-3xl border border-amber-400/25 bg-black/60 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.7)]">
+        <div className="space-y-4 max-w-2xl">
+          <div className="text-[11px] sm:text-xs font-mono tracking-[0.24em] uppercase text-[#F5D77F] font-bold drop-shadow-sm">
+            08 &mdash; CROSS-SOURCE CONFLICT DETECTION
+          </div>
+          <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
+            When sources disagree, ResearchFlow notices.
+          </h2>
+          <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
+            Competitors constantly test subtle pricing adjustments and repackage features. Rather than blindly merging contradictory figures, ResearchFlow exposes tension points for operator review.
+          </p>
         </div>
-        <h2 className="text-[clamp(2.4rem,6vw,4.25rem)] font-display font-extrabold text-white tracking-tight leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
-          When sources disagree, ResearchFlow notices.
-        </h2>
-        <p className="text-lg sm:text-xl text-white/85 leading-relaxed font-sans-editorial drop-shadow-[0_2px_8px_rgba(0,0,0,0.7)]">
-          Competitors constantly test subtle pricing adjustments and repackage features. Rather than blindly merging contradictory figures, ResearchFlow exposes tension points for operator review.
-        </p>
-      </div>
 
-      {/* Refined Conflict Comparison Visual */}
-      <div className="p-6 sm:p-8 rounded-3xl border border-amber-400/25 bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] space-y-6">
+        {/* Refined Conflict Comparison Visual */}
+        <div className="p-6 sm:p-8 rounded-2xl border border-amber-400/20 bg-black/40 shadow-inner space-y-6">
         <div className="flex items-center justify-between text-xs font-mono pb-4 border-b border-white/15">
           <span className="text-white/80 font-semibold tracking-wider">PRICING DISCREPANCY AUDIT</span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-400/15 border border-amber-400/30 text-[#F5D77F] font-semibold shadow-[0_0_12px_rgba(251,191,36,0.25)]">
@@ -67,6 +68,7 @@ export const ConflictDetectionSection: React.FC = () => {
           </span>
         </div>
       </div>
-    </section>
-  );
+    </div>
+  </section>
+);
 };

@@ -17,7 +17,7 @@ export const CinematicFooter: React.FC<CinematicFooterProps> = ({
   };
 
   return (
-    <footer className="relative border-t border-amber-400/20 bg-transparent text-xs font-mono text-white/85 pt-16 pb-[calc(4rem+env(safe-area-inset-bottom))] px-6 sm:px-12">
+    <footer className="relative border-t border-amber-400/25 bg-[#07080C]/95 backdrop-blur-2xl text-xs font-mono text-white/85 pt-16 pb-[calc(4rem+env(safe-area-inset-bottom))] px-6 sm:px-12 mt-16 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
       <div className="max-w-5xl mx-auto space-y-12">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           {/* Brand Info */}

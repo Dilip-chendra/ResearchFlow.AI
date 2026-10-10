@@ -49,8 +49,8 @@ export const LandingNav: React.FC<LandingNavProps> = ({ onSignIn, onGetStarted }
       <nav
         className={`pointer-events-auto w-full max-w-5xl h-11 sm:h-12 px-4 sm:px-5 rounded-full flex items-center justify-between transition-all duration-300 ${
           scrolled
-            ? 'bg-black/35 border border-amber-400/25 shadow-[0_4px_30px_rgba(0,0,0,0.5)]'
-            : 'bg-transparent border border-transparent'
+            ? 'bg-[#090A0F]/90 backdrop-blur-xl border border-amber-400/30 shadow-[0_8px_32px_rgba(0,0,0,0.8)]'
+            : 'bg-black/40 backdrop-blur-sm border border-amber-400/15'
         }`}
         aria-label="Main Navigation"
       >

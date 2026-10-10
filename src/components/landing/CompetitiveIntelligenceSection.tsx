@@ -18,8 +18,33 @@ export const CompetitiveIntelligenceSection: React.FC = () => {
           </p>
         </div>
 
+        {/* Extraordinary Market War Room Matrix Showcase */}
+        <div className="relative rounded-2xl sm:rounded-3xl border border-amber-400/35 bg-black/75 backdrop-blur-2xl p-2.5 sm:p-4 shadow-[0_24px_80px_rgba(0,0,0,0.85),0_0_50px_rgba(212,175,55,0.2)] overflow-hidden group">
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-amber-400/20 mb-3 text-[11px] font-mono text-[#F5D77F]/90">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_6px_#f5d77f]" />
+              <span className="font-semibold text-white/95 tracking-wide">MARKET WAR ROOM &bull; 2X2 PERCEPTUAL POSITIONING MATRIX</span>
+            </div>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="text-[#F5D77F] font-bold">Whitespace Gap Identified</span>
+              <span className="text-white/30 hidden sm:inline">&bull;</span>
+              <span className="text-emerald-400 font-semibold hidden sm:inline">Real-Time Move Feed</span>
+            </div>
+          </div>
+
+          <div className="relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[16/9] w-full border border-white/10 shadow-2xl">
+            <img
+              src="/images/war-room-preview.jpg"
+              alt="ResearchFlow AI Market War Room and Competitive Matrix"
+              className="w-full h-full object-cover object-center transform group-hover:scale-[1.015] transition-transform duration-700 filter brightness-[1.03] contrast-[1.02]"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+          </div>
+        </div>
+
         {/* Matrix Visual: Desktop Table & Mobile Stacked Cards */}
-        <div className="border border-amber-400/25 rounded-3xl bg-black/30 shadow-[0_12px_40px_rgba(0,0,0,0.4)] overflow-hidden text-xs">
+        <div className="border border-amber-400/25 rounded-3xl bg-black/50 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden text-xs">
           {/* Desktop Table Header */}
           <div className="hidden md:grid grid-cols-4 px-6 py-4 bg-white/[0.08] border-b border-white/15 font-mono text-xs text-white/90 font-semibold">
             <div>COMPETITOR & ENTITY</div>

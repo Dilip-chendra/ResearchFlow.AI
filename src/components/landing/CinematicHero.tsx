@@ -83,7 +83,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
 
           <button
             onClick={scrollToNext}
-            className="h-12 px-6 rounded-full bg-black/35 border border-amber-400/35 text-white hover:text-[#F5D77F] hover:border-[#F5D77F] text-sm font-medium inline-flex items-center justify-center gap-1.5 transition-all min-h-[48px] shadow-[0_0_15px_rgba(212,175,55,0.15)] drop-shadow-sm"
+            className="h-12 px-6 rounded-full bg-black/50 border border-amber-400/35 text-white hover:text-[#F5D77F] hover:border-[#F5D77F] text-sm font-medium inline-flex items-center justify-center gap-1.5 transition-all min-h-[48px] shadow-[0_0_15px_rgba(212,175,55,0.15)] drop-shadow-sm"
           >
             <span>See how it works</span>
             <ChevronDown className="w-3.5 h-3.5 opacity-80" />
@@ -91,8 +91,54 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
         </div>
       </div>
 
+      {/* Extraordinary Executive Command Center Showcase */}
+      <div className="relative pt-10 sm:pt-14 pb-4 w-full">
+        <div className="relative rounded-2xl sm:rounded-3xl border border-amber-400/35 bg-black/70 backdrop-blur-2xl p-2.5 sm:p-4 shadow-[0_24px_80px_rgba(0,0,0,0.9),0_0_60px_rgba(212,175,55,0.25)] overflow-hidden group">
+          {/* Executive Window Chrome */}
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 border-b border-amber-400/20 mb-3 text-[11px] font-mono text-[#F5D77F]/90">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80 shadow-[0_0_6px_rgba(244,63,94,0.6)]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80 shadow-[0_0_6px_rgba(245,158,11,0.6)]" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80 shadow-[0_0_6px_rgba(16,185,129,0.6)]" />
+              <span className="ml-2 font-semibold text-white/95 tracking-wide hidden sm:inline">GLOBAL MARKET INTELLIGENCE COMMAND &bull; ACTIVE</span>
+              <span className="ml-2 font-semibold text-white/95 tracking-wide sm:hidden">RADAR ACTIVE</span>
+            </div>
+            <div className="flex items-center gap-3 text-xs">
+              <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                42 Tracked
+              </span>
+              <span className="text-white/30 hidden sm:inline">&bull;</span>
+              <span className="text-[#F5D77F] font-semibold hidden sm:inline">98% Grounding Score</span>
+            </div>
+          </div>
+
+          {/* High-Resolution Razor-Sharp Visual */}
+          <div className="relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[16/9] w-full border border-white/10 shadow-2xl">
+            <img
+              src="/images/hero-command-center.jpg"
+              alt="ResearchFlow AI Global Market Intelligence Command Center"
+              className="w-full h-full object-cover object-center transform group-hover:scale-[1.015] transition-transform duration-700 filter brightness-[1.03] contrast-[1.02]"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent pointer-events-none" />
+
+            {/* Floating Live Overlay Telemetry Badges */}
+            <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 flex flex-wrap items-center justify-between gap-2.5 pointer-events-none">
+              <div className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/80 backdrop-blur-md border border-amber-400/40 text-white text-[11px] sm:text-xs font-mono flex items-center gap-2 shadow-xl">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" />
+                <span>Autonomous Market Radar &bull; Multi-Tenant Verified</span>
+              </div>
+              <div className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-black/80 backdrop-blur-md border border-amber-400/40 text-[#F5D77F] text-[11px] sm:text-xs font-mono font-bold shadow-xl">
+                Cryptographic Verbatim Grounding
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Bottom Editorial Cue */}
-      <div className="pt-8 sm:pt-12 flex items-center justify-between text-[11px] sm:text-xs font-mono text-white/70 border-t border-amber-400/20 drop-shadow-sm">
+      <div className="pt-6 sm:pt-10 flex items-center justify-between text-[11px] sm:text-xs font-mono text-white/70 border-t border-amber-400/20 drop-shadow-sm">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-[#F5D77F] shadow-[0_0_8px_#D4AF37]" />
           <span className="font-semibold text-white/90">STAGE 01 &mdash; MARKET CHAOS</span>
