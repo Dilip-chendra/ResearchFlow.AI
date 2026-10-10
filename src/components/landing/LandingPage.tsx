@@ -2,16 +2,14 @@ import React, { useEffect } from 'react';
 import { ResearchFlowCinematicCanvas } from '../ResearchFlowCinematicCanvas';
 import { LandingNav } from './LandingNav';
 import { CinematicHero } from './CinematicHero';
-import { MarketEverywhereSection } from './MarketEverywhereSection';
-import { IntroductionPipelineSection } from './IntroductionPipelineSection';
-import { EvidenceProvenanceSection } from './EvidenceProvenanceSection';
-import { ConflictDetectionSection } from './ConflictDetectionSection';
-import { CompetitiveIntelligenceSection } from './CompetitiveIntelligenceSection';
-import { AgenticWorkersSection } from './AgenticWorkersSection';
-import { CampaignStrategySection } from './CampaignStrategySection';
-import { ReliabilityAndRoutingSection } from './ReliabilityAndRoutingSection';
-import { ArchitectureAndBenchmarkSection } from './ArchitectureAndBenchmarkSection';
-import { VisionAndCtaSection } from './VisionAndCtaSection';
+import { ProblemVsSolutionSection } from './ProblemVsSolutionSection';
+import { BentoEngineSection } from './BentoEngineSection';
+import { InteractiveBattlecardSection } from './InteractiveBattlecardSection';
+import { BenchmarkRoiSection } from './BenchmarkRoiSection';
+import { TestimonialsSection } from './TestimonialsSection';
+import { PricingSection } from './PricingSection';
+import { FaqSection } from './FaqSection';
+import { GrandFinaleCtaSection } from './GrandFinaleCtaSection';
 import { CinematicFooter } from './CinematicFooter';
 
 interface LandingPageProps {
@@ -28,11 +26,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-transparent text-white font-sans-editorial selection:bg-amber-400/30 selection:text-amber-100 antialiased">
+    <div className="relative min-h-screen bg-transparent text-white font-sans-editorial selection:bg-amber-400/30 selection:text-amber-100 antialiased overflow-x-hidden">
       {/* 
         PERSISTENT CINEMATIC CANVAS BACKGROUND
         Renders full document scroll across all 192 frames (Page Top 0% -> Footer 100%).
-        High-DPI buffer, cover crop, progressive preloading, and requestAnimationFrame throttling.
       */}
       <ResearchFlowCinematicCanvas
         isFixed={true}
@@ -40,53 +37,49 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         focalPoint={{ x: 0.5, y: 0.45 }}
       />
 
-      {/* FOREGROUND EDITORIAL CONTENT LAYER */}
+      {/* FOREGROUND HIGH-CONVERTING MNC PRODUCT EXPERIENCE LAYER */}
       <div className="relative z-10 flex flex-col min-h-screen">
-        {/* Floating Minimal Navigation */}
+        {/* Floating Minimal Glass Navigation */}
         <LandingNav
           onSignIn={onSignIn}
           onGetStarted={onGetStarted}
         />
 
-        {/* 01. Cinematic Opening Hero */}
+        {/* 1. High-Impact Hero with Live Interactive Cockpit Sandbox */}
         <CinematicHero
           onGetStarted={onGetStarted}
         />
 
-        {/* 02. The Market is Everywhere & 03. The Research Bottleneck */}
-        <MarketEverywhereSection />
+        {/* 2. Problem vs. Solution (Replaces slide deck presentation) */}
+        <ProblemVsSolutionSection />
 
-        {/* 04. Introducing ResearchFlow & 05. Live Web Research Pipeline */}
-        <IntroductionPipelineSection />
+        {/* 3. The 5-Card Intelligence Bento Grid */}
+        <BentoEngineSection />
 
-        {/* 06. Evidence Provenance & 07. Confidence Scoring */}
-        <EvidenceProvenanceSection />
+        {/* 4. Interactive Battlecard Arena (Live Competitor Switcher) */}
+        <InteractiveBattlecardSection />
 
-        {/* 08. Cross-Source Conflict Detection */}
-        <ConflictDetectionSection />
+        {/* 5. Empirical Performance & ROI Dashboard */}
+        <BenchmarkRoiSection />
 
-        {/* 09. Competitive Intelligence & 10. The Synthesis Layer */}
-        <CompetitiveIntelligenceSection />
+        {/* 6. Customer Proof & Testimonials */}
+        <TestimonialsSection />
 
-        {/* 11. Specialized Intelligence Workers & 12. Shared Context Flow */}
-        <AgenticWorkersSection />
+        {/* 7. Transparent Tiered Pricing */}
+        <PricingSection
+          onGetStarted={onGetStarted}
+        />
 
-        {/* 13. Campaign Strategy & 14. Human Review & 15. Action */}
-        <CampaignStrategySection />
+        {/* 8. Frequently Asked Questions */}
+        <FaqSection />
 
-        {/* 16. Reliability & 17. Multi-Model Routing & 18. Prompt Injection Defense */}
-        <ReliabilityAndRoutingSection />
-
-        {/* 20. Technical Architecture & 21. Benchmark & 22. The Difference & 23. Operating Loop */}
-        <ArchitectureAndBenchmarkSection />
-
-        {/* 24. Vision & 25. Final High-Impact CTA */}
-        <VisionAndCtaSection
+        {/* 9. Grand Finale Magnetic CTA */}
+        <GrandFinaleCtaSection
           onGetStarted={onGetStarted}
           onSignIn={onSignIn}
         />
 
-        {/* 26. Persistent Dark Cinematic Footer */}
+        {/* 10. Persistent Dark Cinematic Footer */}
         <CinematicFooter
           onSignIn={onSignIn}
           onGetStarted={onGetStarted}
