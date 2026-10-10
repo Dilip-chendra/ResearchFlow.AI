@@ -1,7 +1,10 @@
 @import "tailwindcss";
 
 @layer utilities {
-  .font-stylish-heading, .font-heading, .font-display-stylish {
+  .font-stylish-heading, .font-trend-serif, .font-instrument {
+    font-family: 'Instrument Serif', Georgia, serif;
+  }
+  .font-heading, .font-display-stylish {
     font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
     letter-spacing: -0.025em;
   }
