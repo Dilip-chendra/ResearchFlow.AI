@@ -7,6 +7,7 @@ interface TypewriterProps {
   pauseDuration?: number;
   className?: string;
   cursorClassName?: string;
+  textClassName?: string;
 }
 
 export const Typewriter: React.FC<TypewriterProps> = ({
@@ -16,9 +17,10 @@ export const Typewriter: React.FC<TypewriterProps> = ({
   pauseDuration = 2200,
   className = '',
   cursorClassName = '',
+  textClassName = '',
 }) => {
   const [wordIndex, setWordIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
+  const [currentText, setCurrentText] = useState(words && words.length > 0 ? words[0] : '');
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
@@ -54,11 +56,11 @@ export const Typewriter: React.FC<TypewriterProps> = ({
   }, [currentText, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pauseDuration]);
 
   return (
-    <span className={`inline-flex items-center ${className}`}>
-      <span>{currentText}</span>
+    <span className={`inline-flex items-baseline ${className}`}>
+      <span className={textClassName}>{currentText}</span>
       <span
         aria-hidden="true"
-        className={`inline-block w-0.5 h-[1.15em] ml-1 bg-gradient-to-b from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] rounded-full animate-pulse shadow-[0_0_8px_#D4AF37] ${cursorClassName}`}
+        className={`inline-block w-[3px] sm:w-[4px] h-[0.82em] ml-2 align-middle bg-gradient-to-b from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] rounded-full animate-pulse shadow-[0_0_12px_#D4AF37] ${cursorClassName}`}
       />
     </span>
   );

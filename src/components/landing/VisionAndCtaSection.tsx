@@ -32,7 +32,7 @@ export const VisionAndCtaSection: React.FC<VisionAndCtaSectionProps> = ({
           <div className="text-[11px] font-subheading tracking-[0.2em] uppercase text-[#F5D77F] font-bold drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
             25 &mdash; COMMENCE INTELLIGENCE
           </div>
-          <h2 className="text-3xl sm:text-5xl font-luxury-serif italic font-medium text-white tracking-normal leading-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
+          <h2 className="text-3xl sm:text-5xl font-stylish-heading font-extrabold text-white tracking-[-0.025em] leading-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)]">
             Know your market.{' '}
             <span className="text-gold-gradient block sm:inline drop-shadow-[0_0_20px_rgba(212,175,55,0.5)]">Move with clarity.</span>
           </h2>

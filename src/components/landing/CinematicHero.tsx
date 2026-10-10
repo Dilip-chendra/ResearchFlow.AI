@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { Typewriter } from './Typewriter';
 import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
@@ -18,14 +18,6 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
     }
   };
 
-  const intelligencePrompts = [
-    'Tracking 42 enterprise SaaS competitors for sudden pricing adjustments...',
-    'Detecting contradictory SLA & uptime claims across 16 public domains...',
-    'Synthesizing high-ground positioning angles to win enterprise switchers...',
-    'Extracting verbatim claim provenance with zero hallucinations...',
-    'Generating board-level battlecards and executable GTM tasks...',
-  ];
-
   return (
     <section className="relative min-h-[92vh] flex flex-col justify-between pt-[clamp(6.5rem,14vh,9rem)] pb-8 px-5 sm:px-10 md:px-12 max-w-6xl mx-auto w-full">
       {/* Top spacer for navigation alignment */}
@@ -33,37 +25,30 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
 
       {/* Hero Narrative Core */}
       <div className="max-w-3xl space-y-6 sm:space-y-7">
-        {/* Master Headline with Luxury Typography, Subtle Entrance Motion, and Gold Gradient */}
+        {/* Master Headline with Ultra-Stylish Modern Typography, Dynamic Typing Animation, and Gold Gradient */}
         <HeadlineEntrance
           as="h1"
-          className="text-[clamp(2.75rem,7.5vw,5.5rem)] font-luxury-serif italic font-medium tracking-normal text-white leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]"
+          className="text-[clamp(2.75rem,7vw,5.25rem)] font-stylish-heading font-extrabold tracking-[-0.03em] text-white leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]"
         >
-          Know your market.{' '}
-          <span className="text-gold-gradient block sm:inline drop-shadow-[0_2px_28px_rgba(212,175,55,0.45)]">
-            Before it moves.
+          <span className="block text-white">Know your market.</span>
+          <span className="block text-gold-gradient drop-shadow-[0_2px_28px_rgba(212,175,55,0.45)] min-h-[1.15em] mt-1 sm:mt-2">
+            <Typewriter
+              words={[
+                'Before it moves.',
+                'Before competitors adapt.',
+                'Before pricing shifts.',
+                'Before features launch.',
+                'With verified evidence.',
+              ]}
+              typingSpeed={50}
+              deletingSpeed={25}
+              pauseDuration={2400}
+              className="inline-flex items-baseline"
+              textClassName="text-gold-gradient"
+              cursorClassName="h-[0.82em] w-1 sm:w-1.5 ml-2 bg-gradient-to-b from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] rounded-full shadow-[0_0_12px_#D4AF37]"
+            />
           </span>
         </HeadlineEntrance>
-
-        {/* Live Autonomous Typewriter Terminal */}
-        <div className="p-4 rounded-2xl border border-amber-400/30 bg-black/40 shadow-[0_12px_40px_rgba(0,0,0,0.5)] max-w-2xl space-y-2">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#F5D77F]/90 pb-2 border-b border-amber-400/15">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse" />
-              <span className="font-semibold tracking-wider uppercase text-white/90">AUTONOMOUS RADAR &bull; LIVE</span>
-            </div>
-            <span className="text-[#F5D77F] font-medium hidden sm:inline">MULTI-TENANT PIPELINE</span>
-          </div>
-          <div className="text-sm sm:text-base font-sans text-white/95 flex items-center min-h-[3rem] py-1">
-            <span className="text-[#F5D77F] font-mono font-bold mr-2.5 text-base">&gt;</span>
-            <Typewriter
-              words={intelligencePrompts}
-              typingSpeed={40}
-              deletingSpeed={20}
-              pauseDuration={2400}
-              className="text-white/90 font-medium"
-            />
-          </div>
-        </div>
 
         {/* Subhead & Supporting Statement */}
         <div className="space-y-2 max-w-xl">
