@@ -7,6 +7,9 @@
   .font-playfair {
     font-family: 'Playfair Display', Georgia, serif;
   }
+  .font-luxury-serif, .font-curved-serif {
+    font-family: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  }
   .font-poppins {
     font-family: 'Poppins', sans-serif;
   }

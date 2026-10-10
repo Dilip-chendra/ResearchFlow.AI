@@ -36,7 +36,7 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
         {/* Master Headline with Luxury Typography, Subtle Entrance Motion, and Gold Gradient */}
         <HeadlineEntrance
           as="h1"
-          className="text-[clamp(2.5rem,7vw,5.25rem)] font-display font-extrabold tracking-tight text-white leading-[1.04] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]"
+          className="text-[clamp(2.75rem,7.5vw,5.5rem)] font-luxury-serif italic font-medium tracking-normal text-white leading-[1.08] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]"
         >
           Know your market.{' '}
           <span className="text-gold-gradient block sm:inline drop-shadow-[0_2px_28px_rgba(212,175,55,0.45)]">
