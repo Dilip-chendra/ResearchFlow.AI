@@ -18,6 +18,7 @@ import { razorpayService } from '../billing/razorpayService';
 import { entitlementEngine } from '../billing/entitlementEngine';
 import { aiGateway } from '../ai/gateway';
 import { User, Workspace, ActionableTaskItem, ExecutionTask, JobStatus, AIProviderType } from '../types';
+import { emailService } from '../services/emailService';
 
 export const apiRouter = Router();
 
@@ -234,7 +235,7 @@ apiRouter.post('/profile/avatar', handleUploadAvatar);
 apiRouter.delete('/auth/profile/avatar', handleRemoveAvatar);
 apiRouter.delete('/profile/avatar', handleRemoveAvatar);
 
-apiRouter.post(['/auth/signup', '/auth/register'], (req: Request, res: Response) => {
+apiRouter.post(['/auth/signup', '/auth/register'], async (req: Request, res: Response) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
   if (!email || typeof email !== 'string' || !email.trim()) {
     return res.status(400).json({ error: 'Email address is required for registration.' });
@@ -252,7 +253,7 @@ apiRouter.post(['/auth/signup', '/auth/register'], (req: Request, res: Response)
 
   const normalizedEmail = email.trim().toLowerCase();
   try {
-    const { user, token } = db.registerUser({
+    const { user, token } = await db.registerUserAsync({
       email: normalizedEmail,
       password: password.trim(),
       name: name.trim(),
@@ -306,7 +307,7 @@ apiRouter.post(['/auth/signup', '/auth/register'], (req: Request, res: Response)
   }
 });
 
-apiRouter.post('/auth/login', (req: Request, res: Response) => {
+apiRouter.post('/auth/login', async (req: Request, res: Response) => {
   const { email, password, clientAccountSync } = req.body;
   if (!email || typeof email !== 'string' || !email.trim()) {
     return res.status(400).json({ error: 'Email address is required.' });
@@ -316,12 +317,12 @@ apiRouter.post('/auth/login', (req: Request, res: Response) => {
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  let authResult = db.authenticateUser(normalizedEmail, password.trim());
+  let authResult = await db.authenticateUserAsync(normalizedEmail, password.trim());
 
   // Cold container recovery: if account is not found in memory but client has verified backup
   if (!authResult && clientAccountSync && clientAccountSync.name && password) {
     try {
-      const reg = db.registerUser({
+      const reg = await db.registerUserAsync({
         email: normalizedEmail,
         password: password.trim(),
         name: clientAccountSync.name,
@@ -445,24 +446,45 @@ apiRouter.post('/auth/logout', (req: Request, res: Response) => {
   res.json({ success: true, message: 'Logged out successfully.' });
 });
 
-apiRouter.post('/auth/forgot-password', (req: Request, res: Response) => {
+apiRouter.post('/auth/forgot-password', async (req: Request, res: Response) => {
   const { email } = req.body;
   if (!email || typeof email !== 'string' || !email.trim()) {
     return res.status(400).json({ error: 'Valid email address is required.' });
   }
 
   const normalizedEmail = email.trim().toLowerCase();
-  const resetToken = db.createPasswordResetToken(normalizedEmail);
+  const resetToken = await db.createPasswordResetTokenAsync(normalizedEmail);
+  const user = db.getUserByEmail(normalizedEmail);
+
+  let emailSent = false;
+  let emailError: string | undefined;
+
+  if (resetToken) {
+    const origin = (req.headers.origin || req.headers.referer || '').toString().replace(/\/$/, '');
+    const emailResult = await emailService.sendPasswordResetEmail({
+      to: normalizedEmail,
+      resetToken,
+      userName: user?.displayName || user?.name || 'Founder',
+      origin: origin || undefined,
+    });
+    emailSent = emailResult.success;
+    if (!emailResult.success) {
+      emailError = emailResult.error;
+    }
+  }
+
   res.json({
     success: true,
     message: resetToken
-      ? 'Password reset instructions have been generated.'
+      ? (emailSent ? 'Password reset instructions have been emailed to you.' : 'Password reset instructions generated.')
       : 'If that email is registered, instructions have been sent.',
     resetToken: resetToken || undefined,
+    emailSent,
+    emailError,
   });
 });
 
-apiRouter.post('/auth/reset-password', (req: Request, res: Response) => {
+apiRouter.post('/auth/reset-password', async (req: Request, res: Response) => {
   const { token, newPassword } = req.body;
   if (!token || typeof token !== 'string' || !token.trim()) {
     return res.status(400).json({ error: 'Reset token is required.' });
@@ -471,7 +493,7 @@ apiRouter.post('/auth/reset-password', (req: Request, res: Response) => {
     return res.status(400).json({ error: 'New password must be at least 8 characters long.' });
   }
 
-  const result = db.resetPasswordWithToken(token.trim(), newPassword.trim());
+  const result = await db.resetPasswordWithTokenAsync(token.trim(), newPassword.trim());
   if (!result) {
     return res.status(400).json({ error: 'Invalid or expired password reset token.' });
   }

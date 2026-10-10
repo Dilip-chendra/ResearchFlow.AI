@@ -63,6 +63,417 @@ var init_logger = __esm({
   }
 });
 
+// server/db/neonAdapter.ts
+import { neon } from "@neondatabase/serverless";
+var NeonDatabaseAdapter, neonAdapter;
+var init_neonAdapter = __esm({
+  "server/db/neonAdapter.ts"() {
+    init_logger();
+    NeonDatabaseAdapter = class {
+      constructor() {
+        this.sql = null;
+        this.isInitialized = false;
+        const dbUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+        if (dbUrl) {
+          try {
+            this.sql = neon(dbUrl);
+            logger.info("[NEON] Connected to Neon Serverless PostgreSQL");
+          } catch (err) {
+            logger.warn("[NEON] Failed to initialize Neon client:", err.message);
+          }
+        } else {
+          logger.info("[NEON] No DATABASE_URL found; operating in file/memory mode.");
+        }
+      }
+      isAvailable() {
+        return this.sql !== null;
+      }
+      /**
+       * Initializes PostgreSQL schema tables if they do not exist.
+       */
+      async ensureSchema() {
+        if (!this.sql || this.isInitialized) return;
+        try {
+          await this.sql`
+        CREATE TABLE IF NOT EXISTS app_users (
+          id TEXT PRIMARY KEY,
+          email TEXT NOT NULL,
+          name TEXT NOT NULL,
+          display_name TEXT,
+          avatar_type TEXT,
+          avatar_value TEXT,
+          avatar_url TEXT,
+          profile_image_url TEXT,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `;
+          await this.sql`
+        CREATE TABLE IF NOT EXISTS app_user_accounts (
+          email TEXT PRIMARY KEY,
+          id TEXT NOT NULL,
+          name TEXT NOT NULL,
+          password_hash TEXT NOT NULL,
+          salt TEXT NOT NULL,
+          reset_token TEXT,
+          reset_token_expires BIGINT,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `;
+          await this.sql`
+        CREATE TABLE IF NOT EXISTS app_workspaces (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          business_name TEXT,
+          description TEXT,
+          industry TEXT,
+          target_audience TEXT,
+          owner_id TEXT NOT NULL,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `;
+          await this.sql`
+        CREATE TABLE IF NOT EXISTS app_workspace_members (
+          id TEXT PRIMARY KEY,
+          workspace_id TEXT NOT NULL,
+          name TEXT NOT NULL,
+          email TEXT NOT NULL,
+          role TEXT NOT NULL,
+          title TEXT,
+          department TEXT,
+          joined_at TIMESTAMPTZ DEFAULT NOW()
+        )
+      `;
+          await this.sql`
+        CREATE TABLE IF NOT EXISTS app_sessions (
+          token TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          expires_at TIMESTAMPTZ NOT NULL
+        )
+      `;
+          this.isInitialized = true;
+          logger.info("[NEON] PostgreSQL schema initialized successfully.");
+        } catch (err) {
+          logger.warn("[NEON] Error initializing PostgreSQL schema:", err.message);
+        }
+      }
+      /**
+       * Loads all persistent user and account records from Neon Postgres into memory.
+       */
+      async loadInitialRecords() {
+        if (!this.sql) return { users: [], accounts: [], workspaces: [], members: [] };
+        try {
+          await this.ensureSchema();
+          const [usersRows, accountsRows, workspacesRows, membersRows] = await Promise.all([
+            this.sql`SELECT * FROM app_users`,
+            this.sql`SELECT * FROM app_user_accounts`,
+            this.sql`SELECT * FROM app_workspaces`,
+            this.sql`SELECT * FROM app_workspace_members`
+          ]);
+          const users = usersRows.map((r) => ({
+            id: r.id,
+            email: r.email,
+            name: r.name,
+            displayName: r.display_name,
+            avatarType: r.avatar_type || "INITIALS",
+            avatarValue: r.avatar_value,
+            avatarUrl: r.avatar_url || "",
+            profileImageUrl: r.profile_image_url || "",
+            createdAt: new Date(r.created_at).toISOString(),
+            updatedAt: new Date(r.updated_at).toISOString()
+          }));
+          const accounts = accountsRows.map((r) => ({
+            id: r.id,
+            email: r.email,
+            name: r.name,
+            passwordHash: r.password_hash,
+            salt: r.salt,
+            resetToken: r.reset_token || void 0,
+            resetTokenExpires: r.reset_token_expires ? Number(r.reset_token_expires) : void 0,
+            createdAt: new Date(r.created_at).toISOString(),
+            updatedAt: new Date(r.updated_at).toISOString()
+          }));
+          const workspaces = workspacesRows.map((r) => ({
+            id: r.id,
+            name: r.name,
+            businessName: r.business_name,
+            description: r.description,
+            industry: r.industry,
+            targetAudience: r.target_audience,
+            ownerId: r.owner_id,
+            createdAt: new Date(r.created_at).toISOString(),
+            updatedAt: new Date(r.updated_at).toISOString()
+          }));
+          const members = membersRows.map((r) => ({
+            id: r.id,
+            workspaceId: r.workspace_id,
+            name: r.name,
+            email: r.email,
+            role: r.role,
+            title: r.title,
+            department: r.department,
+            joinedAt: new Date(r.joined_at).toISOString()
+          }));
+          logger.info(`[NEON] Loaded ${users.length} users and ${workspaces.length} workspaces from Postgres.`);
+          return { users, accounts, workspaces, members };
+        } catch (err) {
+          logger.warn("[NEON] Failed to fetch initial records from Postgres:", err.message);
+          return { users: [], accounts: [], workspaces: [], members: [] };
+        }
+      }
+      /**
+       * Persists a user and user account record to Neon Postgres.
+       */
+      async saveUserAndAccount(user, account) {
+        if (!this.sql) return;
+        try {
+          await this.ensureSchema();
+          await this.sql`
+        INSERT INTO app_users (id, email, name, display_name, avatar_type, avatar_value, avatar_url, profile_image_url, created_at, updated_at)
+        VALUES (${user.id}, ${user.email}, ${user.name}, ${user.displayName || user.name}, ${user.avatarType || "INITIALS"}, ${user.avatarValue || ""}, ${user.avatarUrl || ""}, ${user.profileImageUrl || ""}, ${user.createdAt}, ${user.updatedAt || user.createdAt})
+        ON CONFLICT (id) DO UPDATE SET
+          name = EXCLUDED.name,
+          display_name = EXCLUDED.display_name,
+          avatar_type = EXCLUDED.avatar_type,
+          avatar_value = EXCLUDED.avatar_value,
+          avatar_url = EXCLUDED.avatar_url,
+          profile_image_url = EXCLUDED.profile_image_url,
+          updated_at = NOW()
+      `;
+          await this.sql`
+        INSERT INTO app_user_accounts (email, id, name, password_hash, salt, reset_token, reset_token_expires, created_at, updated_at)
+        VALUES (${account.email.toLowerCase().trim()}, ${account.id}, ${account.name}, ${account.passwordHash}, ${account.salt}, ${account.resetToken || null}, ${account.resetTokenExpires || null}, ${account.createdAt}, ${account.updatedAt || account.createdAt})
+        ON CONFLICT (email) DO UPDATE SET
+          password_hash = EXCLUDED.password_hash,
+          salt = EXCLUDED.salt,
+          reset_token = EXCLUDED.reset_token,
+          reset_token_expires = EXCLUDED.reset_token_expires,
+          name = EXCLUDED.name,
+          updated_at = NOW()
+      `;
+        } catch (err) {
+          logger.warn("[NEON] Failed to save user and account to Postgres:", err.message);
+        }
+      }
+      /**
+       * Updates an account's password hash and salt in Neon Postgres.
+       */
+      async updateAccountPassword(email, passwordHash, salt) {
+        if (!this.sql) return;
+        try {
+          await this.ensureSchema();
+          await this.sql`
+        UPDATE app_user_accounts
+        SET password_hash = ${passwordHash},
+            salt = ${salt},
+            reset_token = NULL,
+            reset_token_expires = NULL,
+            updated_at = NOW()
+        WHERE email = ${email.toLowerCase().trim()}
+      `;
+        } catch (err) {
+          logger.warn("[NEON] Failed to update password in Postgres:", err.message);
+        }
+      }
+      /**
+       * Updates a password reset token in Neon Postgres.
+       */
+      async saveResetToken(email, token, expiresAt) {
+        if (!this.sql) return;
+        try {
+          await this.ensureSchema();
+          await this.sql`
+        UPDATE app_user_accounts
+        SET reset_token = ${token},
+            reset_token_expires = ${expiresAt},
+            updated_at = NOW()
+        WHERE email = ${email.toLowerCase().trim()}
+      `;
+        } catch (err) {
+          logger.warn("[NEON] Failed to save reset token to Postgres:", err.message);
+        }
+      }
+      /**
+       * Persists a workspace to Neon Postgres.
+       */
+      async saveWorkspace(ws) {
+        if (!this.sql) return;
+        try {
+          await this.ensureSchema();
+          await this.sql`
+        INSERT INTO app_workspaces (id, name, business_name, description, industry, target_audience, owner_id, created_at, updated_at)
+        VALUES (${ws.id}, ${ws.name}, ${ws.businessName || ""}, ${ws.description || ""}, ${ws.industry || ""}, ${ws.targetAudience || ""}, ${ws.ownerId}, ${ws.createdAt}, ${ws.updatedAt || ws.createdAt})
+        ON CONFLICT (id) DO UPDATE SET
+          name = EXCLUDED.name,
+          business_name = EXCLUDED.business_name,
+          description = EXCLUDED.description,
+          industry = EXCLUDED.industry,
+          target_audience = EXCLUDED.target_audience,
+          updated_at = NOW()
+      `;
+        } catch (err) {
+          logger.warn("[NEON] Failed to save workspace to Postgres:", err.message);
+        }
+      }
+      /**
+       * Persists a workspace member to Neon Postgres.
+       */
+      async saveMember(m) {
+        if (!this.sql) return;
+        try {
+          await this.ensureSchema();
+          await this.sql`
+        INSERT INTO app_workspace_members (id, workspace_id, name, email, role, title, department, joined_at)
+        VALUES (${m.id}, ${m.workspaceId}, ${m.name}, ${m.email}, ${m.role}, ${m.title || ""}, ${m.department || ""}, ${m.joinedAt})
+        ON CONFLICT (id) DO NOTHING
+      `;
+        } catch (err) {
+          logger.warn("[NEON] Failed to save member to Postgres:", err.message);
+        }
+      }
+      /**
+       * Fetches a single user account and user by email from Neon Postgres.
+       */
+      async getUserAccountByEmail(email) {
+        if (!this.sql) return null;
+        try {
+          await this.ensureSchema();
+          const normalizedEmail = email.toLowerCase().trim();
+          const accounts = await this.sql`
+        SELECT * FROM app_user_accounts WHERE LOWER(TRIM(email)) = ${normalizedEmail} LIMIT 1
+      `;
+          if (!accounts || accounts.length === 0) return null;
+          const accRow = accounts[0];
+          const account = {
+            id: accRow.id,
+            email: accRow.email,
+            name: accRow.name,
+            passwordHash: accRow.password_hash,
+            salt: accRow.salt,
+            resetToken: accRow.reset_token || void 0,
+            resetTokenExpires: accRow.reset_token_expires ? Number(accRow.reset_token_expires) : void 0,
+            createdAt: new Date(accRow.created_at).toISOString(),
+            updatedAt: new Date(accRow.updated_at).toISOString()
+          };
+          const users = await this.sql`
+        SELECT * FROM app_users WHERE id = ${account.id} LIMIT 1
+      `;
+          let user;
+          if (users && users.length > 0) {
+            const uRow = users[0];
+            user = {
+              id: uRow.id,
+              email: uRow.email,
+              name: uRow.name,
+              displayName: uRow.display_name,
+              avatarType: uRow.avatar_type || "INITIALS",
+              avatarValue: uRow.avatar_value,
+              avatarUrl: uRow.avatar_url || "",
+              profileImageUrl: uRow.profile_image_url || "",
+              createdAt: new Date(uRow.created_at).toISOString(),
+              updatedAt: new Date(uRow.updated_at).toISOString()
+            };
+          }
+          return { user, account };
+        } catch (err) {
+          logger.warn("[NEON] Failed to fetch account by email from Postgres:", err.message);
+          return null;
+        }
+      }
+      /**
+       * Fetches account by password reset token.
+       */
+      async getAccountByResetToken(token) {
+        if (!this.sql) return null;
+        try {
+          await this.ensureSchema();
+          const accounts = await this.sql`
+        SELECT * FROM app_user_accounts WHERE reset_token = ${token.trim()} LIMIT 1
+      `;
+          if (!accounts || accounts.length === 0) return null;
+          const accRow = accounts[0];
+          const account = {
+            id: accRow.id,
+            email: accRow.email,
+            name: accRow.name,
+            passwordHash: accRow.password_hash,
+            salt: accRow.salt,
+            resetToken: accRow.reset_token || void 0,
+            resetTokenExpires: accRow.reset_token_expires ? Number(accRow.reset_token_expires) : void 0,
+            createdAt: new Date(accRow.created_at).toISOString(),
+            updatedAt: new Date(accRow.updated_at).toISOString()
+          };
+          const users = await this.sql`
+        SELECT * FROM app_users WHERE id = ${account.id} LIMIT 1
+      `;
+          let user;
+          if (users && users.length > 0) {
+            const uRow = users[0];
+            user = {
+              id: uRow.id,
+              email: uRow.email,
+              name: uRow.name,
+              displayName: uRow.display_name,
+              avatarType: uRow.avatar_type || "INITIALS",
+              avatarValue: uRow.avatar_value,
+              avatarUrl: uRow.avatar_url || "",
+              profileImageUrl: uRow.profile_image_url || "",
+              createdAt: new Date(uRow.created_at).toISOString(),
+              updatedAt: new Date(uRow.updated_at).toISOString()
+            };
+          }
+          return { user, account };
+        } catch (err) {
+          logger.warn("[NEON] Failed to fetch account by reset token from Postgres:", err.message);
+          return null;
+        }
+      }
+      /**
+       * Fetches workspaces and members for a given user.
+       */
+      async getWorkspacesAndMembersForUser(userId) {
+        if (!this.sql) return { workspaces: [], members: [] };
+        try {
+          await this.ensureSchema();
+          const [wsRows, memRows] = await Promise.all([
+            this.sql`SELECT * FROM app_workspaces WHERE owner_id = ${userId}`,
+            this.sql`SELECT * FROM app_workspace_members WHERE workspace_id IN (SELECT id FROM app_workspaces WHERE owner_id = ${userId})`
+          ]);
+          const workspaces = wsRows.map((r) => ({
+            id: r.id,
+            name: r.name,
+            businessName: r.business_name,
+            description: r.description,
+            industry: r.industry,
+            targetAudience: r.target_audience,
+            ownerId: r.owner_id,
+            createdAt: new Date(r.created_at).toISOString(),
+            updatedAt: new Date(r.updated_at).toISOString()
+          }));
+          const members = memRows.map((r) => ({
+            id: r.id,
+            workspaceId: r.workspace_id,
+            name: r.name,
+            email: r.email,
+            role: r.role,
+            title: r.title,
+            department: r.department,
+            joinedAt: new Date(r.joined_at).toISOString()
+          }));
+          return { workspaces, members };
+        } catch (err) {
+          logger.warn("[NEON] Failed to fetch workspaces for user from Postgres:", err.message);
+          return { workspaces: [], members: [] };
+        }
+      }
+    };
+    neonAdapter = new NeonDatabaseAdapter();
+  }
+});
+
 // server/db/store.ts
 import fs from "fs";
 import path from "path";
@@ -72,6 +483,7 @@ var DEMO_USER_ID, DEMO_WORKSPACE_ID, DEFAULT_USER, DEFAULT_WORKSPACE, DEFAULT_ME
 var init_store = __esm({
   "server/db/store.ts"() {
     init_logger();
+    init_neonAdapter();
     DEMO_USER_ID = "usr_demo_founder";
     DEMO_WORKSPACE_ID = "ws_demo_sandbox";
     DEFAULT_USER = {
@@ -283,6 +695,32 @@ var init_store = __esm({
         this.seedWarRoomDataIfEmpty();
         this.seedCompanyIntelligenceIfEmpty();
         this.saveToDiskSync();
+        if (neonAdapter.isAvailable()) {
+          this.hydrateFromNeon().catch((err) => {
+            logger.warn("[store] Background hydration from Neon caught error:", err?.message || err);
+          });
+        }
+      }
+      async hydrateFromNeon() {
+        if (!neonAdapter.isAvailable()) return;
+        try {
+          const records = await neonAdapter.loadInitialRecords();
+          for (const user of records.users) {
+            this.users.set(user.id, user);
+          }
+          for (const account of records.accounts) {
+            this.userAccounts.set(account.email.toLowerCase().trim(), account);
+          }
+          for (const ws of records.workspaces) {
+            this.workspaces.set(ws.id, ws);
+          }
+          for (const m of records.members) {
+            this.members.set(m.id, m);
+          }
+          logger.info(`[store] Hydrated ${records.users.length} users and ${records.workspaces.length} workspaces from Neon Postgres.`);
+        } catch (err) {
+          logger.warn("[store] Error hydrating from Neon:", err?.message || err);
+        }
       }
       hashPassword(password, salt) {
         return crypto.pbkdf2Sync(password, salt, 1e5, 64, "sha512").toString("hex");
@@ -606,7 +1044,23 @@ var init_store = __esm({
         this.userAccounts.set(normalizedEmail, account);
         const token = this.createSession(userId);
         this.saveToDiskSync();
+        if (neonAdapter.isAvailable()) {
+          neonAdapter.saveUserAndAccount(user, account).catch((err) => {
+            logger.warn("[store] Background saveUserAndAccount to Neon failed:", err?.message || err);
+          });
+        }
         return { user, token };
+      }
+      async registerUserAsync(data) {
+        const result = this.registerUser(data);
+        const normalizedEmail = data.email.trim().toLowerCase();
+        const account = this.userAccounts.get(normalizedEmail);
+        if (account && neonAdapter.isAvailable()) {
+          await neonAdapter.saveUserAndAccount(result.user, account).catch((err) => {
+            logger.warn("[store] Failed to save user and account to Neon:", err?.message || err);
+          });
+        }
+        return result;
       }
       updateUserProfile(userId, updates) {
         let user = this.users.get(userId);
@@ -693,6 +1147,65 @@ var init_store = __esm({
               account = acc;
               break;
             }
+          }
+        }
+        if (!account) return null;
+        if (password) {
+          const candidateHash = this.hashPassword(password, account.salt);
+          if (candidateHash !== account.passwordHash) {
+            return null;
+          }
+        }
+        let user = this.getUser(account.id);
+        if (!user) {
+          user = {
+            id: account.id,
+            email: account.email,
+            name: account.name,
+            displayName: account.displayName || account.name,
+            avatarType: account.avatarType || "INITIALS",
+            avatarValue: account.avatarValue || this.computeInitials(account.name),
+            avatarUrl: account.avatarUrl || "",
+            profileImageUrl: account.profileImageUrl || "",
+            createdAt: account.createdAt,
+            updatedAt: account.updatedAt
+          };
+          this.users.set(user.id, user);
+        }
+        const token = this.createSession(user.id);
+        this.saveToDiskSync();
+        return { user, token };
+      }
+      async authenticateUserAsync(email, password) {
+        const normalizedEmail = email.trim().toLowerCase();
+        let account = this.userAccounts.get(normalizedEmail);
+        if (!account) {
+          for (const [accEmail, acc] of this.userAccounts.entries()) {
+            if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+              account = acc;
+              break;
+            }
+          }
+        }
+        if (!account && neonAdapter.isAvailable()) {
+          try {
+            const fromNeon = await neonAdapter.getUserAccountByEmail(normalizedEmail);
+            if (fromNeon?.account) {
+              account = fromNeon.account;
+              this.userAccounts.set(normalizedEmail, account);
+              if (fromNeon.user) {
+                this.users.set(fromNeon.user.id, fromNeon.user);
+              }
+              const wsRecords = await neonAdapter.getWorkspacesAndMembersForUser(account.id);
+              for (const ws of wsRecords.workspaces) {
+                this.workspaces.set(ws.id, ws);
+              }
+              for (const m of wsRecords.members) {
+                this.members.set(m.id, m);
+              }
+            }
+          } catch (err) {
+            logger.warn("[store] Error checking user in Neon:", err?.message || err);
           }
         }
         if (!account) return null;
@@ -888,8 +1401,39 @@ var init_store = __esm({
           account.resetTokenExpires = resetTokenExpires;
           this.userAccounts.set(normalizedEmail, account);
         }
+        if (neonAdapter.isAvailable()) {
+          neonAdapter.saveResetToken(normalizedEmail, resetToken, resetTokenExpires).catch((err) => {
+            logger.warn("[store] Background saveResetToken to Neon failed:", err?.message || err);
+          });
+        }
         this.saveToDiskSync();
         logger.info(`[AUTH] Password reset token generated for ${this.maskEmail(normalizedEmail)}`);
+        return resetToken;
+      }
+      async createPasswordResetTokenAsync(email) {
+        const normalizedEmail = email.trim().toLowerCase();
+        let account = this.userAccounts.get(normalizedEmail);
+        if (!account && neonAdapter.isAvailable()) {
+          try {
+            const fromNeon = await neonAdapter.getUserAccountByEmail(normalizedEmail);
+            if (fromNeon?.account) {
+              account = fromNeon.account;
+              this.userAccounts.set(normalizedEmail, account);
+              if (fromNeon.user) {
+                this.users.set(fromNeon.user.id, fromNeon.user);
+              }
+            }
+          } catch (err) {
+            logger.warn("[store] Error checking account in Neon for reset token:", err?.message || err);
+          }
+        }
+        const resetToken = this.createPasswordResetToken(email);
+        if (resetToken && neonAdapter.isAvailable()) {
+          const resetTokenExpires = Date.now() + 36e5;
+          await neonAdapter.saveResetToken(normalizedEmail, resetToken, resetTokenExpires).catch((err) => {
+            logger.warn("[store] Failed to save reset token to Neon:", err?.message || err);
+          });
+        }
         return resetToken;
       }
       resetPasswordWithToken(token, newPass) {
@@ -920,6 +1464,11 @@ var init_store = __esm({
             }
             const sessionToken = this.createSession(user.id);
             this.saveToDiskSync();
+            if (neonAdapter.isAvailable()) {
+              neonAdapter.updateAccountPassword(account.email, account.passwordHash, account.salt).catch((err) => {
+                logger.warn("[store] Background updateAccountPassword to Neon failed:", err?.message || err);
+              });
+            }
             logger.info(`[AUTH] Password reset completed successfully for ${this.maskEmail(account.email)}`);
             return { user, token: sessionToken };
           }
@@ -927,7 +1476,62 @@ var init_store = __esm({
         logger.warn("[AUTH] Password reset failed: invalid or expired token");
         return null;
       }
+      async resetPasswordWithTokenAsync(token, newPass) {
+        let result = this.resetPasswordWithToken(token, newPass);
+        if (!result && neonAdapter.isAvailable()) {
+          try {
+            const fromNeon = await neonAdapter.getAccountByResetToken(token);
+            if (fromNeon?.account && fromNeon.account.resetTokenExpires && fromNeon.account.resetTokenExpires > Date.now()) {
+              const account = fromNeon.account;
+              const normalizedEmail = account.email.toLowerCase().trim();
+              this.userAccounts.set(normalizedEmail, account);
+              if (fromNeon.user) {
+                this.users.set(fromNeon.user.id, fromNeon.user);
+              }
+              result = this.resetPasswordWithToken(token, newPass);
+            }
+          } catch (err) {
+            logger.warn("[store] Error checking reset token in Neon:", err?.message || err);
+          }
+        }
+        if (result && neonAdapter.isAvailable()) {
+          const account = this.userAccounts.get(result.user.email.toLowerCase().trim());
+          if (account) {
+            await neonAdapter.updateAccountPassword(account.email, account.passwordHash, account.salt).catch((err) => {
+              logger.warn("[store] Failed to update password in Neon:", err?.message || err);
+            });
+          }
+        }
+        return result;
+      }
       // Workspaces & Users
+      getUserByEmail(email) {
+        if (!email) return void 0;
+        const normalized = email.trim().toLowerCase();
+        for (const u of this.users.values()) {
+          if (u.email.toLowerCase() === normalized) return u;
+        }
+        const account = this.userAccounts.get(normalized);
+        if (account) {
+          return this.getUser(account.id);
+        }
+        return void 0;
+      }
+      async getUserByEmailAsync(email) {
+        const existing = this.getUserByEmail(email);
+        if (existing) return existing;
+        if (neonAdapter.isAvailable()) {
+          const fromNeon = await neonAdapter.getUserAccountByEmail(email);
+          if (fromNeon?.user) {
+            this.users.set(fromNeon.user.id, fromNeon.user);
+            if (fromNeon.account) {
+              this.userAccounts.set(email.trim().toLowerCase(), fromNeon.account);
+            }
+            return fromNeon.user;
+          }
+        }
+        return void 0;
+      }
       getUser(id) {
         if (!id) return void 0;
         let user = this.users.get(id);
@@ -998,11 +1602,21 @@ var init_store = __esm({
           summary: `Created workspace: ${workspace.name}`
         });
         this.scheduleSave();
+        if (neonAdapter.isAvailable()) {
+          neonAdapter.saveWorkspace(workspace).catch((err) => {
+            logger.warn("[store] Background saveWorkspace to Neon failed:", err?.message || err);
+          });
+        }
         return workspace;
       }
       updateWorkspace(workspace) {
         this.workspaces.set(workspace.id, workspace);
         this.scheduleSave();
+        if (neonAdapter.isAvailable()) {
+          neonAdapter.saveWorkspace(workspace).catch((err) => {
+            logger.warn("[store] Background saveWorkspace to Neon failed:", err?.message || err);
+          });
+        }
         return workspace;
       }
       saveWorkspace(workspace) {
@@ -1236,6 +1850,11 @@ var init_store = __esm({
       addMember(member) {
         this.members.set(member.id, member);
         this.scheduleSave();
+        if (neonAdapter.isAvailable()) {
+          neonAdapter.saveMember(member).catch((err) => {
+            logger.warn("[store] Background saveMember to Neon failed:", err?.message || err);
+          });
+        }
         return member;
       }
       // Research Share Links
@@ -12070,6 +12689,116 @@ var AIGateway = class {
 };
 var aiGateway = new AIGateway();
 
+// server/services/emailService.ts
+init_logger();
+var EmailService = class {
+  constructor() {
+    this.apiKey = process.env.RESEND_API_KEY || "";
+    this.fromEmail = process.env.EMAIL_FROM || "ResearchFlow AI <onboarding@resend.dev>";
+  }
+  isConfigured() {
+    return Boolean(this.apiKey && this.apiKey.trim().startsWith("re_"));
+  }
+  /**
+   * Dispatches a branded password reset email via Resend.
+   */
+  async sendPasswordResetEmail(params) {
+    if (!this.isConfigured()) {
+      logger.warn("[EMAIL] Resend API key is not configured; skipping email dispatch.");
+      return { success: false, error: "Email service is not configured" };
+    }
+    const { to, resetToken, userName = "Founder", origin } = params;
+    const baseUrl = origin || process.env.APP_URL || "https://research-flow-ai-nine.vercel.app";
+    const resetUrl = `${baseUrl}/?mode=forgot&token=${encodeURIComponent(resetToken)}&email=${encodeURIComponent(to)}`;
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Reset your ResearchFlow AI Password</title>
+</head>
+<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #030712; color: #f3f4f6; padding: 40px 20px; margin: 0;">
+  <div style="max-width: 560px; margin: 0 auto; background-color: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 36px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);">
+    
+    <!-- Header with Brand Logo -->
+    <div style="text-align: center; margin-bottom: 28px;">
+      <div style="display: inline-block; padding: 10px 14px; background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.05)); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px;">
+        <span style="font-size: 20px; font-weight: 700; background: linear-gradient(135deg, #fcd34d, #f59e0b, #d97706); -webkit-background-clip: text; color: #f59e0b; letter-spacing: -0.5px;">
+          ResearchFlow AI
+        </span>
+      </div>
+      <p style="margin: 8px 0 0 0; font-size: 13px; color: #94a3b8;">Autonomous Market Intelligence & Strategy</p>
+    </div>
+
+    <!-- Message -->
+    <h1 style="font-size: 20px; font-weight: 600; color: #f8fafc; margin: 0 0 16px 0; text-align: center;">
+      Reset your Password
+    </h1>
+    <p style="font-size: 14px; line-height: 1.6; color: #cbd5e1; margin: 0 0 24px 0;">
+      Hello ${userName},
+    </p>
+    <p style="font-size: 14px; line-height: 1.6; color: #cbd5e1; margin: 0 0 28px 0;">
+      We received a request to reset your ResearchFlow AI password. Click the button below to set a new password:
+    </p>
+
+    <!-- Call to Action Button -->
+    <div style="text-align: center; margin: 32px 0;">
+      <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #ffffff; text-decoration: none; font-weight: 600; font-size: 14px; padding: 14px 32px; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4);">
+        Reset Password
+      </a>
+    </div>
+
+    <!-- Reset Token Fallback -->
+    <div style="margin: 28px 0; padding: 14px; background-color: #020617; border: 1px solid #334155; border-radius: 8px; text-align: center;">
+      <p style="margin: 0 0 6px 0; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8;">
+        Your Direct Reset Token:
+      </p>
+      <code style="font-family: monospace; font-size: 13px; color: #38bdf8; word-break: break-all;">
+        ${resetToken}
+      </code>
+    </div>
+
+    <!-- Security Footnote -->
+    <p style="font-size: 12px; line-height: 1.5; color: #64748b; margin: 28px 0 0 0; border-top: 1px solid #1e293b; padding-top: 20px;">
+      This password reset link is valid for <strong>1 hour</strong>. If you did not request this password reset, you can safely ignore this email and your account password will remain unchanged.
+    </p>
+  </div>
+
+  <div style="text-align: center; margin-top: 24px; font-size: 11px; color: #475569;">
+    &copy; ${(/* @__PURE__ */ new Date()).getFullYear()} ResearchFlow AI. Built for high-growth founders and strategists.
+  </div>
+</body>
+</html>
+    `;
+    try {
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`
+        },
+        body: JSON.stringify({
+          from: this.fromEmail,
+          to: [to],
+          subject: "Reset your ResearchFlow AI password",
+          html: htmlContent
+        })
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        logger.warn("[EMAIL] Resend returned error:", data);
+        return { success: false, error: data.message || "Failed to deliver email" };
+      }
+      logger.info(`[EMAIL] Password reset email sent via Resend to ${to} (ID: ${data.id})`);
+      return { success: true, messageId: data.id };
+    } catch (err) {
+      logger.error("[EMAIL] Failed to dispatch email via Resend:", err.message);
+      return { success: false, error: err.message };
+    }
+  }
+};
+var emailService = new EmailService();
+
 // server/api/routes.ts
 var apiRouter = Router();
 function getAuthUser(req) {
@@ -12230,7 +12959,7 @@ apiRouter.post("/auth/profile/avatar", handleUploadAvatar);
 apiRouter.post("/profile/avatar", handleUploadAvatar);
 apiRouter.delete("/auth/profile/avatar", handleRemoveAvatar);
 apiRouter.delete("/profile/avatar", handleRemoveAvatar);
-apiRouter.post(["/auth/signup", "/auth/register"], (req, res) => {
+apiRouter.post(["/auth/signup", "/auth/register"], async (req, res) => {
   const { email, password, name, avatarUrl, workspaceName, businessName, industry, targetAudience } = req.body;
   if (!email || typeof email !== "string" || !email.trim()) {
     return res.status(400).json({ error: "Email address is required for registration." });
@@ -12247,7 +12976,7 @@ apiRouter.post(["/auth/signup", "/auth/register"], (req, res) => {
   }
   const normalizedEmail = email.trim().toLowerCase();
   try {
-    const { user, token } = db.registerUser({
+    const { user, token } = await db.registerUserAsync({
       email: normalizedEmail,
       password: password.trim(),
       name: name.trim(),
@@ -12292,7 +13021,7 @@ apiRouter.post(["/auth/signup", "/auth/register"], (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
-apiRouter.post("/auth/login", (req, res) => {
+apiRouter.post("/auth/login", async (req, res) => {
   const { email, password, clientAccountSync } = req.body;
   if (!email || typeof email !== "string" || !email.trim()) {
     return res.status(400).json({ error: "Email address is required." });
@@ -12301,10 +13030,10 @@ apiRouter.post("/auth/login", (req, res) => {
     return res.status(400).json({ error: "Password is required." });
   }
   const normalizedEmail = email.trim().toLowerCase();
-  let authResult = db.authenticateUser(normalizedEmail, password.trim());
+  let authResult = await db.authenticateUserAsync(normalizedEmail, password.trim());
   if (!authResult && clientAccountSync && clientAccountSync.name && password) {
     try {
-      const reg = db.registerUser({
+      const reg = await db.registerUserAsync({
         email: normalizedEmail,
         password: password.trim(),
         name: clientAccountSync.name
@@ -12415,20 +13144,38 @@ apiRouter.post("/auth/logout", (req, res) => {
   }
   res.json({ success: true, message: "Logged out successfully." });
 });
-apiRouter.post("/auth/forgot-password", (req, res) => {
+apiRouter.post("/auth/forgot-password", async (req, res) => {
   const { email } = req.body;
   if (!email || typeof email !== "string" || !email.trim()) {
     return res.status(400).json({ error: "Valid email address is required." });
   }
   const normalizedEmail = email.trim().toLowerCase();
-  const resetToken = db.createPasswordResetToken(normalizedEmail);
+  const resetToken = await db.createPasswordResetTokenAsync(normalizedEmail);
+  const user = db.getUserByEmail(normalizedEmail);
+  let emailSent = false;
+  let emailError;
+  if (resetToken) {
+    const origin = (req.headers.origin || req.headers.referer || "").toString().replace(/\/$/, "");
+    const emailResult = await emailService.sendPasswordResetEmail({
+      to: normalizedEmail,
+      resetToken,
+      userName: user?.displayName || user?.name || "Founder",
+      origin: origin || void 0
+    });
+    emailSent = emailResult.success;
+    if (!emailResult.success) {
+      emailError = emailResult.error;
+    }
+  }
   res.json({
     success: true,
-    message: resetToken ? "Password reset instructions have been generated." : "If that email is registered, instructions have been sent.",
-    resetToken: resetToken || void 0
+    message: resetToken ? emailSent ? "Password reset instructions have been emailed to you." : "Password reset instructions generated." : "If that email is registered, instructions have been sent.",
+    resetToken: resetToken || void 0,
+    emailSent,
+    emailError
   });
 });
-apiRouter.post("/auth/reset-password", (req, res) => {
+apiRouter.post("/auth/reset-password", async (req, res) => {
   const { token, newPassword } = req.body;
   if (!token || typeof token !== "string" || !token.trim()) {
     return res.status(400).json({ error: "Reset token is required." });
@@ -12436,7 +13183,7 @@ apiRouter.post("/auth/reset-password", (req, res) => {
   if (!newPassword || typeof newPassword !== "string" || newPassword.trim().length < 8) {
     return res.status(400).json({ error: "New password must be at least 8 characters long." });
   }
-  const result = db.resetPasswordWithToken(token.trim(), newPassword.trim());
+  const result = await db.resetPasswordWithTokenAsync(token.trim(), newPassword.trim());
   if (!result) {
     return res.status(400).json({ error: "Invalid or expired password reset token." });
   }
@@ -15178,6 +15925,7 @@ apiRouter.use((err, req, res, next) => {
 });
 
 // server/vercel.ts
+init_store();
 init_logger();
 var app = express();
 app.use(express.json({
@@ -15196,6 +15944,11 @@ app.use((req, res, next) => {
   }
   next();
 });
+if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+  db.hydrateFromNeon().catch((err) => {
+    logger.warn("[VERCEL] Cold boot hydration caught error:", err?.message || err);
+  });
+}
 try {
   demoService.seedDemoJob("ws_demo_sandbox");
   demoService.seedDemoJob("ws_default_prod");
@@ -15208,6 +15961,8 @@ app.get(["/api/health", "/health", "/api/index", "/api"], (req, res) => {
     app: "ResearchFlow AI",
     version: "1.0.0",
     platform: "vercel-serverless",
+    database: process.env.DATABASE_URL || process.env.POSTGRES_URL ? "neon-serverless-postgres" : "file-json",
+    emailService: process.env.RESEND_API_KEY ? "resend-configured" : "fallback-mode",
     timestamp: (/* @__PURE__ */ new Date()).toISOString()
   });
 });

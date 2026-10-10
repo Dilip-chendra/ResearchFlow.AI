@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import { apiRouter } from './api/routes';
+import { db } from './db/store';
 import { demoService } from './services/demoService';
 import { logger } from './utils/logger';
 
@@ -26,6 +27,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Hydrate persistent data from Neon Postgres on serverless container start
+if (process.env.DATABASE_URL || process.env.POSTGRES_URL) {
+  db.hydrateFromNeon().catch(err => {
+    logger.warn('[VERCEL] Cold boot hydration caught error:', err?.message || err);
+  });
+}
+
 // Seed demo data on initial cold boot safely
 try {
   demoService.seedDemoJob('ws_demo_sandbox');
@@ -41,6 +49,8 @@ app.get(['/api/health', '/health', '/api/index', '/api'], (req: Request, res: Re
     app: 'ResearchFlow AI',
     version: '1.0.0',
     platform: 'vercel-serverless',
+    database: (process.env.DATABASE_URL || process.env.POSTGRES_URL) ? 'neon-serverless-postgres' : 'file-json',
+    emailService: process.env.RESEND_API_KEY ? 'resend-configured' : 'fallback-mode',
     timestamp: new Date().toISOString(),
   });
 });

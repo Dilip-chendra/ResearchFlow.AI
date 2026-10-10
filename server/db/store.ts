@@ -62,6 +62,7 @@ import {
   AIProviderType,
 } from '../types';
 import { logger } from '../utils/logger';
+import { neonAdapter } from './neonAdapter';
 
 export interface UserAccount {
   id: string;
@@ -312,6 +313,34 @@ export class PersistentDatabaseStore {
     this.seedWarRoomDataIfEmpty();
     this.seedCompanyIntelligenceIfEmpty();
     this.saveToDiskSync();
+
+    if (neonAdapter.isAvailable()) {
+      this.hydrateFromNeon().catch(err => {
+        logger.warn('[store] Background hydration from Neon caught error:', err?.message || err);
+      });
+    }
+  }
+
+  public async hydrateFromNeon(): Promise<void> {
+    if (!neonAdapter.isAvailable()) return;
+    try {
+      const records = await neonAdapter.loadInitialRecords();
+      for (const user of records.users) {
+        this.users.set(user.id, user);
+      }
+      for (const account of records.accounts) {
+        this.userAccounts.set(account.email.toLowerCase().trim(), account);
+      }
+      for (const ws of records.workspaces) {
+        this.workspaces.set(ws.id, ws);
+      }
+      for (const m of records.members) {
+        this.members.set(m.id, m);
+      }
+      logger.info(`[store] Hydrated ${records.users.length} users and ${records.workspaces.length} workspaces from Neon Postgres.`);
+    } catch (err: any) {
+      logger.warn('[store] Error hydrating from Neon:', err?.message || err);
+    }
   }
 
   private hashPassword(password: string, salt: string): string {
@@ -666,7 +695,35 @@ export class PersistentDatabaseStore {
 
     const token = this.createSession(userId);
     this.saveToDiskSync();
+
+    if (neonAdapter.isAvailable()) {
+      neonAdapter.saveUserAndAccount(user, account).catch(err => {
+        logger.warn('[store] Background saveUserAndAccount to Neon failed:', err?.message || err);
+      });
+    }
+
     return { user, token };
+  }
+
+  async registerUserAsync(data: {
+    email: string;
+    password?: string;
+    name: string;
+    displayName?: string;
+    avatarUrl?: string;
+    profileImageUrl?: string;
+    avatarType?: 'IMAGE' | 'EMOJI' | 'INITIALS' | 'DEFAULT';
+    avatarValue?: string;
+  }): Promise<{ user: User; token: string }> {
+    const result = this.registerUser(data);
+    const normalizedEmail = data.email.trim().toLowerCase();
+    const account = this.userAccounts.get(normalizedEmail);
+    if (account && neonAdapter.isAvailable()) {
+      await neonAdapter.saveUserAndAccount(result.user, account).catch(err => {
+        logger.warn('[store] Failed to save user and account to Neon:', err?.message || err);
+      });
+    }
+    return result;
   }
 
   updateUserProfile(
@@ -776,6 +833,72 @@ export class PersistentDatabaseStore {
         }
       }
     }
+    if (!account) return null;
+
+    if (password) {
+      const candidateHash = this.hashPassword(password, account.salt);
+      if (candidateHash !== account.passwordHash) {
+        return null;
+      }
+    }
+
+    let user = this.getUser(account.id);
+    if (!user) {
+      user = {
+        id: account.id,
+        email: account.email,
+        name: account.name,
+        displayName: account.displayName || account.name,
+        avatarType: account.avatarType || 'INITIALS',
+        avatarValue: account.avatarValue || this.computeInitials(account.name),
+        avatarUrl: account.avatarUrl || '',
+        profileImageUrl: account.profileImageUrl || '',
+        createdAt: account.createdAt,
+        updatedAt: account.updatedAt,
+      };
+      this.users.set(user.id, user);
+    }
+
+    const token = this.createSession(user.id);
+    this.saveToDiskSync();
+    return { user, token };
+  }
+
+  async authenticateUserAsync(email: string, password?: string): Promise<{ user: User; token: string } | null> {
+    const normalizedEmail = email.trim().toLowerCase();
+    let account = this.userAccounts.get(normalizedEmail);
+    if (!account) {
+      for (const [accEmail, acc] of this.userAccounts.entries()) {
+        if (accEmail.trim().toLowerCase() === normalizedEmail || acc.email?.trim().toLowerCase() === normalizedEmail) {
+          account = acc;
+          break;
+        }
+      }
+    }
+
+    // Direct Neon lookup fallback for cross-container serverless persistence
+    if (!account && neonAdapter.isAvailable()) {
+      try {
+        const fromNeon = await neonAdapter.getUserAccountByEmail(normalizedEmail);
+        if (fromNeon?.account) {
+          account = fromNeon.account;
+          this.userAccounts.set(normalizedEmail, account);
+          if (fromNeon.user) {
+            this.users.set(fromNeon.user.id, fromNeon.user);
+          }
+          const wsRecords = await neonAdapter.getWorkspacesAndMembersForUser(account.id);
+          for (const ws of wsRecords.workspaces) {
+            this.workspaces.set(ws.id, ws);
+          }
+          for (const m of wsRecords.members) {
+            this.members.set(m.id, m);
+          }
+        }
+      } catch (err: any) {
+        logger.warn('[store] Error checking user in Neon:', err?.message || err);
+      }
+    }
+
     if (!account) return null;
 
     if (password) {
@@ -992,8 +1115,42 @@ export class PersistentDatabaseStore {
       this.userAccounts.set(normalizedEmail, account);
     }
 
+    if (neonAdapter.isAvailable()) {
+      neonAdapter.saveResetToken(normalizedEmail, resetToken, resetTokenExpires).catch(err => {
+        logger.warn('[store] Background saveResetToken to Neon failed:', err?.message || err);
+      });
+    }
+
     this.saveToDiskSync();
     logger.info(`[AUTH] Password reset token generated for ${this.maskEmail(normalizedEmail)}`);
+    return resetToken;
+  }
+
+  async createPasswordResetTokenAsync(email: string): Promise<string | null> {
+    const normalizedEmail = email.trim().toLowerCase();
+    let account = this.userAccounts.get(normalizedEmail);
+    if (!account && neonAdapter.isAvailable()) {
+      try {
+        const fromNeon = await neonAdapter.getUserAccountByEmail(normalizedEmail);
+        if (fromNeon?.account) {
+          account = fromNeon.account;
+          this.userAccounts.set(normalizedEmail, account);
+          if (fromNeon.user) {
+            this.users.set(fromNeon.user.id, fromNeon.user);
+          }
+        }
+      } catch (err: any) {
+        logger.warn('[store] Error checking account in Neon for reset token:', err?.message || err);
+      }
+    }
+
+    const resetToken = this.createPasswordResetToken(email);
+    if (resetToken && neonAdapter.isAvailable()) {
+      const resetTokenExpires = Date.now() + 3600000;
+      await neonAdapter.saveResetToken(normalizedEmail, resetToken, resetTokenExpires).catch(err => {
+        logger.warn('[store] Failed to save reset token to Neon:', err?.message || err);
+      });
+    }
     return resetToken;
   }
 
@@ -1028,6 +1185,13 @@ export class PersistentDatabaseStore {
 
         const sessionToken = this.createSession(user.id);
         this.saveToDiskSync();
+
+        if (neonAdapter.isAvailable()) {
+          neonAdapter.updateAccountPassword(account.email, account.passwordHash, account.salt).catch(err => {
+            logger.warn('[store] Background updateAccountPassword to Neon failed:', err?.message || err);
+          });
+        }
+
         logger.info(`[AUTH] Password reset completed successfully for ${this.maskEmail(account.email)}`);
         return { user, token: sessionToken };
       }
@@ -1036,7 +1200,66 @@ export class PersistentDatabaseStore {
     return null;
   }
 
+  async resetPasswordWithTokenAsync(token: string, newPass: string): Promise<{ user: User; token: string } | null> {
+    let result = this.resetPasswordWithToken(token, newPass);
+    if (!result && neonAdapter.isAvailable()) {
+      try {
+        const fromNeon = await neonAdapter.getAccountByResetToken(token);
+        if (fromNeon?.account && fromNeon.account.resetTokenExpires && fromNeon.account.resetTokenExpires > Date.now()) {
+          const account = fromNeon.account;
+          const normalizedEmail = account.email.toLowerCase().trim();
+          this.userAccounts.set(normalizedEmail, account);
+          if (fromNeon.user) {
+            this.users.set(fromNeon.user.id, fromNeon.user);
+          }
+          result = this.resetPasswordWithToken(token, newPass);
+        }
+      } catch (err: any) {
+        logger.warn('[store] Error checking reset token in Neon:', err?.message || err);
+      }
+    }
+
+    if (result && neonAdapter.isAvailable()) {
+      const account = this.userAccounts.get(result.user.email.toLowerCase().trim());
+      if (account) {
+        await neonAdapter.updateAccountPassword(account.email, account.passwordHash, account.salt).catch(err => {
+          logger.warn('[store] Failed to update password in Neon:', err?.message || err);
+        });
+      }
+    }
+    return result;
+  }
+
   // Workspaces & Users
+  getUserByEmail(email: string): User | undefined {
+    if (!email) return undefined;
+    const normalized = email.trim().toLowerCase();
+    for (const u of this.users.values()) {
+      if (u.email.toLowerCase() === normalized) return u;
+    }
+    const account = this.userAccounts.get(normalized);
+    if (account) {
+      return this.getUser(account.id);
+    }
+    return undefined;
+  }
+
+  async getUserByEmailAsync(email: string): Promise<User | undefined> {
+    const existing = this.getUserByEmail(email);
+    if (existing) return existing;
+    if (neonAdapter.isAvailable()) {
+      const fromNeon = await neonAdapter.getUserAccountByEmail(email);
+      if (fromNeon?.user) {
+        this.users.set(fromNeon.user.id, fromNeon.user);
+        if (fromNeon.account) {
+          this.userAccounts.set(email.trim().toLowerCase(), fromNeon.account);
+        }
+        return fromNeon.user;
+      }
+    }
+    return undefined;
+  }
+
   getUser(id: string): User | undefined {
     if (!id) return undefined;
     let user = this.users.get(id);
@@ -1123,12 +1346,26 @@ export class PersistentDatabaseStore {
       summary: `Created workspace: ${workspace.name}`,
     });
     this.scheduleSave();
+
+    if (neonAdapter.isAvailable()) {
+      neonAdapter.saveWorkspace(workspace).catch(err => {
+        logger.warn('[store] Background saveWorkspace to Neon failed:', err?.message || err);
+      });
+    }
+
     return workspace;
   }
 
   updateWorkspace(workspace: Workspace): Workspace {
     this.workspaces.set(workspace.id, workspace);
     this.scheduleSave();
+
+    if (neonAdapter.isAvailable()) {
+      neonAdapter.saveWorkspace(workspace).catch(err => {
+        logger.warn('[store] Background saveWorkspace to Neon failed:', err?.message || err);
+      });
+    }
+
     return workspace;
   }
 
@@ -1411,6 +1648,13 @@ export class PersistentDatabaseStore {
   addMember(member: WorkspaceMember): WorkspaceMember {
     this.members.set(member.id, member);
     this.scheduleSave();
+
+    if (neonAdapter.isAvailable()) {
+      neonAdapter.saveMember(member).catch(err => {
+        logger.warn('[store] Background saveMember to Neon failed:', err?.message || err);
+      });
+    }
+
     return member;
   }
 

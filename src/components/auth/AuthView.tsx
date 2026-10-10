@@ -35,6 +35,32 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
   const [loading, setLoading] = useState(false);
 
+  // Check URL query parameters for reset token & email on mount
+  React.useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlToken = params.get('token');
+      const urlEmail = params.get('email');
+      const urlMode = params.get('mode');
+
+      if (urlMode === 'forgot' || urlToken) {
+        setMode('forgot');
+        if (urlToken) {
+          setResetToken(urlToken);
+          setGeneratedTokenPreview(urlToken);
+          setResetSent(true);
+        }
+        if (urlEmail) {
+          setEmail(urlEmail);
+        }
+      } else if (urlMode === 'signup') {
+        setMode('signup');
+      } else if (urlMode === 'login') {
+        setMode('login');
+      }
+    }
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorBanner(null);

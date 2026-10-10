@@ -70,7 +70,7 @@ const ToastContainer: React.FC = () => {
 const MainApp: React.FC = () => {
   const { activeView, selectedJobId, isAuthenticated, isLoading, isPricingModalOpen, setIsPricingModalOpen } = useWorkspace();
   const [publicView, setPublicView] = useState<'landing' | 'auth'>('landing');
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+  const [authMode, setAuthMode] = useState<'login' | 'signup' | 'forgot'>('signup');
 
   // Synchronize browser tab title with active view & authentication state
   useEffect(() => {
@@ -95,6 +95,9 @@ const MainApp: React.FC = () => {
         setPublicView('auth');
       } else if (hash === '#signup' || search.includes('mode=signup')) {
         setAuthMode('signup');
+        setPublicView('auth');
+      } else if (hash === '#forgot' || search.includes('mode=forgot') || search.includes('token=')) {
+        setAuthMode('forgot');
         setPublicView('auth');
       }
     };
