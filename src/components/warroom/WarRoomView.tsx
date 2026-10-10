@@ -268,8 +268,8 @@ export const WarRoomView: React.FC = () => {
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="space-y-2 max-w-2xl">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono uppercase px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-800 font-bold tracking-wider">
-                STRATEGIC INTELLIGENCE OPERATING SYSTEM
+              <span className="text-[10px] font-medium uppercase px-2.5 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200/60 font-mono tracking-wider">
+                Living Market Model & Strategy Decisions
               </span>
               <span className="text-zinc-400 text-xs">•</span>
               <span className="text-xs text-zinc-500 font-medium">
@@ -351,12 +351,15 @@ export const WarRoomView: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. MARKET PULSE METRICS BAR */}
+      {/* 2. MARKET PULSE METRICS BAR WITH EXPLANATIONS */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-            Market Health
-          </span>
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative" title="Overall market health calculated from competitor aggressiveness, evidence freshness, and unresolved threats.">
+          <div className="flex items-center justify-between text-zinc-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              Market Health
+            </span>
+            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600" />
+          </div>
           <div className="flex items-center gap-2">
             <span
               className={`w-2.5 h-2.5 rounded-full ${
@@ -369,27 +372,36 @@ export const WarRoomView: React.FC = () => {
             />
             <span className="text-xs font-bold text-zinc-900">{pulse.healthStatus.replace('_', ' ')}</span>
           </div>
+          <p className="text-[10px] text-zinc-400 hidden group-hover:block">Strategic posture score</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-            Competitor Coverage
-          </span>
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative" title="Active competitor domains and product alternatives monitored in this workspace.">
+          <div className="flex items-center justify-between text-zinc-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              Competitor Coverage
+            </span>
+            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600" />
+          </div>
           <div className="text-base font-extrabold text-zinc-900">
             {pulse.competitorCoverageCount} <span className="text-xs font-normal text-zinc-500">Tracked</span>
           </div>
+          <p className="text-[10px] text-zinc-400 hidden group-hover:block">Monitored rivals</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
-            Evidence Freshness
-          </span>
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs group relative" title="Percentage of citations, pricing claims, and feature proof verified within the last 30 days.">
+          <div className="flex items-center justify-between text-zinc-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider">
+              Evidence Freshness
+            </span>
+            <HelpCircle className="w-3 h-3 text-zinc-400 hover:text-zinc-600" />
+          </div>
           <div className="text-base font-extrabold text-indigo-600">
             {pulse.evidenceFreshnessPercent}% <span className="text-xs font-normal text-zinc-500">Last 30d</span>
           </div>
+          <p className="text-[10px] text-zinc-400 hidden group-hover:block">Verified recently</p>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1" title="Highest leverage opportunity or defensive action ranked by revenue potential.">
           <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
             Top Priority
           </span>
@@ -398,7 +410,7 @@ export const WarRoomView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1" title="Most urgent competitor release, price cut, or marketing shift requiring response.">
           <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
             Imminent Threat
           </span>
@@ -407,7 +419,7 @@ export const WarRoomView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1">
+        <div className="p-4 rounded-xl border border-zinc-200 bg-white space-y-1 shadow-2xs col-span-2 lg:col-span-1" title="Unaddressed buyer pain point or underserved feature where competitors are weak.">
           <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400">
             Whitespace Opening
           </span>

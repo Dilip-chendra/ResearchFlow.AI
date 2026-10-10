@@ -17,7 +17,8 @@ import {
   TrendingUp,
   ShieldCheck,
   Zap,
-  TestTube2
+  TestTube2,
+  HelpCircle
 } from 'lucide-react';
 
 export const OverviewDashboard: React.FC = () => {
@@ -224,44 +225,88 @@ export const OverviewDashboard: React.FC = () => {
         </div>
       ) : (
         <>
-          {/* Metrics Row */}
+          {/* Metrics Row — Transparent Business Explanations & Direct Drill-Downs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4 text-xs">
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1">
+            <div
+              onClick={() => setActiveView('research')}
+              className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1 hover:border-amber-400 hover:shadow-sm transition-all cursor-pointer group"
+              title="Jobs awaiting your human review/sign-off before strategy execution. Click to open Research Runs."
+            >
               <div className="flex items-center justify-between text-zinc-500">
-                <span className="font-semibold">Review Queue</span>
-                <AlertTriangle className="w-4 h-4 text-amber-500" />
+                <span className="font-semibold text-zinc-700 group-hover:text-amber-800">Review Queue</span>
+                <div className="flex items-center gap-1">
+                  <HelpCircle className="w-3.5 h-3.5 text-zinc-400 group-hover:text-amber-600" />
+                  <AlertTriangle className="w-4 h-4 text-amber-500" />
+                </div>
               </div>
               <p className="text-2xl font-bold text-zinc-900">{reviewQueueJobs.length}</p>
-              <p className="text-[11px] text-zinc-600">Awaiting founder/operator approval</p>
+              <p className="text-[11px] text-zinc-600">Awaiting founder / operator approval</p>
+              <div className="pt-1 flex items-center gap-1 text-[10px] font-semibold text-amber-700 opacity-80 group-hover:opacity-100">
+                <span>Inspect pending runs</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1">
+            <div
+              onClick={() => setActiveView('evidence')}
+              className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1 hover:border-indigo-400 hover:shadow-sm transition-all cursor-pointer group"
+              title="Total claims, pricing tables, and features extracted with public URL proof. Click to open Verified Evidence."
+            >
               <div className="flex items-center justify-between text-zinc-500">
-                <span className="font-semibold">Verified Evidence Base</span>
-                <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                <span className="font-semibold text-zinc-700 group-hover:text-indigo-800">Verified Evidence Base</span>
+                <div className="flex items-center gap-1">
+                  <HelpCircle className="w-3.5 h-3.5 text-zinc-400 group-hover:text-indigo-600" />
+                  <ShieldCheck className="w-4 h-4 text-indigo-600" />
+                </div>
               </div>
               <p className="text-2xl font-bold text-indigo-600">{totalEvidenceCount}</p>
               <p className="text-[11px] text-zinc-600">Claims grounded in public sources</p>
+              <div className="pt-1 flex items-center gap-1 text-[10px] font-semibold text-indigo-700 opacity-80 group-hover:opacity-100">
+                <span>Explore citations & proof</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1">
+            <div
+              onClick={() => setActiveView('evidence')}
+              className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1 hover:border-rose-400 hover:shadow-sm transition-all cursor-pointer group"
+              title="Pricing or claim discrepancies detected between competitor pages or runs. Click to review in Evidence Explorer."
+            >
               <div className="flex items-center justify-between text-zinc-500">
-                <span className="font-semibold">Detected Conflicts</span>
-                <AlertTriangle className="w-4 h-4 text-rose-500" />
+                <span className="font-semibold text-zinc-700 group-hover:text-rose-800">Detected Conflicts</span>
+                <div className="flex items-center gap-1">
+                  <HelpCircle className="w-3.5 h-3.5 text-zinc-400 group-hover:text-rose-600" />
+                  <AlertTriangle className="w-4 h-4 text-rose-500" />
+                </div>
               </div>
               <p className="text-2xl font-bold text-zinc-900">{totalConflictsCount}</p>
               <p className="text-[11px] text-zinc-600">Pricing / claim discrepancies</p>
+              <div className="pt-1 flex items-center gap-1 text-[10px] font-semibold text-rose-700 opacity-80 group-hover:opacity-100">
+                <span>Review & resolve discrepancies</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
             </div>
 
-            <div className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1">
+            <div
+              onClick={() => setActiveView('tasks')}
+              className="bg-white p-4 sm:p-5 rounded-2xl border border-zinc-200 shadow-2xs space-y-1 hover:border-emerald-400 hover:shadow-sm transition-all cursor-pointer group"
+              title="Execution-ready sprint checklist items converted from campaigns. Click to open Action Tasks board."
+            >
               <div className="flex items-center justify-between text-zinc-500">
-                <span className="font-semibold">Execution Tasks Done</span>
-                <CheckSquare className="w-4 h-4 text-emerald-600" />
+                <span className="font-semibold text-zinc-700 group-hover:text-emerald-800">Execution Tasks Done</span>
+                <div className="flex items-center gap-1">
+                  <HelpCircle className="w-3.5 h-3.5 text-zinc-400 group-hover:text-emerald-600" />
+                  <CheckSquare className="w-4 h-4 text-emerald-600" />
+                </div>
               </div>
               <p className="text-2xl font-bold text-emerald-600">
                 {completedTasksCount} / {tasks.length}
               </p>
               <p className="text-[11px] text-zinc-600">Actionable strategic checklist</p>
+              <div className="pt-1 flex items-center gap-1 text-[10px] font-semibold text-emerald-700 opacity-80 group-hover:opacity-100">
+                <span>Open Kanban sprint board</span>
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </div>
             </div>
           </div>
 
