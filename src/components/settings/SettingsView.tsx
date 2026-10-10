@@ -35,6 +35,7 @@ import {
   CreditCard,
   KeyRound,
 } from 'lucide-react';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 import { BillingSettingsTab } from './BillingSettingsTab';
 import { AIProvidersSettingsTab } from './AIProvidersSettingsTab';
 import { AIHealthStatus, ModelCapabilityProfile, AIRun, FailureCategory, AIRoutingMode, AvatarType } from '../../types';
@@ -277,9 +278,9 @@ export const SettingsView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
             Account Profile & System Architecture
-          </h2>
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Personalize your identity avatar, verify AI provider latency, and inspect runtime telemetry.
           </p>

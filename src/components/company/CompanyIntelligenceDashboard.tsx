@@ -24,6 +24,7 @@ import {
   FileText,
   Lock,
 } from 'lucide-react';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 import {
   CompanyProfile,
   DigitalProperty,
@@ -184,9 +185,9 @@ export const CompanyIntelligenceDashboard: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
+            <HeadlineEntrance as="h1" className="text-2xl font-bold text-zinc-900 tracking-tight">
               {profile?.companyName || 'NextGen Resume AI'}
-            </h1>
+            </HeadlineEntrance>
             {profile?.website && (
               <a
                 href={profile.website}

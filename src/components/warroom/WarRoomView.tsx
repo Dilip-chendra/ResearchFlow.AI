@@ -42,6 +42,7 @@ import { MapMyMarketModal } from './MapMyMarketModal';
 import { ScenarioSimulatorModal } from './ScenarioSimulatorModal';
 import { MarketGraphModal } from './MarketGraphModal';
 import { StrategicSearchModal } from './StrategicSearchModal';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const WarRoomView: React.FC = () => {
   const { activeWorkspace, addToast, setActiveView } = useWorkspace();
@@ -278,9 +279,9 @@ export const WarRoomView: React.FC = () => {
               </span>
             </div>
 
-            <h1 className="text-2xl md:text-3xl font-extrabold text-zinc-950 tracking-tight">
+            <HeadlineEntrance as="h1" className="text-2xl md:text-3xl font-extrabold text-zinc-950 tracking-tight">
               MARKET WAR ROOM
-            </h1>
+            </HeadlineEntrance>
             <p className="text-sm font-semibold text-indigo-700">
               "Your living model of the market."
             </p>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import { Typewriter } from './Typewriter';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 interface CinematicHeroProps {
   onGetStarted: () => void;
@@ -32,13 +33,16 @@ export const CinematicHero: React.FC<CinematicHeroProps> = ({ onGetStarted, onEx
 
       {/* Hero Narrative Core */}
       <div className="max-w-3xl space-y-6 sm:space-y-7">
-        {/* Master Headline with Luxury Typography and Gold Gradient */}
-        <h1 className="text-[clamp(2.5rem,7vw,5.25rem)] font-display font-extrabold tracking-tight text-white leading-[1.04] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]">
+        {/* Master Headline with Luxury Typography, Subtle Entrance Motion, and Gold Gradient */}
+        <HeadlineEntrance
+          as="h1"
+          className="text-[clamp(2.5rem,7vw,5.25rem)] font-display font-extrabold tracking-tight text-white leading-[1.04] drop-shadow-[0_6px_36px_rgba(0,0,0,0.85)]"
+        >
           Know your market.{' '}
           <span className="text-gold-gradient block sm:inline drop-shadow-[0_2px_28px_rgba(212,175,55,0.45)]">
             Before it moves.
           </span>
-        </h1>
+        </HeadlineEntrance>
 
         {/* Live Autonomous Typewriter Terminal */}
         <div className="p-4 rounded-2xl border border-amber-400/30 bg-black/40 shadow-[0_12px_40px_rgba(0,0,0,0.5)] max-w-2xl space-y-2">

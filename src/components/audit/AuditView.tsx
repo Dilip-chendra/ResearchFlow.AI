@@ -20,6 +20,7 @@ import {
   Link,
   Tag
 } from 'lucide-react';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const AuditView: React.FC = () => {
   const { addToast } = useWorkspace();
@@ -87,7 +88,9 @@ export const AuditView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Audit Trail & Telemetry</h2>
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
+            Audit Trail & Telemetry
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Verified provenance log of pipeline execution, AI synthesis prompts, conflict resolutions, and human reviews.
           </p>

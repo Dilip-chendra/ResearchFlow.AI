@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Zap
 } from 'lucide-react';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const EvaluationView: React.FC = () => {
   const { addToast } = useWorkspace();
@@ -104,9 +105,9 @@ export const EvaluationView: React.FC = () => {
             </span>
             <span className="text-xs text-zinc-500 font-mono">12 Pre-Engineered Test Cases</span>
           </div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
             System Reliability & Rubric Benchmark
-          </h2>
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Automated verification across edge cases: 404s, paywalls, pricing conflicts ($19 vs $29), sparse pages, and zero-hallucination citations.
           </p>

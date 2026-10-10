@@ -9,7 +9,7 @@ export interface BrandSymbolProps {
 
 export const BrandSymbol: React.FC<BrandSymbolProps> = ({
   size = 'md',
-  variant = 'dark',
+  variant = 'gold',
   animated = false,
   className = '',
 }) => {
@@ -120,7 +120,7 @@ export const BrandSymbol: React.FC<BrandSymbolProps> = ({
 
 export interface BrandLogoProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'dark' | 'light' | 'monochrome';
+  variant?: 'dark' | 'light' | 'monochrome' | 'gold';
   showBadge?: boolean;
   showTagline?: boolean;
   animated?: boolean;
@@ -129,13 +129,14 @@ export interface BrandLogoProps {
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({
   size = 'md',
-  variant = 'dark',
+  variant = 'gold',
   showBadge = true,
   showTagline = false,
   animated = false,
   className = '',
 }) => {
   const isLight = variant === 'light';
+  const isGold = variant === 'gold';
 
   const fontSizes: Record<string, string> = {
     xs: 'text-[15px]',
@@ -170,7 +171,13 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
             >
               Research
             </span>
-            <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent font-black ml-px">
+            <span
+              className={
+                isGold
+                  ? 'text-gold-gradient font-black ml-px drop-shadow-[0_0_12px_rgba(212,175,55,0.4)]'
+                  : 'bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent font-black ml-px'
+              }
+            >
               Flow
             </span>
           </span>
@@ -181,12 +188,20 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
               className={`inline-flex items-center gap-1 font-mono font-black rounded-full uppercase tracking-wider shadow-2xs transition-all ${
                 badgeSizes[size]
               } ${
-                isLight
+                isGold
+                  ? 'border border-amber-400/40 bg-amber-400/15 text-[#F5D77F] font-bold shadow-[0_0_8px_rgba(212,175,55,0.3)]'
+                  : isLight
                   ? 'bg-gradient-to-r from-blue-50/90 via-indigo-50 to-violet-50 text-indigo-700 border border-indigo-200/90 shadow-indigo-500/10'
                   : 'bg-gradient-to-r from-indigo-950/90 via-blue-950/90 to-purple-950/90 text-indigo-300 border border-indigo-500/40 shadow-indigo-500/20'
               }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 animate-pulse shrink-0" />
+              <span
+                className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                  isGold
+                    ? 'bg-amber-400 shadow-[0_0_6px_rgba(212,175,55,0.8)]'
+                    : 'bg-gradient-to-r from-blue-500 to-indigo-500 animate-pulse'
+                }`}
+              />
               <span>AI</span>
             </span>
           )}

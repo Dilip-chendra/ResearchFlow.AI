@@ -23,6 +23,7 @@ import { ExportReportModal } from './ExportReportModal';
 import { ActionableTasksExtractor } from './ActionableTasksExtractor';
 import { ShareResearchModal } from './ShareResearchModal';
 import { SharedResearchPreviewModal } from './SharedResearchPreviewModal';
+import { titleManager } from '../../lib/titleManager';
 import {
   Play,
   CheckCircle2,
@@ -160,6 +161,17 @@ export const JobDetailView: React.FC<{ jobId: string }> = ({ jobId }) => {
           if (!runningStatuses.includes(updated.status)) {
             setIsRunning(false);
             clearInterval(interval);
+            if (updated.status === 'completed') {
+              titleManager.notifyHiddenEvent({
+                id: `job_${updated.id}_completed`,
+                label: 'Research Finished',
+              });
+            } else if (updated.status === 'failed') {
+              titleManager.notifyHiddenEvent({
+                id: `job_${updated.id}_failed`,
+                label: 'Research Alert',
+              });
+            }
           }
         } catch (e) {
           console.error(e);

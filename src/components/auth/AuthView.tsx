@@ -134,7 +134,7 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md relative z-10 text-center">
         <div className="flex items-center justify-center mb-4">
-          <BrandLogo size="lg" variant="dark" showBadge={true} />
+          <BrandLogo size="lg" variant="gold" showBadge={true} />
         </div>
 
         <h2 className="text-center text-xl font-semibold text-slate-200">
@@ -149,25 +149,6 @@ export const AuthView: React.FC<AuthViewProps> = ({
 
       <div className="mt-6 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
         <div className="bg-slate-900/90 py-8 px-6 shadow-2xl rounded-2xl sm:px-10 border border-slate-800 backdrop-blur-md">
-          {/* Quick Demo Sandbox Access */}
-          <div className="mb-6 p-3.5 rounded-xl border border-amber-400/30 bg-gradient-to-r from-amber-500/10 via-amber-400/5 to-transparent flex items-center justify-between gap-3">
-            <div className="space-y-0.5">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span>Instant Demo Sandbox</span>
-              </div>
-              <p className="text-[11px] text-zinc-400">
-                NextGen Resume AI &bull; War Room &bull; Radar
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => enterDemoMode()}
-              className="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-[#FFF3B0] via-[#F5D77F] to-[#D4AF37] text-slate-950 font-bold text-xs hover:shadow-[0_0_16px_rgba(245,215,127,0.6)] hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap cursor-pointer"
-            >
-              Launch Demo
-            </button>
-          </div>
 
           {/* Mode Switcher Tabs */}
           <div className="flex border-b border-slate-800 mb-6 pb-2">

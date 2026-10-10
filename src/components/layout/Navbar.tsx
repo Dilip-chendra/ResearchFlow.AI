@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../lib/api';
 import { BrandLogo } from '../brand/BrandLogo';
+import { titleManager } from '../../lib/titleManager';
 
 export const Navbar: React.FC = () => {
   const {
@@ -51,7 +52,17 @@ export const Navbar: React.FC = () => {
   const fetchNotifications = async () => {
     try {
       const data = await api.getNotifications();
-      setNotifications(data || []);
+      const list = data || [];
+      setNotifications(list);
+      if (typeof document !== 'undefined' && document.hidden) {
+        const unread = list.filter((n: any) => !n.read);
+        unread.forEach((n: any) => {
+          titleManager.notifyHiddenEvent({
+            id: `notif_${n.id}`,
+            label: n.title || 'Review Needed',
+          });
+        });
+      }
     } catch {
       // silent fallback
     }
@@ -133,7 +144,7 @@ export const Navbar: React.FC = () => {
           }}
           className="cursor-pointer group select-none shrink-0"
         >
-          <BrandLogo size="xs" variant="light" showBadge={true} />
+          <BrandLogo size="xs" variant="gold" showBadge={true} />
         </div>
 
         {/* Workspace Switcher */}

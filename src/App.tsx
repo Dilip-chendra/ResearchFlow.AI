@@ -22,6 +22,8 @@ import { PricingModal } from './components/pricing/PricingModal';
 import { BrandSymbol } from './components/brand/BrandLogo';
 import { X, CheckCircle2, AlertTriangle, Info } from 'lucide-react';
 
+import { titleManager } from './lib/titleManager';
+
 const ToastContainer: React.FC = () => {
   const { toasts, removeToast } = useWorkspace();
 
@@ -66,9 +68,22 @@ const ToastContainer: React.FC = () => {
 };
 
 const MainApp: React.FC = () => {
-  const { activeView, isAuthenticated, isLoading, isPricingModalOpen, setIsPricingModalOpen } = useWorkspace();
+  const { activeView, selectedJobId, isAuthenticated, isLoading, isPricingModalOpen, setIsPricingModalOpen } = useWorkspace();
   const [publicView, setPublicView] = useState<'landing' | 'auth'>('landing');
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
+
+  // Synchronize browser tab title with active view & authentication state
+  useEffect(() => {
+    if (!isAuthenticated) {
+      titleManager.setRoute(publicView);
+    } else {
+      if (activeView === 'research' && selectedJobId) {
+        titleManager.setRoute('research', 'Research Job Details');
+      } else {
+        titleManager.setRoute(activeView);
+      }
+    }
+  }, [isAuthenticated, publicView, activeView, selectedJobId]);
 
   // Handle URL hash or query routing on load
   useEffect(() => {
@@ -91,7 +106,7 @@ const MainApp: React.FC = () => {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-[#090A0F] flex flex-col items-center justify-center text-slate-300 gap-4">
-        <BrandSymbol size="lg" animated={true} variant="dark" />
+        <BrandSymbol size="lg" animated={true} variant="gold" />
         <p className="text-xs font-semibold tracking-wider text-zinc-400 uppercase font-mono">
           Loading ResearchFlow Workspace...
         </p>

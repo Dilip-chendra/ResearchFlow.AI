@@ -21,6 +21,7 @@ import {
   HelpCircle,
   Building2,
 } from 'lucide-react';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const OverviewDashboard: React.FC = () => {
   const {
@@ -108,14 +109,14 @@ export const OverviewDashboard: React.FC = () => {
               Neural Synthesis Engine
             </span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5 flex-wrap">
+          <HeadlineEntrance as="h2" className="text-xl sm:text-2xl font-bold tracking-tight text-white flex items-center gap-2.5 flex-wrap">
             <span>{activeWorkspace?.businessName || 'Market Workspace'}</span>
             {activeWorkspace?.industry && (
               <span className="text-[11px] font-normal px-2.5 py-0.5 rounded-md bg-white/10 text-zinc-300 border border-white/10 font-mono">
                 {activeWorkspace.industry}
               </span>
             )}
-          </h2>
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-300/90 max-w-2xl leading-relaxed">
             {activeWorkspace?.description ||
               'Real-time competitor evidence extraction, positioning audits, and execution-ready growth campaigns.'}

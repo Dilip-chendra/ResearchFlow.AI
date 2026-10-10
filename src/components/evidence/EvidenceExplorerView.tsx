@@ -5,6 +5,7 @@ import { Evidence, ResearchCategory, EvidenceType, ConfidenceLevel } from '../..
 import { EvidenceCard } from '../common/EvidenceCard';
 import { exportEvidenceToCSV } from '../../lib/exportUtils';
 import { Search, Download, Filter, Database, RefreshCw, FileSpreadsheet, FileJson } from 'lucide-react';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const EvidenceExplorerView: React.FC = () => {
   const { activeWorkspace, addToast, setSelectedJobId, setActiveView } = useWorkspace();
@@ -91,9 +92,9 @@ export const EvidenceExplorerView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
             Evidence Base Explorer
-          </h2>
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Verified repository of extracted competitor claims, pricing models, and market facts.
           </p>

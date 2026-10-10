@@ -25,6 +25,7 @@ import {
 import { CampaignDetailWorkspace } from './CampaignDetailWorkspace';
 import { CreativeStudioModal } from './CreativeStudioModal';
 import { RedTeamSimulatorModal } from './RedTeamSimulatorModal';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const CampaignsView: React.FC = () => {
   const { activeWorkspace, addToast, setSelectedJobId, setActiveView, selectedJobId } = useWorkspace();
@@ -115,7 +116,9 @@ export const CampaignsView: React.FC = () => {
       {/* Header & Command Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Campaign Strategy Hub</h2>
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
+            Campaign Strategy Hub
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Evidence-backed campaign intelligence, strategic message architecture, and publication-grade channel assets.
           </p>

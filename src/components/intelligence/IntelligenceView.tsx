@@ -6,6 +6,7 @@ import { BrainCircuit, Sparkles, Megaphone, ShieldAlert, ArrowRight, Compass, Sw
 import { AudioBriefingPlayer } from './AudioBriefingPlayer';
 import { PositioningMatrixModal } from './PositioningMatrixModal';
 import { BattlecardBuilder } from './BattlecardBuilder';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 
 export const IntelligenceView: React.FC = () => {
   const { activeWorkspace, addToast, selectedJobId, setSelectedJobId, setActiveView } = useWorkspace();
@@ -109,7 +110,9 @@ export const IntelligenceView: React.FC = () => {
       {/* Header with Persistent Job Selector & 2D Matrix Trigger */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Intelligence Matrix &amp; Radar</h2>
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
+            Intelligence Matrix &amp; Radar
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Cross-competitor positioning gaps, audience sentiment signals, and validated market opportunities.
           </p>

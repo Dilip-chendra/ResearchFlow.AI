@@ -171,7 +171,7 @@ export const Sidebar: React.FC = () => {
           {/* Drawer Content */}
           <div className="relative w-4/5 max-w-xs bg-white h-full shadow-2xl flex flex-col justify-between z-10 animate-in slide-in-from-left duration-200">
             <div className="p-4 border-b border-zinc-200 flex items-center justify-between bg-zinc-50">
-              <BrandLogo size="xs" variant="light" showBadge={true} />
+              <BrandLogo size="xs" variant="gold" showBadge={true} />
               <button
                 onClick={() => setIsMobileNavOpen(false)}
                 className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 hover:bg-zinc-200/60 transition-colors"

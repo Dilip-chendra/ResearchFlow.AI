@@ -10,6 +10,7 @@ import { SharedResearchPreviewModal } from './SharedResearchPreviewModal';
 import { ResearchTimelineScrubber } from './ResearchTimelineScrubber';
 import { TemplatesAndSchedulesModal } from './TemplatesAndSchedulesModal';
 import { CompareRunsModal } from './CompareRunsModal';
+import { HeadlineEntrance } from '../common/HeadlineEntrance';
 import {
   Plus,
   Search,
@@ -160,7 +161,9 @@ export const ResearchListView: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="text-xl font-bold text-zinc-900 tracking-tight">Research Jobs</h2>
+          <HeadlineEntrance as="h2" className="text-xl font-bold text-zinc-900 tracking-tight">
+            Research Jobs
+          </HeadlineEntrance>
           <p className="text-xs text-zinc-600 mt-0.5">
             Manage evidence extraction runs, competitor sources, and strategic campaign pipelines.
           </p>
